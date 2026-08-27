@@ -20,7 +20,16 @@ Fecha: 2026-08-27
 - **Agenda dinámica**: lee `pastelia_pedidos` y renderiza tarjetas reales (o estado vacío "No hay pedidos aún"); los KPIs (Entregas hoy / Esta semana / Por cobrar / Activos) se calculan solos.
 - Botón **"Cambiar"** receta: muestra aviso "Próximamente: Selector de recetas".
 
-**Pendiente (próximas etapas):** botones PDF y Ticket (WhatsApp), botón "Cobrar" y estados del pedido en la Agenda, filtros de la Agenda (Activos/Todos/…), buscadores, e inventario editable en "Mis precios".
+**Etapa 3 — Recetas + Interactividad de Agenda** ✅
+- **Recetas** persistidas en `localStorage` (`pastelia_recetas`), sembradas con las 4 del diseño.
+- Tarjetas de la vista Recetas renderizadas dinámicamente; clic en una tarjeta → **editar**; "Nueva receta" → **crear** (modal con nombre, ícono, # ingredientes y costo base). Se puede **eliminar**.
+- **Selector de recetas** en Cotizar (botón "Cambiar"): elige receta de `pastelia_recetas` y su costo base alimenta el motor de precios (Etapa 1).
+- **Agenda interactiva**: botón **Cobrar** marca el pedido como pagado (recalcula "Por cobrar"); el **estado** (Cotizado → Apartado → Entregado) cambia al tocarlo; los **filtros** (Activos / Todos / Apartados / Entregados) filtran las tarjetas.
+
+**Pendiente — Etapa 4 (foco principal):**
+- **Mis precios (inventario editable):** hoy las filas de insumos (Mantequilla, Harina, Huevo, Chocolate), el buscador y "💾 Guardar inventario" son estáticos. Falta: convertir las filas a inputs (nombre / precio / cantidad / unidad) recalculando el costo por g/pz, persistir en `localStorage` (p. ej. `pastelia_insumos`), hacer funcionar el buscador y, opcionalmente, conectar los insumos al costeo de las recetas.
+- **Exportar PDF** del pedido y **Ticket de WhatsApp** (botones 📄 / 💬 en Cotizar y en las tarjetas de Agenda).
+- Menores: buscador del Inicio, y sincronizar "Recetas favoritas" del Inicio con `pastelia_recetas`.
 
 ---
 

@@ -260,12 +260,7 @@
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px">🍰 Mis recetas</div>
               <div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Guarda una receta desde el cotizador y reutilízala al instante.</div>
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px">
-                <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:76px;background:linear-gradient(135deg,#ffd9c0,#ef7c8e);display:flex;align-items:center;justify-content:center;font-size:32px">🍫</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">6 ingredientes</div></div></div>
-                <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:76px;background:linear-gradient(135deg,#e9f2df,#bfe3d0);display:flex;align-items:center;justify-content:center;font-size:32px">🍋</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">Limón & mora</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">7 ingredientes</div></div></div>
-                <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:76px;background:linear-gradient(135deg,#efe6f7,#d9cbf0);display:flex;align-items:center;justify-content:center;font-size:32px">🫐</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">Red velvet</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">8 ingredientes</div></div></div>
-                <div data-go="cotizar" style="cursor:pointer;border:2px dashed #f2c4ce;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ef7c8e;font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>
-              </div>
+              <div data-recetas-list style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px"></div>
             </div>
           </div>
         </div>
@@ -451,15 +446,10 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px">🍰 Mis recetas</div>
-          <div data-go="cotizar" style="cursor:pointer;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7)">＋ Nueva receta</div>
+          <div data-action="nueva-receta" style="cursor:pointer;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7)">＋ Nueva receta</div>
         </div>
         <div style="font-size:13px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:20px">Guarda una receta y reutilízala al cotizar — el costo se recalcula con tus precios.</div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px">
-          <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:100px;background:linear-gradient(135deg,#ffd9c0,#ef7c8e);display:flex;align-items:center;justify-content:center;font-size:40px">🍫</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">6 ingredientes · $34/p</div></div></div>
-          <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:100px;background:linear-gradient(135deg,#e9f2df,#bfe3d0);display:flex;align-items:center;justify-content:center;font-size:40px">🍋</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">Limón & mora</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">7 ingredientes · $38/p</div></div></div>
-          <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:100px;background:linear-gradient(135deg,#efe6f7,#d9cbf0);display:flex;align-items:center;justify-content:center;font-size:40px">🫐</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">Red velvet</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">8 ingredientes · $40/p</div></div></div>
-          <div style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:100px;background:linear-gradient(135deg,#fde6c9,#f4c95b);display:flex;align-items:center;justify-content:center;font-size:40px">🍑</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">Durazno crema</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">5 ingredientes · $32/p</div></div></div>
-        </div>
+        <div data-recetas-list style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px"></div>
       </div>
     </div>
 
@@ -541,10 +531,33 @@
     'Grande':  { mult:1.45, porc:28 },
     'Bento':   { mult:0.15, porc:2  }
   };
-  var BASE   = { insumos:210, mano:180 };
+  var BASE   = { mano:180 };            // mano de obra base @ Mediano (los insumos vienen de la receta)
   var EXTRAS = { 'Flores':120, 'Topper':80 };
   var MARGIN = 0.40;
-  var state  = { size:'Mediano', extras:{ 'Flores':true, 'Topper':false } };
+  var state  = { size:'Mediano', extras:{ 'Flores':true, 'Topper':false }, recipe:null, filter:'activos' };
+
+  /* ---------- Recetas (localStorage: pastelia_recetas) ---------- */
+  var RECIPES_KEY = 'pastelia_recetas';
+  var GRADS = [
+    'linear-gradient(135deg,#ffd9c0,#ef7c8e)',
+    'linear-gradient(135deg,#e9f2df,#bfe3d0)',
+    'linear-gradient(135deg,#efe6f7,#d9cbf0)',
+    'linear-gradient(135deg,#fde6c9,#f4c95b)',
+    'linear-gradient(135deg,#d9edf2,#a9d3de)',
+    'linear-gradient(135deg,#f7d9e0,#f2a9bd)'
+  ];
+  var EMOJIS = ['🍫','🍋','🫐','🍓','🍑','🎂','🧁','🍰'];
+  var DEFAULT_RECIPES = [
+    { id:'rec_choco',  nombre:'Chocoavellana', emoji:'🍫', grad:GRADS[0], insumos:210, ingredientes:6, precioPorcion:34 },
+    { id:'rec_limon',  nombre:'Limón & mora',  emoji:'🍋', grad:GRADS[1], insumos:225, ingredientes:7, precioPorcion:38 },
+    { id:'rec_velvet', nombre:'Red velvet',    emoji:'🫐', grad:GRADS[2], insumos:240, ingredientes:8, precioPorcion:40 },
+    { id:'rec_durazno',nombre:'Durazno crema', emoji:'🍑', grad:GRADS[3], insumos:200, ingredientes:5, precioPorcion:32 }
+  ];
+  function readRecipes(){ try{ var a=JSON.parse(localStorage.getItem(RECIPES_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
+  function saveRecipes(a){ try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(a)); }catch(e){} }
+  var recipes = readRecipes();
+  if (!recipes){ recipes = DEFAULT_RECIPES.slice(); saveRecipes(recipes); }
+  state.recipe = recipes[0];
 
   function money(n){ return '$' + Math.round(n).toLocaleString('es-MX'); }
   function sizeKey(t){ t=(t||'').trim(); for(var k in SIZES){ if(t.indexOf(k)===0) return k; } return null; }
@@ -556,7 +569,7 @@
 
   function calc(){
     var s = SIZES[state.size];
-    var insumos = BASE.insumos * s.mult;
+    var insumos = (state.recipe ? state.recipe.insumos : 210) * s.mult;
     var mano = BASE.mano * s.mult;
     var extras = 0, activos = [];
     for (var k in state.extras){ if (state.extras[k]){ extras += EXTRAS[k]; activos.push(k.toLowerCase()); } }
@@ -626,7 +639,21 @@
 
   var AVA_BG = ['#ffe1c9','#efe6f7','#d9edf2','#f7d9e0'];
   var AVA_EMO = ['🎂','🧁','🍰','🎂'];
-  function orderSub(o){ var ex = (o.extras&&o.extras.length)? o.extras.join(', ') : 'Sin extras'; return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+ex; }
+  var ESTADOS = ['Cotizado','Apartado','Entregado'];
+  function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
+  function orderSub(o){ return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+esc(o.receta||'Pastel'); }
+  function estadoInfo(o){
+    var e=o.estado||'Cotizado';
+    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'#7f9663' };
+    return { txt:e, color:(e==='Entregado'?'#7f9663':'#c78a3b') };
+  }
+  function statusHtml(o,big){ var info=estadoInfo(o); return '<div data-estado-btn="'+o.id+'" title="Cambiar estado" style="font-size:'+(big?'11px':'10px')+';font-weight:800;color:'+info.color+';cursor:pointer">'+esc(info.txt)+'</div>'; }
+  function cobrarMob(o){ return o.pagado
+      ? '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800;color:rgba(74,52,46,.35)">✓ Cobrado</div>'
+      : '<div data-cobrar="'+o.id+'" style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💵 Cobrar</div>'; }
+  function cobrarDesk(o){ return o.pagado
+      ? '<div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;color:rgba(74,52,46,.35)">✓ Cobrado</div>'
+      : '<div data-cobrar="'+o.id+'" style="background:#ef7c8e;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">💵 Cobrar</div>'; }
 
   function mobCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
@@ -634,12 +661,12 @@
       + '<div style="display:flex;align-items:center;gap:12px">'
       + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:22px">'+emo+'</div>'
       + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+'</div></div>'
-      + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div><div style="font-size:10px;font-weight:800;color:#c78a3b">'+esc(o.estado||'Cotizado')+'</div></div>'
+      + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div>'+statusHtml(o,false)+'</div>'
       + '</div>'
       + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(74,52,46,.07)">'
       + '<div style="flex:1;text-align:center;background:#25d366;color:#fff;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💬 WhatsApp</div>'
       + '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">📄 PDF</div>'
-      + '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💵 Cobrar</div>'
+      + cobrarMob(o)
       + '</div></div>';
   }
   function deskCard(o,i){
@@ -647,8 +674,8 @@
     return '<div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;gap:16px">'
       + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:26px">'+emo+'</div>'
       + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">'+orderSub(o)+'</div></div>'
-      + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div><div style="font-size:11px;font-weight:800;color:#c78a3b">'+esc(o.estado||'Cotizado')+'</div></div>'
-      + '<div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div><div style="background:#ef7c8e;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💵 Cobrar</div></div>'
+      + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
+      + '<div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div>'+cobrarDesk(o)+'</div>'
       + '</div>';
   }
   function emptyState(){
@@ -656,22 +683,156 @@
       + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:8px;color:rgba(74,52,46,.7)">No hay pedidos aún</div>'
       + '<div style="font-size:12px;font-weight:700;margin-top:4px">Crea una cotización y guárdala para verla aquí.</div></div>';
   }
+  function emptyFilter(){ return '<div style="text-align:center;padding:40px 16px;color:rgba(74,52,46,.45);font-weight:700;font-size:13px">No hay pedidos en este filtro.</div>'; }
   function setKPI(pane,label,val){
     var leaves=Array.prototype.filter.call(pane.querySelectorAll('div'), function(d){ return d.children.length===0; });
     for(var i=0;i<leaves.length;i++){ if((leaves[i].textContent||'').trim()===label){ var n=leaves[i].previousElementSibling; if(n) n.textContent=val; break; } }
   }
+  function matchFilter(o){
+    var f=state.filter, e=o.estado||'Cotizado';
+    if(f==='todos') return true;
+    if(f==='activos') return e!=='Entregado';
+    if(f==='Apartado') return e==='Apartado';
+    if(f==='Entregado') return e==='Entregado';
+    return true;
+  }
+  var FILTER_KEYS=['activos','todos','Apartado','Entregado'];
+  function styleFilters(pane){
+    var list=pane.querySelector('[data-agenda-list]'); if(!list) return;
+    var row=list.previousElementSibling; if(!row) return;
+    for(var i=0;i<row.children.length && i<4;i++){
+      var on = state.filter===FILTER_KEYS[i];
+      row.children[i].style.background = on?'#ef7c8e':'#fff';
+      row.children[i].style.color = on?'#fff':'rgba(74,52,46,.5)';
+      row.children[i].style.cursor='pointer';
+    }
+  }
   function renderAgenda(){
     var orders=readOrders();
-    var t=todayISO(), hoy=0, sem=0, cobrar=0;
-    orders.forEach(function(o){ if(o.fechaEvento===t) hoy++; if(within7(o.fechaEvento)) sem++; cobrar+=(o.total||0); });
+    var t=todayISO(), hoy=0, sem=0, cobrar=0, activos=0;
+    orders.forEach(function(o){ if(o.fechaEvento===t) hoy++; if(within7(o.fechaEvento)) sem++; if(!o.pagado) cobrar+=(o.total||0); if((o.estado||'Cotizado')!=='Entregado') activos++; });
+    var shown=orders.filter(matchFilter);
     Array.prototype.forEach.call(document.querySelectorAll('[data-agenda-list]'), function(list){
       var isMob = !!list.closest('#mobile');
-      list.innerHTML = orders.length
-        ? orders.map(function(o,i){ return isMob ? mobCard(o,i) : deskCard(o,i); }).join('')
-        : emptyState();
+      if(!orders.length) list.innerHTML=emptyState();
+      else if(!shown.length) list.innerHTML=emptyFilter();
+      else list.innerHTML = shown.map(function(o,i){ return isMob ? mobCard(o,i) : deskCard(o,i); }).join('');
       var pane=list.closest('.pane[data-scr="agenda"]');
-      if(pane){ setKPI(pane,'Entregas hoy',hoy); setKPI(pane,'Esta semana',sem); setKPI(pane,'Por cobrar',money(cobrar)); setKPI(pane,'Activos',orders.length); }
+      if(pane){ setKPI(pane,'Entregas hoy',hoy); setKPI(pane,'Esta semana',sem); setKPI(pane,'Por cobrar',money(cobrar)); setKPI(pane,'Activos',activos); styleFilters(pane); }
     });
+  }
+  function cobrar(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ arr[i].pagado=true; break; } } saveOrders(arr); renderAgenda(); toast('Pedido marcado como pagado ✓'); }
+  function cycleEstado(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ var e=arr[i].estado||'Cotizado'; arr[i].estado=ESTADOS[(ESTADOS.indexOf(e)+1)%ESTADOS.length]; break; } } saveOrders(arr); renderAgenda(); }
+
+  /* ---------- Recetas: render + modales ---------- */
+  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:32px">'+r.emoji+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+r.ingredientes+' ingredientes</div></div></div>'; }
+  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:40px">'+r.emoji+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+r.ingredientes+' ingredientes · $'+r.precioPorcion+'/p</div></div></div>'; }
+  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #f2c4ce;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ef7c8e;font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>'; }
+  function renderRecetas(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-recetas-list]'), function(list){
+      var isMob=!!list.closest('#mobile');
+      var html=recipes.map(function(r){ return isMob?recetaCardMob(r):recetaCardDesk(r); }).join('');
+      if(isMob) html+=nuevaTile();
+      list.innerHTML=html;
+    });
+  }
+  function updateRecipeRow(){
+    if(!state.recipe) return;
+    Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="cotizar"] [data-action="cambiar"]'), function(camb){
+      var row=camb.parentElement; if(!row) return;
+      var kids=row.children;
+      if(kids[0]) kids[0].textContent=state.recipe.emoji;
+      if(kids[1] && kids[1].firstElementChild) kids[1].firstElementChild.textContent=state.recipe.nombre;
+    });
+  }
+
+  function openModal(inner){
+    var ov=document.createElement('div');
+    ov.style.cssText='position:fixed;inset:0;background:rgba(74,52,46,.45);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+    var card=document.createElement('div');
+    card.style.cssText='background:#fff;color:#4a342e;border-radius:24px;padding:22px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(74,52,46,.5);max-height:88vh;overflow:auto;font-family:inherit';
+    card.appendChild(inner); ov.appendChild(card);
+    function close(){ ov.remove(); document.removeEventListener('keydown', onkey); }
+    function onkey(e){ if(e.key==='Escape') close(); }
+    ov.addEventListener('click', function(e){ if(e.target===ov) close(); });
+    document.addEventListener('keydown', onkey);
+    document.body.appendChild(ov);
+    return { close:close };
+  }
+  function fieldStyle(){ return 'width:100%;box-sizing:border-box;border:1px solid #f0e4d8;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e;margin-top:6px'; }
+
+  function openRecipeEditor(recipe){
+    var isNew=!recipe;
+    var r = recipe || { id:'rec_'+Date.now(), nombre:'', emoji:EMOJIS[recipes.length%EMOJIS.length], grad:GRADS[recipes.length%GRADS.length], insumos:200, ingredientes:5, precioPorcion:30 };
+    var box=document.createElement('div');
+    box.innerHTML =
+      '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nueva receta':'Editar receta')+'</div>'
+      + '<div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:14px">Se usa al cotizar para calcular el precio.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">ÍCONO</div>'
+      + '<div id="rc-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">NOMBRE</div>'
+      + '<input id="rc-nombre" type="text" placeholder="Ej. Chocoavellana" style="'+fieldStyle()+'">'
+      + '<div style="display:flex;gap:10px;margin-top:12px">'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)"># INGREDIENTES</div><input id="rc-ing" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">COSTO BASE ($)</div><input id="rc-ins" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      + '</div>'
+      + '<div style="font-size:11px;font-weight:700;color:rgba(74,52,46,.45);margin-top:6px">Costo de materiales para un pastel Mediano (20 porciones).</div>'
+      + '<div style="display:flex;gap:10px;margin-top:20px">'
+      +   '<div id="rc-save" style="flex:1;text-align:center;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="rc-del" style="text-align:center;background:#fbecea;color:#db5a4e;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      + '</div>'
+      + '<div id="rc-cancel" style="text-align:center;color:rgba(74,52,46,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+    var modal=openModal(box);
+    box.querySelector('#rc-nombre').value=r.nombre;
+    box.querySelector('#rc-ing').value=r.ingredientes;
+    box.querySelector('#rc-ins').value=r.insumos;
+    var chosen=r.emoji, ep=box.querySelector('#rc-emojis');
+    EMOJIS.forEach(function(em){
+      var b=document.createElement('div');
+      b.textContent=em;
+      b.style.cssText='width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:'+(em===chosen?'#fbeef1':'#faf3ec')+';border:2px solid '+(em===chosen?'#ef7c8e':'transparent');
+      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#faf3ec'; c.style.border='2px solid transparent'; }); b.style.background='#fbeef1'; b.style.border='2px solid #ef7c8e'; });
+      ep.appendChild(b);
+    });
+    box.querySelector('#rc-save').addEventListener('click', function(){
+      var nombre=box.querySelector('#rc-nombre').value.trim();
+      if(!nombre){ toast('Escribe el nombre de la receta'); return; }
+      r.nombre=nombre; r.emoji=chosen;
+      r.ingredientes=parseInt(box.querySelector('#rc-ing').value,10)||0;
+      r.insumos=parseFloat(box.querySelector('#rc-ins').value)||0;
+      r.precioPorcion=Math.round((r.insumos+BASE.mano)*1.4/20);
+      if(!r.grad) r.grad=GRADS[recipes.length%GRADS.length];
+      if(isNew) recipes.push(r);
+      saveRecipes(recipes);
+      if(state.recipe && state.recipe.id===r.id){ state.recipe=r; updateRecipeRow(); render(); }
+      renderRecetas(); modal.close();
+      toast(isNew?'Receta creada ✓':'Receta actualizada ✓');
+    });
+    var del=box.querySelector('#rc-del');
+    if(del) del.addEventListener('click', function(){
+      if(!confirm('¿Eliminar la receta "'+r.nombre+'"?')) return;
+      recipes=recipes.filter(function(x){ return x.id!==r.id; });
+      if(!recipes.length) recipes=DEFAULT_RECIPES.slice();
+      saveRecipes(recipes);
+      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]; updateRecipeRow(); render(); }
+      renderRecetas(); modal.close(); toast('Receta eliminada');
+    });
+    box.querySelector('#rc-cancel').addEventListener('click', function(){ modal.close(); });
+  }
+
+  function openRecipeSelector(){
+    var box=document.createElement('div');
+    box.innerHTML='<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:12px">Elige una receta</div><div id="rs-list" style="display:flex;flex-direction:column;gap:10px"></div><div id="rs-nueva" style="text-align:center;color:#ef7c8e;font-weight:800;font-size:14px;padding:14px 0 2px;cursor:pointer">＋ Nueva receta</div>';
+    var modal=openModal(box), list=box.querySelector('#rs-list');
+    recipes.forEach(function(r){
+      var active = state.recipe && state.recipe.id===r.id;
+      var row=document.createElement('div');
+      row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'#fbeef1':'#faf3ec')+';border:2px solid '+(active?'#f2c4ce':'transparent');
+      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:20px">'+r.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+r.ingredientes+' ingredientes · costo base '+money(r.insumos)+'</div></div>'+(active?'<div style="color:#ef7c8e;font-weight:800;font-size:18px">✓</div>':'');
+      row.addEventListener('click', function(){ state.recipe=r; updateRecipeRow(); render(); modal.close(); toast('Receta: '+r.nombre); });
+      list.appendChild(row);
+    });
+    box.querySelector('#rs-nueva').addEventListener('click', function(){ modal.close(); openRecipeEditor(null); });
   }
 
   function guardar(btn){
@@ -682,8 +843,9 @@
     var v=calc(), activos=[];
     for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
     var order={ id:Date.now(), cliente:nombre, telefono:tel, fechaEvento:fecha,
+                recetaId: state.recipe?state.recipe.id:null, receta: state.recipe?state.recipe.nombre:'',
                 tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
-                total:Math.round(v.precio), estado:'Cotizado', creado:new Date().toISOString() };
+                total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:new Date().toISOString() };
     var arr=readOrders(); arr.push(order); saveOrders(arr);
     Array.prototype.forEach.call(panes(), function(p){
       ['nombre','tel','fecha'].forEach(function(f){ var e=p.querySelector('[data-field="'+f+'"]'); if(e) e.value=''; });
@@ -703,13 +865,25 @@
       });
     });
     render();
+    updateRecipeRow();
+    renderRecetas();
+    renderAgenda();
+    // Guardar (elementos estáticos)
     Array.prototype.forEach.call(document.querySelectorAll('[data-action="guardar"]'), function(b){
       b.addEventListener('click', function(){ guardar(b); });
     });
-    Array.prototype.forEach.call(document.querySelectorAll('[data-action="cambiar"]'), function(b){
-      b.addEventListener('click', function(){ alert('Próximamente: Selector de recetas'); });
+    // Filtros de la agenda
+    Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="agenda"] [data-agenda-list]'), function(list){
+      var row=list.previousElementSibling; if(!row) return;
+      Array.prototype.forEach.call(row.children, function(chip,i){ if(i>3) return; chip.addEventListener('click', function(){ state.filter=FILTER_KEYS[i]; renderAgenda(); }); });
     });
-    renderAgenda();
+    // Delegación para elementos dinámicos y de acción
+    document.addEventListener('click', function(ev){
+      var cob=ev.target.closest('[data-cobrar]'); if(cob){ cobrar(parseInt(cob.getAttribute('data-cobrar'),10)); return; }
+      var est=ev.target.closest('[data-estado-btn]'); if(est){ cycleEstado(parseInt(est.getAttribute('data-estado-btn'),10)); return; }
+      var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
+      var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action'); if(a==='cambiar'){ openRecipeSelector(); } else if(a==='nueva-receta'){ openRecipeEditor(null); } }
+    });
   }
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', enhance);
