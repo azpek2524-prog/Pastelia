@@ -703,6 +703,66 @@
         .ped-ava { width:52px; height:52px; border-radius:16px; display:grid; place-items:center; font-size:26px; flex:none; }
 
         /* =========================================================
+           MAQUETA — Ventana flotante (escritorio) + cabecera móvil
+           ========================================================= */
+        .desk-only { display: block; }
+        .m-only { display: none; }
+
+        @media (min-width: 900px) {
+            body { justify-content: center; padding: 20px 0; }
+            .shell {
+                width: min(1280px, 95vw);
+                height: min(800px, 90vh);
+                margin: 0 auto;
+                background: #fdf5ec;
+                border-radius: 28px;
+                overflow: hidden;
+                box-shadow: 0 40px 80px -30px rgba(74,52,46,.45);
+                flex: none;
+            }
+            .sidebar { height: 100%; position: static; }
+            .main-area { overflow-y: auto; }
+            main.container { padding: 30px 0 48px; }
+        }
+
+        @media (max-width: 899px) {
+            .desk-only { display: none !important; }
+            .m-only { display: block !important; }
+            .mobile-topbar { display: none !important; }
+            body { background: #fdf5ec; }
+        }
+
+        /* ----- Cabecera coral de Inicio (móvil) ----- */
+        .m-hero { position: relative; color: #fff; margin: -18px -20px 0; }
+        .m-hero-bg { position: absolute; top: 0; left: 0; right: 0; height: 270px; background: linear-gradient(150deg, var(--sage), var(--peach)); }
+        .m-hero-wave { position: absolute; top: 250px; left: 0; width: 100%; height: 40px; display: block; }
+        .m-hero-inner { position: relative; padding: 20px 24px 0; }
+        .m-hero-top { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 18px; }
+        .m-hero-greet { font-size: 13px; font-weight: 800; opacity: .9; }
+        .m-hero-brand { font-family: var(--font-head); font-weight: 600; font-size: 26px; line-height: 1.05; }
+        .m-hero-ava { width: 48px; height: 48px; border-radius: 16px; background: rgba(255,255,255,.25); display: grid; place-items: center; font-size: 24px; flex: none; }
+        .m-hero-big { display: flex; align-items: flex-end; gap: 14px; padding-bottom: 8px; }
+        .m-hero-big .n { font-family: var(--font-head); font-weight: 700; font-size: 76px; line-height: .85; }
+        .m-hero-big-r { padding-bottom: 10px; }
+        .m-hero-big .r1 { font-family: var(--font-head); font-weight: 500; font-size: 20px; line-height: 1; }
+        .m-hero-big .r2 { font-size: 13px; font-weight: 800; opacity: .9; }
+
+        /* ----- Cuerpo de Inicio (móvil) ----- */
+        .m-body { position: relative; padding: 12px 0 20px; }
+        .m-qa { display: flex; gap: 12px; margin: 4px 0 14px; }
+        .m-qa-card { flex: 1; background: #fff; border: 0; border-radius: 22px; padding: 16px; box-shadow: 0 10px 20px -14px rgba(74,52,46,.5); font-family: inherit; text-align: left; color: var(--ink); cursor: pointer; }
+        .m-qa-card.pri { background: var(--sage); color: #fff; box-shadow: 0 14px 24px -12px rgba(239,124,142,.8); }
+        .m-qa-card .e { font-size: 24px; }
+        .m-qa-card .t { font-family: var(--font-head); font-weight: 600; font-size: 15px; margin-top: 6px; }
+        .m-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .m-mini { border-radius: 20px; padding: 14px 16px; border: 0; font-family: inherit; text-align: left; cursor: pointer; }
+        .m-mini .l { font-size: 12px; font-weight: 800; }
+        .m-mini .v { font-family: var(--font-head); font-weight: 600; font-size: 24px; margin-top: 2px; }
+        .m-wide { border-radius: 20px; padding: 14px 16px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; }
+        .m-wide .l { font-size: 12px; font-weight: 800; }
+        .m-wide .v { font-family: var(--font-head); font-weight: 600; font-size: 26px; }
+
+        /* =========================================================
            FORMULARIO IMPRIMIBLE (PDF)
            ========================================================= */
         #formulario-print { display: none; }
@@ -832,6 +892,44 @@
 
         <!-- ================= INICIO (DASHBOARD) ================= -->
         <section id="section-inicio">
+
+            <!-- ===== MÓVIL: cabecera coral + cuerpo ===== -->
+            <div class="m-only">
+                <div class="m-hero">
+                    <div class="m-hero-bg"></div>
+                    <svg class="m-hero-wave" viewBox="0 0 390 40" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg"><path d="M0 40 C 32 6, 65 6, 97 24 S 162 42, 195 24 S 260 6, 292 24 S 358 42, 390 20 L390 40 Z" fill="#fdf5ec"></path></svg>
+                    <div class="m-hero-inner">
+                        <div class="m-hero-top">
+                            <div>
+                                <div class="m-hero-greet" id="m-greet">Buen día ☀️</div>
+                                <div class="m-hero-brand" id="m-brand">Pastelia</div>
+                            </div>
+                            <div class="m-hero-ava">🧁</div>
+                        </div>
+                        <div class="m-hero-big">
+                            <div class="n" id="m-hoy">0</div>
+                            <div class="m-hero-big-r"><div class="r1">entregas</div><div class="r2">para hoy 🎉</div></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-body">
+                    <div class="m-qa">
+                        <button class="m-qa-card pri" onclick="switchTab('cotizador')"><div class="e">✏️</div><div class="t">Cotizar</div></button>
+                        <button class="m-qa-card" onclick="switchTab('cotizador')"><div class="e">📄</div><div class="t">PDF</div></button>
+                        <button class="m-qa-card" onclick="switchTab('cotizador')"><div class="e">💬</div><div class="t">Ticket</div></button>
+                    </div>
+                    <div class="m-2">
+                        <div class="m-mini" style="background:var(--green)"><div class="l" style="color:var(--green-t)">Por cobrar 💰</div><div class="v" id="m-cobrar">$0</div></div>
+                        <button class="m-mini" style="background:var(--lilac)" onclick="switchTab('pedidos')"><div class="l" style="color:var(--lilac-t)">Semana 📦</div><div class="v" id="m-semana">0 pedidos</div></button>
+                    </div>
+                    <div class="m-wide" style="background:var(--sky)"><div><div class="l" style="color:#5a92a3">Ingresos del mes 💵</div><div class="v" id="m-mes">$0</div></div></div>
+                    <div class="h-sec-h" style="margin-top:20px;"><div class="t fk">Entregas de hoy</div><button class="a" onclick="switchTab('pedidos')">Ver todas</button></div>
+                    <div class="hlist" id="m-entregas"></div>
+                </div>
+            </div>
+
+            <!-- ===== ESCRITORIO ===== -->
+            <div class="desk-only">
             <div class="home-top">
                 <div>
                     <div class="home-greet" id="dash-date">Hoy</div>
@@ -878,6 +976,7 @@
                     <div class="hrecis" id="dash-recetas"></div>
                 </div>
             </div>
+            </div><!-- /desk-only -->
         </section>
 
         <!-- ================= RECETAS ================= -->
@@ -1692,6 +1791,20 @@
         }
 
         /* ===================== NAVEGACIÓN ===================== */
+        function actualizarSidebar() {
+            let cobrar = 0, conSaldo = 0, activos = 0;
+            pedidos.forEach(p => {
+                if (pedidoActivo(p)) {
+                    activos++;
+                    const s = Math.max(0, (p.total || 0) - (p.pagado || 0));
+                    if (s > 0) { cobrar += s; conSaldo++; }
+                }
+            });
+            const sc = document.getElementById('side-cobrar'); if (sc) sc.innerText = money(cobrar).replace('.00', '');
+            const scs = document.getElementById('side-cobrar-sub'); if (scs) scs.innerText = `${conSaldo} pedido(s) con saldo`;
+            document.querySelectorAll('.pedidos-badge').forEach(b => { b.innerText = activos; b.classList.toggle('hidden', activos === 0); });
+        }
+
         const SECCIONES = {
             inicio: 'section-inicio',
             cotizador: 'section-cotizador',
@@ -1714,6 +1827,9 @@
             if (tabId === 'cotizador') { renderizarCotizador(); calcularTotales(); }
             if (tabId === 'pedidos') { renderPedidos(); }
             if (tabId === 'recetas') { renderRecetasScreen(); }
+            actualizarSidebar();
+            const ma = document.querySelector('.main-area');
+            if (ma && ma.scrollHeight > ma.clientHeight) ma.scrollTo({ top: 0, behavior: 'smooth' });
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -1786,14 +1902,23 @@
             const sc = document.getElementById('side-cobrar'); if (sc) sc.innerText = money(cobrar).replace('.00', '');
             const scs = document.getElementById('side-cobrar-sub'); if (scs) scs.innerText = `${conSaldo} pedido(s) con saldo`;
 
+            // Cabecera y tarjetas móviles
+            const setT = (id, v) => { const e = document.getElementById(id); if (e) e.innerText = v; };
+            setT('m-greet', `${dia.charAt(0).toUpperCase()}${dia.slice(1)} ${now.getDate()} · Buen día ☀️`);
+            setT('m-brand', BRAND.nombre || 'Pastelia');
+            setT('m-hoy', hoy);
+            setT('m-cobrar', money(cobrar).replace('.00', ''));
+            setT('m-semana', `${semana} ${semana === 1 ? 'pedido' : 'pedidos'}`);
+            setT('m-mes', moneyCompact(ventasMes));
+
             // Próximas entregas (filas con avatar)
             const avaBg = ['var(--tan)', 'var(--lilac)', 'var(--pink)', 'var(--sky)'];
             const avaEmo = ['🎂', '🧁', '🍰', '🎂'];
-            const ent = document.getElementById('dash-entregas');
+            let entHTML;
             if (!prox.length) {
-                ent.innerHTML = `<div class="empty-hint">Sin entregas próximas. Guarda un pedido en la agenda.</div>`;
+                entHTML = `<div class="empty-hint">Sin entregas próximas. Guarda un pedido en la agenda.</div>`;
             } else {
-                ent.innerHTML = prox.slice(0, 4).map((p, i) => {
+                entHTML = prox.slice(0, 4).map((p, i) => {
                     const saldo = Math.max(0, (p.total || 0) - (p.pagado || 0));
                     const d = diasHasta(p.fechaEntrega);
                     let cuando = fmtFecha(p.fechaEntrega);
@@ -1807,6 +1932,8 @@
                     return `<div class="hrow"><div class="hava" style="background:${avaBg[i % 4]}">${avaEmo[i % 4]}</div><div style="flex:1;min-width:0"><div class="nm">${esc(p.cliente)}</div><div class="mt">${esc(sub)}</div></div><div style="text-align:right"><div class="pr">${money(p.total)}</div>${badge}</div></div>`;
                 }).join('');
             }
+            const ent = document.getElementById('dash-entregas'); if (ent) ent.innerHTML = entHTML;
+            const entM = document.getElementById('m-entregas'); if (entM) entM.innerHTML = entHTML;
 
             // Recetas favoritas
             const rc = document.getElementById('dash-recetas');
