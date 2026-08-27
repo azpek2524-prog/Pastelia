@@ -571,5 +571,101 @@
   apply(saved);
 })();
 </script>
+
+<!-- ============================================================
+     FUNCIONALIDAD (mejora progresiva, sin tocar el diseño)
+     Etapa 1: Cotizar — seleccionar tamaño/extras y calcular precio en vivo
+     ============================================================ -->
+<script>
+(function(){
+  // Modelo base tomado del propio diseño: Mediano 20p con Insumos $210 y Mano de obra $180,
+  // Flores +$120 y margen 40% => $714 ($35.70/porción). Se conserva idéntico al arranque.
+  var SIZES = {
+    'Petit':   { mult:0.45, porc:9  },
+    'Chico':   { mult:0.65, porc:13 },
+    'Mediano': { mult:1.00, porc:20 },
+    'Grande':  { mult:1.45, porc:28 },
+    'Bento':   { mult:0.15, porc:2  }
+  };
+  var BASE   = { insumos:210, mano:180 };
+  var EXTRAS = { 'Flores':120, 'Topper':80 };
+  var MARGIN = 0.40;
+  var state  = { size:'Mediano', extras:{ 'Flores':true, 'Topper':false } };
+
+  function money(n){ return '$' + Math.round(n).toLocaleString('es-MX'); }
+  function sizeKey(t){ t=(t||'').trim(); for(var k in SIZES){ if(t.indexOf(k)===0) return k; } return null; }
+  function extraKey(t){ t=(t||'').trim(); for(var k in EXTRAS){ if(t.indexOf(k)===0) return k; } return null; }
+  function panes(){ return document.querySelectorAll('.pane[data-scr="cotizar"]'); }
+  function leafDivs(pane){ return Array.prototype.filter.call(pane.querySelectorAll('div'), function(d){ return d.children.length===0; }); }
+  function sizeChips(pane){ return leafDivs(pane).filter(function(d){ return sizeKey(d.textContent); }); }
+  function extraChips(pane){ return leafDivs(pane).filter(function(d){ return extraKey(d.textContent); }); }
+
+  function calc(){
+    var s = SIZES[state.size];
+    var insumos = BASE.insumos * s.mult;
+    var mano = BASE.mano * s.mult;
+    var extras = 0, activos = [];
+    for (var k in state.extras){ if (state.extras[k]){ extras += EXTRAS[k]; activos.push(k.toLowerCase()); } }
+    var costo = insumos + mano + extras;
+    var margen = costo * MARGIN;
+    var precio = costo + margen;
+    return { insumos:insumos, mano:mano, extras:extras, margen:margen, precio:precio,
+             porcion: precio / s.porc, activos:activos };
+  }
+
+  function paint(pane, v){
+    // chips de tamaño
+    sizeChips(pane).forEach(function(chip){
+      var on = sizeKey(chip.textContent) === state.size;
+      chip.style.background = on ? '#ef7c8e' : '#faf3ec';
+      chip.style.color = on ? '#fff' : 'rgba(74,52,46,.55)';
+      chip.style.cursor = 'pointer';
+    });
+    // chips de extras (solo existen en móvil)
+    extraChips(pane).forEach(function(chip){
+      var kk = extraKey(chip.textContent), on = state.extras[kk];
+      if (kk === 'Flores'){ chip.style.background = on?'#e9f2df':'#faf3ec'; chip.style.color = on?'#5e7346':'rgba(74,52,46,.5)'; }
+      else if (kk === 'Topper'){ chip.style.background = on?'#efe6f7':'#faf3ec'; chip.style.color = on?'#7a5fa8':'rgba(74,52,46,.5)'; }
+      chip.style.cursor = 'pointer';
+    });
+    // filas del resumen (pares de <span>)
+    Array.prototype.forEach.call(pane.querySelectorAll('div'), function(row){
+      if (row.children.length!==2) return;
+      var a = row.firstElementChild, b = row.lastElementChild;
+      if (a.tagName!=='SPAN' || b.tagName!=='SPAN') return;
+      var lab = (a.textContent||'').trim();
+      if (/^Insumos/.test(lab)) b.textContent = money(v.insumos);
+      else if (/^Mano de obra/.test(lab)) b.textContent = money(v.mano);
+      else if (/^Extras/.test(lab)){ a.textContent = 'Extras' + (v.activos.length?' ('+v.activos.join(', ')+')':''); b.textContent = money(v.extras); }
+      else if (/^Margen/.test(lab)){ a.textContent = 'Margen '+Math.round(MARGIN*100)+'%'; b.textContent = money(v.margen); }
+    });
+    // precio grande + por porción
+    leafDivs(pane).forEach(function(d){
+      if ((d.textContent||'').trim()==='Precio sugerido'){
+        var pr = d.nextElementSibling, pc = pr && pr.nextElementSibling;
+        if (pr) pr.textContent = money(v.precio);
+        if (pc) pc.textContent = '$'+v.porcion.toFixed(2)+' por porción';
+      }
+    });
+  }
+
+  function render(){ var v = calc(); Array.prototype.forEach.call(panes(), function(p){ paint(p, v); }); }
+
+  function enhance(){
+    Array.prototype.forEach.call(panes(), function(pane){
+      sizeChips(pane).forEach(function(chip){
+        chip.addEventListener('click', function(){ state.size = sizeKey(chip.textContent); render(); });
+      });
+      extraChips(pane).forEach(function(chip){
+        chip.addEventListener('click', function(){ var k=extraKey(chip.textContent); state.extras[k]=!state.extras[k]; render(); });
+      });
+    });
+    render();
+  }
+
+  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', enhance);
+  else enhance();
+})();
+</script>
 </body>
 </html>
