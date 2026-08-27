@@ -141,9 +141,9 @@
               <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(74,52,46,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:12px">👤 Cliente y evento</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                  <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">NOMBRE</div><div style="background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px">Marisol González</div></div>
-                  <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">TELÉFONO</div><div style="background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px">55 1234 5678</div></div>
-                  <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">EVENTO</div><div style="background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px">13 ago · 11:30</div></div>
+                  <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#4a342e"></div>
+                  <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#4a342e"></div>
+                  <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#4a342e"></div>
                 </div>
               </div>
               <!-- card: pastel -->
@@ -151,7 +151,7 @@
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:6px">🎂 El pastel</div>
                 <div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700;margin-bottom:12px">Elige receta y tamaño — sabores y precio se llenan solos ✨</div>
                 <div style="background:#fbeef1;border:2px solid #f2c4ce;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
-                  <div style="font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Receta base guardada</div></div><div style="font-size:12px;font-weight:800;color:#ef7c8e">Cambiar</div>
+                  <div style="font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:12px;font-weight:800;color:#ef7c8e;cursor:pointer">Cambiar</div>
                 </div>
                 <div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:6px">TAMAÑO</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px">
@@ -182,7 +182,7 @@
                 </div>
                 <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:14px"><div style="font-size:12px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:40px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
                 <div style="display:flex;gap:10px;margin-top:16px">
-                  <div style="flex:2;background:#ef7c8e;text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px">Guardar</div>
+                  <div data-action="guardar" style="flex:2;background:#ef7c8e;text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px;cursor:pointer">Guardar</div>
                   <div style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px">📄</div>
                   <div style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px">💬</div>
                 </div>
@@ -209,34 +209,7 @@
                 <div style="flex:none;background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Apartados</div>
                 <div style="flex:none;background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Entregados</div>
               </div>
-              <div style="display:flex;flex-direction:column;gap:12px">
-                <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(74,52,46,.4)">
-                  <div style="display:flex;align-items:center;gap:12px">
-                    <div style="width:44px;height:44px;border-radius:14px;background:#ffe1c9;display:flex;align-items:center;justify-content:center;font-size:22px">🎂</div>
-                    <div style="flex:1"><div style="font-weight:800;font-size:15px">Pastel Frida · 20p</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Marisol G. · Hoy 11:30</div></div>
-                    <div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:17px">$680</div><div style="font-size:10px;font-weight:800;color:#c78a3b">Resta $340</div></div>
-                  </div>
-                  <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(74,52,46,.07)">
-                    <div style="flex:1;text-align:center;background:#25d366;color:#fff;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💬 WhatsApp</div>
-                    <div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">📄 PDF</div>
-                    <div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💵 Cobrar</div>
-                  </div>
-                </div>
-                <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(74,52,46,.4)">
-                  <div style="display:flex;align-items:center;gap:12px">
-                    <div style="width:44px;height:44px;border-radius:14px;background:#efe6f7;display:flex;align-items:center;justify-content:center;font-size:22px">🧁</div>
-                    <div style="flex:1"><div style="font-weight:800;font-size:15px">Cupcakes x24</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Bruno T. · Hoy 16:00</div></div>
-                    <div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:17px">$420</div><div style="font-size:10px;font-weight:800;color:#7f9663">Pagado ✓</div></div>
-                  </div>
-                </div>
-                <div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(74,52,46,.4)">
-                  <div style="display:flex;align-items:center;gap:12px">
-                    <div style="width:44px;height:44px;border-radius:14px;background:#d9edf2;display:flex;align-items:center;justify-content:center;font-size:22px">🎂</div>
-                    <div style="flex:1"><div style="font-weight:800;font-size:15px">Boda · 3 pisos</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Diana R. · Sáb 18:00</div></div>
-                    <div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:17px">$2,400</div><div style="font-size:10px;font-weight:800;color:#c78a3b">Apartado</div></div>
-                  </div>
-                </div>
-              </div>
+              <div data-agenda-list style="display:flex;flex-direction:column;gap:12px"></div>
             </div>
           </div>
         </div>
@@ -413,14 +386,14 @@
             <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(74,52,46,.45)">
               <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px">👤 Cliente y evento</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">NOMBRE</div><div style="background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px">Marisol González</div></div>
-                <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">TELÉFONO</div><div style="background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px">55 1234 5678</div></div>
-                <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">EVENTO</div><div style="background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px">13 ago · 11:30</div></div>
+                <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e"></div>
+                <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e"></div>
+                <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e"></div>
               </div>
             </div>
             <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(74,52,46,.45)">
               <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:12px">🎂 El pastel</div>
-              <div style="background:#fbeef1;border:2px solid #f2c4ce;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:24px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Receta base guardada</div></div><div style="font-size:13px;font-weight:800;color:#ef7c8e">Cambiar</div></div>
+              <div style="background:#fbeef1;border:2px solid #f2c4ce;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:24px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:13px;font-weight:800;color:#ef7c8e;cursor:pointer">Cambiar</div></div>
               <div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:8px">TAMAÑO</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px">
                 <div style="background:#faf3ec;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(74,52,46,.55)">Petit</div>
@@ -442,7 +415,7 @@
             </div>
             <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:16px"><div style="font-size:13px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:44px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
-              <div style="background:#ef7c8e;text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px">Guardar cotización</div>
+              <div data-action="guardar" style="background:#ef7c8e;text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Guardar cotización</div>
               <div style="display:flex;gap:10px"><div style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px">📄 PDF</div><div style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px">💬 Ticket</div></div>
             </div>
           </div>
@@ -469,26 +442,7 @@
           <div style="background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Apartados</div>
           <div style="background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Entregados</div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;gap:16px">
-            <div style="width:52px;height:52px;border-radius:16px;background:#ffe1c9;display:flex;align-items:center;justify-content:center;font-size:26px">🎂</div>
-            <div style="flex:1"><div style="font-weight:800;font-size:16px">Pastel Frida · 20p</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Marisol G. · Hoy 11:30 · Chocoavellana</div></div>
-            <div style="text-align:right;margin-right:8px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">$680</div><div style="font-size:11px;font-weight:800;color:#c78a3b">Resta $340</div></div>
-            <div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div><div style="background:#ef7c8e;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💵 Cobrar</div></div>
-          </div>
-          <div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;gap:16px">
-            <div style="width:52px;height:52px;border-radius:16px;background:#efe6f7;display:flex;align-items:center;justify-content:center;font-size:26px">🧁</div>
-            <div style="flex:1"><div style="font-weight:800;font-size:16px">Cupcakes x24</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Bruno T. · Hoy 16:00 · Vainilla</div></div>
-            <div style="text-align:right;margin-right:8px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">$420</div><div style="font-size:11px;font-weight:800;color:#7f9663">Pagado ✓</div></div>
-            <div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div></div>
-          </div>
-          <div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;gap:16px">
-            <div style="width:52px;height:52px;border-radius:16px;background:#d9edf2;display:flex;align-items:center;justify-content:center;font-size:26px">🎂</div>
-            <div style="flex:1"><div style="font-weight:800;font-size:16px">Boda · 3 pisos</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Diana R. · Sáb 18:00 · Red velvet</div></div>
-            <div style="text-align:right;margin-right:8px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">$2,400</div><div style="font-size:11px;font-weight:800;color:#c78a3b">Apartado</div></div>
-            <div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div><div style="background:#ef7c8e;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💵 Cobrar</div></div>
-          </div>
-        </div>
+        <div data-agenda-list style="display:flex;flex-direction:column;gap:14px"></div>
       </div>
     </div>
 
@@ -651,6 +605,94 @@
 
   function render(){ var v = calc(); Array.prototype.forEach.call(panes(), function(p){ paint(p, v); }); }
 
+  /* ---------- Etapa 2: guardado + agenda ---------- */
+  var ORDERS_KEY = 'pastelia_pedidos';
+  function readOrders(){ try{ return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }catch(e){ return []; } }
+  function saveOrders(a){ try{ localStorage.setItem(ORDERS_KEY, JSON.stringify(a)); }catch(e){} }
+  function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
+  function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function fFecha(iso){ if(!iso) return 'Sin fecha'; var p=(''+iso).split('-'); if(p.length!==3) return iso; var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return parseInt(p[2],10)+' '+m[parseInt(p[1],10)-1]; }
+  function within7(iso){ if(!iso) return false; var d=new Date(iso+'T00:00:00'); var n=new Date(); n.setHours(0,0,0,0); var diff=(d-n)/86400000; return diff>=0 && diff<=7; }
+
+  function toast(msg){
+    var t=document.createElement('div');
+    t.textContent=msg;
+    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#4a342e;color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 14px 34px -12px rgba(74,52,46,.55);opacity:0;transition:opacity .25s;max-width:88vw;text-align:center';
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){ t.style.opacity='1'; });
+    setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 320); }, 2200);
+  }
+  function goTo(scr){ var b=document.querySelector('[data-go="'+scr+'"]'); if(b) b.click(); }
+
+  var AVA_BG = ['#ffe1c9','#efe6f7','#d9edf2','#f7d9e0'];
+  var AVA_EMO = ['🎂','🧁','🍰','🎂'];
+  function orderSub(o){ var ex = (o.extras&&o.extras.length)? o.extras.join(', ') : 'Sin extras'; return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+ex; }
+
+  function mobCard(o,i){
+    var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
+    return '<div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(74,52,46,.4)">'
+      + '<div style="display:flex;align-items:center;gap:12px">'
+      + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:22px">'+emo+'</div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+'</div></div>'
+      + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div><div style="font-size:10px;font-weight:800;color:#c78a3b">'+esc(o.estado||'Cotizado')+'</div></div>'
+      + '</div>'
+      + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(74,52,46,.07)">'
+      + '<div style="flex:1;text-align:center;background:#25d366;color:#fff;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💬 WhatsApp</div>'
+      + '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">📄 PDF</div>'
+      + '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💵 Cobrar</div>'
+      + '</div></div>';
+  }
+  function deskCard(o,i){
+    var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
+    return '<div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;gap:16px">'
+      + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:26px">'+emo+'</div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">'+orderSub(o)+'</div></div>'
+      + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div><div style="font-size:11px;font-weight:800;color:#c78a3b">'+esc(o.estado||'Cotizado')+'</div></div>'
+      + '<div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div><div style="background:#ef7c8e;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💵 Cobrar</div></div>'
+      + '</div>';
+  }
+  function emptyState(){
+    return '<div style="text-align:center;padding:48px 16px;color:rgba(74,52,46,.45)"><div style="font-size:40px">📭</div>'
+      + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:8px;color:rgba(74,52,46,.7)">No hay pedidos aún</div>'
+      + '<div style="font-size:12px;font-weight:700;margin-top:4px">Crea una cotización y guárdala para verla aquí.</div></div>';
+  }
+  function setKPI(pane,label,val){
+    var leaves=Array.prototype.filter.call(pane.querySelectorAll('div'), function(d){ return d.children.length===0; });
+    for(var i=0;i<leaves.length;i++){ if((leaves[i].textContent||'').trim()===label){ var n=leaves[i].previousElementSibling; if(n) n.textContent=val; break; } }
+  }
+  function renderAgenda(){
+    var orders=readOrders();
+    var t=todayISO(), hoy=0, sem=0, cobrar=0;
+    orders.forEach(function(o){ if(o.fechaEvento===t) hoy++; if(within7(o.fechaEvento)) sem++; cobrar+=(o.total||0); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-agenda-list]'), function(list){
+      var isMob = !!list.closest('#mobile');
+      list.innerHTML = orders.length
+        ? orders.map(function(o,i){ return isMob ? mobCard(o,i) : deskCard(o,i); }).join('')
+        : emptyState();
+      var pane=list.closest('.pane[data-scr="agenda"]');
+      if(pane){ setKPI(pane,'Entregas hoy',hoy); setKPI(pane,'Esta semana',sem); setKPI(pane,'Por cobrar',money(cobrar)); setKPI(pane,'Activos',orders.length); }
+    });
+  }
+
+  function guardar(btn){
+    var pane = btn.closest('.pane[data-scr="cotizar"]');
+    function val(f){ var e=pane.querySelector('[data-field="'+f+'"]'); return e ? e.value.trim() : ''; }
+    var nombre=val('nombre'), tel=val('tel'), fecha=val('fecha');
+    if(!nombre){ toast('Escribe el nombre del cliente'); return; }
+    var v=calc(), activos=[];
+    for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
+    var order={ id:Date.now(), cliente:nombre, telefono:tel, fechaEvento:fecha,
+                tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
+                total:Math.round(v.precio), estado:'Cotizado', creado:new Date().toISOString() };
+    var arr=readOrders(); arr.push(order); saveOrders(arr);
+    Array.prototype.forEach.call(panes(), function(p){
+      ['nombre','tel','fecha'].forEach(function(f){ var e=p.querySelector('[data-field="'+f+'"]'); if(e) e.value=''; });
+    });
+    renderAgenda();
+    toast('Pedido guardado en la agenda ✓');
+    goTo('agenda');
+  }
+
   function enhance(){
     Array.prototype.forEach.call(panes(), function(pane){
       sizeChips(pane).forEach(function(chip){
@@ -661,6 +703,13 @@
       });
     });
     render();
+    Array.prototype.forEach.call(document.querySelectorAll('[data-action="guardar"]'), function(b){
+      b.addEventListener('click', function(){ guardar(b); });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-action="cambiar"]'), function(b){
+      b.addEventListener('click', function(){ alert('Próximamente: Selector de recetas'); });
+    });
+    renderAgenda();
   }
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', enhance);

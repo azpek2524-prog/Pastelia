@@ -1,9 +1,26 @@
 # Auditoría de botones y enlaces — Pastelia
 
 > Estado tras aplicar el diseño definitivo **al pie de la letra** (commit `306c380`).
-> El diseño entregado es una maqueta **visual/estática**: solo la **navegación entre pantallas** está conectada. Todo lo demás son elementos de muestra sin lógica. Esta lista documenta qué falta cablear (sin corregir todavía, según lo pedido).
+> El diseño entregado es una maqueta **visual/estática**: solo la **navegación entre pantallas** está conectada. Todo lo demás son elementos de muestra sin lógica. Esta lista documenta qué falta cablear.
 
 Fecha: 2026-08-27
+
+---
+
+## 🟢 Progreso de cableado
+
+**Etapa 1 — Cotizador (motor de precios)** ✅
+- Chips de TAMAÑO seleccionables y cálculo en vivo.
+- Chips de Extras (Flores/Topper) activables que suman al precio.
+- "Resumen en vivo" (insumos, mano de obra, extras, margen, precio, por porción) calculado.
+
+**Etapa 2 — Cliente + Guardado + Agenda** ✅
+- Campos Nombre/Teléfono/Evento convertidos a `<input>` reales (mismo diseño).
+- Botón **Guardar / Guardar cotización**: arma el pedido y lo persiste en `localStorage` (`pastelia_pedidos`), muestra confirmación, limpia el formulario y navega a Agenda.
+- **Agenda dinámica**: lee `pastelia_pedidos` y renderiza tarjetas reales (o estado vacío "No hay pedidos aún"); los KPIs (Entregas hoy / Esta semana / Por cobrar / Activos) se calculan solos.
+- Botón **"Cambiar"** receta: muestra aviso "Próximamente: Selector de recetas".
+
+**Pendiente (próximas etapas):** botones PDF y Ticket (WhatsApp), botón "Cobrar" y estados del pedido en la Agenda, filtros de la Agenda (Activos/Todos/…), buscadores, e inventario editable en "Mis precios".
 
 ---
 
