@@ -53,6 +53,15 @@
     .ph{width:100%;height:100%;border-radius:0;padding:0;box-shadow:none}
     .ph-scr{border-radius:0;height:100%}
   }
+  /* ---------- Impresión / PDF ---------- */
+  @media screen { #pastelia-print{ display:none; } }
+  @media print {
+    html, body { background:#fff !important; }
+    body > *:not(#pastelia-print){ display:none !important; }
+    #pastelia-print{ display:block !important; padding:0; }
+    #pastelia-print *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    @page { margin:14mm; }
+  }
 </style>
 </head>
 <body>
@@ -183,8 +192,8 @@
                 <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:14px"><div style="font-size:12px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:40px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
                 <div style="display:flex;gap:10px;margin-top:16px">
                   <div data-action="guardar" style="flex:2;background:#ef7c8e;text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px;cursor:pointer">Guardar</div>
-                  <div style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px">📄</div>
-                  <div style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px">💬</div>
+                  <div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer">📄</div>
+                  <div data-action="ticket" style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer">💬</div>
                 </div>
               </div>
             </div>
@@ -221,24 +230,8 @@
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px">🧾 Mis precios</div>
               <div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza.</div>
-              <div style="background:#faf3ec;border-radius:16px;padding:12px 14px;margin-top:14px;display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;color:rgba(74,52,46,.5)">🔍 Buscar insumo…</div>
-              <div style="display:flex;flex-direction:column;gap:10px;margin-top:14px">
-                <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#ffe9c7;display:flex;align-items:center;justify-content:center;font-size:20px">🧈</div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Mantequilla</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">$186 / 1000 g</div></div>
-                  <div style="background:#faf3ec;border-radius:12px;padding:8px 12px;font-family:'Fredoka';font-weight:600;font-size:14px">$0.19<span style="font-size:10px;color:rgba(74,52,46,.5)">/g</span></div>
-                </div>
-                <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#f6ead2;display:flex;align-items:center;justify-content:center;font-size:20px">🌾</div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Harina</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">$32 / 1000 g</div></div>
-                  <div style="background:#faf3ec;border-radius:12px;padding:8px 12px;font-family:'Fredoka';font-weight:600;font-size:14px">$0.03<span style="font-size:10px;color:rgba(74,52,46,.5)">/g</span></div>
-                </div>
-                <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#f7d9e0;display:flex;align-items:center;justify-content:center;font-size:20px">🥚</div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Huevo</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">$62 / 30 pz</div></div>
-                  <div style="background:#faf3ec;border-radius:12px;padding:8px 12px;font-family:'Fredoka';font-weight:600;font-size:14px">$2.07<span style="font-size:10px;color:rgba(74,52,46,.5)">/pz</span></div>
-                </div>
-              </div>
+              <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#faf3ec;border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:13px;color:#4a342e;border:0;outline:none;font-family:inherit">
+              <div data-insumos-list style="display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
               <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin:20px 2px 10px">🎀 Extras de diseño</div>
               <div style="display:flex;flex-direction:column;gap:10px">
                 <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
@@ -248,7 +241,7 @@
                 <div><div style="font-size:12px;font-weight:800;color:rgba(74,52,46,.5)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.5)">Aplicado a cada cotización</div></div>
                 <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#ef7c8e">40%</div>
               </div>
-              <div style="background:#ef7c8e;color:#fff;border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(239,124,142,.7)">💾 Guardar inventario</div>
+              <div data-action="guardar-inv" style="background:#ef7c8e;color:#fff;border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(239,124,142,.7);cursor:pointer">💾 Guardar inventario</div>
             </div>
           </div>
         </div>
@@ -411,7 +404,7 @@
             <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:16px"><div style="font-size:13px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:44px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
               <div data-action="guardar" style="background:#ef7c8e;text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Guardar cotización</div>
-              <div style="display:flex;gap:10px"><div style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px">📄 PDF</div><div style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px">💬 Ticket</div></div>
+              <div style="display:flex;gap:10px"><div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">📄 PDF</div><div data-action="ticket" style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">💬 Ticket</div></div>
             </div>
           </div>
         </div>
@@ -458,18 +451,13 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px">🧾 Mis precios</div>
-          <div style="background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7)">💾 Guardar inventario</div>
+          <div data-action="guardar-inv" style="background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7);cursor:pointer">💾 Guardar inventario</div>
         </div>
         <div style="font-size:13px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:20px">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza y lo usa al cotizar.</div>
         <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
           <div>
-            <div style="background:#faf3ec;border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:rgba(74,52,46,.5)">🔍 Buscar insumo…</div>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#ffe9c7;display:flex;align-items:center;justify-content:center;font-size:22px">🧈</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Mantequilla</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">$186 / 1000 g</div></div><div style="background:#faf3ec;border-radius:12px;padding:10px 14px;font-family:'Fredoka';font-weight:600;font-size:15px">$0.19<span style="font-size:11px;color:rgba(74,52,46,.5)">/g</span></div></div>
-              <div style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#f6ead2;display:flex;align-items:center;justify-content:center;font-size:22px">🌾</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Harina</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">$32 / 1000 g</div></div><div style="background:#faf3ec;border-radius:12px;padding:10px 14px;font-family:'Fredoka';font-weight:600;font-size:15px">$0.03<span style="font-size:11px;color:rgba(74,52,46,.5)">/g</span></div></div>
-              <div style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#f7d9e0;display:flex;align-items:center;justify-content:center;font-size:22px">🥚</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Huevo</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">$62 / 30 pz</div></div><div style="background:#faf3ec;border-radius:12px;padding:10px 14px;font-family:'Fredoka';font-weight:600;font-size:15px">$2.07<span style="font-size:11px;color:rgba(74,52,46,.5)">/pz</span></div></div>
-              <div style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#e7dff5;display:flex;align-items:center;justify-content:center;font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocolate</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">$145 / 500 g</div></div><div style="background:#faf3ec;border-radius:12px;padding:10px 14px;font-family:'Fredoka';font-weight:600;font-size:15px">$0.29<span style="font-size:11px;color:rgba(74,52,46,.5)">/g</span></div></div>
-            </div>
+            <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#faf3ec;border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:#4a342e;border:0;outline:none;font-family:inherit">
+            <div data-insumos-list style="display:flex;flex-direction:column;gap:12px"></div>
           </div>
           <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(74,52,46,.45)">
             <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px">🎀 Extras de diseño</div>
@@ -490,6 +478,8 @@
   </div>
 </div>
 </div>
+
+<div id="pastelia-print"></div>
 
 <script>
 (function(){
@@ -558,6 +548,23 @@
   var recipes = readRecipes();
   if (!recipes){ recipes = DEFAULT_RECIPES.slice(); saveRecipes(recipes); }
   state.recipe = recipes[0];
+
+  /* ---------- Insumos / Mis precios (localStorage: pastelia_insumos) ---------- */
+  var INSUMOS_KEY = 'pastelia_insumos';
+  var INS_EMOJIS = ['🧈','🌾','🥚','🍫','🍶','🧂','🍓','🫙','🥛','🍋','🧀','🍯'];
+  var ICON_BGS = ['#ffe9c7','#f6ead2','#f7d9e0','#e7dff5','#d9edf2','#e9f2df'];
+  var DEFAULT_INSUMOS = [
+    { id:'ins_mant', nombre:'Mantequilla', emoji:'🧈', iconBg:'#ffe9c7', precio:186, cantidad:1000, unidad:'g'  },
+    { id:'ins_hari', nombre:'Harina',      emoji:'🌾', iconBg:'#f6ead2', precio:32,  cantidad:1000, unidad:'g'  },
+    { id:'ins_hue',  nombre:'Huevo',       emoji:'🥚', iconBg:'#f7d9e0', precio:62,  cantidad:30,   unidad:'pz' },
+    { id:'ins_choc', nombre:'Chocolate',   emoji:'🍫', iconBg:'#e7dff5', precio:145, cantidad:500,  unidad:'g'  }
+  ];
+  function readInsumos(){ try{ var a=JSON.parse(localStorage.getItem(INSUMOS_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
+  function saveInsumos(a){ try{ localStorage.setItem(INSUMOS_KEY, JSON.stringify(a)); }catch(e){} }
+  var insumos = readInsumos();
+  if (!insumos){ insumos = DEFAULT_INSUMOS.slice(); saveInsumos(insumos); }
+  function insumoById(id){ for(var i=0;i<insumos.length;i++){ if(insumos[i].id===id) return insumos[i]; } return null; }
+  function unitCost(it){ var c=(it.cantidad>0)?(it.precio/it.cantidad):0; return (c>=1?c.toFixed(2):c.toFixed(2)); }
 
   function money(n){ return '$' + Math.round(n).toLocaleString('es-MX'); }
   function sizeKey(t){ t=(t||'').trim(); for(var k in SIZES){ if(t.indexOf(k)===0) return k; } return null; }
@@ -664,8 +671,8 @@
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div>'+statusHtml(o,false)+'</div>'
       + '</div>'
       + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(74,52,46,.07)">'
-      + '<div style="flex:1;text-align:center;background:#25d366;color:#fff;border-radius:12px;padding:8px;font-size:12px;font-weight:800">💬 WhatsApp</div>'
-      + '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800">📄 PDF</div>'
+      + '<div data-ticket="'+o.id+'" style="flex:1;text-align:center;background:#25d366;color:#fff;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💬 WhatsApp</div>'
+      + '<div data-pdf="'+o.id+'" style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">📄 PDF</div>'
       + cobrarMob(o)
       + '</div></div>';
   }
@@ -675,7 +682,7 @@
       + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:26px">'+emo+'</div>'
       + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">'+orderSub(o)+'</div></div>'
       + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
-      + '<div style="display:flex;gap:8px"><div style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">💬</div><div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800">📄</div>'+cobrarDesk(o)+'</div>'
+      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">💬</div><div data-pdf="'+o.id+'" style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">📄</div>'+cobrarDesk(o)+'</div>'
       + '</div>';
   }
   function emptyState(){
@@ -835,6 +842,137 @@
     box.querySelector('#rs-nueva').addEventListener('click', function(){ modal.close(); openRecipeEditor(null); });
   }
 
+  /* ---------- Mis precios: render + editor ---------- */
+  function insRowMob(it){
+    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer">'
+      + '<div style="width:40px;height:40px;border-radius:12px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:20px">'+it.emoji+'</div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div>'
+      + '<div style="background:#faf3ec;border-radius:12px;padding:8px 12px;font-family:\'Fredoka\';font-weight:600;font-size:14px">$'+unitCost(it)+'<span style="font-size:10px;color:rgba(74,52,46,.5)">/'+esc(it.unidad)+'</span></div>'
+      + '</div>';
+  }
+  function insRowDesk(it){
+    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:#faf3ec;border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:rgba(74,52,46,.5)">/'+esc(it.unidad)+'</span></div></div>';
+  }
+  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed #f2c4ce;border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:#ef7c8e;font-weight:800;font-size:13px;cursor:pointer">＋ Añadir insumo</div>'; }
+  function renderInsumos(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-insumos-list]'), function(list){
+      var isMob=!!list.closest('#mobile');
+      var pane=list.closest('.pane[data-scr="precios"]');
+      var s=pane?pane.querySelector('[data-buscar-insumo]'):null;
+      var q=s?(s.value||'').toLowerCase().trim():'';
+      var items=insumos.filter(function(it){ return !q || (it.nombre||'').toLowerCase().indexOf(q)>=0; });
+      var html=items.map(function(it){ return isMob?insRowMob(it):insRowDesk(it); }).join('');
+      html+=insAddTile();
+      list.innerHTML=html;
+    });
+  }
+  function openInsumoEditor(item){
+    var isNew=!item;
+    var it=item||{ id:'ins_'+Date.now(), nombre:'', emoji:INS_EMOJIS[insumos.length%INS_EMOJIS.length], iconBg:ICON_BGS[insumos.length%ICON_BGS.length], precio:0, cantidad:1000, unidad:'g' };
+    var box=document.createElement('div');
+    box.innerHTML =
+      '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nuevo insumo':'Editar insumo')+'</div>'
+      + '<div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:14px">La app calcula el costo por gramo o pieza.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">ÍCONO</div>'
+      + '<div id="ic-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">NOMBRE</div>'
+      + '<input id="ic-nombre" type="text" placeholder="Ej. Mantequilla" style="'+fieldStyle()+'">'
+      + '<div style="display:flex;gap:10px;margin-top:12px">'
+      +   '<div style="flex:1.2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">PRECIO ($)</div><input id="ic-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">CANTIDAD</div><input id="ic-cant" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:.8"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">UNIDAD</div><input id="ic-unidad" type="text" placeholder="g" style="'+fieldStyle()+'"></div>'
+      + '</div>'
+      + '<div style="font-size:11px;font-weight:700;color:rgba(74,52,46,.45);margin-top:6px">Ej.: precio 186, cantidad 1000, unidad g → $0.19/g.</div>'
+      + '<div style="display:flex;gap:10px;margin-top:20px">'
+      +   '<div id="ic-save" style="flex:1;text-align:center;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="ic-del" style="text-align:center;background:#fbecea;color:#db5a4e;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      + '</div>'
+      + '<div id="ic-cancel" style="text-align:center;color:rgba(74,52,46,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+    var modal=openModal(box);
+    box.querySelector('#ic-nombre').value=it.nombre;
+    box.querySelector('#ic-precio').value=it.precio;
+    box.querySelector('#ic-cant').value=it.cantidad;
+    box.querySelector('#ic-unidad').value=it.unidad;
+    var chosen=it.emoji, ep=box.querySelector('#ic-emojis');
+    INS_EMOJIS.forEach(function(em){
+      var b=document.createElement('div'); b.textContent=em;
+      b.style.cssText='width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;background:'+(em===chosen?'#fbeef1':'#faf3ec')+';border:2px solid '+(em===chosen?'#ef7c8e':'transparent');
+      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#faf3ec'; c.style.border='2px solid transparent'; }); b.style.background='#fbeef1'; b.style.border='2px solid #ef7c8e'; });
+      ep.appendChild(b);
+    });
+    box.querySelector('#ic-save').addEventListener('click', function(){
+      var nombre=box.querySelector('#ic-nombre').value.trim();
+      if(!nombre){ toast('Escribe el nombre del insumo'); return; }
+      it.nombre=nombre; it.emoji=chosen;
+      it.precio=parseFloat(box.querySelector('#ic-precio').value)||0;
+      it.cantidad=parseFloat(box.querySelector('#ic-cant').value)||0;
+      it.unidad=(box.querySelector('#ic-unidad').value.trim())||'u';
+      if(isNew) insumos.push(it);
+      saveInsumos(insumos); renderInsumos(); modal.close();
+      toast(isNew?'Insumo agregado ✓':'Insumo actualizado ✓');
+    });
+    var del=box.querySelector('#ic-del');
+    if(del) del.addEventListener('click', function(){
+      if(!confirm('¿Eliminar "'+it.nombre+'"?')) return;
+      insumos=insumos.filter(function(x){ return x.id!==it.id; });
+      saveInsumos(insumos); renderInsumos(); modal.close(); toast('Insumo eliminado');
+    });
+    box.querySelector('#ic-cancel').addEventListener('click', function(){ modal.close(); });
+  }
+
+  /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
+  function orderById(id){ var a=readOrders(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
+  function quoteFromPane(pane){
+    function val(f){ var e=pane.querySelector('[data-field="'+f+'"]'); return e?e.value.trim():''; }
+    var v=calc(), activos=[]; for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
+    return { cliente:val('nombre'), telefono:val('tel'), fechaEvento:val('fecha'),
+             receta: state.recipe?state.recipe.nombre:'', tamano:state.size, porciones:SIZES[state.size].porc,
+             extras:activos, total:Math.round(v.precio) };
+  }
+  function waMessage(o){
+    var L=[];
+    L.push('🎂 *Pastelia* — Cotización de pastel');
+    if(o.cliente) L.push('Cliente: '+o.cliente);
+    L.push('Pastel: '+(o.receta||'Pastel')+' · '+o.tamano+' ('+o.porciones+' porciones)');
+    if(o.extras && o.extras.length) L.push('Extras: '+o.extras.join(', '));
+    if(o.fechaEvento) L.push('Entrega: '+fFecha(o.fechaEvento));
+    L.push('Total: '+money(o.total));
+    L.push('¡Gracias por tu preferencia! 💕');
+    return L.join('\n');
+  }
+  function sendWhatsApp(o){
+    if(!o){ toast('No se encontró el pedido'); return; }
+    var phone=(o.telefono||'').replace(/\D/g,'');
+    var msg=waMessage(o);
+    try{ if(navigator.clipboard) navigator.clipboard.writeText(msg); }catch(e){}
+    window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg), '_blank');
+    toast('Abriendo WhatsApp…');
+  }
+  var LOGO_SVG='<svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#3A2A24"></rect><rect x="28" y="24" width="14" height="54" rx="7" fill="#FDF5EC"></rect><circle cx="53" cy="38" r="16" fill="none" stroke="#FDF5EC" stroke-width="14"></circle><circle cx="73" cy="72" r="7" fill="#EF7C8E"></circle></svg>';
+  function printOrder(o){
+    if(!o){ toast('No se encontró el pedido'); return; }
+    var pr=document.getElementById('pastelia-print'); if(!pr) return;
+    var extras=(o.extras&&o.extras.length)?o.extras.join(', '):'—';
+    pr.innerHTML =
+      '<div style="font-family:Nunito,Arial,sans-serif;color:#4a342e;max-width:720px;margin:0 auto">'
+      + '<div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #f2c4ce;padding-bottom:14px">'+LOGO_SVG
+      +   '<div><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">Pastelia</div><div style="font-size:12px;font-weight:800;color:#ef7c8e;letter-spacing:.14em">COTIZACIÓN DE PASTEL</div></div>'
+      +   '<div style="margin-left:auto;text-align:right;font-size:12px;font-weight:700;color:rgba(74,52,46,.55)">'+new Date().toLocaleDateString('es-MX')+'</div></div>'
+      + '<div style="display:flex;gap:20px;margin-top:18px">'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#ef7c8e">CLIENTE</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.cliente||'—')+'</div>'+(o.telefono?'<div style="font-size:12px;color:rgba(74,52,46,.6);font-weight:700">'+esc(o.telefono)+'</div>':'')+'</div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#ef7c8e">FECHA DE ENTREGA</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.fechaEvento?fFecha(o.fechaEvento):'Por definir')+'</div></div></div>'
+      + '<div style="background:#faf3ec;border-radius:16px;padding:16px 18px;margin-top:16px">'
+      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:17px">'+esc(o.receta||'Pastel')+'</div>'
+      +   '<div style="font-size:13px;color:rgba(74,52,46,.65);font-weight:700;margin-top:4px">Tamaño: '+esc(o.tamano)+' · '+o.porciones+' porciones</div>'
+      +   '<div style="font-size:13px;color:rgba(74,52,46,.65);font-weight:700;margin-top:2px">Extras: '+esc(extras)+'</div></div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;border-top:2px solid #f2c4ce;margin-top:18px;padding-top:14px">'
+      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:18px">Total</div>'
+      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:30px;color:#ef7c8e">'+money(o.total)+'</div></div>'
+      + '<div style="text-align:center;color:rgba(74,52,46,.5);font-size:12px;font-weight:700;margin-top:28px">¡Gracias por tu preferencia! 💕 · Pastelia</div>'
+      + '</div>';
+    window.print();
+  }
+
   function guardar(btn){
     var pane = btn.closest('.pane[data-scr="cotizar"]');
     function val(f){ var e=pane.querySelector('[data-field="'+f+'"]'); return e ? e.value.trim() : ''; }
@@ -868,9 +1006,14 @@
     updateRecipeRow();
     renderRecetas();
     renderAgenda();
+    renderInsumos();
     // Guardar (elementos estáticos)
     Array.prototype.forEach.call(document.querySelectorAll('[data-action="guardar"]'), function(b){
       b.addEventListener('click', function(){ guardar(b); });
+    });
+    // Buscador de insumos
+    Array.prototype.forEach.call(document.querySelectorAll('[data-buscar-insumo]'), function(s){
+      s.addEventListener('input', function(){ renderInsumos(); });
     });
     // Filtros de la agenda
     Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="agenda"] [data-agenda-list]'), function(list){
@@ -881,8 +1024,18 @@
     document.addEventListener('click', function(ev){
       var cob=ev.target.closest('[data-cobrar]'); if(cob){ cobrar(parseInt(cob.getAttribute('data-cobrar'),10)); return; }
       var est=ev.target.closest('[data-estado-btn]'); if(est){ cycleEstado(parseInt(est.getAttribute('data-estado-btn'),10)); return; }
+      var tk=ev.target.closest('[data-ticket]'); if(tk){ sendWhatsApp(orderById(parseInt(tk.getAttribute('data-ticket'),10))); return; }
+      var pf=ev.target.closest('[data-pdf]'); if(pf){ printOrder(orderById(parseInt(pf.getAttribute('data-pdf'),10))); return; }
+      var ins=ev.target.closest('[data-insumo]'); if(ins){ var it=insumoById(ins.getAttribute('data-insumo')); if(it) openInsumoEditor(it); return; }
       var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
-      var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action'); if(a==='cambiar'){ openRecipeSelector(); } else if(a==='nueva-receta'){ openRecipeEditor(null); } }
+      var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action');
+        if(a==='cambiar'){ openRecipeSelector(); }
+        else if(a==='nueva-receta'){ openRecipeEditor(null); }
+        else if(a==='add-insumo'){ openInsumoEditor(null); }
+        else if(a==='guardar-inv'){ saveInsumos(insumos); toast('Inventario guardado ✓'); }
+        else if(a==='pdf'){ var pc=act.closest('.pane[data-scr="cotizar"]'); if(pc) printOrder(quoteFromPane(pc)); }
+        else if(a==='ticket'){ var tc=act.closest('.pane[data-scr="cotizar"]'); if(tc) sendWhatsApp(quoteFromPane(tc)); }
+      }
     });
   }
 

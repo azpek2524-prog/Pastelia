@@ -26,10 +26,15 @@ Fecha: 2026-08-27
 - **Selector de recetas** en Cotizar (botón "Cambiar"): elige receta de `pastelia_recetas` y su costo base alimenta el motor de precios (Etapa 1).
 - **Agenda interactiva**: botón **Cobrar** marca el pedido como pagado (recalcula "Por cobrar"); el **estado** (Cotizado → Apartado → Entregado) cambia al tocarlo; los **filtros** (Activos / Todos / Apartados / Entregados) filtran las tarjetas.
 
-**Pendiente — Etapa 4 (foco principal):**
-- **Mis precios (inventario editable):** hoy las filas de insumos (Mantequilla, Harina, Huevo, Chocolate), el buscador y "💾 Guardar inventario" son estáticos. Falta: convertir las filas a inputs (nombre / precio / cantidad / unidad) recalculando el costo por g/pz, persistir en `localStorage` (p. ej. `pastelia_insumos`), hacer funcionar el buscador y, opcionalmente, conectar los insumos al costeo de las recetas.
-- **Exportar PDF** del pedido y **Ticket de WhatsApp** (botones 📄 / 💬 en Cotizar y en las tarjetas de Agenda).
-- Menores: buscador del Inicio, y sincronizar "Recetas favoritas" del Inicio con `pastelia_recetas`.
+**Etapa 4 — Mis precios + PDF + Ticket** ✅
+- **Mis precios (inventario editable):** insumos en `localStorage` (`pastelia_insumos`), sembrados con los del diseño. Filas dinámicas; clic en una fila → **editar**, "＋ Añadir insumo" → **crear**, con **eliminar** (modal: ícono, nombre, precio, cantidad, unidad). El costo por g/pz se recalcula solo. **Buscador** funcional y "💾 Guardar inventario" con confirmación.
+- **Exportar PDF:** botón 📄 (Cotizar y tarjetas de Agenda) genera una hoja de cotización imprimible (logo, cliente, pastel, total) vía `window.print()` → guardar como PDF.
+- **Ticket de WhatsApp:** botón 💬 arma el mensaje del pedido y abre `wa.me` (con el teléfono del cliente si existe) y lo copia al portapapeles.
+
+**Pendiente (menores / mejoras):**
+- Conectar los insumos de "Mis precios" al costeo de las recetas (hoy cada receta usa un costo base fijo).
+- Editar en "Mis precios" los Extras de diseño y el Margen (hoy son display; el motor usa Flores $120 / Topper $80 / margen 40%).
+- Buscador del Inicio y sincronizar "Recetas favoritas" del Inicio con `pastelia_recetas`.
 
 ---
 
