@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pastelia</title>
 <meta name="theme-color" content="#7B5B4B">
+<script>try{if(localStorage.getItem('pastelia_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
@@ -19,38 +20,52 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   /* ===== Paleta global Pastelia (toda la interfaz deriva de estos 3 tonos) ===== */
+  /* ===== Paleta semántica (claro + oscuro) ===== */
   :root{
-    --primary:#7B5B4B;      /* Marrón: textos, menú lateral, botones primarios, íconos */
-    --secondary:#FFF4E6;    /* Crema: fondo de la app, tarjetas y contenedores */
-    --accent:#E7B676;       /* Dorado/Beige: botones secundarios, badges, estados, selección de extras */
-    /* Tonos derivados (tintes de los 3 anteriores) para conservar niveles y contraste */
-    --primary-strong:#634739; --primary-soft:#8A6552; --primary-deep:#5A4236;
-    --ground:#EAD9C0; --field:#F5E7D0; --accent-soft:#F5E4C6; --accent-tint:#F1E6CE; --sel:#F7E7CC;
+    color-scheme:light;
+    --bg:#EAD9C0; --main:#FFF4E6; --surface:#ffffff; --field:#F5E7D0;
+    --tint:#F1E6CE; --tint2:#F5E4C6; --sel:#F7E7CC; --badge:#F7E7C9;
+    --text:#7B5B4B; --text-strong:#5A4236; --muted:rgba(123,91,75,.6);
+    --line:rgba(123,91,75,.08); --line-strong:#EAD9C0;
+    --on-dark:#FFF7EC; --btn:#7B5B4B; --bezel:#5A4236;
+    --accent:#E7B676; --accent-ink:#7B5B4B;
+    --panel1:#5A4236; --panel2:#7B5B4B; --hero1:#7B5B4B; --hero2:#8A6552;
+    --primary:var(--text); --secondary:var(--main); --ground:var(--bg);
+  }
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --bg:#161009; --main:#201811; --surface:#2C231D; --field:#382B23;
+    --tint:#33281F; --tint2:#3C2F26; --sel:#3E3024; --badge:#3E3226;
+    --text:#F1E6D6; --text-strong:#FFF7EC; --muted:rgba(241,230,214,.62);
+    --line:rgba(255,247,236,.10); --line-strong:rgba(255,247,236,.14);
+    --on-dark:#FFF7EC; --btn:#6E5647; --bezel:#0E0B08;
+    --accent:#E7B676; --accent-ink:#2A1F17;
+    --panel1:#241C15; --panel2:#33281F; --hero1:#33281F; --hero2:#463629;
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--ground);font-family:'Nunito',system-ui,sans-serif;color:var(--primary)}
-  a{color:#7B5B4B}
+  a{color:var(--text)}
   a:hover{color:#634739}
   .pane{display:contents}
   .pane[hidden]{display:none}
 
   /* ---------- móvil (idéntico a Pastelia App copy) ---------- */
   #mobile{display:flex;justify-content:center;align-items:flex-start;padding:40px 0}
-  .ph{width:390px;border-radius:46px;background:#5A4236;padding:12px;box-shadow:0 40px 70px -24px rgba(123,91,75,.5),0 10px 24px -12px rgba(123,91,75,.35)}
-  .ph-scr{border-radius:36px;overflow:hidden;position:relative;height:812px;background:#FFF4E6}
+  .ph{width:390px;border-radius:46px;background:var(--bezel);padding:12px;box-shadow:0 40px 70px -24px rgba(123,91,75,.5),0 10px 24px -12px rgba(123,91,75,.35)}
+  .ph-scr{border-radius:36px;overflow:hidden;position:relative;height:812px;background:var(--main)}
   .scr::-webkit-scrollbar{display:none}
   .scr{scrollbar-width:none}
 
   /* ---------- escritorio (idéntico a Pastelia Escritorio) ---------- */
   #desktop{display:none}
-  .app{width:100%;height:100vh;height:100dvh;margin:0;background:#FFF4E6;overflow:hidden;display:flex;color:#7B5B4B}
+  .app{width:100%;height:100vh;height:100dvh;margin:0;background:var(--main);overflow:hidden;display:flex;color:var(--text)}
   .main::-webkit-scrollbar{width:8px}
-  .main::-webkit-scrollbar-thumb{background:rgba(123,91,75,.15);border-radius:8px}
+  .main::-webkit-scrollbar-thumb{background:var(--muted);border-radius:8px}
   .navitem{cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;font-weight:800;font-size:14px;transition:background .15s}
-  .navitem[data-active="1"]{background:#F7E7CC;color:#7B5B4B}
-  .navitem:not([data-active="1"]){color:rgba(123,91,75,.55)}
-  #mobile [data-nav][data-active="1"]{color:#7B5B4B}
-  #mobile [data-nav]:not([data-active="1"]){color:rgba(123,91,75,.4)}
+  .navitem[data-active="1"]{background:var(--sel);color:var(--text)}
+  .navitem:not([data-active="1"]){color:var(--muted)}
+  #mobile [data-nav][data-active="1"]{color:var(--text)}
+  #mobile [data-nav]:not([data-active="1"]){color:var(--muted)}
 
   /* a partir de 1120px se muestra la app de escritorio */
   @media (min-width:1120px){
@@ -67,12 +82,16 @@
   /* ---------- Impresión / PDF ---------- */
   @media screen { #pastelia-print{ display:none; } }
   @media print {
-    html, body { background:#fff !important; }
+    html, body { background:var(--surface) !important; }
     body > *:not(#pastelia-print){ display:none !important; }
     #pastelia-print{ display:block !important; padding:0; }
     #pastelia-print *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     @page { margin:14mm; }
   }
+  ::placeholder{color:var(--muted);opacity:1}
+  .theme-toggle{position:fixed;right:18px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px -10px rgba(20,14,10,.35);display:flex;align-items:center;justify-content:center;color:var(--text);cursor:pointer;padding:0}
+  .theme-toggle:hover{background:var(--field)}
+  @media (max-width:899px){ .theme-toggle{bottom:calc(104px + env(safe-area-inset-bottom,0px))} }
 </style>
 </head>
 <body>
@@ -85,56 +104,56 @@
 
         <!-- ================= INICIO ================= -->
         <div class="pane" data-scr="inicio">
-          <div style="position:relative;color:#7B5B4B;min-height:100%">
-            <div style="position:absolute;top:0;left:0;right:0;height:270px;background:linear-gradient(150deg,#7B5B4B,#8A6552)"></div>
-            <svg viewBox="0 0 390 40" preserveAspectRatio="none" style="position:absolute;top:250px;left:0;width:100%;height:40px" xmlns="http://www.w3.org/2000/svg"><path d="M0 40 C 32 6, 65 6, 97 24 S 162 42, 195 24 S 260 6, 292 24 S 358 42, 390 20 L390 40 Z" fill="#FFF4E6"></path></svg>
+          <div style="position:relative;color:var(--text);min-height:100%">
+            <div style="position:absolute;top:0;left:0;right:0;height:270px;background:linear-gradient(150deg,var(--hero1),var(--hero2))"></div>
+            <svg viewBox="0 0 390 40" preserveAspectRatio="none" style="position:absolute;top:250px;left:0;width:100%;height:40px" xmlns="http://www.w3.org/2000/svg"><path d="M0 40 C 32 6, 65 6, 97 24 S 162 42, 195 24 S 260 6, 292 24 S 358 42, 390 20 L390 40 Z" fill="var(--main)"></path></svg>
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="position:relative;padding:6px 24px 0">
               <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 18px">
-                <div style="color:#fff">
+                <div style="color:var(--on-dark)">
                   <div style="font-size:13px;font-weight:800;opacity:.9">Martes 13 · Buen día ☀️</div>
                   <div style="font-family:'Fredoka';font-weight:600;font-size:26px;line-height:1.05">Azucena's<br>Cake Studio</div>
                 </div>
                 <div style="width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:30px;height:30px;display:block"></div>
               </div>
-              <div style="display:flex;align-items:flex-end;gap:14px;color:#fff;padding-bottom:6px">
+              <div style="display:flex;align-items:flex-end;gap:14px;color:var(--on-dark);padding-bottom:6px">
                 <div style="font-family:'Fredoka';font-weight:700;font-size:76px;line-height:.85">3</div>
                 <div style="padding-bottom:10px"><div style="font-family:'Fredoka';font-weight:500;font-size:20px;line-height:1">entregas</div><div style="font-size:13px;font-weight:800;opacity:.9">para hoy 🎉</div></div>
               </div>
             </div>
             <div style="position:relative;padding:10px 22px 90px">
               <div style="display:flex;gap:12px;margin:6px 0 16px">
-                <div data-go="cotizar" style="cursor:pointer;flex:1;background:#7B5B4B;border-radius:22px;padding:16px;color:#fff;box-shadow:0 14px 24px -12px rgba(123,91,75,.8)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Cotizar</div></div>
-                <div style="flex:1;background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">PDF</div></div>
-                <div style="flex:1;background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Ticket</div></div>
+                <div data-go="cotizar" style="cursor:pointer;flex:1;background:var(--btn);border-radius:22px;padding:16px;color:var(--on-dark);box-shadow:0 14px 24px -12px rgba(123,91,75,.8)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Cotizar</div></div>
+                <div style="flex:1;background:var(--surface);border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">PDF</div></div>
+                <div style="flex:1;background:var(--surface);border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Ticket</div></div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="background:#F1E6CE;border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:#7B5B4B"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div></div>
-                <div data-go="agenda" style="cursor:pointer;background:#F1E6CE;border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:#7B5B4B">Semana<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8 pedidos</div></div>
+                <div style="background:var(--tint);border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:var(--text)"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div></div>
+                <div data-go="agenda" style="cursor:pointer;background:var(--tint);border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:var(--text)">Semana<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8 pedidos</div></div>
               </div>
-              <div style="background:#F1E6CE;border-radius:20px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
-                <div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Ingresos del mes<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:26px">$8,940</div></div>
-                <div style="font-size:12px;font-weight:800;color:#7B5B4B;background:#fff;border-radius:20px;padding:4px 10px">+18% ▲</div>
+              <div style="background:var(--tint);border-radius:20px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
+                <div><div style="font-size:12px;font-weight:800;color:var(--text)">Ingresos del mes<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:26px">$8,940</div></div>
+                <div style="font-size:12px;font-weight:800;color:var(--text);background:var(--surface);border-radius:20px;padding:4px 10px">+18% ▲</div>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin:20px 2px 10px">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px">Entregas de hoy</div>
-                <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:#7B5B4B">Ver todas</div>
+                <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:var(--text)">Ver todas</div>
               </div>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Pastel Frida · 20p</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Marisol G. · 11:30</div></div>
-                  <div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F7E7C9;border-radius:20px;padding:3px 9px">Apartado</div>
+                <div style="background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
+                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Pastel Frida · 20p</div><div style="font-size:11px;color:var(--muted);font-weight:700">Marisol G. · 11:30</div></div>
+                  <div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:3px 9px">Apartado</div>
                 </div>
-                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#F1E6CE;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Cupcakes x24</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Bruno T. · 16:00</div></div>
-                  <div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F1E6CE;border-radius:20px;padding:3px 9px">Pagado</div>
+                <div style="background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
+                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Cupcakes x24</div><div style="font-size:11px;color:var(--muted);font-weight:700">Bruno T. · 16:00</div></div>
+                  <div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint);border-radius:20px;padding:3px 9px">Pagado</div>
                 </div>
-                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Número 30 · Fondant</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Diana R. · 18:30</div></div>
-                  <div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F5E4C6;border-radius:20px;padding:3px 9px">Pendiente</div>
+                <div style="background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
+                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Número 30 · Fondant</div><div style="font-size:11px;color:var(--muted);font-weight:700">Diana R. · 18:30</div></div>
+                  <div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint2);border-radius:20px;padding:3px 9px">Pendiente</div>
                 </div>
               </div>
             </div>
@@ -143,56 +162,56 @@
 
         <!-- ================= COTIZAR ================= -->
         <div class="pane" data-scr="cotizar">
-          <div style="color:#7B5B4B;padding:0 0 90px">
+          <div style="color:var(--text);padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="display:flex;align-items:center;gap:12px;margin:6px 0 4px">
-                <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(123,91,75,.5)">‹</div>
+                <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(123,91,75,.5)">‹</div>
                 <div style="font-family:'Fredoka';font-weight:600;font-size:22px">Nueva cotización</div>
               </div>
               <!-- step chips -->
               <div style="display:flex;gap:8px;margin:16px 0 4px">
-                <div style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">1 Cliente</div>
-                <div style="flex:1;text-align:center;background:#F5E4C6;color:#7B5B4B;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">2 Pastel</div>
-                <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">3 Costeo</div>
-                <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">$ Total</div>
+                <div style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">1 Cliente</div>
+                <div style="flex:1;text-align:center;background:var(--tint2);color:var(--text);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">2 Pastel</div>
+                <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">3 Costeo</div>
+                <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">$ Total</div>
               </div>
               <!-- card: cliente -->
-              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
+              <div style="background:var(--surface);border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>Cliente y evento</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                  <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:4px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#7B5B4B"></div>
-                  <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:4px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#7B5B4B"></div>
-                  <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:4px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#7B5B4B"></div>
+                  <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:var(--text)"></div>
+                  <div><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:var(--text)"></div>
+                  <div><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:var(--text)"></div>
                 </div>
               </div>
               <!-- card: pastel -->
-              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
+              <div style="background:var(--surface);border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:6px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg>El pastel</div>
-                <div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700;margin-bottom:12px">Elige receta y tamaño — sabores y precio se llenan solos ✨</div>
-                <div style="background:#F7E7CC;border:2px solid #E7B676;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
-                  <div style="font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:12px;font-weight:800;color:#7B5B4B;cursor:pointer">Cambiar</div>
+                <div style="font-size:12px;color:var(--muted);font-weight:700;margin-bottom:12px">Elige receta y tamaño — sabores y precio se llenan solos ✨</div>
+                <div style="background:var(--sel);border:2px solid var(--accent);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                  <div style="font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:var(--muted);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:12px;font-weight:800;color:var(--text);cursor:pointer">Cambiar</div>
                 </div>
-                <div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:6px">TAMAÑO</div>
+                <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px">TAMAÑO</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px">
-                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Petit</div>
-                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Chico</div>
-                  <div style="background:#7B5B4B;color:#fff;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Mediano · 20p</div>
-                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Grande</div>
-                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Bento</div>
+                  <div style="background:var(--field);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:var(--muted)">Petit</div>
+                  <div style="background:var(--field);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:var(--muted)">Chico</div>
+                  <div style="background:var(--btn);color:var(--on-dark);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Mediano · 20p</div>
+                  <div style="background:var(--field);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:var(--muted)">Grande</div>
+                  <div style="background:var(--field);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:var(--muted)">Bento</div>
                 </div>
               </div>
               <!-- card: extras -->
-              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
+              <div style="background:var(--surface);border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/></svg>Extras de diseño</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px">
-                  <div style="background:#F1E6CE;color:#7B5B4B;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Flores +$120</div>
-                  <div style="background:#F1E6CE;color:#7B5B4B;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Topper +$80</div>
-                  <div style="background:#F5E7D0;color:rgba(123,91,75,.5);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">+ Añadir</div>
+                  <div style="background:var(--tint);color:var(--text);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Flores +$120</div>
+                  <div style="background:var(--tint);color:var(--text);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Topper +$80</div>
+                  <div style="background:var(--field);color:var(--muted);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">+ Añadir</div>
                 </div>
               </div>
               <!-- live total -->
-              <div style="background:linear-gradient(150deg,#5A4236,#7B5B4B);border-radius:24px;padding:20px;margin-top:14px;color:#fff;box-shadow:0 16px 30px -16px rgba(123,91,75,.7)">
+              <div style="background:linear-gradient(150deg,var(--panel1),var(--panel2));border-radius:24px;padding:20px;margin-top:14px;color:var(--on-dark);box-shadow:0 16px 30px -16px rgba(123,91,75,.7)">
                 <div style="font-size:12px;font-weight:800;opacity:.7">Resumen en vivo</div>
                 <div style="display:flex;flex-direction:column;gap:8px;margin:12px 0;font-size:13px;font-weight:700">
                   <div style="display:flex;justify-content:space-between;opacity:.85"><span>Insumos</span><span>$210</span></div>
@@ -202,9 +221,9 @@
                 </div>
                 <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:14px"><div style="font-size:12px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:40px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
                 <div style="display:flex;gap:10px;margin-top:16px">
-                  <div data-action="guardar" style="flex:2;background:#7B5B4B;text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px;cursor:pointer">Guardar</div>
+                  <div data-action="guardar" style="flex:2;background:var(--btn);text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px;cursor:pointer">Guardar</div>
                   <div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div>
-                  <div data-action="ticket" style="flex:1;background:#E7B676;color:#7B5B4B;text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div>
+                  <div data-action="ticket" style="flex:1;background:var(--accent);color:var(--accent-ink);text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div>
                 </div>
               </div>
             </div>
@@ -213,21 +232,21 @@
 
         <!-- ================= AGENDA ================= -->
         <div class="pane" data-scr="agenda">
-          <div style="color:#7B5B4B;padding:0 0 90px">
+          <div style="color:var(--text);padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/></svg>Agenda de pedidos</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
-                <div style="background:#F5E4C6;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">3</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Entregas hoy</div></div>
-                <div style="background:#F1E6CE;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Esta semana</div></div>
-                <div style="background:#F5E4C6;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Por cobrar</div></div>
-                <div style="background:#F1E6CE;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">5</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Activos</div></div>
+                <div style="background:var(--tint2);border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">3</div><div style="font-size:11px;font-weight:800;color:var(--text)">Entregas hoy</div></div>
+                <div style="background:var(--tint);border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8</div><div style="font-size:11px;font-weight:800;color:var(--text)">Esta semana</div></div>
+                <div style="background:var(--tint2);border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div><div style="font-size:11px;font-weight:800;color:var(--text)">Por cobrar</div></div>
+                <div style="background:var(--tint);border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">5</div><div style="font-size:11px;font-weight:800;color:var(--text)">Activos</div></div>
               </div>
               <div style="display:flex;gap:8px;margin:16px 0 14px;overflow-x:auto">
-                <div style="flex:none;background:#7B5B4B;color:#fff;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Activos</div>
-                <div style="flex:none;background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Todos</div>
-                <div style="flex:none;background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Apartados</div>
-                <div style="flex:none;background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Entregados</div>
+                <div style="flex:none;background:var(--btn);color:var(--on-dark);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Activos</div>
+                <div style="flex:none;background:var(--surface);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Todos</div>
+                <div style="flex:none;background:var(--surface);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Apartados</div>
+                <div style="flex:none;background:var(--surface);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Entregados</div>
               </div>
               <div data-agenda-list style="display:flex;flex-direction:column;gap:12px"></div>
             </div>
@@ -236,34 +255,34 @@
 
         <!-- ================= PRECIOS ================= -->
         <div class="pane" data-scr="precios">
-          <div style="color:#7B5B4B;padding:0 0 90px">
+          <div style="color:var(--text);padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg>Mis precios</div>
-              <div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza.</div>
-              <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#F5E7D0;border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:13px;color:#7B5B4B;border:0;outline:none;font-family:inherit">
+              <div style="font-size:12px;color:var(--muted);font-weight:700">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza.</div>
+              <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:var(--field);border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:13px;color:var(--text);border:0;outline:none;font-family:inherit">
               <div data-insumos-list style="display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
               <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin:20px 2px 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/></svg>Extras de diseño</div>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
-                <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
+                <div style="background:var(--surface);border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
+                <div style="background:var(--surface);border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
               </div>
-              <div style="background:#fff;border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;justify-content:space-between">
-                <div><div style="font-size:12px;font-weight:800;color:rgba(123,91,75,.5)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.5)">Aplicado a cada cotización</div></div>
-                <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#7B5B4B">40%</div>
+              <div style="background:var(--surface);border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;justify-content:space-between">
+                <div><div style="font-size:12px;font-weight:800;color:var(--muted)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:var(--muted)">Aplicado a cada cotización</div></div>
+                <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:var(--text)">40%</div>
               </div>
-              <div data-action="guardar-inv" style="background:#7B5B4B;color:#fff;border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/></svg>Guardar inventario</div>
+              <div data-action="guardar-inv" style="background:var(--btn);color:var(--on-dark);border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/></svg>Guardar inventario</div>
             </div>
           </div>
         </div>
 
         <!-- ================= RECETAS ================= -->
         <div class="pane" data-scr="recetas">
-          <div style="color:#7B5B4B;padding:0 0 90px">
+          <div style="color:var(--text);padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/></svg>Mis recetas</div>
-              <div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Guarda una receta desde el cotizador y reutilízala al instante.</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:700">Guarda una receta desde el cotizador y reutilízala al instante.</div>
               <div data-recetas-list style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px"></div>
             </div>
           </div>
@@ -272,13 +291,13 @@
       </div>
 
       <!-- ================= BOTTOM NAV ================= -->
-      <div style="position:relative;height:88px;background:#fff;border-top:1px solid rgba(123,91,75,.06);display:flex;align-items:center;justify-content:space-around;padding:0 20px 18px;box-shadow:0 -8px 24px -16px rgba(123,91,75,.4);flex:none">
+      <div style="position:relative;height:88px;background:var(--surface);border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-around;padding:0 20px 18px;box-shadow:0 -8px 24px -16px rgba(123,91,75,.4);flex:none">
         <div data-go="inicio" data-nav="inicio" style="cursor:pointer;text-align:center"><div style="display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/></svg></div><div style="font-size:10px;font-weight:800">Inicio</div></div>
         <div data-go="agenda" data-nav="agenda" style="cursor:pointer;text-align:center"><div style="display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/></svg></div><div style="font-size:10px;font-weight:800">Agenda</div></div>
         <div style="width:60px"></div>
         <div data-go="recetas" data-nav="recetas" style="cursor:pointer;text-align:center"><div style="display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/></svg></div><div style="font-size:10px;font-weight:800">Recetas</div></div>
         <div data-go="precios" data-nav="precios" style="cursor:pointer;text-align:center"><div style="display:flex;justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg></div><div style="font-size:10px;font-weight:800">Precios</div></div>
-        <div data-go="cotizar" style="cursor:pointer;position:absolute;left:50%;top:-22px;transform:translateX(-50%);width:60px;height:60px;border-radius:22px;background:#7B5B4B;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 12px 22px -8px rgba(123,91,75,.8)">＋</div>
+        <div data-go="cotizar" style="cursor:pointer;position:absolute;left:50%;top:-22px;transform:translateX(-50%);width:60px;height:60px;border-radius:22px;background:var(--btn);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--on-dark);box-shadow:0 12px 22px -8px rgba(123,91,75,.8)">＋</div>
       </div>
 
     </div>
@@ -290,26 +309,26 @@
 <div class="app">
 
   <!-- ============ SIDEBAR ============ -->
-  <div style="width:260px;flex:none;background:#fff;border-right:1px solid rgba(123,91,75,.06);display:flex;flex-direction:column;padding:26px 20px">
+  <div style="width:260px;flex:none;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:26px 20px">
     <div style="display:flex;align-items:center;gap:12px;padding:0 6px 24px">
       <div style="width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#F0C98D,#E7B676);display:flex;align-items:center;justify-content:center"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:30px;height:30px;display:block"></div>
-      <div><div style="font-family:'Fredoka';font-weight:600;font-size:19px;line-height:1">Pastelia</div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.45)">Cake Studio</div></div>
+      <div><div style="font-family:'Fredoka';font-weight:600;font-size:19px;line-height:1">Pastelia</div><div style="font-size:11px;font-weight:800;color:var(--muted)">Cake Studio</div></div>
     </div>
-    <div data-go="cotizar" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-weight:600;font-size:15px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);margin-bottom:20px">＋ Nueva cotización</div>
+    <div data-go="cotizar" style="cursor:pointer;background:var(--btn);color:var(--on-dark);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-weight:600;font-size:15px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);margin-bottom:20px">＋ Nueva cotización</div>
     <div style="display:flex;flex-direction:column;gap:6px">
       <div data-go="inicio" class="navitem" data-nav="inicio"><span style="font-size:18px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/></svg></span>Inicio</div>
       <div data-go="agenda" class="navitem" data-nav="agenda"><span style="font-size:18px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/></svg></span>Agenda de pedidos</div>
       <div data-go="recetas" class="navitem" data-nav="recetas"><span style="font-size:18px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/></svg></span>Recetas</div>
       <div data-go="precios" class="navitem" data-nav="precios"><span style="font-size:18px;display:inline-flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg></span>Mis precios</div>
     </div>
-    <div style="margin-top:auto;background:#F5E7D0;border-radius:18px;padding:16px">
-      <div style="font-size:12px;font-weight:800;color:rgba(123,91,75,.5)"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div>
+    <div style="margin-top:auto;background:var(--field);border-radius:18px;padding:16px">
+      <div style="font-size:12px;font-weight:800;color:var(--muted)"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div>
       <div style="font-family:'Fredoka';font-weight:600;font-size:26px">$1,240</div>
-      <div style="font-size:11px;font-weight:700;color:rgba(123,91,75,.5)">3 pedidos apartados</div>
+      <div style="font-size:11px;font-weight:700;color:var(--muted)">3 pedidos apartados</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:16px 6px 0">
-      <div style="width:36px;height:36px;border-radius:12px;background:#F1E6CE;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></div>
-      <div><div style="font-weight:800;font-size:13px">Azucena</div><div style="font-size:11px;color:rgba(123,91,75,.45);font-weight:700">Dueña</div></div>
+      <div style="width:36px;height:36px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></div>
+      <div><div style="font-weight:800;font-size:13px">Azucena</div><div style="font-size:11px;color:var(--muted);font-weight:700">Dueña</div></div>
     </div>
   </div>
 
@@ -321,47 +340,47 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
           <div>
-            <div style="font-size:13px;font-weight:800;color:rgba(123,91,75,.5)">Martes 13 de agosto · Buen día ☀️</div>
+            <div style="font-size:13px;font-weight:800;color:var(--muted)">Martes 13 de agosto · Buen día ☀️</div>
             <div style="font-family:'Fredoka';font-weight:600;font-size:32px;line-height:1.1">¡Hola, Azucena!</div>
           </div>
-          <div style="background:#F5E7D0;border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:rgba(123,91,75,.55)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-3px"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/></svg>Buscar pedido, cliente…</div>
+          <div style="background:var(--field);border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:var(--muted)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-3px"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/></svg>Buscar pedido, cliente…</div>
         </div>
 
         <!-- hero row -->
         <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:16px;margin-bottom:16px">
-          <div style="background:linear-gradient(135deg,#7B5B4B,#8A6552);border-radius:24px;padding:26px;color:#fff;display:flex;align-items:center;justify-content:space-between;box-shadow:0 18px 32px -16px rgba(123,91,75,.6)">
+          <div style="background:linear-gradient(135deg,var(--hero1),var(--hero2));border-radius:24px;padding:26px;color:var(--on-dark);display:flex;align-items:center;justify-content:space-between;box-shadow:0 18px 32px -16px rgba(123,91,75,.6)">
             <div><div style="font-size:14px;font-weight:800;opacity:.9">Entregas de hoy</div><div style="font-family:'Fredoka';font-weight:700;font-size:64px;line-height:.9">3</div><div style="font-size:13px;font-weight:800;opacity:.9">Próxima 11:30 · Pastel Frida</div></div>
             <div style="filter:drop-shadow(0 10px 12px rgba(123,91,75,.25))"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
           </div>
-          <div style="background:#F1E6CE;border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">8</div><div style="font-size:13px;font-weight:800;color:#7B5B4B">Pedidos esta semana</div></div>
-          <div style="background:#F1E6CE;border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$8.9k</div><div style="font-size:13px;font-weight:800;color:#7B5B4B">Ingresos del mes</div></div>
+          <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">8</div><div style="font-size:13px;font-weight:800;color:var(--text)">Pedidos esta semana</div></div>
+          <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$8.9k</div><div style="font-size:13px;font-weight:800;color:var(--text)">Ingresos del mes</div></div>
         </div>
 
         <!-- quick actions -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
-          <div data-go="cotizar" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:20px;padding:20px;box-shadow:0 14px 24px -14px rgba(123,91,75,.7)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Cotizar</div></div>
-          <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Generar PDF</div></div>
-          <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Ticket WhatsApp</div></div>
-          <div data-go="precios" style="cursor:pointer;background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Precios</div></div>
+          <div data-go="cotizar" style="cursor:pointer;background:var(--btn);color:var(--on-dark);border-radius:20px;padding:20px;box-shadow:0 14px 24px -14px rgba(123,91,75,.7)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Cotizar</div></div>
+          <div style="background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Generar PDF</div></div>
+          <div style="background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Ticket WhatsApp</div></div>
+          <div data-go="precios" style="cursor:pointer;background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Precios</div></div>
         </div>
 
         <!-- two columns: entregas + próximos -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Entregas de hoy</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:#7B5B4B">Ver agenda</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Entregas de hoy</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:var(--text)">Ver agenda</div></div>
             <div style="display:flex;flex-direction:column;gap:12px">
-              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Pastel Frida · 20p</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Marisol G. · 11:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$680</div><div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F7E7C9;border-radius:20px;padding:2px 8px;margin-top:2px">Apartado</div></div></div>
-              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#F1E6CE;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Cupcakes x24</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Bruno T. · 16:00</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$420</div><div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F1E6CE;border-radius:20px;padding:2px 8px;margin-top:2px">Pagado</div></div></div>
-              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;color:#7B5B4B"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Número 30 · Fondant</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Diana R. · 18:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$1,150</div><div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F5E4C6;border-radius:20px;padding:2px 8px;margin-top:2px">Pendiente</div></div></div>
+              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Pastel Frida · 20p</div><div style="font-size:12px;color:var(--muted);font-weight:700">Marisol G. · 11:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$680</div><div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:2px 8px;margin-top:2px">Apartado</div></div></div>
+              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Cupcakes x24</div><div style="font-size:12px;color:var(--muted);font-weight:700">Bruno T. · 16:00</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$420</div><div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint);border-radius:20px;padding:2px 8px;margin-top:2px">Pagado</div></div></div>
+              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Número 30 · Fondant</div><div style="font-size:12px;color:var(--muted);font-weight:700">Diana R. · 18:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$1,150</div><div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint2);border-radius:20px;padding:2px 8px;margin-top:2px">Pendiente</div></div></div>
             </div>
           </div>
           <div>
             <div style="font-family:'Fredoka';font-weight:600;font-size:19px;margin-bottom:12px">Recetas favoritas</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F3D9B0,#7B5B4B);display:flex;align-items:center;justify-content:center;font-size:30px">🍫</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">$34/porción</div></div></div>
-              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E7B676);display:flex;align-items:center;justify-content:center;font-size:30px">🍋</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Limón & mora</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">$38/porción</div></div></div>
-              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E0AE6A);display:flex;align-items:center;justify-content:center;font-size:30px">🫐</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Red velvet</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">$40/porción</div></div></div>
-              <div data-go="recetas" style="cursor:pointer;border:2px dashed #E7B676;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#7B5B4B;font-weight:800;font-size:13px"><div style="font-size:26px">＋</div>Nueva</div>
+              <div style="background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F3D9B0,#7B5B4B);display:flex;align-items:center;justify-content:center;font-size:30px">🍫</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:var(--muted);font-weight:700">$34/porción</div></div></div>
+              <div style="background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E7B676);display:flex;align-items:center;justify-content:center;font-size:30px">🍋</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Limón & mora</div><div style="font-size:11px;color:var(--muted);font-weight:700">$38/porción</div></div></div>
+              <div style="background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E0AE6A);display:flex;align-items:center;justify-content:center;font-size:30px">🫐</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Red velvet</div><div style="font-size:11px;color:var(--muted);font-weight:700">$40/porción</div></div></div>
+              <div data-go="recetas" style="cursor:pointer;border:2px dashed #E7B676;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px"><div style="font-size:26px">＋</div>Nueva</div>
             </div>
           </div>
         </div>
@@ -372,39 +391,39 @@
     <div class="pane" data-scr="cotizar">
       <div>
         <div style="font-family:'Fredoka';font-weight:600;font-size:32px;margin-bottom:4px">Nueva cotización</div>
-        <div style="font-size:13px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:20px">Llena los pasos y el precio se calcula solo ✨</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Llena los pasos y el precio se calcula solo ✨</div>
         <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:start">
           <!-- left: steps -->
           <div style="display:flex;flex-direction:column;gap:16px">
             <div style="display:flex;gap:10px">
-              <div style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:10px;font-size:12px;font-weight:800">1 Cliente</div>
-              <div style="flex:1;text-align:center;background:#F5E4C6;color:#7B5B4B;border-radius:14px;padding:10px;font-size:12px;font-weight:800">2 Pastel</div>
-              <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:10px;font-size:12px;font-weight:800">3 Costeo</div>
-              <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:10px;font-size:12px;font-weight:800">$ Total</div>
+              <div style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:10px;font-size:12px;font-weight:800">1 Cliente</div>
+              <div style="flex:1;text-align:center;background:var(--tint2);color:var(--text);border-radius:14px;padding:10px;font-size:12px;font-weight:800">2 Pastel</div>
+              <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800">3 Costeo</div>
+              <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800">$ Total</div>
             </div>
-            <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
+            <div style="background:var(--surface);border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
               <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg>Cliente y evento</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:5px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B"></div>
-                <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:5px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B"></div>
-                <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:5px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B"></div>
+                <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:var(--text)"></div>
+                <div><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:var(--text)"></div>
+                <div><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:5px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:var(--text)"></div>
               </div>
             </div>
-            <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
+            <div style="background:var(--surface);border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
               <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:12px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg>El pastel</div>
-              <div style="background:#F7E7CC;border:2px solid #E7B676;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:24px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:13px;font-weight:800;color:#7B5B4B;cursor:pointer">Cambiar</div></div>
-              <div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:8px">TAMAÑO</div>
+              <div style="background:var(--sel);border:2px solid var(--accent);border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:24px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:12px;color:var(--muted);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:13px;font-weight:800;color:var(--text);cursor:pointer">Cambiar</div></div>
+              <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:8px">TAMAÑO</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px">
-                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Petit</div>
-                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Chico</div>
-                <div style="background:#7B5B4B;color:#fff;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800">Mediano · 20p</div>
-                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Grande</div>
-                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Bento</div>
+                <div style="background:var(--field);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:var(--muted)">Petit</div>
+                <div style="background:var(--field);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:var(--muted)">Chico</div>
+                <div style="background:var(--btn);color:var(--on-dark);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800">Mediano · 20p</div>
+                <div style="background:var(--field);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:var(--muted)">Grande</div>
+                <div style="background:var(--field);border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:var(--muted)">Bento</div>
               </div>
             </div>
           </div>
           <!-- right: live total -->
-          <div style="background:linear-gradient(150deg,#5A4236,#7B5B4B);border-radius:24px;padding:24px;color:#fff;position:sticky;top:0;box-shadow:0 18px 34px -18px rgba(123,91,75,.7)">
+          <div style="background:linear-gradient(150deg,var(--panel1),var(--panel2));border-radius:24px;padding:24px;color:var(--on-dark);position:sticky;top:0;box-shadow:0 18px 34px -18px rgba(123,91,75,.7)">
             <div style="font-size:13px;font-weight:800;opacity:.7">Resumen en vivo</div>
             <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;font-size:14px;font-weight:700">
               <div style="display:flex;justify-content:space-between;opacity:.85"><span>Insumos</span><span>$210</span></div>
@@ -414,8 +433,8 @@
             </div>
             <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:16px"><div style="font-size:13px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:44px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
-              <div data-action="guardar" style="background:#7B5B4B;text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Guardar cotización</div>
-              <div style="display:flex;gap:10px"><div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg>PDF</div><div data-action="ticket" style="flex:1;background:#E7B676;color:#7B5B4B;text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg>Ticket</div></div>
+              <div data-action="guardar" style="background:var(--btn);text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Guardar cotización</div>
+              <div style="display:flex;gap:10px"><div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg>PDF</div><div data-action="ticket" style="flex:1;background:var(--accent);color:var(--accent-ink);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg>Ticket</div></div>
             </div>
           </div>
         </div>
@@ -427,19 +446,19 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/></svg>Agenda de pedidos</div>
-          <div data-go="cotizar" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7)">＋ Nuevo pedido</div>
+          <div data-go="cotizar" style="cursor:pointer;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7)">＋ Nuevo pedido</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px">
-          <div style="background:#F5E4C6;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">3</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Entregas hoy</div></div>
-          <div style="background:#F1E6CE;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">8</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Esta semana</div></div>
-          <div style="background:#F5E4C6;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">$1,240</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Por cobrar</div></div>
-          <div style="background:#F1E6CE;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">5</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Activos</div></div>
+          <div style="background:var(--tint2);border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">3</div><div style="font-size:12px;font-weight:800;color:var(--text)">Entregas hoy</div></div>
+          <div style="background:var(--tint);border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">8</div><div style="font-size:12px;font-weight:800;color:var(--text)">Esta semana</div></div>
+          <div style="background:var(--tint2);border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">$1,240</div><div style="font-size:12px;font-weight:800;color:var(--text)">Por cobrar</div></div>
+          <div style="background:var(--tint);border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">5</div><div style="font-size:12px;font-weight:800;color:var(--text)">Activos</div></div>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:16px">
-          <div style="background:#7B5B4B;color:#fff;border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Activos</div>
-          <div style="background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Todos</div>
-          <div style="background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Apartados</div>
-          <div style="background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Entregados</div>
+          <div style="background:var(--btn);color:var(--on-dark);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Activos</div>
+          <div style="background:var(--surface);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Todos</div>
+          <div style="background:var(--surface);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Apartados</div>
+          <div style="background:var(--surface);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Entregados</div>
         </div>
         <div data-agenda-list style="display:flex;flex-direction:column;gap:14px"></div>
       </div>
@@ -450,9 +469,9 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/></svg>Mis recetas</div>
-          <div data-action="nueva-receta" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7)">＋ Nueva receta</div>
+          <div data-action="nueva-receta" style="cursor:pointer;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7)">＋ Nueva receta</div>
         </div>
-        <div style="font-size:13px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:20px">Guarda una receta y reutilízala al cotizar — el costo se recalcula con tus precios.</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Guarda una receta y reutilízala al cotizar — el costo se recalcula con tus precios.</div>
         <div data-recetas-list style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px"></div>
       </div>
     </div>
@@ -462,24 +481,24 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg>Mis precios</div>
-          <div data-action="guardar-inv" style="background:#7B5B4B;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7);cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/></svg>Guardar inventario</div>
+          <div data-action="guardar-inv" style="background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7);cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/></svg>Guardar inventario</div>
         </div>
-        <div style="font-size:13px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:20px">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza y lo usa al cotizar.</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza y lo usa al cotizar.</div>
         <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
           <div>
-            <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#F5E7D0;border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:#7B5B4B;border:0;outline:none;font-family:inherit">
+            <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:var(--field);border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:var(--text);border:0;outline:none;font-family:inherit">
             <div data-insumos-list style="display:flex;flex-direction:column;gap:12px"></div>
           </div>
-          <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
+          <div style="background:var(--surface);border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
             <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/></svg>Extras de diseño</div>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <div style="display:flex;justify-content:space-between;align-items:center;background:#F5E7D0;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:#F5E7D0;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:#F5E7D0;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Piso extra</div><div style="font-family:'Fredoka';font-weight:600">$350</div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--field);border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--field);border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--field);border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Piso extra</div><div style="font-family:'Fredoka';font-weight:600">$350</div></div>
             </div>
-            <div style="border-top:1px solid rgba(123,91,75,.08);margin-top:16px;padding-top:16px">
-              <div style="font-size:12px;font-weight:800;color:rgba(123,91,75,.5)">Margen de ganancia</div>
-              <div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#7B5B4B">40%</div><div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.5)">aplicado a cada cotización</div></div>
+            <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:16px">
+              <div style="font-size:12px;font-weight:800;color:var(--muted)">Margen de ganancia</div>
+              <div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:var(--text)">40%</div><div style="font-size:12px;font-weight:700;color:var(--muted)">aplicado a cada cotización</div></div>
             </div>
           </div>
         </div>
@@ -650,14 +669,14 @@
   function toast(msg){
     var t=document.createElement('div');
     t.textContent=msg;
-    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#7B5B4B;color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 14px 34px -12px rgba(123,91,75,.55);opacity:0;transition:opacity .25s;max-width:88vw;text-align:center';
+    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--btn);color:var(--on-dark);padding:12px 20px;border-radius:999px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 14px 34px -12px rgba(123,91,75,.55);opacity:0;transition:opacity .25s;max-width:88vw;text-align:center';
     document.body.appendChild(t);
     requestAnimationFrame(function(){ t.style.opacity='1'; });
     setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 320); }, 2200);
   }
   function goTo(scr){ var b=document.querySelector('[data-go="'+scr+'"]'); if(b) b.click(); }
 
-  var AVA_BG = ['#F5E4C6','#F1E6CE','#F1E6CE','#F5E4C6'];
+  var AVA_BG = ['var(--tint2)','var(--tint)','var(--tint)','var(--tint2)'];
   var AVA_EMO = ['🎂','🧁','🍰','🎂'];
   var ESTADOS = ['Cotizado','Apartado','Entregado'];
   function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
@@ -669,41 +688,41 @@
   }
   function statusHtml(o,big){ var info=estadoInfo(o); return '<div data-estado-btn="'+o.id+'" title="Cambiar estado" style="font-size:'+(big?'11px':'10px')+';font-weight:800;color:'+info.color+';cursor:pointer">'+esc(info.txt)+'</div>'; }
   function cobrarMob(o){ return o.pagado
-      ? '<div style="flex:1;text-align:center;background:#F5E7D0;border-radius:12px;padding:8px;font-size:12px;font-weight:800;color:rgba(123,91,75,.35)">✓ Cobrado</div>'
-      : '<div data-cobrar="'+o.id+'" style="flex:1;text-align:center;background:#F5E7D0;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('coin',15,'margin-right:5px')+'Cobrar</div>'; }
+      ? '<div style="flex:1;text-align:center;background:var(--field);border-radius:12px;padding:8px;font-size:12px;font-weight:800;color:var(--muted)">✓ Cobrado</div>'
+      : '<div data-cobrar="'+o.id+'" style="flex:1;text-align:center;background:var(--field);border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('coin',15,'margin-right:5px')+'Cobrar</div>'; }
   function cobrarDesk(o){ return o.pagado
-      ? '<div style="background:#F5E7D0;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;color:rgba(123,91,75,.35)">✓ Cobrado</div>'
-      : '<div data-cobrar="'+o.id+'" style="background:#7B5B4B;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('coin',15,'margin-right:5px')+'Cobrar</div>'; }
+      ? '<div style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;color:var(--muted)">✓ Cobrado</div>'
+      : '<div data-cobrar="'+o.id+'" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('coin',15,'margin-right:5px')+'Cobrar</div>'; }
 
   function mobCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
-    return '<div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(123,91,75,.4)">'
+    return '<div style="background:var(--surface);border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(123,91,75,.4)">'
       + '<div style="display:flex;align-items:center;gap:12px">'
-      + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:#7B5B4B">'+icSvg('cake',22)+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+'</div></div>'
+      + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+'</div></div>'
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div>'+statusHtml(o,false)+'</div>'
       + '</div>'
-      + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(123,91,75,.07)">'
-      + '<div data-ticket="'+o.id+'" style="flex:1;text-align:center;background:#E7B676;color:#7B5B4B;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('chat',15,'margin-right:5px')+'WhatsApp</div>'
-      + '<div data-pdf="'+o.id+'" style="flex:1;text-align:center;background:#F5E7D0;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg>PDF</div>'
+      + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">'
+      + '<div data-ticket="'+o.id+'" style="flex:1;text-align:center;background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('chat',15,'margin-right:5px')+'WhatsApp</div>'
+      + '<div data-pdf="'+o.id+'" style="flex:1;text-align:center;background:var(--field);border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg>PDF</div>'
       + cobrarMob(o)
       + '</div></div>';
   }
   function deskCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
-    return '<div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;gap:16px">'
-      + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:#7B5B4B">'+icSvg('cake',24)+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">'+orderSub(o)+'</div></div>'
+    return '<div style="background:var(--surface);border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;gap:16px">'
+      + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',24)+'</div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+orderSub(o)+'</div></div>'
       + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
-      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:#E7B676;color:#7B5B4B;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:#F5E7D0;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div>'+cobrarDesk(o)+'</div>'
+      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div>'+cobrarDesk(o)+'</div>'
       + '</div>';
   }
   function emptyState(){
-    return '<div style="text-align:center;padding:48px 16px;color:rgba(123,91,75,.45)"><div>'+icSvg('inbox',40)+'</div>'
-      + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:8px;color:rgba(123,91,75,.7)">No hay pedidos aún</div>'
+    return '<div style="text-align:center;padding:48px 16px;color:var(--muted)"><div>'+icSvg('inbox',40)+'</div>'
+      + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:8px;color:var(--muted)">No hay pedidos aún</div>'
       + '<div style="font-size:12px;font-weight:700;margin-top:4px">Crea una cotización y guárdala para verla aquí.</div></div>';
   }
-  function emptyFilter(){ return '<div style="text-align:center;padding:40px 16px;color:rgba(123,91,75,.45);font-weight:700;font-size:13px">No hay pedidos en este filtro.</div>'; }
+  function emptyFilter(){ return '<div style="text-align:center;padding:40px 16px;color:var(--muted);font-weight:700;font-size:13px">No hay pedidos en este filtro.</div>'; }
   function setKPI(pane,label,val){
     var leaves=Array.prototype.filter.call(pane.querySelectorAll('div'), function(d){ return d.children.length===0; });
     for(var i=0;i<leaves.length;i++){ if((leaves[i].textContent||'').trim()===label){ var n=leaves[i].previousElementSibling; if(n) n.textContent=val; break; } }
@@ -745,9 +764,9 @@
   function cycleEstado(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ var e=arr[i].estado||'Cotizado'; arr[i].estado=ESTADOS[(ESTADOS.indexOf(e)+1)%ESTADOS.length]; break; } } saveOrders(arr); renderAgenda(); }
 
   /* ---------- Recetas: render + modales ---------- */
-  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:32px">'+r.emoji+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+r.ingredientes+' ingredientes</div></div></div>'; }
-  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:40px">'+r.emoji+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+r.ingredientes+' ingredientes · $'+r.precioPorcion+'/p</div></div></div>'; }
-  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #E7B676;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#7B5B4B;font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>'; }
+  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:32px">'+r.emoji+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+r.ingredientes+' ingredientes</div></div></div>'; }
+  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:40px">'+r.emoji+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+r.ingredientes+' ingredientes · $'+r.precioPorcion+'/p</div></div></div>'; }
+  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #E7B676;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>'; }
   function renderRecetas(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-recetas-list]'), function(list){
       var isMob=!!list.closest('#mobile');
@@ -768,9 +787,9 @@
 
   function openModal(inner){
     var ov=document.createElement('div');
-    ov.style.cssText='position:fixed;inset:0;background:rgba(123,91,75,.45);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+    ov.style.cssText='position:fixed;inset:0;background:var(--muted);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
     var card=document.createElement('div');
-    card.style.cssText='background:#fff;color:#7B5B4B;border-radius:24px;padding:22px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(123,91,75,.5);max-height:88vh;overflow:auto;font-family:inherit';
+    card.style.cssText='background:var(--surface);color:var(--text);border-radius:24px;padding:22px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(123,91,75,.5);max-height:88vh;overflow:auto;font-family:inherit';
     card.appendChild(inner); ov.appendChild(card);
     function close(){ ov.remove(); document.removeEventListener('keydown', onkey); }
     function onkey(e){ if(e.key==='Escape') close(); }
@@ -779,7 +798,7 @@
     document.body.appendChild(ov);
     return { close:close };
   }
-  function fieldStyle(){ return 'width:100%;box-sizing:border-box;border:1px solid #EAD9C0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B;margin-top:6px'; }
+  function fieldStyle(){ return 'width:100%;box-sizing:border-box;border:1px solid var(--line-strong);outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:14px;font-family:inherit;color:var(--text);margin-top:6px'; }
 
   function openRecipeEditor(recipe){
     var isNew=!recipe;
@@ -787,21 +806,21 @@
     var box=document.createElement('div');
     box.innerHTML =
       '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nueva receta':'Editar receta')+'</div>'
-      + '<div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:14px">Se usa al cotizar para calcular el precio.</div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">ÍCONO</div>'
+      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:14px">Se usa al cotizar para calcular el precio.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">ÍCONO</div>'
       + '<div id="rc-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">NOMBRE</div>'
+      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">NOMBRE</div>'
       + '<input id="rc-nombre" type="text" placeholder="Ej. Chocoavellana" style="'+fieldStyle()+'">'
       + '<div style="display:flex;gap:10px;margin-top:12px">'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)"># INGREDIENTES</div><input id="rc-ing" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">COSTO BASE ($)</div><input id="rc-ins" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--muted)"># INGREDIENTES</div><input id="rc-ing" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--muted)">COSTO BASE ($)</div><input id="rc-ins" type="number" min="0" style="'+fieldStyle()+'"></div>'
       + '</div>'
-      + '<div style="font-size:11px;font-weight:700;color:rgba(123,91,75,.45);margin-top:6px">Costo de materiales para un pastel Mediano (20 porciones).</div>'
+      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:6px">Costo de materiales para un pastel Mediano (20 porciones).</div>'
       + '<div style="display:flex;gap:10px;margin-top:20px">'
-      +   '<div id="rc-save" style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
-      +   (isNew?'':'<div id="rc-del" style="text-align:center;background:#F7E7C9;color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      +   '<div id="rc-save" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="rc-del" style="text-align:center;background:var(--badge);color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
       + '</div>'
-      + '<div id="rc-cancel" style="text-align:center;color:rgba(123,91,75,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+      + '<div id="rc-cancel" style="text-align:center;color:var(--muted);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
     var modal=openModal(box);
     box.querySelector('#rc-nombre').value=r.nombre;
     box.querySelector('#rc-ing').value=r.ingredientes;
@@ -842,13 +861,13 @@
 
   function openRecipeSelector(){
     var box=document.createElement('div');
-    box.innerHTML='<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:12px">Elige una receta</div><div id="rs-list" style="display:flex;flex-direction:column;gap:10px"></div><div id="rs-nueva" style="text-align:center;color:#7B5B4B;font-weight:800;font-size:14px;padding:14px 0 2px;cursor:pointer">＋ Nueva receta</div>';
+    box.innerHTML='<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:12px">Elige una receta</div><div id="rs-list" style="display:flex;flex-direction:column;gap:10px"></div><div id="rs-nueva" style="text-align:center;color:var(--text);font-weight:800;font-size:14px;padding:14px 0 2px;cursor:pointer">＋ Nueva receta</div>';
     var modal=openModal(box), list=box.querySelector('#rs-list');
     recipes.forEach(function(r){
       var active = state.recipe && state.recipe.id===r.id;
       var row=document.createElement('div');
       row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(active?'#E7B676':'transparent');
-      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:20px">'+r.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+r.ingredientes+' ingredientes · costo base '+money(r.insumos)+'</div></div>'+(active?'<div style="color:#7B5B4B;font-weight:800;font-size:18px">✓</div>':'');
+      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:20px">'+r.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+r.ingredientes+' ingredientes · costo base '+money(r.insumos)+'</div></div>'+(active?'<div style="color:var(--text);font-weight:800;font-size:18px">✓</div>':'');
       row.addEventListener('click', function(){ state.recipe=r; updateRecipeRow(); render(); modal.close(); toast('Receta: '+r.nombre); });
       list.appendChild(row);
     });
@@ -857,16 +876,16 @@
 
   /* ---------- Mis precios: render + editor ---------- */
   function insRowMob(it){
-    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer">'
+    return '<div data-insumo="'+it.id+'" style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer">'
       + '<div style="width:40px;height:40px;border-radius:12px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:20px">'+it.emoji+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div>'
-      + '<div style="background:#F5E7D0;border-radius:12px;padding:8px 12px;font-family:\'Fredoka\';font-weight:600;font-size:14px">$'+unitCost(it)+'<span style="font-size:10px;color:rgba(123,91,75,.5)">/'+esc(it.unidad)+'</span></div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div>'
+      + '<div style="background:var(--field);border-radius:12px;padding:8px 12px;font-family:\'Fredoka\';font-weight:600;font-size:14px">$'+unitCost(it)+'<span style="font-size:10px;color:var(--muted)">/'+esc(it.unidad)+'</span></div>'
       + '</div>';
   }
   function insRowDesk(it){
-    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:#F5E7D0;border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:rgba(123,91,75,.5)">/'+esc(it.unidad)+'</span></div></div>';
+    return '<div data-insumo="'+it.id+'" style="background:var(--surface);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:var(--field);border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:var(--muted)">/'+esc(it.unidad)+'</span></div></div>';
   }
-  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed #E7B676;border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:#7B5B4B;font-weight:800;font-size:13px;cursor:pointer">＋ Añadir insumo</div>'; }
+  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed #E7B676;border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--text);font-weight:800;font-size:13px;cursor:pointer">＋ Añadir insumo</div>'; }
   function renderInsumos(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-insumos-list]'), function(list){
       var isMob=!!list.closest('#mobile');
@@ -885,22 +904,22 @@
     var box=document.createElement('div');
     box.innerHTML =
       '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nuevo insumo':'Editar insumo')+'</div>'
-      + '<div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:14px">La app calcula el costo por gramo o pieza.</div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">ÍCONO</div>'
+      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:14px">La app calcula el costo por gramo o pieza.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">ÍCONO</div>'
       + '<div id="ic-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">NOMBRE</div>'
+      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">NOMBRE</div>'
       + '<input id="ic-nombre" type="text" placeholder="Ej. Mantequilla" style="'+fieldStyle()+'">'
       + '<div style="display:flex;gap:10px;margin-top:12px">'
-      +   '<div style="flex:1.2"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">PRECIO ($)</div><input id="ic-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">CANTIDAD</div><input id="ic-cant" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:.8"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">UNIDAD</div><input id="ic-unidad" type="text" placeholder="g" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1.2"><div style="font-size:11px;font-weight:800;color:var(--muted)">PRECIO ($)</div><input id="ic-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--muted)">CANTIDAD</div><input id="ic-cant" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:.8"><div style="font-size:11px;font-weight:800;color:var(--muted)">UNIDAD</div><input id="ic-unidad" type="text" placeholder="g" style="'+fieldStyle()+'"></div>'
       + '</div>'
-      + '<div style="font-size:11px;font-weight:700;color:rgba(123,91,75,.45);margin-top:6px">Ej.: precio 186, cantidad 1000, unidad g → $0.19/g.</div>'
+      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:6px">Ej.: precio 186, cantidad 1000, unidad g → $0.19/g.</div>'
       + '<div style="display:flex;gap:10px;margin-top:20px">'
-      +   '<div id="ic-save" style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
-      +   (isNew?'':'<div id="ic-del" style="text-align:center;background:#F7E7C9;color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      +   '<div id="ic-save" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="ic-del" style="text-align:center;background:var(--badge);color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
       + '</div>'
-      + '<div id="ic-cancel" style="text-align:center;color:rgba(123,91,75,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+      + '<div id="ic-cancel" style="text-align:center;color:var(--muted);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
     var modal=openModal(box);
     box.querySelector('#ic-nombre').value=it.nombre;
     box.querySelector('#ic-precio').value=it.precio;
@@ -1054,6 +1073,27 @@
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', enhance);
   else enhance();
+})();
+</script>
+<script>
+(function(){
+  var K='pastelia_theme', root=document.documentElement, meta=document.querySelector('meta[name="theme-color"]');
+  function isDark(){ return root.getAttribute('data-theme')==='dark'; }
+  function ico(dark){ return dark
+    ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>'
+    : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>'; }
+  var btn=document.createElement('button');
+  btn.className='theme-toggle'; btn.type='button'; btn.setAttribute('aria-label','Cambiar modo claro u oscuro');
+  function apply(){ var d=isDark(); btn.innerHTML=ico(d); if(meta) meta.setAttribute('content', d?'#201811':'#7B5B4B'); }
+  btn.addEventListener('click', function(){
+    var d=isDark();
+    if(d) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
+    try{ localStorage.setItem(K, d?'light':'dark'); }catch(e){}
+    apply();
+  });
+  apply();
+  if(document.body) document.body.appendChild(btn);
+  else document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(btn); });
 })();
 </script>
 </body>
