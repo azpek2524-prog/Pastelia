@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pastelia</title>
-<meta name="theme-color" content="#ef7c8e">
+<meta name="theme-color" content="#7B5B4B">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
@@ -18,30 +18,39 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
+  /* ===== Paleta global Pastelia (toda la interfaz deriva de estos 3 tonos) ===== */
+  :root{
+    --primary:#7B5B4B;      /* Marrón: textos, menú lateral, botones primarios, íconos */
+    --secondary:#FFF4E6;    /* Crema: fondo de la app, tarjetas y contenedores */
+    --accent:#E7B676;       /* Dorado/Beige: botones secundarios, badges, estados, selección de extras */
+    /* Tonos derivados (tintes de los 3 anteriores) para conservar niveles y contraste */
+    --primary-strong:#634739; --primary-soft:#8A6552; --primary-deep:#5A4236;
+    --ground:#EAD9C0; --field:#F5E7D0; --accent-soft:#F5E4C6; --accent-tint:#F1E6CE; --sel:#F7E7CC;
+  }
   *{box-sizing:border-box}
-  body{margin:0;background:#efe7dd;font-family:'Nunito',system-ui,sans-serif;color:#4a342e}
-  a{color:#ef7c8e}
-  a:hover{color:#d9647a}
+  body{margin:0;background:var(--ground);font-family:'Nunito',system-ui,sans-serif;color:var(--primary)}
+  a{color:#7B5B4B}
+  a:hover{color:#634739}
   .pane{display:contents}
   .pane[hidden]{display:none}
 
   /* ---------- móvil (idéntico a Pastelia App copy) ---------- */
   #mobile{display:flex;justify-content:center;align-items:flex-start;padding:40px 0}
-  .ph{width:390px;border-radius:46px;background:#3a2a24;padding:12px;box-shadow:0 40px 70px -24px rgba(74,52,46,.5),0 10px 24px -12px rgba(74,52,46,.35)}
-  .ph-scr{border-radius:36px;overflow:hidden;position:relative;height:812px;background:#fdf5ec}
+  .ph{width:390px;border-radius:46px;background:#5A4236;padding:12px;box-shadow:0 40px 70px -24px rgba(123,91,75,.5),0 10px 24px -12px rgba(123,91,75,.35)}
+  .ph-scr{border-radius:36px;overflow:hidden;position:relative;height:812px;background:#FFF4E6}
   .scr::-webkit-scrollbar{display:none}
   .scr{scrollbar-width:none}
 
   /* ---------- escritorio (idéntico a Pastelia Escritorio) ---------- */
   #desktop{display:none}
-  .app{width:100%;height:100vh;height:100dvh;margin:0;background:#fdf5ec;overflow:hidden;display:flex;color:#4a342e}
+  .app{width:100%;height:100vh;height:100dvh;margin:0;background:#FFF4E6;overflow:hidden;display:flex;color:#7B5B4B}
   .main::-webkit-scrollbar{width:8px}
-  .main::-webkit-scrollbar-thumb{background:rgba(74,52,46,.15);border-radius:8px}
+  .main::-webkit-scrollbar-thumb{background:rgba(123,91,75,.15);border-radius:8px}
   .navitem{cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:16px;font-weight:800;font-size:14px;transition:background .15s}
-  .navitem[data-active="1"]{background:#fbeef1;color:#ef7c8e}
-  .navitem:not([data-active="1"]){color:rgba(74,52,46,.55)}
-  #mobile [data-nav][data-active="1"]{color:#ef7c8e}
-  #mobile [data-nav]:not([data-active="1"]){color:rgba(74,52,46,.4)}
+  .navitem[data-active="1"]{background:#F7E7CC;color:#7B5B4B}
+  .navitem:not([data-active="1"]){color:rgba(123,91,75,.55)}
+  #mobile [data-nav][data-active="1"]{color:#7B5B4B}
+  #mobile [data-nav]:not([data-active="1"]){color:rgba(123,91,75,.4)}
 
   /* a partir de 1120px se muestra la app de escritorio */
   @media (min-width:1120px){
@@ -76,9 +85,9 @@
 
         <!-- ================= INICIO ================= -->
         <div class="pane" data-scr="inicio">
-          <div style="position:relative;color:#4a342e;min-height:100%">
-            <div style="position:absolute;top:0;left:0;right:0;height:270px;background:linear-gradient(150deg,#ef7c8e,#ffb08a)"></div>
-            <svg viewBox="0 0 390 40" preserveAspectRatio="none" style="position:absolute;top:250px;left:0;width:100%;height:40px" xmlns="http://www.w3.org/2000/svg"><path d="M0 40 C 32 6, 65 6, 97 24 S 162 42, 195 24 S 260 6, 292 24 S 358 42, 390 20 L390 40 Z" fill="#fdf5ec"></path></svg>
+          <div style="position:relative;color:#7B5B4B;min-height:100%">
+            <div style="position:absolute;top:0;left:0;right:0;height:270px;background:linear-gradient(150deg,#7B5B4B,#8A6552)"></div>
+            <svg viewBox="0 0 390 40" preserveAspectRatio="none" style="position:absolute;top:250px;left:0;width:100%;height:40px" xmlns="http://www.w3.org/2000/svg"><path d="M0 40 C 32 6, 65 6, 97 24 S 162 42, 195 24 S 260 6, 292 24 S 358 42, 390 20 L390 40 Z" fill="#FFF4E6"></path></svg>
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="position:relative;padding:6px 24px 0">
               <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 18px">
@@ -95,37 +104,37 @@
             </div>
             <div style="position:relative;padding:10px 22px 90px">
               <div style="display:flex;gap:12px;margin:6px 0 16px">
-                <div data-go="cotizar" style="cursor:pointer;flex:1;background:#ef7c8e;border-radius:22px;padding:16px;color:#fff;box-shadow:0 14px 24px -12px rgba(239,124,142,.8)"><div style="font-size:24px">✏️</div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Cotizar</div></div>
-                <div style="flex:1;background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(74,52,46,.5)"><div style="font-size:24px">📄</div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">PDF</div></div>
-                <div style="flex:1;background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(74,52,46,.5)"><div style="font-size:24px">💬</div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Ticket</div></div>
+                <div data-go="cotizar" style="cursor:pointer;flex:1;background:#7B5B4B;border-radius:22px;padding:16px;color:#fff;box-shadow:0 14px 24px -12px rgba(123,91,75,.8)"><div style="font-size:24px">✏️</div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Cotizar</div></div>
+                <div style="flex:1;background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div style="font-size:24px">📄</div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">PDF</div></div>
+                <div style="flex:1;background:#fff;border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div style="font-size:24px">💬</div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Ticket</div></div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="background:#e9f2df;border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:#7f9663">Por cobrar 💰</div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div></div>
-                <div data-go="agenda" style="cursor:pointer;background:#efe6f7;border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:#9179b8">Semana 📦</div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8 pedidos</div></div>
+                <div style="background:#F1E6CE;border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:#7B5B4B">Por cobrar 💰</div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div></div>
+                <div data-go="agenda" style="cursor:pointer;background:#F1E6CE;border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:#7B5B4B">Semana 📦</div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8 pedidos</div></div>
               </div>
-              <div style="background:#d9edf2;border-radius:20px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
-                <div><div style="font-size:12px;font-weight:800;color:#5a92a3">Ingresos del mes 💵</div><div style="font-family:'Fredoka';font-weight:600;font-size:26px">$8,940</div></div>
-                <div style="font-size:12px;font-weight:800;color:#5a92a3;background:#fff;border-radius:20px;padding:4px 10px">+18% ▲</div>
+              <div style="background:#F1E6CE;border-radius:20px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
+                <div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Ingresos del mes 💵</div><div style="font-family:'Fredoka';font-weight:600;font-size:26px">$8,940</div></div>
+                <div style="font-size:12px;font-weight:800;color:#7B5B4B;background:#fff;border-radius:20px;padding:4px 10px">+18% ▲</div>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin:20px 2px 10px">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px">Entregas de hoy</div>
-                <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:#ef7c8e">Ver todas</div>
+                <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:#7B5B4B">Ver todas</div>
               </div>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(74,52,46,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#ffe1c9;display:flex;align-items:center;justify-content:center;font-size:20px">🎂</div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Pastel Frida · 20p</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Marisol G. · 11:30</div></div>
-                  <div style="font-size:10px;font-weight:800;color:#c78a3b;background:#fbeecb;border-radius:20px;padding:3px 9px">Apartado</div>
+                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;font-size:20px">🎂</div>
+                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Pastel Frida · 20p</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Marisol G. · 11:30</div></div>
+                  <div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F7E7C9;border-radius:20px;padding:3px 9px">Apartado</div>
                 </div>
-                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(74,52,46,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#efe6f7;display:flex;align-items:center;justify-content:center;font-size:20px">🧁</div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Cupcakes x24</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Bruno T. · 16:00</div></div>
-                  <div style="font-size:10px;font-weight:800;color:#7f9663;background:#e9f2df;border-radius:20px;padding:3px 9px">Pagado</div>
+                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:#F1E6CE;display:flex;align-items:center;justify-content:center;font-size:20px">🧁</div>
+                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Cupcakes x24</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Bruno T. · 16:00</div></div>
+                  <div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F1E6CE;border-radius:20px;padding:3px 9px">Pagado</div>
                 </div>
-                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(74,52,46,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:#f7d9e0;display:flex;align-items:center;justify-content:center;font-size:20px">🎂</div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Número 30 · Fondant</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Diana R. · 18:30</div></div>
-                  <div style="font-size:10px;font-weight:800;color:#b25b52;background:#ffe1e1;border-radius:20px;padding:3px 9px">Pendiente</div>
+                <div style="background:#fff;border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
+                  <div style="width:40px;height:40px;border-radius:12px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;font-size:20px">🎂</div>
+                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Número 30 · Fondant</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Diana R. · 18:30</div></div>
+                  <div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F5E4C6;border-radius:20px;padding:3px 9px">Pendiente</div>
                 </div>
               </div>
             </div>
@@ -134,56 +143,56 @@
 
         <!-- ================= COTIZAR ================= -->
         <div class="pane" data-scr="cotizar">
-          <div style="color:#4a342e;padding:0 0 90px">
+          <div style="color:#7B5B4B;padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="display:flex;align-items:center;gap:12px;margin:6px 0 4px">
-                <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(74,52,46,.5)">‹</div>
+                <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(123,91,75,.5)">‹</div>
                 <div style="font-family:'Fredoka';font-weight:600;font-size:22px">Nueva cotización</div>
               </div>
               <!-- step chips -->
               <div style="display:flex;gap:8px;margin:16px 0 4px">
-                <div style="flex:1;text-align:center;background:#ef7c8e;color:#fff;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">1 Cliente</div>
-                <div style="flex:1;text-align:center;background:#ffe1c9;color:#b25b52;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">2 Pastel</div>
-                <div style="flex:1;text-align:center;background:#fff;color:rgba(74,52,46,.45);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">3 Costeo</div>
-                <div style="flex:1;text-align:center;background:#fff;color:rgba(74,52,46,.45);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">$ Total</div>
+                <div style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">1 Cliente</div>
+                <div style="flex:1;text-align:center;background:#F5E4C6;color:#7B5B4B;border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">2 Pastel</div>
+                <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">3 Costeo</div>
+                <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">$ Total</div>
               </div>
               <!-- card: cliente -->
-              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(74,52,46,.45)">
+              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:12px">👤 Cliente y evento</div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                  <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#4a342e"></div>
-                  <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#4a342e"></div>
-                  <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:4px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#4a342e"></div>
+                  <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:4px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#7B5B4B"></div>
+                  <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:4px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#7B5B4B"></div>
+                  <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:4px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;font-family:inherit;color:#7B5B4B"></div>
                 </div>
               </div>
               <!-- card: pastel -->
-              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(74,52,46,.45)">
+              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:6px">🎂 El pastel</div>
-                <div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700;margin-bottom:12px">Elige receta y tamaño — sabores y precio se llenan solos ✨</div>
-                <div style="background:#fbeef1;border:2px solid #f2c4ce;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
-                  <div style="font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:12px;font-weight:800;color:#ef7c8e;cursor:pointer">Cambiar</div>
+                <div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700;margin-bottom:12px">Elige receta y tamaño — sabores y precio se llenan solos ✨</div>
+                <div style="background:#F7E7CC;border:2px solid #E7B676;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">
+                  <div style="font-size:22px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:12px;font-weight:800;color:#7B5B4B;cursor:pointer">Cambiar</div>
                 </div>
-                <div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:6px">TAMAÑO</div>
+                <div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:6px">TAMAÑO</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px">
-                  <div style="background:#faf3ec;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(74,52,46,.55)">Petit</div>
-                  <div style="background:#faf3ec;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(74,52,46,.55)">Chico</div>
-                  <div style="background:#ef7c8e;color:#fff;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Mediano · 20p</div>
-                  <div style="background:#faf3ec;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(74,52,46,.55)">Grande</div>
-                  <div style="background:#faf3ec;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(74,52,46,.55)">Bento</div>
+                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Petit</div>
+                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Chico</div>
+                  <div style="background:#7B5B4B;color:#fff;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Mediano · 20p</div>
+                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Grande</div>
+                  <div style="background:#F5E7D0;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;color:rgba(123,91,75,.55)">Bento</div>
                 </div>
               </div>
               <!-- card: extras -->
-              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(74,52,46,.45)">
+              <div style="background:#fff;border-radius:24px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-bottom:12px">🎀 Extras de diseño</div>
                 <div style="display:flex;flex-wrap:wrap;gap:8px">
-                  <div style="background:#e9f2df;color:#5e7346;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Flores +$120</div>
-                  <div style="background:#efe6f7;color:#7a5fa8;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Topper +$80</div>
-                  <div style="background:#faf3ec;color:rgba(74,52,46,.5);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">+ Añadir</div>
+                  <div style="background:#F1E6CE;color:#7B5B4B;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Flores +$120</div>
+                  <div style="background:#F1E6CE;color:#7B5B4B;border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">Topper +$80</div>
+                  <div style="background:#F5E7D0;color:rgba(123,91,75,.5);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800">+ Añadir</div>
                 </div>
               </div>
               <!-- live total -->
-              <div style="background:linear-gradient(150deg,#4a342e,#6d4a3e);border-radius:24px;padding:20px;margin-top:14px;color:#fff;box-shadow:0 16px 30px -16px rgba(74,52,46,.7)">
+              <div style="background:linear-gradient(150deg,#5A4236,#7B5B4B);border-radius:24px;padding:20px;margin-top:14px;color:#fff;box-shadow:0 16px 30px -16px rgba(123,91,75,.7)">
                 <div style="font-size:12px;font-weight:800;opacity:.7">Resumen en vivo</div>
                 <div style="display:flex;flex-direction:column;gap:8px;margin:12px 0;font-size:13px;font-weight:700">
                   <div style="display:flex;justify-content:space-between;opacity:.85"><span>Insumos</span><span>$210</span></div>
@@ -193,9 +202,9 @@
                 </div>
                 <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:14px"><div style="font-size:12px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:40px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
                 <div style="display:flex;gap:10px;margin-top:16px">
-                  <div data-action="guardar" style="flex:2;background:#ef7c8e;text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px;cursor:pointer">Guardar</div>
+                  <div data-action="guardar" style="flex:2;background:#7B5B4B;text-align:center;border-radius:14px;padding:12px;font-family:'Fredoka';font-weight:600;font-size:14px;cursor:pointer">Guardar</div>
                   <div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer">📄</div>
-                  <div data-action="ticket" style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer">💬</div>
+                  <div data-action="ticket" style="flex:1;background:#E7B676;color:#7B5B4B;text-align:center;border-radius:14px;padding:12px;font-weight:800;font-size:13px;cursor:pointer">💬</div>
                 </div>
               </div>
             </div>
@@ -204,21 +213,21 @@
 
         <!-- ================= AGENDA ================= -->
         <div class="pane" data-scr="agenda">
-          <div style="color:#4a342e;padding:0 0 90px">
+          <div style="color:#7B5B4B;padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px">📅 Agenda de pedidos</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px">
-                <div style="background:#ffe1c9;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">3</div><div style="font-size:11px;font-weight:800;color:#b25b52">Entregas hoy</div></div>
-                <div style="background:#e9f2df;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8</div><div style="font-size:11px;font-weight:800;color:#7f9663">Esta semana</div></div>
-                <div style="background:#f7d9e0;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div><div style="font-size:11px;font-weight:800;color:#b25b52">Por cobrar</div></div>
-                <div style="background:#efe6f7;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">5</div><div style="font-size:11px;font-weight:800;color:#9179b8">Activos</div></div>
+                <div style="background:#F5E4C6;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">3</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Entregas hoy</div></div>
+                <div style="background:#F1E6CE;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Esta semana</div></div>
+                <div style="background:#F5E4C6;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Por cobrar</div></div>
+                <div style="background:#F1E6CE;border-radius:18px;padding:12px 14px"><div style="font-family:'Fredoka';font-weight:600;font-size:24px">5</div><div style="font-size:11px;font-weight:800;color:#7B5B4B">Activos</div></div>
               </div>
               <div style="display:flex;gap:8px;margin:16px 0 14px;overflow-x:auto">
-                <div style="flex:none;background:#ef7c8e;color:#fff;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Activos</div>
-                <div style="flex:none;background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Todos</div>
-                <div style="flex:none;background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Apartados</div>
-                <div style="flex:none;background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Entregados</div>
+                <div style="flex:none;background:#7B5B4B;color:#fff;border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Activos</div>
+                <div style="flex:none;background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Todos</div>
+                <div style="flex:none;background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Apartados</div>
+                <div style="flex:none;background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Entregados</div>
               </div>
               <div data-agenda-list style="display:flex;flex-direction:column;gap:12px"></div>
             </div>
@@ -227,34 +236,34 @@
 
         <!-- ================= PRECIOS ================= -->
         <div class="pane" data-scr="precios">
-          <div style="color:#4a342e;padding:0 0 90px">
+          <div style="color:#7B5B4B;padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px">🧾 Mis precios</div>
-              <div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza.</div>
-              <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#faf3ec;border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:13px;color:#4a342e;border:0;outline:none;font-family:inherit">
+              <div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza.</div>
+              <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#F5E7D0;border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:13px;color:#7B5B4B;border:0;outline:none;font-family:inherit">
               <div data-insumos-list style="display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
               <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin:20px 2px 10px">🎀 Extras de diseño</div>
               <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
-                <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
+                <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
+                <div style="background:#fff;border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
               </div>
-              <div style="background:#fff;border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;justify-content:space-between">
-                <div><div style="font-size:12px;font-weight:800;color:rgba(74,52,46,.5)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.5)">Aplicado a cada cotización</div></div>
-                <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#ef7c8e">40%</div>
+              <div style="background:#fff;border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;justify-content:space-between">
+                <div><div style="font-size:12px;font-weight:800;color:rgba(123,91,75,.5)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.5)">Aplicado a cada cotización</div></div>
+                <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#7B5B4B">40%</div>
               </div>
-              <div data-action="guardar-inv" style="background:#ef7c8e;color:#fff;border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(239,124,142,.7);cursor:pointer">💾 Guardar inventario</div>
+              <div data-action="guardar-inv" style="background:#7B5B4B;color:#fff;border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);cursor:pointer">💾 Guardar inventario</div>
             </div>
           </div>
         </div>
 
         <!-- ================= RECETAS ================= -->
         <div class="pane" data-scr="recetas">
-          <div style="color:#4a342e;padding:0 0 90px">
+          <div style="color:#7B5B4B;padding:0 0 90px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px">🍰 Mis recetas</div>
-              <div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Guarda una receta desde el cotizador y reutilízala al instante.</div>
+              <div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Guarda una receta desde el cotizador y reutilízala al instante.</div>
               <div data-recetas-list style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px"></div>
             </div>
           </div>
@@ -263,13 +272,13 @@
       </div>
 
       <!-- ================= BOTTOM NAV ================= -->
-      <div style="position:relative;height:88px;background:#fff;border-top:1px solid rgba(74,52,46,.06);display:flex;align-items:center;justify-content:space-around;padding:0 20px 18px;box-shadow:0 -8px 24px -16px rgba(74,52,46,.4);flex:none">
+      <div style="position:relative;height:88px;background:#fff;border-top:1px solid rgba(123,91,75,.06);display:flex;align-items:center;justify-content:space-around;padding:0 20px 18px;box-shadow:0 -8px 24px -16px rgba(123,91,75,.4);flex:none">
         <div data-go="inicio" data-nav="inicio" style="cursor:pointer;text-align:center"><div style="font-size:20px">🏠</div><div style="font-size:10px;font-weight:800">Inicio</div></div>
         <div data-go="agenda" data-nav="agenda" style="cursor:pointer;text-align:center"><div style="font-size:20px">📅</div><div style="font-size:10px;font-weight:800">Agenda</div></div>
         <div style="width:60px"></div>
         <div data-go="recetas" data-nav="recetas" style="cursor:pointer;text-align:center"><div style="font-size:20px">🍰</div><div style="font-size:10px;font-weight:800">Recetas</div></div>
         <div data-go="precios" data-nav="precios" style="cursor:pointer;text-align:center"><div style="font-size:20px">🧾</div><div style="font-size:10px;font-weight:800">Precios</div></div>
-        <div data-go="cotizar" style="cursor:pointer;position:absolute;left:50%;top:-22px;transform:translateX(-50%);width:60px;height:60px;border-radius:22px;background:#ef7c8e;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 12px 22px -8px rgba(239,124,142,.8)">＋</div>
+        <div data-go="cotizar" style="cursor:pointer;position:absolute;left:50%;top:-22px;transform:translateX(-50%);width:60px;height:60px;border-radius:22px;background:#7B5B4B;display:flex;align-items:center;justify-content:center;font-size:30px;color:#fff;box-shadow:0 12px 22px -8px rgba(123,91,75,.8)">＋</div>
       </div>
 
     </div>
@@ -281,26 +290,26 @@
 <div class="app">
 
   <!-- ============ SIDEBAR ============ -->
-  <div style="width:260px;flex:none;background:#fff;border-right:1px solid rgba(74,52,46,.06);display:flex;flex-direction:column;padding:26px 20px">
+  <div style="width:260px;flex:none;background:#fff;border-right:1px solid rgba(123,91,75,.06);display:flex;flex-direction:column;padding:26px 20px">
     <div style="display:flex;align-items:center;gap:12px;padding:0 6px 24px">
-      <div style="width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#ffc7a8,#ef7c8e);display:flex;align-items:center;justify-content:center"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:30px;height:30px;display:block"></div>
-      <div><div style="font-family:'Fredoka';font-weight:600;font-size:19px;line-height:1">Pastelia</div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.45)">Cake Studio</div></div>
+      <div style="width:46px;height:46px;border-radius:16px;background:linear-gradient(135deg,#F0C98D,#E7B676);display:flex;align-items:center;justify-content:center"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:30px;height:30px;display:block"></div>
+      <div><div style="font-family:'Fredoka';font-weight:600;font-size:19px;line-height:1">Pastelia</div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.45)">Cake Studio</div></div>
     </div>
-    <div data-go="cotizar" style="cursor:pointer;background:#ef7c8e;color:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-weight:600;font-size:15px;box-shadow:0 12px 22px -12px rgba(239,124,142,.7);margin-bottom:20px">＋ Nueva cotización</div>
+    <div data-go="cotizar" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:10px;font-family:'Fredoka';font-weight:600;font-size:15px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);margin-bottom:20px">＋ Nueva cotización</div>
     <div style="display:flex;flex-direction:column;gap:6px">
       <div data-go="inicio" class="navitem" data-nav="inicio"><span style="font-size:18px">🏠</span>Inicio</div>
       <div data-go="agenda" class="navitem" data-nav="agenda"><span style="font-size:18px">📅</span>Agenda de pedidos</div>
       <div data-go="recetas" class="navitem" data-nav="recetas"><span style="font-size:18px">🍰</span>Recetas</div>
       <div data-go="precios" class="navitem" data-nav="precios"><span style="font-size:18px">🧾</span>Mis precios</div>
     </div>
-    <div style="margin-top:auto;background:#faf3ec;border-radius:18px;padding:16px">
-      <div style="font-size:12px;font-weight:800;color:rgba(74,52,46,.5)">Por cobrar 💰</div>
+    <div style="margin-top:auto;background:#F5E7D0;border-radius:18px;padding:16px">
+      <div style="font-size:12px;font-weight:800;color:rgba(123,91,75,.5)">Por cobrar 💰</div>
       <div style="font-family:'Fredoka';font-weight:600;font-size:26px">$1,240</div>
-      <div style="font-size:11px;font-weight:700;color:rgba(74,52,46,.5)">3 pedidos apartados</div>
+      <div style="font-size:11px;font-weight:700;color:rgba(123,91,75,.5)">3 pedidos apartados</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:16px 6px 0">
-      <div style="width:36px;height:36px;border-radius:12px;background:#efe6f7;display:flex;align-items:center;justify-content:center;font-size:16px">👩‍🍳</div>
-      <div><div style="font-weight:800;font-size:13px">Azucena</div><div style="font-size:11px;color:rgba(74,52,46,.45);font-weight:700">Dueña</div></div>
+      <div style="width:36px;height:36px;border-radius:12px;background:#F1E6CE;display:flex;align-items:center;justify-content:center;font-size:16px">👩‍🍳</div>
+      <div><div style="font-weight:800;font-size:13px">Azucena</div><div style="font-size:11px;color:rgba(123,91,75,.45);font-weight:700">Dueña</div></div>
     </div>
   </div>
 
@@ -312,47 +321,47 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
           <div>
-            <div style="font-size:13px;font-weight:800;color:rgba(74,52,46,.5)">Martes 13 de agosto · Buen día ☀️</div>
+            <div style="font-size:13px;font-weight:800;color:rgba(123,91,75,.5)">Martes 13 de agosto · Buen día ☀️</div>
             <div style="font-family:'Fredoka';font-weight:600;font-size:32px;line-height:1.1">¡Hola, Azucena!</div>
           </div>
-          <div style="background:#faf3ec;border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:rgba(74,52,46,.55)">🔍 Buscar pedido, cliente…</div>
+          <div style="background:#F5E7D0;border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:rgba(123,91,75,.55)">🔍 Buscar pedido, cliente…</div>
         </div>
 
         <!-- hero row -->
         <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:16px;margin-bottom:16px">
-          <div style="background:linear-gradient(135deg,#ef7c8e,#ffb08a);border-radius:24px;padding:26px;color:#fff;display:flex;align-items:center;justify-content:space-between;box-shadow:0 18px 32px -16px rgba(239,124,142,.6)">
+          <div style="background:linear-gradient(135deg,#7B5B4B,#8A6552);border-radius:24px;padding:26px;color:#fff;display:flex;align-items:center;justify-content:space-between;box-shadow:0 18px 32px -16px rgba(123,91,75,.6)">
             <div><div style="font-size:14px;font-weight:800;opacity:.9">Entregas de hoy</div><div style="font-family:'Fredoka';font-weight:700;font-size:64px;line-height:.9">3</div><div style="font-size:13px;font-weight:800;opacity:.9">Próxima 11:30 · Pastel Frida</div></div>
-            <div style="font-size:72px;filter:drop-shadow(0 10px 12px rgba(74,52,46,.25))">🎂</div>
+            <div style="font-size:72px;filter:drop-shadow(0 10px 12px rgba(123,91,75,.25))">🎂</div>
           </div>
-          <div style="background:#e9f2df;border-radius:24px;padding:22px"><div style="font-size:28px">📦</div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">8</div><div style="font-size:13px;font-weight:800;color:#7f9663">Pedidos esta semana</div></div>
-          <div style="background:#efe6f7;border-radius:24px;padding:22px"><div style="font-size:28px">💵</div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$8.9k</div><div style="font-size:13px;font-weight:800;color:#9179b8">Ingresos del mes</div></div>
+          <div style="background:#F1E6CE;border-radius:24px;padding:22px"><div style="font-size:28px">📦</div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">8</div><div style="font-size:13px;font-weight:800;color:#7B5B4B">Pedidos esta semana</div></div>
+          <div style="background:#F1E6CE;border-radius:24px;padding:22px"><div style="font-size:28px">💵</div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$8.9k</div><div style="font-size:13px;font-weight:800;color:#7B5B4B">Ingresos del mes</div></div>
         </div>
 
         <!-- quick actions -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
-          <div data-go="cotizar" style="cursor:pointer;background:#ef7c8e;color:#fff;border-radius:20px;padding:20px;box-shadow:0 14px 24px -14px rgba(239,124,142,.7)"><div style="font-size:26px">✏️</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Cotizar</div></div>
-          <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(74,52,46,.5)"><div style="font-size:26px">📄</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Generar PDF</div></div>
-          <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(74,52,46,.5)"><div style="font-size:26px">💬</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Ticket WhatsApp</div></div>
-          <div data-go="precios" style="cursor:pointer;background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(74,52,46,.5)"><div style="font-size:26px">🧾</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Precios</div></div>
+          <div data-go="cotizar" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:20px;padding:20px;box-shadow:0 14px 24px -14px rgba(123,91,75,.7)"><div style="font-size:26px">✏️</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Cotizar</div></div>
+          <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div style="font-size:26px">📄</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Generar PDF</div></div>
+          <div style="background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div style="font-size:26px">💬</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Ticket WhatsApp</div></div>
+          <div data-go="precios" style="cursor:pointer;background:#fff;border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div style="font-size:26px">🧾</div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Precios</div></div>
         </div>
 
         <!-- two columns: entregas + próximos -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Entregas de hoy</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:#ef7c8e">Ver agenda</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Entregas de hoy</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:#7B5B4B">Ver agenda</div></div>
             <div style="display:flex;flex-direction:column;gap:12px">
-              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#ffe1c9;display:flex;align-items:center;justify-content:center;font-size:22px">🎂</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Pastel Frida · 20p</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Marisol G. · 11:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$680</div><div style="font-size:10px;font-weight:800;color:#c78a3b;background:#fbeecb;border-radius:20px;padding:2px 8px;margin-top:2px">Apartado</div></div></div>
-              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#efe6f7;display:flex;align-items:center;justify-content:center;font-size:22px">🧁</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Cupcakes x24</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Bruno T. · 16:00</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$420</div><div style="font-size:10px;font-weight:800;color:#7f9663;background:#e9f2df;border-radius:20px;padding:2px 8px;margin-top:2px">Pagado</div></div></div>
-              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#f7d9e0;display:flex;align-items:center;justify-content:center;font-size:22px">🎂</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Número 30 · Fondant</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Diana R. · 18:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$1,150</div><div style="font-size:10px;font-weight:800;color:#b25b52;background:#ffe1e1;border-radius:20px;padding:2px 8px;margin-top:2px">Pendiente</div></div></div>
+              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;font-size:22px">🎂</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Pastel Frida · 20p</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Marisol G. · 11:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$680</div><div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F7E7C9;border-radius:20px;padding:2px 8px;margin-top:2px">Apartado</div></div></div>
+              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#F1E6CE;display:flex;align-items:center;justify-content:center;font-size:22px">🧁</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Cupcakes x24</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Bruno T. · 16:00</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$420</div><div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F1E6CE;border-radius:20px;padding:2px 8px;margin-top:2px">Pagado</div></div></div>
+              <div style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:#F5E4C6;display:flex;align-items:center;justify-content:center;font-size:22px">🎂</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Número 30 · Fondant</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Diana R. · 18:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$1,150</div><div style="font-size:10px;font-weight:800;color:#7B5B4B;background:#F5E4C6;border-radius:20px;padding:2px 8px;margin-top:2px">Pendiente</div></div></div>
             </div>
           </div>
           <div>
             <div style="font-family:'Fredoka';font-weight:600;font-size:19px;margin-bottom:12px">Recetas favoritas</div>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:70px;background:linear-gradient(135deg,#ffd9c0,#ef7c8e);display:flex;align-items:center;justify-content:center;font-size:30px">🍫</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">$34/porción</div></div></div>
-              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:70px;background:linear-gradient(135deg,#e9f2df,#bfe3d0);display:flex;align-items:center;justify-content:center;font-size:30px">🍋</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Limón & mora</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">$38/porción</div></div></div>
-              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4)"><div style="height:70px;background:linear-gradient(135deg,#efe6f7,#d9cbf0);display:flex;align-items:center;justify-content:center;font-size:30px">🫐</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Red velvet</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">$40/porción</div></div></div>
-              <div data-go="recetas" style="cursor:pointer;border:2px dashed #f2c4ce;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ef7c8e;font-weight:800;font-size:13px"><div style="font-size:26px">＋</div>Nueva</div>
+              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F3D9B0,#7B5B4B);display:flex;align-items:center;justify-content:center;font-size:30px">🍫</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">$34/porción</div></div></div>
+              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E7B676);display:flex;align-items:center;justify-content:center;font-size:30px">🍋</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Limón & mora</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">$38/porción</div></div></div>
+              <div style="background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E0AE6A);display:flex;align-items:center;justify-content:center;font-size:30px">🫐</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Red velvet</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">$40/porción</div></div></div>
+              <div data-go="recetas" style="cursor:pointer;border:2px dashed #E7B676;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#7B5B4B;font-weight:800;font-size:13px"><div style="font-size:26px">＋</div>Nueva</div>
             </div>
           </div>
         </div>
@@ -363,39 +372,39 @@
     <div class="pane" data-scr="cotizar">
       <div>
         <div style="font-family:'Fredoka';font-weight:600;font-size:32px;margin-bottom:4px">Nueva cotización</div>
-        <div style="font-size:13px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:20px">Llena los pasos y el precio se calcula solo ✨</div>
+        <div style="font-size:13px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:20px">Llena los pasos y el precio se calcula solo ✨</div>
         <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:start">
           <!-- left: steps -->
           <div style="display:flex;flex-direction:column;gap:16px">
             <div style="display:flex;gap:10px">
-              <div style="flex:1;text-align:center;background:#ef7c8e;color:#fff;border-radius:14px;padding:10px;font-size:12px;font-weight:800">1 Cliente</div>
-              <div style="flex:1;text-align:center;background:#ffe1c9;color:#b25b52;border-radius:14px;padding:10px;font-size:12px;font-weight:800">2 Pastel</div>
-              <div style="flex:1;text-align:center;background:#fff;color:rgba(74,52,46,.45);border-radius:14px;padding:10px;font-size:12px;font-weight:800">3 Costeo</div>
-              <div style="flex:1;text-align:center;background:#fff;color:rgba(74,52,46,.45);border-radius:14px;padding:10px;font-size:12px;font-weight:800">$ Total</div>
+              <div style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:10px;font-size:12px;font-weight:800">1 Cliente</div>
+              <div style="flex:1;text-align:center;background:#F5E4C6;color:#7B5B4B;border-radius:14px;padding:10px;font-size:12px;font-weight:800">2 Pastel</div>
+              <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:10px;font-size:12px;font-weight:800">3 Costeo</div>
+              <div style="flex:1;text-align:center;background:#fff;color:rgba(123,91,75,.45);border-radius:14px;padding:10px;font-size:12px;font-weight:800">$ Total</div>
             </div>
-            <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(74,52,46,.45)">
+            <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
               <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px">👤 Cliente y evento</div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e"></div>
-                <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e"></div>
-                <div><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:5px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#faf3ec;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e"></div>
+                <div style="grid-column:span 2"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:5px">NOMBRE</div><input type="text" data-field="nombre" placeholder="Marisol González" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B"></div>
+                <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:5px">TELÉFONO</div><input type="tel" data-field="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B"></div>
+                <div><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:5px">EVENTO</div><input type="date" data-field="fecha" style="width:100%;box-sizing:border-box;border:0;outline:none;background:#F5E7D0;border-radius:12px;padding:12px 14px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B"></div>
               </div>
             </div>
-            <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(74,52,46,.45)">
+            <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
               <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:12px">🎂 El pastel</div>
-              <div style="background:#fbeef1;border:2px solid #f2c4ce;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:24px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:13px;font-weight:800;color:#ef7c8e;cursor:pointer">Cambiar</div></div>
-              <div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5);margin-bottom:8px">TAMAÑO</div>
+              <div style="background:#F7E7CC;border:2px solid #E7B676;border-radius:16px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:14px"><div style="font-size:24px">🍫</div><div style="flex:1"><div style="font-weight:800;font-size:15px">Chocoavellana</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">Receta base guardada</div></div><div data-action="cambiar" style="font-size:13px;font-weight:800;color:#7B5B4B;cursor:pointer">Cambiar</div></div>
+              <div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5);margin-bottom:8px">TAMAÑO</div>
               <div style="display:flex;flex-wrap:wrap;gap:8px">
-                <div style="background:#faf3ec;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(74,52,46,.55)">Petit</div>
-                <div style="background:#faf3ec;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(74,52,46,.55)">Chico</div>
-                <div style="background:#ef7c8e;color:#fff;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800">Mediano · 20p</div>
-                <div style="background:#faf3ec;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(74,52,46,.55)">Grande</div>
-                <div style="background:#faf3ec;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(74,52,46,.55)">Bento</div>
+                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Petit</div>
+                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Chico</div>
+                <div style="background:#7B5B4B;color:#fff;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800">Mediano · 20p</div>
+                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Grande</div>
+                <div style="background:#F5E7D0;border-radius:20px;padding:8px 16px;font-size:13px;font-weight:800;color:rgba(123,91,75,.55)">Bento</div>
               </div>
             </div>
           </div>
           <!-- right: live total -->
-          <div style="background:linear-gradient(150deg,#4a342e,#6d4a3e);border-radius:24px;padding:24px;color:#fff;position:sticky;top:0;box-shadow:0 18px 34px -18px rgba(74,52,46,.7)">
+          <div style="background:linear-gradient(150deg,#5A4236,#7B5B4B);border-radius:24px;padding:24px;color:#fff;position:sticky;top:0;box-shadow:0 18px 34px -18px rgba(123,91,75,.7)">
             <div style="font-size:13px;font-weight:800;opacity:.7">Resumen en vivo</div>
             <div style="display:flex;flex-direction:column;gap:10px;margin:16px 0;font-size:14px;font-weight:700">
               <div style="display:flex;justify-content:space-between;opacity:.85"><span>Insumos</span><span>$210</span></div>
@@ -405,8 +414,8 @@
             </div>
             <div style="border-top:1px solid rgba(255,255,255,.15);padding-top:16px"><div style="font-size:13px;font-weight:800;opacity:.7">Precio sugerido</div><div style="font-family:'Fredoka';font-weight:700;font-size:44px;line-height:1">$714</div><div style="font-size:12px;font-weight:700;opacity:.7">$35.70 por porción</div></div>
             <div style="display:flex;flex-direction:column;gap:10px;margin-top:20px">
-              <div data-action="guardar" style="background:#ef7c8e;text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Guardar cotización</div>
-              <div style="display:flex;gap:10px"><div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">📄 PDF</div><div data-action="ticket" style="flex:1;background:#25d366;text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">💬 Ticket</div></div>
+              <div data-action="guardar" style="background:#7B5B4B;text-align:center;border-radius:14px;padding:13px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Guardar cotización</div>
+              <div style="display:flex;gap:10px"><div data-action="pdf" style="flex:1;background:rgba(255,255,255,.12);text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">📄 PDF</div><div data-action="ticket" style="flex:1;background:#E7B676;color:#7B5B4B;text-align:center;border-radius:14px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">💬 Ticket</div></div>
             </div>
           </div>
         </div>
@@ -418,19 +427,19 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px">📅 Agenda de pedidos</div>
-          <div data-go="cotizar" style="cursor:pointer;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7)">＋ Nuevo pedido</div>
+          <div data-go="cotizar" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7)">＋ Nuevo pedido</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px">
-          <div style="background:#ffe1c9;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">3</div><div style="font-size:12px;font-weight:800;color:#b25b52">Entregas hoy</div></div>
-          <div style="background:#e9f2df;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">8</div><div style="font-size:12px;font-weight:800;color:#7f9663">Esta semana</div></div>
-          <div style="background:#f7d9e0;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">$1,240</div><div style="font-size:12px;font-weight:800;color:#b25b52">Por cobrar</div></div>
-          <div style="background:#efe6f7;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">5</div><div style="font-size:12px;font-weight:800;color:#9179b8">Activos</div></div>
+          <div style="background:#F5E4C6;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">3</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Entregas hoy</div></div>
+          <div style="background:#F1E6CE;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">8</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Esta semana</div></div>
+          <div style="background:#F5E4C6;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">$1,240</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Por cobrar</div></div>
+          <div style="background:#F1E6CE;border-radius:20px;padding:18px"><div style="font-family:'Fredoka';font-weight:600;font-size:30px">5</div><div style="font-size:12px;font-weight:800;color:#7B5B4B">Activos</div></div>
         </div>
         <div style="display:flex;gap:8px;margin-bottom:16px">
-          <div style="background:#ef7c8e;color:#fff;border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Activos</div>
-          <div style="background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Todos</div>
-          <div style="background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Apartados</div>
-          <div style="background:#fff;color:rgba(74,52,46,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Entregados</div>
+          <div style="background:#7B5B4B;color:#fff;border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Activos</div>
+          <div style="background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Todos</div>
+          <div style="background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Apartados</div>
+          <div style="background:#fff;color:rgba(123,91,75,.5);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Entregados</div>
         </div>
         <div data-agenda-list style="display:flex;flex-direction:column;gap:14px"></div>
       </div>
@@ -441,9 +450,9 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px">🍰 Mis recetas</div>
-          <div data-action="nueva-receta" style="cursor:pointer;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7)">＋ Nueva receta</div>
+          <div data-action="nueva-receta" style="cursor:pointer;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7)">＋ Nueva receta</div>
         </div>
-        <div style="font-size:13px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:20px">Guarda una receta y reutilízala al cotizar — el costo se recalcula con tus precios.</div>
+        <div style="font-size:13px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:20px">Guarda una receta y reutilízala al cotizar — el costo se recalcula con tus precios.</div>
         <div data-recetas-list style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px"></div>
       </div>
     </div>
@@ -453,24 +462,24 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:6px">
           <div style="font-family:'Fredoka';font-weight:600;font-size:32px">🧾 Mis precios</div>
-          <div data-action="guardar-inv" style="background:#ef7c8e;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(239,124,142,.7);cursor:pointer">💾 Guardar inventario</div>
+          <div data-action="guardar-inv" style="background:#7B5B4B;color:#fff;border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7);cursor:pointer">💾 Guardar inventario</div>
         </div>
-        <div style="font-size:13px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:20px">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza y lo usa al cotizar.</div>
+        <div style="font-size:13px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:20px">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza y lo usa al cotizar.</div>
         <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
           <div>
-            <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#faf3ec;border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:#4a342e;border:0;outline:none;font-family:inherit">
+            <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:#F5E7D0;border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:#7B5B4B;border:0;outline:none;font-family:inherit">
             <div data-insumos-list style="display:flex;flex-direction:column;gap:12px"></div>
           </div>
-          <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(74,52,46,.45)">
+          <div style="background:#fff;border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
             <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px">🎀 Extras de diseño</div>
             <div style="display:flex;flex-direction:column;gap:10px">
-              <div style="display:flex;justify-content:space-between;align-items:center;background:#faf3ec;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:#faf3ec;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:#faf3ec;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Piso extra</div><div style="font-family:'Fredoka';font-weight:600">$350</div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:#F5E7D0;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:#F5E7D0;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;background:#F5E7D0;border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Piso extra</div><div style="font-family:'Fredoka';font-weight:600">$350</div></div>
             </div>
-            <div style="border-top:1px solid rgba(74,52,46,.08);margin-top:16px;padding-top:16px">
-              <div style="font-size:12px;font-weight:800;color:rgba(74,52,46,.5)">Margen de ganancia</div>
-              <div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#ef7c8e">40%</div><div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.5)">aplicado a cada cotización</div></div>
+            <div style="border-top:1px solid rgba(123,91,75,.08);margin-top:16px;padding-top:16px">
+              <div style="font-size:12px;font-weight:800;color:rgba(123,91,75,.5)">Margen de ganancia</div>
+              <div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:#7B5B4B">40%</div><div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.5)">aplicado a cada cotización</div></div>
             </div>
           </div>
         </div>
@@ -531,12 +540,12 @@
   /* ---------- Recetas (localStorage: pastelia_recetas) ---------- */
   var RECIPES_KEY = 'pastelia_recetas';
   var GRADS = [
-    'linear-gradient(135deg,#ffd9c0,#ef7c8e)',
-    'linear-gradient(135deg,#e9f2df,#bfe3d0)',
-    'linear-gradient(135deg,#efe6f7,#d9cbf0)',
-    'linear-gradient(135deg,#fde6c9,#f4c95b)',
-    'linear-gradient(135deg,#d9edf2,#a9d3de)',
-    'linear-gradient(135deg,#f7d9e0,#f2a9bd)'
+    'linear-gradient(135deg,#F3D9B0,#7B5B4B)',
+    'linear-gradient(135deg,#F1E6CE,#E7B676)',
+    'linear-gradient(135deg,#F1E6CE,#E0AE6A)',
+    'linear-gradient(135deg,#F7E6C6,#E7B676)',
+    'linear-gradient(135deg,#F1E6CE,#E7B676)',
+    'linear-gradient(135deg,#F5E4C6,#DDA457)'
   ];
   var EMOJIS = ['🍫','🍋','🫐','🍓','🍑','🎂','🧁','🍰'];
   var DEFAULT_RECIPES = [
@@ -554,12 +563,12 @@
   /* ---------- Insumos / Mis precios (localStorage: pastelia_insumos) ---------- */
   var INSUMOS_KEY = 'pastelia_insumos';
   var INS_EMOJIS = ['🧈','🌾','🥚','🍫','🍶','🧂','🍓','🫙','🥛','🍋','🧀','🍯'];
-  var ICON_BGS = ['#ffe9c7','#f6ead2','#f7d9e0','#e7dff5','#d9edf2','#e9f2df'];
+  var ICON_BGS = ['#F7E7C9','#F5E7D0','#F5E4C6','#F1E6CE','#F1E6CE','#F1E6CE'];
   var DEFAULT_INSUMOS = [
-    { id:'ins_mant', nombre:'Mantequilla', emoji:'🧈', iconBg:'#ffe9c7', precio:186, cantidad:1000, unidad:'g'  },
-    { id:'ins_hari', nombre:'Harina',      emoji:'🌾', iconBg:'#f6ead2', precio:32,  cantidad:1000, unidad:'g'  },
-    { id:'ins_hue',  nombre:'Huevo',       emoji:'🥚', iconBg:'#f7d9e0', precio:62,  cantidad:30,   unidad:'pz' },
-    { id:'ins_choc', nombre:'Chocolate',   emoji:'🍫', iconBg:'#e7dff5', precio:145, cantidad:500,  unidad:'g'  }
+    { id:'ins_mant', nombre:'Mantequilla', emoji:'🧈', iconBg:'#F7E7C9', precio:186, cantidad:1000, unidad:'g'  },
+    { id:'ins_hari', nombre:'Harina',      emoji:'🌾', iconBg:'#F5E7D0', precio:32,  cantidad:1000, unidad:'g'  },
+    { id:'ins_hue',  nombre:'Huevo',       emoji:'🥚', iconBg:'#F5E4C6', precio:62,  cantidad:30,   unidad:'pz' },
+    { id:'ins_choc', nombre:'Chocolate',   emoji:'🍫', iconBg:'#F1E6CE', precio:145, cantidad:500,  unidad:'g'  }
   ];
   function readInsumos(){ try{ var a=JSON.parse(localStorage.getItem(INSUMOS_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
   function saveInsumos(a){ try{ localStorage.setItem(INSUMOS_KEY, JSON.stringify(a)); }catch(e){} }
@@ -593,15 +602,15 @@
     // chips de tamaño
     sizeChips(pane).forEach(function(chip){
       var on = sizeKey(chip.textContent) === state.size;
-      chip.style.background = on ? '#ef7c8e' : '#faf3ec';
-      chip.style.color = on ? '#fff' : 'rgba(74,52,46,.55)';
+      chip.style.background = on ? '#7B5B4B' : '#F5E7D0';
+      chip.style.color = on ? '#fff' : 'rgba(123,91,75,.55)';
       chip.style.cursor = 'pointer';
     });
     // chips de extras (solo existen en móvil)
     extraChips(pane).forEach(function(chip){
       var kk = extraKey(chip.textContent), on = state.extras[kk];
-      if (kk === 'Flores'){ chip.style.background = on?'#e9f2df':'#faf3ec'; chip.style.color = on?'#5e7346':'rgba(74,52,46,.5)'; }
-      else if (kk === 'Topper'){ chip.style.background = on?'#efe6f7':'#faf3ec'; chip.style.color = on?'#7a5fa8':'rgba(74,52,46,.5)'; }
+      if (kk === 'Flores'){ chip.style.background = on?'#F1E6CE':'#F5E7D0'; chip.style.color = on?'#7B5B4B':'rgba(123,91,75,.5)'; }
+      else if (kk === 'Topper'){ chip.style.background = on?'#F1E6CE':'#F5E7D0'; chip.style.color = on?'#7B5B4B':'rgba(123,91,75,.5)'; }
       chip.style.cursor = 'pointer';
     });
     // filas del resumen (pares de <span>)
@@ -639,60 +648,60 @@
   function toast(msg){
     var t=document.createElement('div');
     t.textContent=msg;
-    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#4a342e;color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 14px 34px -12px rgba(74,52,46,.55);opacity:0;transition:opacity .25s;max-width:88vw;text-align:center';
+    t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#7B5B4B;color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;font-size:14px;z-index:9999;box-shadow:0 14px 34px -12px rgba(123,91,75,.55);opacity:0;transition:opacity .25s;max-width:88vw;text-align:center';
     document.body.appendChild(t);
     requestAnimationFrame(function(){ t.style.opacity='1'; });
     setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 320); }, 2200);
   }
   function goTo(scr){ var b=document.querySelector('[data-go="'+scr+'"]'); if(b) b.click(); }
 
-  var AVA_BG = ['#ffe1c9','#efe6f7','#d9edf2','#f7d9e0'];
+  var AVA_BG = ['#F5E4C6','#F1E6CE','#F1E6CE','#F5E4C6'];
   var AVA_EMO = ['🎂','🧁','🍰','🎂'];
   var ESTADOS = ['Cotizado','Apartado','Entregado'];
   function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
   function orderSub(o){ return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+esc(o.receta||'Pastel'); }
   function estadoInfo(o){
     var e=o.estado||'Cotizado';
-    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'#7f9663' };
-    return { txt:e, color:(e==='Entregado'?'#7f9663':'#c78a3b') };
+    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'#7B5B4B' };
+    return { txt:e, color:(e==='Entregado'?'#7B5B4B':'#7B5B4B') };
   }
   function statusHtml(o,big){ var info=estadoInfo(o); return '<div data-estado-btn="'+o.id+'" title="Cambiar estado" style="font-size:'+(big?'11px':'10px')+';font-weight:800;color:'+info.color+';cursor:pointer">'+esc(info.txt)+'</div>'; }
   function cobrarMob(o){ return o.pagado
-      ? '<div style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800;color:rgba(74,52,46,.35)">✓ Cobrado</div>'
-      : '<div data-cobrar="'+o.id+'" style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💵 Cobrar</div>'; }
+      ? '<div style="flex:1;text-align:center;background:#F5E7D0;border-radius:12px;padding:8px;font-size:12px;font-weight:800;color:rgba(123,91,75,.35)">✓ Cobrado</div>'
+      : '<div data-cobrar="'+o.id+'" style="flex:1;text-align:center;background:#F5E7D0;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💵 Cobrar</div>'; }
   function cobrarDesk(o){ return o.pagado
-      ? '<div style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;color:rgba(74,52,46,.35)">✓ Cobrado</div>'
-      : '<div data-cobrar="'+o.id+'" style="background:#ef7c8e;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">💵 Cobrar</div>'; }
+      ? '<div style="background:#F5E7D0;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;color:rgba(123,91,75,.35)">✓ Cobrado</div>'
+      : '<div data-cobrar="'+o.id+'" style="background:#7B5B4B;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">💵 Cobrar</div>'; }
 
   function mobCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
-    return '<div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(74,52,46,.4)">'
+    return '<div style="background:#fff;border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(123,91,75,.4)">'
       + '<div style="display:flex;align-items:center;gap:12px">'
       + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:22px">'+emo+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+'</div></div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+'</div></div>'
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div>'+statusHtml(o,false)+'</div>'
       + '</div>'
-      + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(74,52,46,.07)">'
-      + '<div data-ticket="'+o.id+'" style="flex:1;text-align:center;background:#25d366;color:#fff;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💬 WhatsApp</div>'
-      + '<div data-pdf="'+o.id+'" style="flex:1;text-align:center;background:#faf3ec;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">📄 PDF</div>'
+      + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid rgba(123,91,75,.07)">'
+      + '<div data-ticket="'+o.id+'" style="flex:1;text-align:center;background:#E7B676;color:#7B5B4B;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">💬 WhatsApp</div>'
+      + '<div data-pdf="'+o.id+'" style="flex:1;text-align:center;background:#F5E7D0;border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">📄 PDF</div>'
       + cobrarMob(o)
       + '</div></div>';
   }
   function deskCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
-    return '<div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);display:flex;align-items:center;gap:16px">'
+    return '<div style="background:#fff;border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;gap:16px">'
       + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;font-size:26px">'+emo+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">'+orderSub(o)+'</div></div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">'+orderSub(o)+'</div></div>'
       + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
-      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:#25d366;color:#fff;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">💬</div><div data-pdf="'+o.id+'" style="background:#faf3ec;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">📄</div>'+cobrarDesk(o)+'</div>'
+      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:#E7B676;color:#7B5B4B;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">💬</div><div data-pdf="'+o.id+'" style="background:#F5E7D0;border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">📄</div>'+cobrarDesk(o)+'</div>'
       + '</div>';
   }
   function emptyState(){
-    return '<div style="text-align:center;padding:48px 16px;color:rgba(74,52,46,.45)"><div style="font-size:40px">📭</div>'
-      + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:8px;color:rgba(74,52,46,.7)">No hay pedidos aún</div>'
+    return '<div style="text-align:center;padding:48px 16px;color:rgba(123,91,75,.45)"><div style="font-size:40px">📭</div>'
+      + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:8px;color:rgba(123,91,75,.7)">No hay pedidos aún</div>'
       + '<div style="font-size:12px;font-weight:700;margin-top:4px">Crea una cotización y guárdala para verla aquí.</div></div>';
   }
-  function emptyFilter(){ return '<div style="text-align:center;padding:40px 16px;color:rgba(74,52,46,.45);font-weight:700;font-size:13px">No hay pedidos en este filtro.</div>'; }
+  function emptyFilter(){ return '<div style="text-align:center;padding:40px 16px;color:rgba(123,91,75,.45);font-weight:700;font-size:13px">No hay pedidos en este filtro.</div>'; }
   function setKPI(pane,label,val){
     var leaves=Array.prototype.filter.call(pane.querySelectorAll('div'), function(d){ return d.children.length===0; });
     for(var i=0;i<leaves.length;i++){ if((leaves[i].textContent||'').trim()===label){ var n=leaves[i].previousElementSibling; if(n) n.textContent=val; break; } }
@@ -711,8 +720,8 @@
     var row=list.previousElementSibling; if(!row) return;
     for(var i=0;i<row.children.length && i<4;i++){
       var on = state.filter===FILTER_KEYS[i];
-      row.children[i].style.background = on?'#ef7c8e':'#fff';
-      row.children[i].style.color = on?'#fff':'rgba(74,52,46,.5)';
+      row.children[i].style.background = on?'#7B5B4B':'#fff';
+      row.children[i].style.color = on?'#fff':'rgba(123,91,75,.5)';
       row.children[i].style.cursor='pointer';
     }
   }
@@ -734,9 +743,9 @@
   function cycleEstado(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ var e=arr[i].estado||'Cotizado'; arr[i].estado=ESTADOS[(ESTADOS.indexOf(e)+1)%ESTADOS.length]; break; } } saveOrders(arr); renderAgenda(); }
 
   /* ---------- Recetas: render + modales ---------- */
-  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:32px">'+r.emoji+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+r.ingredientes+' ingredientes</div></div></div>'; }
-  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:40px">'+r.emoji+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+r.ingredientes+' ingredientes · $'+r.precioPorcion+'/p</div></div></div>'; }
-  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #f2c4ce;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#ef7c8e;font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>'; }
+  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:32px">'+r.emoji+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+r.ingredientes+' ingredientes</div></div></div>'; }
+  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:40px">'+r.emoji+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+r.ingredientes+' ingredientes · $'+r.precioPorcion+'/p</div></div></div>'; }
+  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #E7B676;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#7B5B4B;font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>'; }
   function renderRecetas(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-recetas-list]'), function(list){
       var isMob=!!list.closest('#mobile');
@@ -757,9 +766,9 @@
 
   function openModal(inner){
     var ov=document.createElement('div');
-    ov.style.cssText='position:fixed;inset:0;background:rgba(74,52,46,.45);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
+    ov.style.cssText='position:fixed;inset:0;background:rgba(123,91,75,.45);z-index:9998;display:flex;align-items:center;justify-content:center;padding:20px';
     var card=document.createElement('div');
-    card.style.cssText='background:#fff;color:#4a342e;border-radius:24px;padding:22px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(74,52,46,.5);max-height:88vh;overflow:auto;font-family:inherit';
+    card.style.cssText='background:#fff;color:#7B5B4B;border-radius:24px;padding:22px;max-width:420px;width:100%;box-shadow:0 30px 60px -20px rgba(123,91,75,.5);max-height:88vh;overflow:auto;font-family:inherit';
     card.appendChild(inner); ov.appendChild(card);
     function close(){ ov.remove(); document.removeEventListener('keydown', onkey); }
     function onkey(e){ if(e.key==='Escape') close(); }
@@ -768,7 +777,7 @@
     document.body.appendChild(ov);
     return { close:close };
   }
-  function fieldStyle(){ return 'width:100%;box-sizing:border-box;border:1px solid #f0e4d8;outline:none;background:#faf3ec;border-radius:12px;padding:11px 13px;font-weight:700;font-size:14px;font-family:inherit;color:#4a342e;margin-top:6px'; }
+  function fieldStyle(){ return 'width:100%;box-sizing:border-box;border:1px solid #EAD9C0;outline:none;background:#F5E7D0;border-radius:12px;padding:11px 13px;font-weight:700;font-size:14px;font-family:inherit;color:#7B5B4B;margin-top:6px'; }
 
   function openRecipeEditor(recipe){
     var isNew=!recipe;
@@ -776,21 +785,21 @@
     var box=document.createElement('div');
     box.innerHTML =
       '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nueva receta':'Editar receta')+'</div>'
-      + '<div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:14px">Se usa al cotizar para calcular el precio.</div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">ÍCONO</div>'
+      + '<div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:14px">Se usa al cotizar para calcular el precio.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">ÍCONO</div>'
       + '<div id="rc-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">NOMBRE</div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">NOMBRE</div>'
       + '<input id="rc-nombre" type="text" placeholder="Ej. Chocoavellana" style="'+fieldStyle()+'">'
       + '<div style="display:flex;gap:10px;margin-top:12px">'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)"># INGREDIENTES</div><input id="rc-ing" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">COSTO BASE ($)</div><input id="rc-ins" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)"># INGREDIENTES</div><input id="rc-ing" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">COSTO BASE ($)</div><input id="rc-ins" type="number" min="0" style="'+fieldStyle()+'"></div>'
       + '</div>'
-      + '<div style="font-size:11px;font-weight:700;color:rgba(74,52,46,.45);margin-top:6px">Costo de materiales para un pastel Mediano (20 porciones).</div>'
+      + '<div style="font-size:11px;font-weight:700;color:rgba(123,91,75,.45);margin-top:6px">Costo de materiales para un pastel Mediano (20 porciones).</div>'
       + '<div style="display:flex;gap:10px;margin-top:20px">'
-      +   '<div id="rc-save" style="flex:1;text-align:center;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
-      +   (isNew?'':'<div id="rc-del" style="text-align:center;background:#fbecea;color:#db5a4e;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      +   '<div id="rc-save" style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="rc-del" style="text-align:center;background:#F7E7C9;color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
       + '</div>'
-      + '<div id="rc-cancel" style="text-align:center;color:rgba(74,52,46,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+      + '<div id="rc-cancel" style="text-align:center;color:rgba(123,91,75,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
     var modal=openModal(box);
     box.querySelector('#rc-nombre').value=r.nombre;
     box.querySelector('#rc-ing').value=r.ingredientes;
@@ -799,8 +808,8 @@
     EMOJIS.forEach(function(em){
       var b=document.createElement('div');
       b.textContent=em;
-      b.style.cssText='width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:'+(em===chosen?'#fbeef1':'#faf3ec')+';border:2px solid '+(em===chosen?'#ef7c8e':'transparent');
-      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#faf3ec'; c.style.border='2px solid transparent'; }); b.style.background='#fbeef1'; b.style.border='2px solid #ef7c8e'; });
+      b.style.cssText='width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:'+(em===chosen?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(em===chosen?'#7B5B4B':'transparent');
+      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#F5E7D0'; c.style.border='2px solid transparent'; }); b.style.background='#F7E7CC'; b.style.border='2px solid #7B5B4B'; });
       ep.appendChild(b);
     });
     box.querySelector('#rc-save').addEventListener('click', function(){
@@ -831,13 +840,13 @@
 
   function openRecipeSelector(){
     var box=document.createElement('div');
-    box.innerHTML='<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:12px">Elige una receta</div><div id="rs-list" style="display:flex;flex-direction:column;gap:10px"></div><div id="rs-nueva" style="text-align:center;color:#ef7c8e;font-weight:800;font-size:14px;padding:14px 0 2px;cursor:pointer">＋ Nueva receta</div>';
+    box.innerHTML='<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:12px">Elige una receta</div><div id="rs-list" style="display:flex;flex-direction:column;gap:10px"></div><div id="rs-nueva" style="text-align:center;color:#7B5B4B;font-weight:800;font-size:14px;padding:14px 0 2px;cursor:pointer">＋ Nueva receta</div>';
     var modal=openModal(box), list=box.querySelector('#rs-list');
     recipes.forEach(function(r){
       var active = state.recipe && state.recipe.id===r.id;
       var row=document.createElement('div');
-      row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'#fbeef1':'#faf3ec')+';border:2px solid '+(active?'#f2c4ce':'transparent');
-      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:20px">'+r.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+r.ingredientes+' ingredientes · costo base '+money(r.insumos)+'</div></div>'+(active?'<div style="color:#ef7c8e;font-weight:800;font-size:18px">✓</div>':'');
+      row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(active?'#E7B676':'transparent');
+      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:20px">'+r.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+r.ingredientes+' ingredientes · costo base '+money(r.insumos)+'</div></div>'+(active?'<div style="color:#7B5B4B;font-weight:800;font-size:18px">✓</div>':'');
       row.addEventListener('click', function(){ state.recipe=r; updateRecipeRow(); render(); modal.close(); toast('Receta: '+r.nombre); });
       list.appendChild(row);
     });
@@ -846,16 +855,16 @@
 
   /* ---------- Mis precios: render + editor ---------- */
   function insRowMob(it){
-    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer">'
+    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer">'
       + '<div style="width:40px;height:40px;border-radius:12px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:20px">'+it.emoji+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:rgba(74,52,46,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div>'
-      + '<div style="background:#faf3ec;border-radius:12px;padding:8px 12px;font-family:\'Fredoka\';font-weight:600;font-size:14px">$'+unitCost(it)+'<span style="font-size:10px;color:rgba(74,52,46,.5)">/'+esc(it.unidad)+'</span></div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:rgba(123,91,75,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div>'
+      + '<div style="background:#F5E7D0;border-radius:12px;padding:8px 12px;font-family:\'Fredoka\';font-weight:600;font-size:14px">$'+unitCost(it)+'<span style="font-size:10px;color:rgba(123,91,75,.5)">/'+esc(it.unidad)+'</span></div>'
       + '</div>';
   }
   function insRowDesk(it){
-    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(74,52,46,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:rgba(74,52,46,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:#faf3ec;border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:rgba(74,52,46,.5)">/'+esc(it.unidad)+'</span></div></div>';
+    return '<div data-insumo="'+it.id+'" style="background:#fff;border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:rgba(123,91,75,.55);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:#F5E7D0;border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:rgba(123,91,75,.5)">/'+esc(it.unidad)+'</span></div></div>';
   }
-  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed #f2c4ce;border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:#ef7c8e;font-weight:800;font-size:13px;cursor:pointer">＋ Añadir insumo</div>'; }
+  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed #E7B676;border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:#7B5B4B;font-weight:800;font-size:13px;cursor:pointer">＋ Añadir insumo</div>'; }
   function renderInsumos(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-insumos-list]'), function(list){
       var isMob=!!list.closest('#mobile');
@@ -874,22 +883,22 @@
     var box=document.createElement('div');
     box.innerHTML =
       '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nuevo insumo':'Editar insumo')+'</div>'
-      + '<div style="font-size:12px;font-weight:700;color:rgba(74,52,46,.55);margin-bottom:14px">La app calcula el costo por gramo o pieza.</div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">ÍCONO</div>'
+      + '<div style="font-size:12px;font-weight:700;color:rgba(123,91,75,.55);margin-bottom:14px">La app calcula el costo por gramo o pieza.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">ÍCONO</div>'
       + '<div id="ic-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
-      + '<div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">NOMBRE</div>'
+      + '<div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">NOMBRE</div>'
       + '<input id="ic-nombre" type="text" placeholder="Ej. Mantequilla" style="'+fieldStyle()+'">'
       + '<div style="display:flex;gap:10px;margin-top:12px">'
-      +   '<div style="flex:1.2"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">PRECIO ($)</div><input id="ic-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">CANTIDAD</div><input id="ic-cant" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:.8"><div style="font-size:11px;font-weight:800;color:rgba(74,52,46,.5)">UNIDAD</div><input id="ic-unidad" type="text" placeholder="g" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1.2"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">PRECIO ($)</div><input id="ic-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">CANTIDAD</div><input id="ic-cant" type="number" min="0" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:.8"><div style="font-size:11px;font-weight:800;color:rgba(123,91,75,.5)">UNIDAD</div><input id="ic-unidad" type="text" placeholder="g" style="'+fieldStyle()+'"></div>'
       + '</div>'
-      + '<div style="font-size:11px;font-weight:700;color:rgba(74,52,46,.45);margin-top:6px">Ej.: precio 186, cantidad 1000, unidad g → $0.19/g.</div>'
+      + '<div style="font-size:11px;font-weight:700;color:rgba(123,91,75,.45);margin-top:6px">Ej.: precio 186, cantidad 1000, unidad g → $0.19/g.</div>'
       + '<div style="display:flex;gap:10px;margin-top:20px">'
-      +   '<div id="ic-save" style="flex:1;text-align:center;background:#ef7c8e;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
-      +   (isNew?'':'<div id="ic-del" style="text-align:center;background:#fbecea;color:#db5a4e;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      +   '<div id="ic-save" style="flex:1;text-align:center;background:#7B5B4B;color:#fff;border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="ic-del" style="text-align:center;background:#F7E7C9;color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
       + '</div>'
-      + '<div id="ic-cancel" style="text-align:center;color:rgba(74,52,46,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+      + '<div id="ic-cancel" style="text-align:center;color:rgba(123,91,75,.5);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
     var modal=openModal(box);
     box.querySelector('#ic-nombre').value=it.nombre;
     box.querySelector('#ic-precio').value=it.precio;
@@ -898,8 +907,8 @@
     var chosen=it.emoji, ep=box.querySelector('#ic-emojis');
     INS_EMOJIS.forEach(function(em){
       var b=document.createElement('div'); b.textContent=em;
-      b.style.cssText='width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;background:'+(em===chosen?'#fbeef1':'#faf3ec')+';border:2px solid '+(em===chosen?'#ef7c8e':'transparent');
-      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#faf3ec'; c.style.border='2px solid transparent'; }); b.style.background='#fbeef1'; b.style.border='2px solid #ef7c8e'; });
+      b.style.cssText='width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;background:'+(em===chosen?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(em===chosen?'#7B5B4B':'transparent');
+      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#F5E7D0'; c.style.border='2px solid transparent'; }); b.style.background='#F7E7CC'; b.style.border='2px solid #7B5B4B'; });
       ep.appendChild(b);
     });
     box.querySelector('#ic-save').addEventListener('click', function(){
@@ -950,27 +959,27 @@
     window.open('https://wa.me/'+phone+'?text='+encodeURIComponent(msg), '_blank');
     toast('Abriendo WhatsApp…');
   }
-  var LOGO_SVG='<svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#3A2A24"></rect><rect x="28" y="24" width="14" height="54" rx="7" fill="#FDF5EC"></rect><circle cx="53" cy="38" r="16" fill="none" stroke="#FDF5EC" stroke-width="14"></circle><circle cx="73" cy="72" r="7" fill="#EF7C8E"></circle></svg>';
+  var LOGO_SVG='<svg width="46" height="46" viewBox="0 0 100 100"><rect width="100" height="100" rx="24" fill="#5A4236"></rect><rect x="28" y="24" width="14" height="54" rx="7" fill="#FFF4E6"></rect><circle cx="53" cy="38" r="16" fill="none" stroke="#FFF4E6" stroke-width="14"></circle><circle cx="73" cy="72" r="7" fill="#7B5B4B"></circle></svg>';
   function printOrder(o){
     if(!o){ toast('No se encontró el pedido'); return; }
     var pr=document.getElementById('pastelia-print'); if(!pr) return;
     var extras=(o.extras&&o.extras.length)?o.extras.join(', '):'—';
     pr.innerHTML =
-      '<div style="font-family:Nunito,Arial,sans-serif;color:#4a342e;max-width:720px;margin:0 auto">'
-      + '<div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #f2c4ce;padding-bottom:14px">'+LOGO_SVG
-      +   '<div><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">Pastelia</div><div style="font-size:12px;font-weight:800;color:#ef7c8e;letter-spacing:.14em">COTIZACIÓN DE PASTEL</div></div>'
-      +   '<div style="margin-left:auto;text-align:right;font-size:12px;font-weight:700;color:rgba(74,52,46,.55)">'+new Date().toLocaleDateString('es-MX')+'</div></div>'
+      '<div style="font-family:Nunito,Arial,sans-serif;color:#7B5B4B;max-width:720px;margin:0 auto">'
+      + '<div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #E7B676;padding-bottom:14px">'+LOGO_SVG
+      +   '<div><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">Pastelia</div><div style="font-size:12px;font-weight:800;color:#7B5B4B;letter-spacing:.14em">COTIZACIÓN DE PASTEL</div></div>'
+      +   '<div style="margin-left:auto;text-align:right;font-size:12px;font-weight:700;color:rgba(123,91,75,.55)">'+new Date().toLocaleDateString('es-MX')+'</div></div>'
       + '<div style="display:flex;gap:20px;margin-top:18px">'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#ef7c8e">CLIENTE</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.cliente||'—')+'</div>'+(o.telefono?'<div style="font-size:12px;color:rgba(74,52,46,.6);font-weight:700">'+esc(o.telefono)+'</div>':'')+'</div>'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#ef7c8e">FECHA DE ENTREGA</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.fechaEvento?fFecha(o.fechaEvento):'Por definir')+'</div></div></div>'
-      + '<div style="background:#faf3ec;border-radius:16px;padding:16px 18px;margin-top:16px">'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#7B5B4B">CLIENTE</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.cliente||'—')+'</div>'+(o.telefono?'<div style="font-size:12px;color:rgba(123,91,75,.6);font-weight:700">'+esc(o.telefono)+'</div>':'')+'</div>'
+      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#7B5B4B">FECHA DE ENTREGA</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.fechaEvento?fFecha(o.fechaEvento):'Por definir')+'</div></div></div>'
+      + '<div style="background:#F5E7D0;border-radius:16px;padding:16px 18px;margin-top:16px">'
       +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:17px">'+esc(o.receta||'Pastel')+'</div>'
-      +   '<div style="font-size:13px;color:rgba(74,52,46,.65);font-weight:700;margin-top:4px">Tamaño: '+esc(o.tamano)+' · '+o.porciones+' porciones</div>'
-      +   '<div style="font-size:13px;color:rgba(74,52,46,.65);font-weight:700;margin-top:2px">Extras: '+esc(extras)+'</div></div>'
-      + '<div style="display:flex;justify-content:space-between;align-items:center;border-top:2px solid #f2c4ce;margin-top:18px;padding-top:14px">'
+      +   '<div style="font-size:13px;color:rgba(123,91,75,.65);font-weight:700;margin-top:4px">Tamaño: '+esc(o.tamano)+' · '+o.porciones+' porciones</div>'
+      +   '<div style="font-size:13px;color:rgba(123,91,75,.65);font-weight:700;margin-top:2px">Extras: '+esc(extras)+'</div></div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;border-top:2px solid #E7B676;margin-top:18px;padding-top:14px">'
       +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:18px">Total</div>'
-      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:30px;color:#ef7c8e">'+money(o.total)+'</div></div>'
-      + '<div style="text-align:center;color:rgba(74,52,46,.5);font-size:12px;font-weight:700;margin-top:28px">¡Gracias por tu preferencia! 💕 · Pastelia</div>'
+      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:30px;color:#7B5B4B">'+money(o.total)+'</div></div>'
+      + '<div style="text-align:center;color:rgba(123,91,75,.5);font-size:12px;font-weight:700;margin-top:28px">¡Gracias por tu preferencia! 💕 · Pastelia</div>'
       + '</div>';
     window.print();
   }
