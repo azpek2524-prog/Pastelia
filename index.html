@@ -159,10 +159,10 @@
               </div>
               <!-- step chips -->
               <div style="display:flex;gap:8px;margin:16px 0 4px">
-                <div style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">1 Cliente</div>
-                <div style="flex:1;text-align:center;background:var(--tint2);color:var(--text);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">2 Pastel</div>
-                <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">3 Costeo</div>
-                <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800">$ Total</div>
+                <div data-step-chip="1" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer">1 Cliente</div>
+                <div data-step-chip="2" style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer">2 Pastel</div>
+                <div data-step-chip="3" style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer">3 Costeo</div>
+                <div data-step-chip="4" style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:8px 4px;font-size:11px;font-weight:800;cursor:pointer">$ Total</div>
               </div>
               <!-- formulario dinámico (secciones 1·2·3 + extras) -->
               <div data-cotizar-form></div>
@@ -216,6 +216,11 @@
             <div style="padding:6px 22px 0">
               <div style="font-family:'Fredoka';font-weight:600;font-size:24px;margin:6px 0 4px"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:10px;vertical-align:-5px"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg>Mis precios</div>
               <div style="font-size:12px;color:var(--muted);font-weight:700">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza.</div>
+              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)">
+                <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px">NOMBRE DEL NEGOCIO</div>
+                <input type="text" data-biz-input placeholder="Ej. Azucena's Cake Studio" style="width:100%;box-sizing:border-box;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:13px;color:var(--text);border:0;outline:none;font-family:inherit">
+                <div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:6px">Aparece en el PDF y el ticket de tus clientes.</div>
+              </div>
               <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:var(--field);border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:13px;color:var(--text);border:0;outline:none;font-family:inherit">
               <div data-insumos-list style="display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
               <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin:20px 2px 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/></svg>Extras de diseño</div>
@@ -343,10 +348,10 @@
           <!-- left: steps -->
           <div style="display:flex;flex-direction:column;gap:16px">
             <div style="display:flex;gap:10px">
-              <div style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:10px;font-size:12px;font-weight:800">1 Cliente</div>
-              <div style="flex:1;text-align:center;background:var(--tint2);color:var(--text);border-radius:14px;padding:10px;font-size:12px;font-weight:800">2 Pastel</div>
-              <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800">3 Costeo</div>
-              <div style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800">$ Total</div>
+              <div data-step-chip="1" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:10px;font-size:12px;font-weight:800;cursor:pointer">1 Cliente</div>
+              <div data-step-chip="2" style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800;cursor:pointer">2 Pastel</div>
+              <div data-step-chip="3" style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800;cursor:pointer">3 Costeo</div>
+              <div data-step-chip="4" style="flex:1;text-align:center;background:var(--surface);color:var(--muted);border-radius:14px;padding:10px;font-size:12px;font-weight:800;cursor:pointer">$ Total</div>
             </div>
             <div data-cotizar-form></div>
           </div>
@@ -412,6 +417,10 @@
           <div data-action="guardar-inv" style="background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px 18px;font-family:'Fredoka';font-weight:600;font-size:14px;box-shadow:0 12px 22px -14px rgba(123,91,75,.7);cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/></svg>Guardar inventario</div>
         </div>
         <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Cuánto te cuesta comprar — la app calcula el costo por gramo o pieza y lo usa al cotizar.</div>
+        <div style="background:var(--surface);border-radius:18px;padding:16px 18px;margin-bottom:20px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;gap:16px">
+          <div style="flex:none"><div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:4px">NOMBRE DEL NEGOCIO</div><div style="font-size:11px;font-weight:700;color:var(--muted)">Marca blanca del PDF y el ticket.</div></div>
+          <input type="text" data-biz-input placeholder="Ej. Azucena's Cake Studio" style="flex:1;box-sizing:border-box;background:var(--field);border-radius:12px;padding:11px 14px;font-weight:700;font-size:14px;color:var(--text);border:0;outline:none;font-family:inherit">
+        </div>
         <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:20px;align-items:start">
           <div>
             <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:var(--field);border-radius:14px;padding:12px 16px;margin-bottom:14px;font-weight:700;font-size:14px;color:var(--text);border:0;outline:none;font-family:inherit">
@@ -509,8 +518,8 @@
     cobertura:'Buttercream', coberturaOtra:'', detallesDiseno:'', mensajePastel:'', alergias:'', imagenRef:'',
     // sección 3 — ingredientes manuales
     ingredientesManual:[],
-    // transitorios (mini-form de extras + acordeón del pastel personalizado)
-    _addingExtra:false, _newExtraName:'', _newExtraPrice:'', _acc:'forma'
+    // transitorios (mini-form de extras + acordeón del pastel personalizado + paso del stepper)
+    _addingExtra:false, _newExtraName:'', _newExtraPrice:'', _acc:'forma', step:1
   };
 
   /* ---------- Recetas (localStorage: pastelia_recetas) ---------- */
@@ -719,11 +728,41 @@
     return fCard(fHead('box','Ingredientes del pedido')+list+(rows||'<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">Agrega los ingredientes de este pastel.</div>')+add+total);
   }
 
-  function formHTML(idSuf){ return sec1Html()+sec2Html(idSuf)+extrasHtml()+sec3Html(idSuf); }
+  function stepSummaryHtml(){
+    var o=buildOrder(), v=calc();
+    function line(k,val){ return '<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:13px"><span style="color:var(--muted);font-weight:700">'+k+'</span><span style="font-weight:800;text-align:right">'+val+'</span></div>'; }
+    var rell=(o.rellenos&&o.rellenos.length)?o.rellenos.join(', '):'—';
+    var body = line('Cliente', esc(o.cliente||'—'))
+      + line('Entrega', o.fechaEvento?esc(fFecha(o.fechaEvento)):'Por definir')
+      + line('Pastel', esc(o.receta||'—')+' · '+esc(o.tamano)+' ('+o.porciones+'p)')
+      + (o.modo==='personalizado' ? line('Forma · cobertura', esc(o.forma||'—')+' · '+esc(o.cobertura||'—')) : '')
+      + line('Rellenos', esc(rell))
+      + line('Extras', (o.extras&&o.extras.length)?esc(o.extras.join(', ')):'—')
+      + '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800">Total</span><span style="font-family:\'Fredoka\';font-weight:700;font-size:26px">'+money(v.precio)+'</span></div>'
+      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:10px">Revisa los datos y usa <b style="color:var(--text)">Guardar</b>, <b style="color:var(--text)">PDF</b> o <b style="color:var(--text)">Ticket</b> en el panel de resumen.</div>';
+    return fCard(fHead('receipt','Resumen del pedido')+body);
+  }
+  function formHTML(idSuf){
+    switch(state.step){
+      case 2: return sec2Html(idSuf)+extrasHtml();
+      case 3: return sec3Html(idSuf);
+      case 4: return stepSummaryHtml();
+      default: return sec1Html();
+    }
+  }
+  function paintSteps(){
+    qsa('[data-step-chip]').forEach(function(ch){
+      var n=parseInt(ch.getAttribute('data-step-chip'),10), on=(n===state.step);
+      ch.style.background = on?'var(--btn)':'var(--surface)';
+      ch.style.color = on?'var(--on-dark)':'var(--muted)';
+      ch.style.cursor='pointer';
+    });
+  }
 
   function renderCotizar(){
     var forms = document.querySelectorAll('[data-cotizar-form]');
     Array.prototype.forEach.call(forms, function(f,i){ f.innerHTML = formHTML('-'+i); });
+    paintSteps();
     paintResumen();
   }
 
@@ -1135,6 +1174,13 @@
     box.querySelector('#ic-cancel').addEventListener('click', function(){ modal.close(); });
   }
 
+  /* ---------- Marca blanca: nombre del negocio (config de la cuenta) ---------- */
+  var BIZ_KEY = 'pastelia_negocio';
+  var BIZ_DEFAULT = "Azucena's Cake Studio";
+  function bizName(){ try{ var n=localStorage.getItem(BIZ_KEY); return (n&&n.trim())?n.trim():BIZ_DEFAULT; }catch(e){ return BIZ_DEFAULT; } }
+  function saveBizName(n){ try{ localStorage.setItem(BIZ_KEY, n); }catch(e){} }
+  function renderBiz(){ qsa('[data-biz-name]').forEach(function(el){ el.textContent=bizName(); }); qsa('[data-biz-input]').forEach(function(el){ if(document.activeElement!==el && el.value!==bizName()) el.value=bizName(); }); }
+
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
   function orderById(id){ var a=readOrders(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
   function latestOrder(){ var a=readOrders(); return a.length ? a[a.length-1] : null; }
@@ -1144,10 +1190,13 @@
     var cob = state.cobertura==='Otra' ? (state.coberturaOtra.trim()||'Otra') : state.cobertura;
     var esPers = state.modoReceta==='personalizado';
     var rec = state.recipe || {};
+    // Si no se indicó fecha del evento, cae en la fecha del pedido (hoy por defecto)
+    // para que el pedido entre en los rangos "hoy" y "esta semana" del dashboard.
+    var fechaEvento = state.fecha || state.fechaPedido || todayISO0();
     return {
       id:Date.now(),
       cliente:state.nombre.trim(), telefono:state.tel.trim(),
-      fechaPedido:state.fechaPedido, fechaEvento:state.fecha,
+      fechaPedido:state.fechaPedido||todayISO0(), fechaEvento:fechaEvento,
       tipoEntrega:state.tipoEntrega, direccion:state.direccion.trim(), invitados:state.invitados||0,
       modo:state.modoReceta,
       recetaId: (!esPers && state.recipe)?state.recipe.id:null,
@@ -1168,7 +1217,7 @@
   function quoteFromPane(){ return buildOrder(); }
   function waMessage(o){
     var L=[];
-    L.push('🎂 *Pastelia* — Cotización de pastel');
+    L.push('🎂 *'+bizName()+'* — Cotización de pastel');
     if(o.cliente) L.push('Cliente: '+o.cliente);
     if(o.invitados) L.push('Invitados: '+o.invitados);
     L.push('Pastel: '+(o.receta||'Pastel')+' · '+o.tamano+' ('+o.porciones+' porciones)');
@@ -1218,7 +1267,7 @@
     pr.innerHTML =
       '<div style="font-family:Nunito,Arial,sans-serif;color:#7B5B4B;max-width:720px;margin:0 auto">'
       + '<div style="display:flex;align-items:center;gap:14px;border-bottom:2px solid #E7B676;padding-bottom:14px">'+LOGO_SVG
-      +   '<div><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">Pastelia</div><div style="font-size:12px;font-weight:800;color:#7B5B4B;letter-spacing:.14em">COTIZACIÓN DE PASTEL</div></div>'
+      +   '<div><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">'+esc(bizName())+'</div><div style="font-size:12px;font-weight:800;color:#7B5B4B;letter-spacing:.14em">COTIZACIÓN DE PASTEL</div></div>'
       +   '<div style="margin-left:auto;text-align:right;font-size:12px;font-weight:700;color:rgba(123,91,75,.55)">'+new Date().toLocaleDateString('es-MX')+'</div></div>'
       + '<div style="display:flex;gap:20px;margin-top:18px">'
       +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:#7B5B4B">CLIENTE</div><div style="font-weight:800;font-size:15px;margin-top:2px">'+esc(o.cliente||'—')+'</div>'+(o.telefono?'<div style="font-size:12px;color:rgba(123,91,75,.6);font-weight:700">'+esc(o.telefono)+'</div>':'')+(o.invitados?'<div style="font-size:12px;color:rgba(123,91,75,.6);font-weight:700">'+o.invitados+' invitados</div>':'')+'</div>'
@@ -1234,7 +1283,7 @@
       + '<div style="display:flex;justify-content:space-between;align-items:center;border-top:2px solid #E7B676;margin-top:18px;padding-top:14px">'
       +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:18px">Total</div>'
       +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:30px;color:#7B5B4B">'+money(o.total)+'</div></div>'
-      + '<div style="text-align:center;color:rgba(123,91,75,.5);font-size:12px;font-weight:700;margin-top:28px">¡Gracias por tu preferencia! 💕 · Pastelia</div>'
+      + '<div style="text-align:center;color:rgba(123,91,75,.5);font-size:12px;font-weight:700;margin-top:28px">¡Gracias por tu preferencia! 💕 · '+esc(bizName())+'</div>'
       + '</div>';
     window.print();
   }
@@ -1245,6 +1294,7 @@
     state.saborPan=''; state.rellenos=[]; state.rellenoOtro=''; state.coberturaOtra='';
     state.detallesDiseno=''; state.mensajePastel=''; state.alergias=''; state.imagenRef='';
     state.ingredientesManual=[]; state._addingExtra=false; state._newExtraName=''; state._newExtraPrice='';
+    state.step=1; state._acc='forma';
     renderCotizar();
   }
   function guardar(){
@@ -1252,7 +1302,9 @@
     var order=buildOrder();
     var arr=readOrders(); arr.push(order); saveOrders(arr);
     resetForm();
+    // Reactividad: re-render inmediato de agenda y dashboard con los datos nuevos.
     renderAgenda();
+    renderInicio();
     toast('Pedido guardado en la agenda ✓');
     goTo('agenda');
   }
@@ -1306,6 +1358,7 @@
     renderRecetas();
     renderAgenda();
     renderInsumos();
+    renderBiz();
     // Guardar (botón estático del resumen)
     Array.prototype.forEach.call(document.querySelectorAll('[data-action="guardar"]'), function(b){
       b.addEventListener('click', function(){ guardar(); });
@@ -1313,6 +1366,10 @@
     // Buscador de insumos
     Array.prototype.forEach.call(document.querySelectorAll('[data-buscar-insumo]'), function(s){
       s.addEventListener('input', function(){ renderInsumos(); });
+    });
+    // Nombre del negocio (marca blanca del PDF/ticket)
+    Array.prototype.forEach.call(document.querySelectorAll('[data-biz-input]'), function(inp){
+      inp.addEventListener('input', function(){ saveBizName(inp.value); renderBiz(); });
     });
     // Filtros de la agenda
     Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="agenda"] [data-agenda-list]'), function(list){
@@ -1331,7 +1388,8 @@
     // Delegación para elementos dinámicos y de acción
     document.addEventListener('click', function(ev){
       // Iniciar cotización → llevar el formulario al primer paso (captura de datos).
-      var gc=ev.target.closest('[data-go="cotizar"]'); if(gc){ state._acc='forma'; renderCotizar(); }
+      var gc=ev.target.closest('[data-go="cotizar"]'); if(gc){ state.step=1; state._acc='forma'; renderCotizar(); }
+      var stp=ev.target.closest('[data-step-chip]'); if(stp){ state.step=parseInt(stp.getAttribute('data-step-chip'),10)||1; renderCotizar(); return; }
       var cob=ev.target.closest('[data-cobrar]'); if(cob){ cobrar(parseInt(cob.getAttribute('data-cobrar'),10)); return; }
       var est=ev.target.closest('[data-estado-btn]'); if(est){ cycleEstado(parseInt(est.getAttribute('data-estado-btn'),10)); return; }
       var tk=ev.target.closest('[data-ticket]'); if(tk){ sendWhatsApp(orderById(parseInt(tk.getAttribute('data-ticket'),10))); return; }
