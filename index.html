@@ -89,6 +89,10 @@
     @page { margin:14mm; }
   }
   ::placeholder{color:var(--muted);opacity:1}
+  /* Guarda anti-desbordamiento: ningún input/select/textarea excede su contenedor */
+  input,select,textarea{max-width:100%;box-sizing:border-box}
+  select{min-width:0}
+  [data-cotizar-form],[data-cotizar-form] *{min-width:0}
   .theme-toggle{position:fixed;right:18px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px -10px rgba(20,14,10,.35);display:flex;align-items:center;justify-content:center;color:var(--text);cursor:pointer;padding:0}
   .theme-toggle:hover{background:var(--field)}
   @media (max-width:899px){ .theme-toggle{bottom:calc(104px + env(safe-area-inset-bottom,0px))} }
@@ -111,51 +115,35 @@
             <div style="position:relative;padding:6px 24px 0">
               <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 18px">
                 <div style="color:var(--on-dark)">
-                  <div style="font-size:13px;font-weight:800;opacity:.9">Martes 13 · Buen día ☀️</div>
+                  <div data-in-saludo style="font-size:13px;font-weight:800;opacity:.9">Buen día ☀️</div>
                   <div style="font-family:'Fredoka';font-weight:600;font-size:26px;line-height:1.05">Azucena's<br>Cake Studio</div>
                 </div>
                 <div style="width:48px;height:48px;border-radius:16px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:30px;height:30px;display:block"></div>
               </div>
               <div style="display:flex;align-items:flex-end;gap:14px;color:var(--on-dark);padding-bottom:6px">
-                <div style="font-family:'Fredoka';font-weight:700;font-size:76px;line-height:.85">3</div>
+                <div data-in-hoy style="font-family:'Fredoka';font-weight:700;font-size:76px;line-height:.85">0</div>
                 <div style="padding-bottom:10px"><div style="font-family:'Fredoka';font-weight:500;font-size:20px;line-height:1">entregas</div><div style="font-size:13px;font-weight:800;opacity:.9">para hoy 🎉</div></div>
               </div>
             </div>
             <div style="position:relative;padding:10px 22px 90px">
               <div style="display:flex;gap:12px;margin:6px 0 16px">
                 <div data-go="cotizar" style="cursor:pointer;flex:1;background:var(--btn);border-radius:22px;padding:16px;color:var(--on-dark);box-shadow:0 14px 24px -12px rgba(123,91,75,.8)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Cotizar</div></div>
-                <div style="flex:1;background:var(--surface);border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">PDF</div></div>
-                <div style="flex:1;background:var(--surface);border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Ticket</div></div>
+                <div data-action="pdf-latest" style="cursor:pointer;flex:1;background:var(--surface);border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">PDF</div></div>
+                <div data-action="ticket-latest" style="cursor:pointer;flex:1;background:var(--surface);border-radius:22px;padding:16px;box-shadow:0 10px 20px -14px rgba(123,91,75,.5)"><div><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:6px;line-height:1.1">Ticket</div></div>
               </div>
               <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-                <div style="background:var(--tint);border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:var(--text)"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">$1,240</div></div>
-                <div data-go="agenda" style="cursor:pointer;background:var(--tint);border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:var(--text)">Semana<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:24px">8 pedidos</div></div>
+                <div data-go="agenda" style="cursor:pointer;background:var(--tint);border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:var(--text)"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div><div data-in-porcobrar style="font-family:'Fredoka';font-weight:600;font-size:24px">$0</div></div>
+                <div data-go="agenda" style="cursor:pointer;background:var(--tint);border-radius:20px;padding:14px 16px"><div style="font-size:12px;font-weight:800;color:var(--text)">Semana<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div data-in-semana style="font-family:'Fredoka';font-weight:600;font-size:24px">0 pedidos</div></div>
               </div>
               <div style="background:var(--tint);border-radius:20px;padding:14px 16px;margin-top:12px;display:flex;align-items:center;justify-content:space-between">
-                <div><div style="font-size:12px;font-weight:800;color:var(--text)">Ingresos del mes<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:26px">$8,940</div></div>
-                <div style="font-size:12px;font-weight:800;color:var(--text);background:var(--surface);border-radius:20px;padding:4px 10px">+18% ▲</div>
+                <div><div style="font-size:12px;font-weight:800;color:var(--text)">Ingresos del mes<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div data-in-mes style="font-family:'Fredoka';font-weight:600;font-size:26px">$0</div></div>
+                <div data-in-cobradas style="font-size:12px;font-weight:800;color:var(--text);background:var(--surface);border-radius:20px;padding:4px 10px">0 cobrados</div>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin:20px 2px 10px">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px">Entregas de hoy</div>
                 <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:var(--text)">Ver todas</div>
               </div>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Pastel Frida · 20p</div><div style="font-size:11px;color:var(--muted);font-weight:700">Marisol G. · 11:30</div></div>
-                  <div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:3px 9px">Apartado</div>
-                </div>
-                <div style="background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Cupcakes x24</div><div style="font-size:11px;color:var(--muted);font-weight:700">Bruno T. · 16:00</div></div>
-                  <div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint);border-radius:20px;padding:3px 9px">Pagado</div>
-                </div>
-                <div style="background:var(--surface);border-radius:18px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">
-                  <div style="width:40px;height:40px;border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
-                  <div style="flex:1"><div style="font-weight:800;font-size:14px">Número 30 · Fondant</div><div style="font-size:11px;color:var(--muted);font-weight:700">Diana R. · 18:30</div></div>
-                  <div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint2);border-radius:20px;padding:3px 9px">Pendiente</div>
-                </div>
-              </div>
+              <div data-in-hoy-list style="display:flex;flex-direction:column;gap:10px"></div>
             </div>
           </div>
         </div>
@@ -291,8 +279,8 @@
     </div>
     <div style="margin-top:auto;background:var(--field);border-radius:18px;padding:16px">
       <div style="font-size:12px;font-weight:800;color:var(--muted)"> Por cobrar<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/></svg></div>
-      <div style="font-family:'Fredoka';font-weight:600;font-size:26px">$1,240</div>
-      <div style="font-size:11px;font-weight:700;color:var(--muted)">3 pedidos apartados</div>
+      <div data-side-cobrar style="font-family:'Fredoka';font-weight:600;font-size:26px">$0</div>
+      <div data-side-apartados style="font-size:11px;font-weight:700;color:var(--muted)">0 pedidos por cobrar</div>
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:16px 6px 0">
       <div style="width:36px;height:36px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></div>
@@ -308,7 +296,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
           <div>
-            <div style="font-size:13px;font-weight:800;color:var(--muted)">Martes 13 de agosto · Buen día ☀️</div>
+            <div data-in-saludo style="font-size:13px;font-weight:800;color:var(--muted)">Buen día ☀️</div>
             <div style="font-family:'Fredoka';font-weight:600;font-size:32px;line-height:1.1">¡Hola, Azucena!</div>
           </div>
           <div style="background:var(--field);border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:var(--muted)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-3px"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/></svg>Buscar pedido, cliente…</div>
@@ -317,18 +305,18 @@
         <!-- hero row -->
         <div style="display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:16px;margin-bottom:16px">
           <div style="background:linear-gradient(135deg,var(--hero1),var(--hero2));border-radius:24px;padding:26px;color:var(--on-dark);display:flex;align-items:center;justify-content:space-between;box-shadow:0 18px 32px -16px rgba(123,91,75,.6)">
-            <div><div style="font-size:14px;font-weight:800;opacity:.9">Entregas de hoy</div><div style="font-family:'Fredoka';font-weight:700;font-size:64px;line-height:.9">3</div><div style="font-size:13px;font-weight:800;opacity:.9">Próxima 11:30 · Pastel Frida</div></div>
+            <div><div style="font-size:14px;font-weight:800;opacity:.9">Entregas de hoy</div><div data-in-hoy style="font-family:'Fredoka';font-weight:700;font-size:64px;line-height:.9">0</div><div data-in-proxima style="font-size:13px;font-weight:800;opacity:.9">Sin entregas para hoy</div></div>
             <div style="filter:drop-shadow(0 10px 12px rgba(123,91,75,.25))"><svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div>
           </div>
-          <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">8</div><div style="font-size:13px;font-weight:800;color:var(--text)">Pedidos esta semana</div></div>
-          <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$8.9k</div><div style="font-size:13px;font-weight:800;color:var(--text)">Ingresos del mes</div></div>
+          <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div data-in-semana-n style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">0</div><div style="font-size:13px;font-weight:800;color:var(--text)">Pedidos esta semana</div></div>
+          <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div data-in-mes style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$0</div><div style="font-size:13px;font-weight:800;color:var(--text)">Ingresos del mes</div></div>
         </div>
 
         <!-- quick actions -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px">
           <div data-go="cotizar" style="cursor:pointer;background:var(--btn);color:var(--on-dark);border-radius:20px;padding:20px;box-shadow:0 14px 24px -14px rgba(123,91,75,.7)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Cotizar</div></div>
-          <div style="background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Generar PDF</div></div>
-          <div style="background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Ticket WhatsApp</div></div>
+          <div data-action="pdf-latest" style="cursor:pointer;background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Generar PDF</div></div>
+          <div data-action="ticket-latest" style="cursor:pointer;background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Ticket WhatsApp</div></div>
           <div data-go="precios" style="cursor:pointer;background:var(--surface);border-radius:20px;padding:20px;box-shadow:0 10px 22px -16px rgba(123,91,75,.5)"><div><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/></svg></div><div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin-top:8px">Precios</div></div>
         </div>
 
@@ -336,20 +324,11 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
           <div>
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Entregas de hoy</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:var(--text)">Ver agenda</div></div>
-            <div style="display:flex;flex-direction:column;gap:12px">
-              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Pastel Frida · 20p</div><div style="font-size:12px;color:var(--muted);font-weight:700">Marisol G. · 11:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$680</div><div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:2px 8px;margin-top:2px">Apartado</div></div></div>
-              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Cupcakes x24</div><div style="font-size:12px;color:var(--muted);font-weight:700">Bruno T. · 16:00</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$420</div><div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint);border-radius:20px;padding:2px 8px;margin-top:2px">Pagado</div></div></div>
-              <div style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="width:44px;height:44px;border-radius:14px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/></svg></div><div style="flex:1"><div style="font-weight:800;font-size:15px">Número 30 · Fondant</div><div style="font-size:12px;color:var(--muted);font-weight:700">Diana R. · 18:30</div></div><div style="text-align:right"><div style="font-family:'Fredoka';font-weight:600;font-size:16px">$1,150</div><div style="font-size:10px;font-weight:800;color:var(--text);background:var(--tint2);border-radius:20px;padding:2px 8px;margin-top:2px">Pendiente</div></div></div>
-            </div>
+            <div data-in-hoy-list style="display:flex;flex-direction:column;gap:12px"></div>
           </div>
           <div>
             <div style="font-family:'Fredoka';font-weight:600;font-size:19px;margin-bottom:12px">Recetas favoritas</div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-              <div style="background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F3D9B0,#7B5B4B);display:flex;align-items:center;justify-content:center;font-size:30px">🍫</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Chocoavellana</div><div style="font-size:11px;color:var(--muted);font-weight:700">$34/porción</div></div></div>
-              <div style="background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E7B676);display:flex;align-items:center;justify-content:center;font-size:30px">🍋</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Limón & mora</div><div style="font-size:11px;color:var(--muted);font-weight:700">$38/porción</div></div></div>
-              <div style="background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:linear-gradient(135deg,#F1E6CE,#E0AE6A);display:flex;align-items:center;justify-content:center;font-size:30px">🫐</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">Red velvet</div><div style="font-size:11px;color:var(--muted);font-weight:700">$40/porción</div></div></div>
-              <div data-go="recetas" style="cursor:pointer;border:2px dashed #E7B676;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px"><div style="font-size:26px">＋</div>Nueva</div>
-            </div>
+            <div data-in-recetas style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>
           </div>
         </div>
       </div>
@@ -473,6 +452,7 @@
       var sc=r.querySelector('.scr')||r.querySelector('.main');
       if(sc) sc.scrollTop=0;
     });
+    try{ window.scrollTo(0,0); }catch(e){}
     try{ localStorage.setItem(KEY,s); }catch(e){}
   }
   document.addEventListener('click',function(ev){
@@ -529,8 +509,8 @@
     cobertura:'Buttercream', coberturaOtra:'', detallesDiseno:'', mensajePastel:'', alergias:'', imagenRef:'',
     // sección 3 — ingredientes manuales
     ingredientesManual:[],
-    // transitorios (mini-form de extras)
-    _addingExtra:false, _newExtraName:'', _newExtraPrice:''
+    // transitorios (mini-form de extras + acordeón del pastel personalizado)
+    _addingExtra:false, _newExtraName:'', _newExtraPrice:'', _acc:'forma'
   };
 
   /* ---------- Recetas (localStorage: pastelia_recetas) ---------- */
@@ -545,15 +525,28 @@
   ];
   var EMOJIS = ['🍫','🍋','🫐','🍓','🍑','🎂','🧁','🍰'];
   var DEFAULT_RECIPES = [
-    { id:'rec_choco',  nombre:'Chocoavellana', emoji:'🍫', grad:GRADS[0], insumos:210, ingredientes:6, precioPorcion:34 },
-    { id:'rec_limon',  nombre:'Limón & mora',  emoji:'🍋', grad:GRADS[1], insumos:225, ingredientes:7, precioPorcion:38 },
-    { id:'rec_velvet', nombre:'Red velvet',    emoji:'🫐', grad:GRADS[2], insumos:240, ingredientes:8, precioPorcion:40 },
-    { id:'rec_durazno',nombre:'Durazno crema', emoji:'🍑', grad:GRADS[3], insumos:200, ingredientes:5, precioPorcion:32 }
+    { id:'rec_choco',  nombre:'Chocoavellana', grad:GRADS[0], forma:'Redondo', saborPan:'Chocolate',     rellenos:['Ganache','Nutella'],      cobertura:'Ganache',    detallesDiseno:'', ingredientesLista:[], insumos:210, ingredientes:6, precioPorcion:34 },
+    { id:'rec_limon',  nombre:'Limón & mora',  grad:GRADS[1], forma:'Redondo', saborPan:'Vainilla',      rellenos:['Frutos rojos','Queso crema'], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:225, ingredientes:7, precioPorcion:38 },
+    { id:'rec_velvet', nombre:'Red velvet',    grad:GRADS[2], forma:'Redondo', saborPan:'Red velvet',    rellenos:['Queso crema'],            cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:240, ingredientes:8, precioPorcion:40 },
+    { id:'rec_durazno',nombre:'Durazno crema', grad:GRADS[3], forma:'Redondo', saborPan:'Vainilla',      rellenos:['Crema pastelera','Frutos rojos'], cobertura:'Chantilly', detallesDiseno:'', ingredientesLista:[], insumos:200, ingredientes:5, precioPorcion:32 }
   ];
   function readRecipes(){ try{ var a=JSON.parse(localStorage.getItem(RECIPES_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
   function saveRecipes(a){ try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(a)); }catch(e){} }
   var recipes = readRecipes();
   if (!recipes){ recipes = DEFAULT_RECIPES.slice(); saveRecipes(recipes); }
+  // Migración: garantiza los campos nuevos en recetas guardadas antes de esta versión.
+  recipes.forEach(function(r){
+    if(!r.forma) r.forma='Redondo';
+    if(r.saborPan==null) r.saborPan='';
+    if(!r.rellenos) r.rellenos=[];
+    if(!r.cobertura) r.cobertura='Buttercream';
+    if(r.detallesDiseno==null) r.detallesDiseno='';
+    if(!r.ingredientesLista) r.ingredientesLista=[];
+  });
+  function listCost(list){ var t=0; (list||[]).forEach(function(it){ t+=(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0); }); return t; }
+  function recipeInsumos(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return listCost(r.ingredientesLista); return (r&&r.insumos)||210; }
+  function recipeIngCount(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return r.ingredientesLista.length; return (r&&r.ingredientes)||0; }
+  function recipePorcion(r){ return Math.round((recipeInsumos(r)+BASE.mano)*(1+MARGIN)/20); }
   state.recipe = recipes[0];
 
   /* ---------- Insumos / Mis precios (localStorage: pastelia_insumos) ---------- */
@@ -591,7 +584,7 @@
     if (state.modoReceta === 'personalizado'){
       insumos = ingTotal() * s.mult;                          // costeo manual, escalado por tamaño
     } else {
-      insumos = (state.recipe ? state.recipe.insumos : 210) * s.mult;
+      insumos = recipeInsumos(state.recipe) * s.mult;
     }
     var mano = BASE.mano * s.mult;
     var extras = 0, activos = [];
@@ -643,6 +636,16 @@
       + '<div data-action="cambiar" style="font-size:12px;font-weight:800;color:var(--text);cursor:pointer">Cambiar</div></div>';
   }
 
+  function accItem(key,title,inner){
+    var open = state._acc===key;
+    return '<div style="border:1px solid var(--line);border-radius:14px;margin-top:8px;overflow:hidden">'
+      + '<div data-acc="'+key+'" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;background:'+(open?'var(--field)':'transparent')+'">'
+      +   '<div style="font-weight:800;font-size:13px;color:var(--text)">'+title+'</div>'
+      +   '<div style="color:var(--muted);font-weight:800;font-size:16px;line-height:1;transition:transform .15s;transform:rotate('+(open?'90deg':'0deg')+')">›</div>'
+      + '</div>'
+      + (open ? '<div style="padding:2px 14px 14px">'+inner+'</div>' : '')
+      + '</div>';
+  }
   function sec2Html(idSuf){
     var body = '<div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px">MODO</div>'
       + fChipsRow(
@@ -651,20 +654,24 @@
     if (state.modoReceta === 'receta'){
       body += '<div style="margin-top:14px">'+recipeRowHtml()+'</div>';
     } else {
-      body += '<div style="margin-top:14px">'+fLab('FORMA')+fChipsRow(FORMAS.map(function(f){ return fChip('forma',f,f,state.forma===f); }).join(''))+'</div>';
-      body += '<div style="margin-top:12px">'+fLab('SABOR DEL PAN')+fTxt('saborPan','text','Ej. Vainilla, chocolate…',state.saborPan)+'</div>';
-      body += '<div style="margin-top:12px">'+fLab('RELLENOS')+fChipsRow(
-          RELLENOS_BASE.map(function(r){ return fMChip('relleno',r,state.rellenos.indexOf(r)>=0); }).join(''))
-        + '<div style="margin-top:8px">'+fTxt('rellenoOtro','text','+ Otro relleno…',state.rellenoOtro)+'</div></div>';
-      body += '<div style="margin-top:12px">'+fLab('COBERTURA')+fChipsRow(COBERTURAS.map(function(c){ return fChip('cobertura',c,c,state.cobertura===c); }).join(''));
-      if (state.cobertura==='Otra'){ body += '<div style="margin-top:8px">'+fTxt('coberturaOtra','text','¿Cuál cobertura?',state.coberturaOtra)+'</div>'; }
-      body += '</div>';
-      body += '<div style="margin-top:12px">'+fLab('DETALLES DEL DISEÑO')+'<textarea data-field="detallesDiseno" rows="3" placeholder="Colores, temática, referencias…" style="'+FIN+';resize:vertical;min-height:60px">'+esc(state.detallesDiseno)+'</textarea></div>';
-      body += '<div style="margin-top:12px">'+fLab('MENSAJE EN EL PASTEL')+fTxt('mensajePastel','text','Ej. Feliz cumpleaños Ana',state.mensajePastel)+'</div>';
-      body += '<div style="margin-top:12px">'+fLab('ALERGIAS / RESTRICCIONES')+fTxt('alergias','text','Ej. Sin nuez, sin gluten…',state.alergias)+'</div>';
-      body += '<div style="margin-top:12px">'+fLab('IMAGEN DE REFERENCIA')
+      // Acordeón: agrupa los campos del pastel personalizado sin quitar ninguno.
+      var gForma = fLab('FORMA')+fChipsRow(FORMAS.map(function(f){ return fChip('forma',f,f,state.forma===f); }).join(''));
+      var gPan = fLab('SABOR DEL PAN')+fTxt('saborPan','text','Ej. Vainilla, chocolate…',state.saborPan)
+        + '<div style="margin-top:12px">'+fLab('RELLENOS')+fChipsRow(RELLENOS_BASE.map(function(r){ return fMChip('relleno',r,state.rellenos.indexOf(r)>=0); }).join(''))
+          + '<div style="margin-top:8px">'+fTxt('rellenoOtro','text','+ Otro relleno…',state.rellenoOtro)+'</div></div>'
+        + '<div style="margin-top:12px">'+fLab('COBERTURA')+fChipsRow(COBERTURAS.map(function(c){ return fChip('cobertura',c,c,state.cobertura===c); }).join(''))
+          + (state.cobertura==='Otra' ? '<div style="margin-top:8px">'+fTxt('coberturaOtra','text','¿Cuál cobertura?',state.coberturaOtra)+'</div>' : '') + '</div>';
+      var gDiseno = fLab('DETALLES DEL DISEÑO')+'<textarea data-field="detallesDiseno" rows="3" placeholder="Colores, temática, referencias…" style="'+FIN+';resize:vertical;min-height:60px">'+esc(state.detallesDiseno)+'</textarea>'
+        + '<div style="margin-top:12px">'+fLab('MENSAJE EN EL PASTEL')+fTxt('mensajePastel','text','Ej. Feliz cumpleaños Ana',state.mensajePastel)+'</div>'
+        + '<div style="margin-top:12px">'+fLab('ALERGIAS / RESTRICCIONES')+fTxt('alergias','text','Ej. Sin nuez, sin gluten…',state.alergias)+'</div>';
+      var gImagen = fLab('IMAGEN DE REFERENCIA')
         + '<input type="file" accept="image/*" data-field="imagenRef" style="'+FIN+';font-weight:700">'
-        + (state.imagenRef ? '<div style="margin-top:8px;display:flex;align-items:center;gap:10px"><img src="'+state.imagenRef+'" style="width:120px;height:120px;object-fit:cover;border-radius:14px"><div data-action="del-imagen" style="color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar imagen</div></div>' : '')
+        + (state.imagenRef ? '<div style="margin-top:8px;display:flex;align-items:center;gap:10px"><img src="'+state.imagenRef+'" style="width:120px;height:120px;object-fit:cover;border-radius:14px"><div data-action="del-imagen" style="color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar imagen</div></div>' : '');
+      body += '<div style="margin-top:12px">'
+        + accItem('forma','1 · Forma', gForma)
+        + accItem('pan','2 · Pan, relleno y cobertura', gPan)
+        + accItem('diseno','3 · Diseño, mensaje y alergias', gDiseno)
+        + accItem('imagen','4 · Imagen de referencia', gImagen)
         + '</div>';
     }
     body += '<div style="margin-top:14px">'+fLab('TAMAÑO')+fChipsRow(sizeChipsHtml())+'</div>';
@@ -687,7 +694,7 @@
 
   function sec3Html(idSuf){
     if (state.modoReceta === 'receta'){
-      var ins = (state.recipe ? state.recipe.insumos : 210) * SIZES[state.size].mult;
+      var ins = recipeInsumos(state.recipe) * SIZES[state.size].mult;
       var note = '<div style="background:var(--field);border-radius:14px;padding:12px 14px;font-size:12px;font-weight:700;color:var(--muted)">El costo de insumos ('+money(ins)+') viene de la receta <b style="color:var(--text)">'+esc(state.recipe?state.recipe.nombre:'—')+'</b>, escalado al tamaño '+esc(state.size)+'. Cambia a “Pastel personalizado” para capturar ingredientes manualmente.</div>';
       return fCard(fHead('box','Ingredientes del pedido')+note);
     }
@@ -847,13 +854,57 @@
       var pane=list.closest('.pane[data-scr="agenda"]');
       if(pane){ setKPI(pane,'Entregas hoy',hoy); setKPI(pane,'Esta semana',sem); setKPI(pane,'Por cobrar',money(cobrar)); setKPI(pane,'Activos',activos); styleFilters(pane); }
     });
+    renderInicio();
   }
   function cobrar(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ arr[i].pagado=true; break; } } saveOrders(arr); renderAgenda(); toast('Pedido marcado como pagado ✓'); }
   function cycleEstado(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ var e=arr[i].estado||'Cotizado'; arr[i].estado=ESTADOS[(ESTADOS.indexOf(e)+1)%ESTADOS.length]; break; } } saveOrders(arr); renderAgenda(); }
 
+  /* ---------- Dashboard (Inicio) en vivo ---------- */
+  var DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+  var MESES_L=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+  function qsa(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); }
+  function saludoTxt(){ var d=new Date(), h=d.getHours(); var s=h<12?'Buen día ☀️':(h<19?'Buenas tardes ☀️':'Buenas noches 🌙'); return DIAS[d.getDay()]+' '+d.getDate()+' de '+MESES_L[d.getMonth()]+' · '+s; }
+  function sameMonth(iso){ if(!iso) return false; var d=new Date(iso), n=new Date(); return d.getFullYear()===n.getFullYear() && d.getMonth()===n.getMonth(); }
+  function inicioEstadoBadge(o){ var e=o.pagado?'Pagado':(o.estado||'Cotizado'); return '<div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:3px 9px">'+esc(e)+'</div>'; }
+  function inicioHoyCard(o,isMob){
+    var av=isMob?'40px':'44px';
+    return '<div data-go="agenda" style="cursor:pointer;background:var(--surface);border-radius:18px;padding:'+(isMob?'12px 14px':'14px 16px')+';display:flex;align-items:center;gap:'+(isMob?'12px':'14px')+';box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">'
+      + '<div style="width:'+av+';height:'+av+';border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
+      + '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:'+(isMob?'14px':'15px')+'">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:'+(isMob?'11px':'12px')+';color:var(--muted);font-weight:700">'+esc(o.cliente||'Cliente')+'</div></div>'
+      + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:'+(isMob?'15px':'16px')+'">'+money(o.total)+'</div>'+inicioEstadoBadge(o)+'</div>'
+      + '</div>';
+  }
+  function renderInicio(){
+    var orders=readOrders(), t=todayISO();
+    var hoyList=orders.filter(function(o){ return o.fechaEvento===t; });
+    var sem=0, cobrar=0, mes=0, cobradas=0, porCobrarN=0;
+    orders.forEach(function(o){ if(within7(o.fechaEvento)) sem++; if(!o.pagado){ cobrar+=(o.total||0); porCobrarN++; } if(sameMonth(o.creado)){ mes+=(o.total||0); if(o.pagado) cobradas++; } });
+    qsa('[data-side-cobrar]').forEach(function(el){ el.textContent=money(cobrar); });
+    qsa('[data-side-apartados]').forEach(function(el){ el.textContent=porCobrarN+' pedido'+(porCobrarN===1?'':'s')+' por cobrar'; });
+    qsa('[data-in-saludo]').forEach(function(el){ el.textContent=saludoTxt(); });
+    qsa('[data-in-hoy]').forEach(function(el){ el.textContent=hoyList.length; });
+    qsa('[data-in-semana]').forEach(function(el){ el.textContent=sem+' pedido'+(sem===1?'':'s'); });
+    qsa('[data-in-semana-n]').forEach(function(el){ el.textContent=sem; });
+    qsa('[data-in-porcobrar]').forEach(function(el){ el.textContent=money(cobrar); });
+    qsa('[data-in-mes]').forEach(function(el){ el.textContent=money(mes); });
+    qsa('[data-in-cobradas]').forEach(function(el){ el.textContent=cobradas+' cobrado'+(cobradas===1?'':'s'); });
+    qsa('[data-in-proxima]').forEach(function(el){ el.textContent = hoyList.length ? ('Próxima: '+(hoyList[0].cliente||'Pedido')+' · '+(hoyList[0].receta||'')) : 'Sin entregas para hoy'; });
+    qsa('[data-in-hoy-list]').forEach(function(list){
+      var isMob=!!list.closest('#mobile');
+      if(!hoyList.length){ list.innerHTML='<div style="background:var(--surface);border-radius:18px;padding:20px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">No hay entregas para hoy</div>'; return; }
+      list.innerHTML=hoyList.map(function(o){ return inicioHoyCard(o,isMob); }).join('');
+    });
+    qsa('[data-in-recetas]').forEach(function(g){
+      var favs=recipes.slice(0,3);
+      var html=favs.map(function(r){ return '<div data-receta="'+r.id+'" style="cursor:pointer;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',30)+'</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">$'+recipePorcion(r)+'/porción</div></div></div>'; }).join('');
+      html+='<div data-go="recetas" style="cursor:pointer;border:2px dashed var(--accent);border-radius:18px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px"><div style="font-size:26px">＋</div>Nueva</div>';
+      g.innerHTML=html;
+    });
+  }
+
   /* ---------- Recetas: render + modales ---------- */
-  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:32px">'+r.emoji+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+r.ingredientes+' ingredientes</div></div></div>'; }
-  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:40px">'+r.emoji+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+r.ingredientes+' ingredientes · $'+r.precioPorcion+'/p</div></div></div>'; }
+  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',34)+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · $'+recipePorcion(r)+'/p</div></div></div>'; }
+  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',44)+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · $'+recipePorcion(r)+'/p</div></div></div>'; }
   function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #E7B676;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px;min-height:130px"><div style="font-size:30px">＋</div>Nueva receta</div>'; }
   function renderRecetas(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-recetas-list]'), function(list){
@@ -880,51 +931,103 @@
   }
   function fieldStyle(){ return 'width:100%;box-sizing:border-box;border:1px solid var(--line-strong);outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:14px;font-family:inherit;color:var(--text);margin-top:6px'; }
 
+  /* Componente reutilizable: editor de lista de ingredientes (usa insumos para autollenar costo) */
+  function mountIngredientList(mountEl, list, onChange){
+    function unitOpts(sel){ return UNIDADES.map(function(u){ return '<option value="'+u+'"'+(sel===u?' selected':'')+'>'+u+'</option>'; }).join(''); }
+    function rowHtml(it,i){
+      var sub=(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0);
+      return '<div data-ri="'+i+'" style="background:var(--field);border-radius:12px;padding:9px;margin-bottom:7px">'
+        + '<div style="display:flex;gap:6px;align-items:center;margin-bottom:6px"><input data-k="nombre" list="rc-ing-dl" value="'+esc(it.nombre||'')+'" placeholder="Ingrediente" style="flex:1;min-width:0;'+FIN2+'"><div data-x="'+i+'" title="Quitar" style="cursor:pointer;color:var(--muted);font-weight:800;font-size:15px;padding:2px 6px">×</div></div>'
+        + '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center"><input data-k="cantidad" type="number" min="0" step="0.01" value="'+esc(it.cantidad||'')+'" placeholder="Cant." style="width:64px;'+FIN2+'"><select data-k="unidad" style="'+FIN2+';font-weight:700">'+unitOpts(it.unidad)+'</select><input data-k="costoUnitario" type="number" min="0" step="0.01" value="'+esc(it.costoUnitario||'')+'" placeholder="$/u" style="width:76px;'+FIN2+'"><div style="margin-left:auto;font-weight:800;font-size:13px">= <span data-sub>'+money(sub)+'</span></div></div></div>';
+    }
+    function draw(){
+      mountEl.innerHTML = '<datalist id="rc-ing-dl">'+insumos.map(function(it){ return '<option value="'+esc(it.nombre)+'">'; }).join('')+'</datalist>'
+        + list.map(rowHtml).join('')
+        + '<div data-addrow style="border:2px dashed var(--accent);border-radius:12px;padding:9px;text-align:center;color:var(--text);font-weight:800;font-size:12px;cursor:pointer">+ Agregar ingrediente</div>'
+        + '<div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:9px;margin-top:9px;font-weight:800;font-size:13px"><span>Costo insumos</span><span data-total>'+money(listCost(list))+'</span></div>';
+    }
+    function refresh(){ var t=mountEl.querySelector('[data-total]'); if(t) t.textContent=money(listCost(list)); if(onChange) onChange(); }
+    mountEl.addEventListener('input', function(e){
+      var row=e.target.closest('[data-ri]'); if(!row) return; var i=+row.getAttribute('data-ri'), k=e.target.getAttribute('data-k'); if(!k||!list[i]) return;
+      list[i][k]=e.target.value;
+      if(k==='nombre'){ var nm=e.target.value.toLowerCase().trim(); for(var j=0;j<insumos.length;j++){ if((insumos[j].nombre||'').toLowerCase()===nm){ list[i].costoUnitario=parseFloat(unitCost(insumos[j]))||0; list[i].unidad=insumos[j].unidad||list[i].unidad; var ci=row.querySelector('[data-k="costoUnitario"]'); if(ci) ci.value=list[i].costoUnitario; var ui=row.querySelector('[data-k="unidad"]'); if(ui) ui.value=list[i].unidad; break; } } }
+      var sub=row.querySelector('[data-sub]'); if(sub) sub.textContent=money((parseFloat(list[i].cantidad)||0)*(parseFloat(list[i].costoUnitario)||0));
+      refresh();
+    });
+    mountEl.addEventListener('change', function(e){ var row=e.target.closest('[data-ri]'); if(!row) return; var i=+row.getAttribute('data-ri'); if(e.target.getAttribute('data-k')==='unidad'&&list[i]){ list[i].unidad=e.target.value; refresh(); } });
+    mountEl.addEventListener('click', function(e){ if(e.target.closest('[data-addrow]')){ list.push({nombre:'',cantidad:'',unidad:'g',costoUnitario:''}); draw(); refresh(); return; } var x=e.target.closest('[data-x]'); if(x){ list.splice(+x.getAttribute('data-x'),1); draw(); refresh(); } });
+    draw();
+  }
+
+  /* Grupo de chips dentro de un modal (single o multi-select) */
+  function modalChips(container, values, isActive, onPick, multi){
+    container.innerHTML='';
+    function paintAll(){ Array.prototype.forEach.call(container.children, function(c){ if(c._paint) c._paint(); }); }
+    values.forEach(function(v){
+      var b=document.createElement('div');
+      b._paint=function(){ var on=isActive(v); b.style.cssText='background:'+(on?(multi?'var(--sel)':'var(--btn)'):'var(--field)')+';color:'+(on?(multi?'var(--text)':'var(--on-dark)'):'var(--muted)')+';'+(multi?'border:2px solid '+(on?'var(--accent)':'transparent')+';':'')+'border-radius:20px;padding:7px 13px;font-size:12px;font-weight:800;cursor:pointer'; b.textContent=(multi&&on?'✓ ':'')+v; };
+      b.addEventListener('click', function(){ onPick(v); paintAll(); });
+      container.appendChild(b); b._paint();
+    });
+  }
+
   function openRecipeEditor(recipe){
     var isNew=!recipe;
-    var r = recipe || { id:'rec_'+Date.now(), nombre:'', emoji:EMOJIS[recipes.length%EMOJIS.length], grad:GRADS[recipes.length%GRADS.length], insumos:200, ingredientes:5, precioPorcion:30 };
+    var r = recipe || { id:'rec_'+Date.now(), nombre:'', grad:GRADS[recipes.length%GRADS.length], forma:'Redondo', saborPan:'', rellenos:[], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:0, ingredientes:0, precioPorcion:0 };
+    var d = { forma:r.forma||'Redondo', saborPan:r.saborPan||'', rellenos:(r.rellenos||[]).slice(), cobertura:r.cobertura||'Buttercream', coberturaOtra:'', detallesDiseno:r.detallesDiseno||'',
+              lista:(r.ingredientesLista||[]).map(function(x){ return { nombre:x.nombre, cantidad:x.cantidad, unidad:x.unidad, costoUnitario:x.costoUnitario }; }) };
+    var lab='font-size:11px;font-weight:800;color:var(--muted);margin:14px 0 6px';
     var box=document.createElement('div');
     box.innerHTML =
       '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nueva receta':'Editar receta')+'</div>'
-      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:14px">Se usa al cotizar para calcular el precio.</div>'
-      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">ÍCONO</div>'
-      + '<div id="rc-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
-      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">NOMBRE</div>'
-      + '<input id="rc-nombre" type="text" placeholder="Ej. Chocoavellana" style="'+fieldStyle()+'">'
-      + '<div style="display:flex;gap:10px;margin-top:12px">'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--muted)"># INGREDIENTES</div><input id="rc-ing" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--muted)">COSTO BASE ($)</div><input id="rc-ins" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      + '</div>'
-      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:6px">Costo de materiales para un pastel Mediano (20 porciones).</div>'
-      + '<div style="display:flex;gap:10px;margin-top:20px">'
+      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">Se usa al cotizar: precio y detalles se llenan solos.</div>'
+      + '<div style="'+lab+'">NOMBRE</div>'
+      + '<input id="rc-nombre" type="text" placeholder="Ej. Chocoavellana" style="'+fieldStyle()+';margin-top:0">'
+      + '<div style="'+lab+'">FORMA</div><div id="rc-forma" style="display:flex;flex-wrap:wrap;gap:7px"></div>'
+      + '<div style="'+lab+'">SABOR DEL PAN</div>'
+      + '<input id="rc-sabor" type="text" placeholder="Ej. Chocolate, vainilla…" style="'+fieldStyle()+';margin-top:0">'
+      + '<div style="'+lab+'">RELLENOS</div><div id="rc-rellenos" style="display:flex;flex-wrap:wrap;gap:7px"></div>'
+      + '<div style="'+lab+'">COBERTURA</div><div id="rc-cobertura" style="display:flex;flex-wrap:wrap;gap:7px"></div>'
+      + '<div id="rc-cobotra-wrap" style="margin-top:8px"></div>'
+      + '<div style="'+lab+'">DETALLES DEL DISEÑO</div>'
+      + '<textarea id="rc-detalles" rows="2" placeholder="Colores, temática, referencias…" style="'+fieldStyle()+';margin-top:0;resize:vertical;min-height:52px"></textarea>'
+      + '<div style="'+lab+'">INGREDIENTES E INSUMOS</div>'
+      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:8px">El costo de materiales se calcula desde tus precios (Mis precios).</div>'
+      + '<div id="rc-inglist"></div>'
+      + '<div style="display:flex;gap:10px;margin-top:18px">'
       +   '<div id="rc-save" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
       +   (isNew?'':'<div id="rc-del" style="text-align:center;background:var(--badge);color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
       + '</div>'
       + '<div id="rc-cancel" style="text-align:center;color:var(--muted);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
     var modal=openModal(box);
-    box.querySelector('#rc-nombre').value=r.nombre;
-    box.querySelector('#rc-ing').value=r.ingredientes;
-    box.querySelector('#rc-ins').value=r.insumos;
-    var chosen=r.emoji, ep=box.querySelector('#rc-emojis');
-    EMOJIS.forEach(function(em){
-      var b=document.createElement('div');
-      b.textContent=em;
-      b.style.cssText='width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;background:'+(em===chosen?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(em===chosen?'#7B5B4B':'transparent');
-      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#F5E7D0'; c.style.border='2px solid transparent'; }); b.style.background='#F7E7CC'; b.style.border='2px solid #7B5B4B'; });
-      ep.appendChild(b);
-    });
+    box.querySelector('#rc-nombre').value=r.nombre||'';
+    box.querySelector('#rc-sabor').value=d.saborPan;
+    box.querySelector('#rc-detalles').value=d.detallesDiseno;
+    var cobOtraWrap=box.querySelector('#rc-cobotra-wrap');
+    function drawCobOtra(){ if(d.cobertura==='Otra'){ cobOtraWrap.innerHTML='<input id="rc-cobotra" type="text" placeholder="¿Cuál cobertura?" value="'+esc(d.coberturaOtra)+'" style="'+fieldStyle()+';margin-top:0">'; cobOtraWrap.querySelector('#rc-cobotra').addEventListener('input',function(e){ d.coberturaOtra=e.target.value; }); } else cobOtraWrap.innerHTML=''; }
+    modalChips(box.querySelector('#rc-forma'), FORMAS, function(v){ return d.forma===v; }, function(v){ d.forma=v; }, false);
+    modalChips(box.querySelector('#rc-rellenos'), RELLENOS_BASE, function(v){ return d.rellenos.indexOf(v)>=0; }, function(v){ var i=d.rellenos.indexOf(v); if(i>=0) d.rellenos.splice(i,1); else d.rellenos.push(v); }, true);
+    modalChips(box.querySelector('#rc-cobertura'), COBERTURAS, function(v){ return d.cobertura===v; }, function(v){ d.cobertura=v; drawCobOtra(); }, false);
+    drawCobOtra();
+    mountIngredientList(box.querySelector('#rc-inglist'), d.lista);
+
     box.querySelector('#rc-save').addEventListener('click', function(){
       var nombre=box.querySelector('#rc-nombre').value.trim();
       if(!nombre){ toast('Escribe el nombre de la receta'); return; }
-      r.nombre=nombre; r.emoji=chosen;
-      r.ingredientes=parseInt(box.querySelector('#rc-ing').value,10)||0;
-      r.insumos=parseFloat(box.querySelector('#rc-ins').value)||0;
-      r.precioPorcion=Math.round((r.insumos+BASE.mano)*1.4/20);
+      r.nombre=nombre;
+      r.forma=d.forma;
+      r.saborPan=box.querySelector('#rc-sabor').value.trim();
+      r.rellenos=d.rellenos.slice();
+      r.cobertura=(d.cobertura==='Otra')?(d.coberturaOtra.trim()||'Otra'):d.cobertura;
+      r.detallesDiseno=box.querySelector('#rc-detalles').value.trim();
+      r.ingredientesLista=d.lista.filter(function(x){ return (x.nombre||'').trim(); });
+      if(r.ingredientesLista.length){ r.insumos=listCost(r.ingredientesLista); r.ingredientes=r.ingredientesLista.length; }
+      r.precioPorcion=recipePorcion(r);
       if(!r.grad) r.grad=GRADS[recipes.length%GRADS.length];
       if(isNew) recipes.push(r);
       saveRecipes(recipes);
-      if(state.recipe && state.recipe.id===r.id){ state.recipe=r; updateRecipeRow(); render(); }
-      renderRecetas(); modal.close();
+      if(state.recipe && state.recipe.id===r.id){ state.recipe=r; renderCotizar(); }
+      renderRecetas(); renderInicio(); modal.close();
       toast(isNew?'Receta creada ✓':'Receta actualizada ✓');
     });
     var del=box.querySelector('#rc-del');
@@ -933,8 +1036,8 @@
       recipes=recipes.filter(function(x){ return x.id!==r.id; });
       if(!recipes.length) recipes=DEFAULT_RECIPES.slice();
       saveRecipes(recipes);
-      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]; updateRecipeRow(); render(); }
-      renderRecetas(); modal.close(); toast('Receta eliminada');
+      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]; renderCotizar(); }
+      renderRecetas(); renderInicio(); modal.close(); toast('Receta eliminada');
     });
     box.querySelector('#rc-cancel').addEventListener('click', function(){ modal.close(); });
   }
@@ -947,7 +1050,7 @@
       var active = state.recipe && state.recipe.id===r.id;
       var row=document.createElement('div');
       row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(active?'#E7B676':'transparent');
-      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;font-size:20px">'+r.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+r.ingredientes+' ingredientes · costo base '+money(r.insumos)+'</div></div>'+(active?'<div style="color:var(--text);font-weight:800;font-size:18px">✓</div>':'');
+      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',22)+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · costo '+money(recipeInsumos(r))+'</div></div>'+(active?'<div style="color:var(--text);font-weight:800;font-size:18px">✓</div>':'');
       row.addEventListener('click', function(){ state.recipe=r; state.modoReceta='receta'; renderCotizar(); modal.close(); toast('Receta: '+r.nombre); });
       list.appendChild(row);
     });
@@ -992,9 +1095,9 @@
       + '<div style="display:flex;gap:10px;margin-top:12px">'
       +   '<div style="flex:1.2"><div style="font-size:11px;font-weight:800;color:var(--muted)">PRECIO ($)</div><input id="ic-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
       +   '<div style="flex:1"><div style="font-size:11px;font-weight:800;color:var(--muted)">CANTIDAD</div><input id="ic-cant" type="number" min="0" style="'+fieldStyle()+'"></div>'
-      +   '<div style="flex:.8"><div style="font-size:11px;font-weight:800;color:var(--muted)">UNIDAD</div><input id="ic-unidad" type="text" placeholder="g" style="'+fieldStyle()+'"></div>'
+      +   '<div style="flex:.9"><div style="font-size:11px;font-weight:800;color:var(--muted)">MÉTRICA</div><select id="ic-unidad" style="'+fieldStyle()+'">'+UNIDADES.map(function(u){ return '<option value="'+u+'">'+u+'</option>'; }).join('')+'</select></div>'
       + '</div>'
-      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:6px">Ej.: precio 186, cantidad 1000, unidad g → $0.19/g.</div>'
+      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-top:6px">Ej.: precio 186, cantidad 1000, métrica g → $0.19/g. Ese costo alimenta las cotizaciones.</div>'
       + '<div style="display:flex;gap:10px;margin-top:20px">'
       +   '<div id="ic-save" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
       +   (isNew?'':'<div id="ic-del" style="text-align:center;background:var(--badge);color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
@@ -1034,11 +1137,13 @@
 
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
   function orderById(id){ var a=readOrders(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
+  function latestOrder(){ var a=readOrders(); return a.length ? a[a.length-1] : null; }
   function buildOrder(){
     var v=calc(), activos=[]; for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
     var rellenos = state.rellenos.slice(); if(state.rellenoOtro.trim()) rellenos.push(state.rellenoOtro.trim());
     var cob = state.cobertura==='Otra' ? (state.coberturaOtra.trim()||'Otra') : state.cobertura;
     var esPers = state.modoReceta==='personalizado';
+    var rec = state.recipe || {};
     return {
       id:Date.now(),
       cliente:state.nombre.trim(), telefono:state.tel.trim(),
@@ -1047,10 +1152,15 @@
       modo:state.modoReceta,
       recetaId: (!esPers && state.recipe)?state.recipe.id:null,
       receta: esPers ? (state.saborPan.trim()||'Pastel personalizado') : (state.recipe?state.recipe.nombre:'Pastel'),
-      forma: esPers?state.forma:'', saborPan:state.saborPan.trim(), rellenos:rellenos, cobertura: esPers?cob:'',
-      detallesDiseno:state.detallesDiseno.trim(), mensajePastel:state.mensajePastel.trim(), alergias:state.alergias.trim(),
+      // En modo receta, hereda los detalles guardados de la receta; en personalizado, del formulario.
+      forma: esPers ? state.forma : (rec.forma||''),
+      saborPan: esPers ? state.saborPan.trim() : (rec.saborPan||''),
+      rellenos: esPers ? rellenos : ((rec.rellenos||[]).slice()),
+      cobertura: esPers ? cob : (rec.cobertura||''),
+      detallesDiseno: esPers ? state.detallesDiseno.trim() : (rec.detallesDiseno||''),
+      mensajePastel:state.mensajePastel.trim(), alergias:state.alergias.trim(),
       imagenRef:state.imagenRef,
-      ingredientes: esPers ? state.ingredientesManual.filter(function(it){ return (it.nombre||'').trim(); }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }) : [],
+      ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim(); }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
       tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
       total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:new Date().toISOString()
     };
@@ -1220,6 +1330,8 @@
     });
     // Delegación para elementos dinámicos y de acción
     document.addEventListener('click', function(ev){
+      // Iniciar cotización → llevar el formulario al primer paso (captura de datos).
+      var gc=ev.target.closest('[data-go="cotizar"]'); if(gc){ state._acc='forma'; renderCotizar(); }
       var cob=ev.target.closest('[data-cobrar]'); if(cob){ cobrar(parseInt(cob.getAttribute('data-cobrar'),10)); return; }
       var est=ev.target.closest('[data-estado-btn]'); if(est){ cycleEstado(parseInt(est.getAttribute('data-estado-btn'),10)); return; }
       var tk=ev.target.closest('[data-ticket]'); if(tk){ sendWhatsApp(orderById(parseInt(tk.getAttribute('data-ticket'),10))); return; }
@@ -1227,6 +1339,7 @@
       var ins=ev.target.closest('[data-insumo]'); if(ins){ var it=insumoById(ins.getAttribute('data-insumo')); if(it) openInsumoEditor(it); return; }
       var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
       var fc=ev.target.closest('[data-fchip]'); if(fc){ handleChip(fc); return; }
+      var ac=ev.target.closest('[data-acc]'); if(ac){ var ak=ac.getAttribute('data-acc'); state._acc=(state._acc===ak)?'':ak; renderCotizar(); return; }
       var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action');
         if(a==='cambiar'){ openRecipeSelector(); }
         else if(a==='nueva-receta'){ openRecipeEditor(null); }
@@ -1234,6 +1347,8 @@
         else if(a==='guardar-inv'){ saveInsumos(insumos); toast('Inventario guardado ✓'); }
         else if(a==='pdf'){ printOrder(buildOrder()); }
         else if(a==='ticket'){ sendWhatsApp(buildOrder()); }
+        else if(a==='pdf-latest'){ var lo=latestOrder(); if(lo) printOrder(lo); else toast('Aún no hay pedidos guardados'); }
+        else if(a==='ticket-latest'){ var lt=latestOrder(); if(lt) sendWhatsApp(lt); else toast('Aún no hay pedidos guardados'); }
         else if(a==='add-ing'){ state.ingredientesManual.push({ nombre:'', cantidad:'', unidad:'g', costoUnitario:'' }); renderCotizar(); }
         else if(a==='del-ing'){ var di=parseInt(act.getAttribute('data-idx'),10); state.ingredientesManual.splice(di,1); renderCotizar(); }
         else if(a==='del-imagen'){ state.imagenRef=''; renderCotizar(); }
