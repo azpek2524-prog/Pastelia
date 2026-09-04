@@ -30,6 +30,7 @@
     --on-dark:#FFF7EC; --btn:#7B5B4B; --bezel:#5A4236;
     --accent:#E7B676; --accent-ink:#7B5B4B;
     --panel1:#5A4236; --panel2:#7B5B4B; --hero1:#7B5B4B; --hero2:#8A6552;
+    --brand-primary:#7B5B4B;
     --primary:var(--text); --secondary:var(--main); --ground:var(--bg);
   }
   :root[data-theme="dark"]{
@@ -300,7 +301,7 @@
     </div>
     <div style="display:flex;align-items:center;gap:10px;padding:16px 6px 0">
       <div style="width:36px;height:36px;border-radius:12px;background:var(--tint);display:flex;align-items:center;justify-content:center;color:var(--text)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/></svg></div>
-      <div><div style="font-weight:800;font-size:13px">Azucena</div><div style="font-size:11px;color:var(--muted);font-weight:700">Dueña</div></div>
+      <div><div data-owner-name style="font-weight:800;font-size:13px">Azucena</div><div data-owner-title style="font-size:11px;color:var(--muted);font-weight:700">Dueña</div></div>
     </div>
   </div>
 
@@ -313,7 +314,7 @@
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
           <div>
             <div data-in-saludo style="font-size:13px;font-weight:800;color:var(--muted)">Buen día ☀️</div>
-            <div style="font-family:'Fredoka';font-weight:600;font-size:32px;line-height:1.1">¡Hola, Azucena!</div>
+            <div style="font-family:'Fredoka';font-weight:600;font-size:32px;line-height:1.1">¡Hola, <span data-owner-name>Azucena</span>!</div>
           </div>
           <div style="background:var(--field);border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:var(--muted)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-3px"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/></svg>Buscar pedido, cliente…</div>
         </div>
@@ -550,10 +551,10 @@
   ];
   var EMOJIS = ['🍫','🍋','🫐','🍓','🍑','🎂','🧁','🍰'];
   var DEFAULT_RECIPES = [
-    { id:'rec_choco',  nombre:'Chocoavellana', grad:GRADS[0], forma:'Redondo', saborPan:'Chocolate',     rellenos:['Ganache','Nutella'],      cobertura:'Ganache',    detallesDiseno:'', ingredientesLista:[], insumos:210, ingredientes:6, precioPorcion:34 },
-    { id:'rec_limon',  nombre:'Limón & mora',  grad:GRADS[1], forma:'Redondo', saborPan:'Vainilla',      rellenos:['Frutos rojos','Queso crema'], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:225, ingredientes:7, precioPorcion:38 },
-    { id:'rec_velvet', nombre:'Red velvet',    grad:GRADS[2], forma:'Redondo', saborPan:'Red velvet',    rellenos:['Queso crema'],            cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:240, ingredientes:8, precioPorcion:40 },
-    { id:'rec_durazno',nombre:'Durazno crema', grad:GRADS[3], forma:'Redondo', saborPan:'Vainilla',      rellenos:['Crema pastelera','Frutos rojos'], cobertura:'Chantilly', detallesDiseno:'', ingredientesLista:[], insumos:200, ingredientes:5, precioPorcion:32 }
+    { id:'rec_choco',  nombre:'Chocoavellana', grad:GRADS[0], photoBase64:'', forma:'Redondo', saborPan:'Chocolate',     rellenos:['Ganache','Nutella'],      cobertura:'Ganache',    detallesDiseno:'', ingredientesLista:[], insumos:210, ingredientes:6, precioPorcion:34 },
+    { id:'rec_limon',  nombre:'Limón & mora',  grad:GRADS[1], photoBase64:'', forma:'Redondo', saborPan:'Vainilla',      rellenos:['Frutos rojos','Queso crema'], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:225, ingredientes:7, precioPorcion:38 },
+    { id:'rec_velvet', nombre:'Red velvet',    grad:GRADS[2], photoBase64:'', forma:'Redondo', saborPan:'Red velvet',    rellenos:['Queso crema'],            cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:240, ingredientes:8, precioPorcion:40 },
+    { id:'rec_durazno',nombre:'Durazno crema', grad:GRADS[3], photoBase64:'', forma:'Redondo', saborPan:'Vainilla',      rellenos:['Crema pastelera','Frutos rojos'], cobertura:'Chantilly', detallesDiseno:'', ingredientesLista:[], insumos:200, ingredientes:5, precioPorcion:32 }
   ];
   function readRecipes(){ try{ var a=JSON.parse(localStorage.getItem(RECIPES_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
   function saveRecipes(a){ try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(a)); }catch(e){} }
@@ -567,6 +568,7 @@
     if(!r.cobertura) r.cobertura='Buttercream';
     if(r.detallesDiseno==null) r.detallesDiseno='';
     if(!r.ingredientesLista) r.ingredientesLista=[];
+    if(r.photoBase64==null) r.photoBase64='';
   });
   function listCost(list){ var t=0; (list||[]).forEach(function(it){ t+=(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0); }); return t; }
   function recipeInsumos(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return listCost(r.ingredientesLista); return (r&&r.insumos)||210; }
@@ -833,8 +835,8 @@
   function orderSub(o){ var x = (o.modo==='personalizado' && o.forma) ? ' · '+esc(o.forma) : ''; return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+esc(o.receta||'Pastel')+x; }
   function estadoInfo(o){
     var e=o.estado||'Cotizado';
-    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'#7B5B4B' };
-    return { txt:e, color:(e==='Entregado'?'#7B5B4B':'#7B5B4B') };
+    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'var(--text)' };
+    return { txt:e, color:'var(--text)' };
   }
   function statusHtml(o,big){ var info=estadoInfo(o); return '<div data-estado-btn="'+o.id+'" title="Cambiar estado" style="font-size:'+(big?'11px':'10px')+';font-weight:800;color:'+info.color+';cursor:pointer">'+esc(info.txt)+'</div>'; }
   function cobrarMob(o){ return o.pagado
@@ -891,8 +893,8 @@
     var row=list.previousElementSibling; if(!row) return;
     for(var i=0;i<row.children.length && i<4;i++){
       var on = state.filter===FILTER_KEYS[i];
-      row.children[i].style.background = on?'#7B5B4B':'#fff';
-      row.children[i].style.color = on?'#fff':'rgba(123,91,75,.5)';
+      row.children[i].style.background = on?'var(--btn)':'var(--surface)';
+      row.children[i].style.color = on?'var(--on-dark)':'var(--muted)';
       row.children[i].style.cursor='pointer';
     }
   }
@@ -951,16 +953,21 @@
     });
     qsa('[data-in-recetas]').forEach(function(g){
       var favs=recipes.slice(0,3);
-      var html=favs.map(function(r){ return '<div data-receta="'+r.id+'" style="cursor:pointer;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="height:70px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',30)+'</div><div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">$'+recipePorcion(r)+'/porción</div></div></div>'; }).join('');
+      var html=favs.map(function(r){ return '<div data-receta="'+r.id+'" style="cursor:pointer;background:var(--surface);border-radius:18px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)">'+recipeHeader(r,70,30)+'<div style="padding:10px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">$'+recipePorcion(r)+'/porción</div></div></div>'; }).join('');
       html+='<div data-go="recetas" style="cursor:pointer;border:2px dashed var(--accent);border-radius:18px;min-height:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px">'+icSvg('plus',26,'stroke-width:2;margin-bottom:4px')+'Nueva</div>';
       g.innerHTML=html;
     });
   }
 
   /* ---------- Recetas: render + modales ---------- */
-  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:76px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',34)+'</div><div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · $'+recipePorcion(r)+'/p</div></div></div>'; }
-  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="height:100px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',44)+'</div><div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · $'+recipePorcion(r)+'/p</div></div></div>'; }
-  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed #E7B676;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px;min-height:130px">'+icSvg('plus',28,'stroke-width:2;margin-bottom:4px')+'Nueva receta</div>'; }
+  // Cabecera de tarjeta de receta: foto si existe, o SVG de pastel en el color de marca.
+  function recipeHeader(r, h, iconSize){
+    if(r.photoBase64) return '<div style="height:'+h+'px;overflow:hidden"><img src="'+r.photoBase64+'" alt="'+esc(r.nombre)+'" style="object-fit:cover;width:100%;height:100%;display:block"></div>';
+    return '<div style="height:'+h+'px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--brand-primary)">'+icSvg('cake',iconSize)+'</div>';
+  }
+  function recetaCardMob(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer">'+recipeHeader(r,76,34)+'<div style="padding:12px 14px"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · $'+recipePorcion(r)+'/p</div></div></div>'; }
+  function recetaCardDesk(r){ return '<div data-receta="'+r.id+'" style="background:var(--surface);border-radius:20px;overflow:hidden;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer">'+recipeHeader(r,100,44)+'<div style="padding:14px 16px"><div style="font-weight:800;font-size:15px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · $'+recipePorcion(r)+'/p</div></div></div>'; }
+  function nuevaTile(){ return '<div data-action="nueva-receta" style="cursor:pointer;border:2px dashed var(--accent);border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--text);font-weight:800;font-size:13px;min-height:130px">'+icSvg('plus',28,'stroke-width:2;margin-bottom:4px')+'Nueva receta</div>'; }
   function renderRecetas(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-recetas-list]'), function(list){
       var isMob=!!list.closest('#mobile');
@@ -1029,7 +1036,7 @@
   function openRecipeEditor(recipe){
     var isNew=!recipe;
     var r = recipe || { id:'rec_'+Date.now(), nombre:'', grad:GRADS[recipes.length%GRADS.length], forma:'Redondo', saborPan:'', rellenos:[], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:0, ingredientes:0, precioPorcion:0 };
-    var d = { forma:r.forma||'Redondo', saborPan:r.saborPan||'', rellenos:(r.rellenos||[]).slice(), cobertura:r.cobertura||'Buttercream', coberturaOtra:'', detallesDiseno:r.detallesDiseno||'',
+    var d = { forma:r.forma||'Redondo', saborPan:r.saborPan||'', rellenos:(r.rellenos||[]).slice(), cobertura:r.cobertura||'Buttercream', coberturaOtra:'', detallesDiseno:r.detallesDiseno||'', photoBase64:r.photoBase64||'',
               lista:(r.ingredientesLista||[]).map(function(x){ return { nombre:x.nombre, cantidad:x.cantidad, unidad:x.unidad, costoUnitario:x.costoUnitario }; }) };
     var lab='font-size:11px;font-weight:800;color:var(--muted);margin:14px 0 6px';
     var box=document.createElement('div');
@@ -1038,6 +1045,12 @@
       + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">Se usa al cotizar: precio y detalles se llenan solos.</div>'
       + '<div style="'+lab+'">NOMBRE</div>'
       + '<input id="rc-nombre" type="text" placeholder="Ej. Chocoavellana" style="'+fieldStyle()+';margin-top:0">'
+      + '<div style="'+lab+'">FOTO DEL PASTEL</div>'
+      + '<div style="display:flex;align-items:center;gap:12px">'
+      +   '<div id="rc-photo-preview" style="flex:none"></div>'
+      +   '<div style="flex:1;min-width:0"><input id="rc-photo-input" type="file" accept="image/*" style="'+fieldStyle()+';margin-top:0;font-weight:700">'
+      +     '<div id="rc-photo-remove" style="margin-top:8px;color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar foto</div></div>'
+      + '</div>'
       + '<div style="'+lab+'">FORMA</div><div id="rc-forma" style="display:flex;flex-wrap:wrap;gap:7px"></div>'
       + '<div style="'+lab+'">SABOR DEL PAN</div>'
       + '<input id="rc-sabor" type="text" placeholder="Ej. Chocolate, vainilla…" style="'+fieldStyle()+';margin-top:0">'
@@ -1065,6 +1078,12 @@
     modalChips(box.querySelector('#rc-cobertura'), COBERTURAS, function(v){ return d.cobertura===v; }, function(v){ d.cobertura=v; drawCobOtra(); }, false);
     drawCobOtra();
     mountIngredientList(box.querySelector('#rc-inglist'), d.lista);
+    // Foto de la receta (comprimida a JPEG en canvas)
+    var photoPrev=box.querySelector('#rc-photo-preview');
+    function drawPhoto(){ photoPrev.innerHTML = d.photoBase64 ? '<img src="'+d.photoBase64+'" style="width:64px;height:64px;object-fit:cover;border-radius:12px;display:block">' : '<div style="width:64px;height:64px;border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--brand-primary)">'+icSvg('cake',30)+'</div>'; }
+    drawPhoto();
+    box.querySelector('#rc-photo-input').addEventListener('change', function(e){ var f=e.target.files&&e.target.files[0]; if(!f) return; compressImage(f, function(data){ d.photoBase64=data; drawPhoto(); }); });
+    box.querySelector('#rc-photo-remove').addEventListener('click', function(){ d.photoBase64=''; drawPhoto(); });
 
     box.querySelector('#rc-save').addEventListener('click', function(){
       var nombre=box.querySelector('#rc-nombre').value.trim();
@@ -1075,6 +1094,7 @@
       r.rellenos=d.rellenos.slice();
       r.cobertura=(d.cobertura==='Otra')?(d.coberturaOtra.trim()||'Otra'):d.cobertura;
       r.detallesDiseno=box.querySelector('#rc-detalles').value.trim();
+      r.photoBase64=d.photoBase64||'';
       r.ingredientesLista=d.lista.filter(function(x){ return (x.nombre||'').trim(); });
       if(r.ingredientesLista.length){ r.insumos=listCost(r.ingredientesLista); r.ingredientes=r.ingredientesLista.length; }
       r.precioPorcion=recipePorcion(r);
@@ -1104,7 +1124,7 @@
     recipes.forEach(function(r){
       var active = state.recipe && state.recipe.id===r.id;
       var row=document.createElement('div');
-      row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(active?'#E7B676':'transparent');
+      row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'var(--sel)':'var(--field)')+';border:2px solid '+(active?'var(--accent)':'transparent');
       row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',22)+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · costo '+money(recipeInsumos(r))+'</div></div>'+(active?'<div style="color:var(--text);font-weight:800;font-size:18px">✓</div>':'');
       row.addEventListener('click', function(){ state.recipe=r; state.modoReceta='receta'; renderCotizar(); modal.close(); toast('Receta: '+r.nombre); });
       list.appendChild(row);
@@ -1123,7 +1143,7 @@
   function insRowDesk(it){
     return '<div data-insumo="'+it.id+'" style="background:var(--surface);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:var(--field);border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:var(--muted)">/'+esc(it.unidad)+'</span></div></div>';
   }
-  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed #E7B676;border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--text);font-weight:800;font-size:13px;cursor:pointer">'+icSvg('plus',16,'stroke-width:2')+'Añadir insumo</div>'; }
+  function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed var(--accent);border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--text);font-weight:800;font-size:13px;cursor:pointer">'+icSvg('plus',16,'stroke-width:2')+'Añadir insumo</div>'; }
   function renderInsumos(){
     Array.prototype.forEach.call(document.querySelectorAll('[data-insumos-list]'), function(list){
       var isMob=!!list.closest('#mobile');
@@ -1166,8 +1186,8 @@
     var chosen=it.emoji, ep=box.querySelector('#ic-emojis');
     INS_EMOJIS.forEach(function(em){
       var b=document.createElement('div'); b.textContent=em;
-      b.style.cssText='width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;background:'+(em===chosen?'#F7E7CC':'#F5E7D0')+';border:2px solid '+(em===chosen?'#7B5B4B':'transparent');
-      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='#F5E7D0'; c.style.border='2px solid transparent'; }); b.style.background='#F7E7CC'; b.style.border='2px solid #7B5B4B'; });
+      b.style.cssText='width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;background:'+(em===chosen?'var(--sel)':'var(--field)')+';border:2px solid '+(em===chosen?'var(--btn)':'transparent');
+      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='var(--field)'; c.style.border='2px solid transparent'; }); b.style.background='var(--sel)'; b.style.border='2px solid var(--btn)'; });
       ep.appendChild(b);
     });
     box.querySelector('#ic-save').addEventListener('click', function(){
@@ -1193,7 +1213,7 @@
   /* ---------- Marca blanca / tenant (config de la cuenta) ---------- */
   var MARCA_KEY = 'pastelia_marca';
   var BIZ_DEFAULT = "Azucena's Cake Studio";
-  var MARCA_DEFAULT = { bakeryName:BIZ_DEFAULT, logoUrl:'', primaryColor:'#7B5B4B', telefono:'', direccion:'' };
+  var MARCA_DEFAULT = { bakeryName:BIZ_DEFAULT, logoUrl:'', primaryColor:'#7B5B4B', telefono:'', direccion:'', ownerName:'Azucena', ownerTitle:'Dueña' };
   function readMarca(){
     try{ var m=JSON.parse(localStorage.getItem(MARCA_KEY)); if(m&&typeof m==='object'){ var o={}; for(var k in MARCA_DEFAULT){ o[k]=(m[k]!=null?m[k]:MARCA_DEFAULT[k]); } return o; } }catch(e){}
     // Migración desde el ajuste anterior (solo nombre)
@@ -1220,23 +1240,29 @@
   function applyBrand(){
     var c=marca.primaryColor||'#7B5B4B', d=shade(c,-16);
     var rs=document.documentElement.style;
-    rs.setProperty('--btn', c);
+    rs.setProperty('--brand-primary', c);          // color de marca (fuente única)
+    rs.setProperty('--btn', c);                    // botones y acciones primarias
     rs.setProperty('--hero1', c);  rs.setProperty('--hero2', d);
     rs.setProperty('--panel1', c); rs.setProperty('--panel2', d);
     var meta=document.querySelector('meta[name="theme-color"]');
-    if(meta && document.documentElement.getAttribute('data-theme')!=='dark') meta.setAttribute('content', c);
+    if(meta) meta.setAttribute('content', document.documentElement.getAttribute('data-theme')==='dark' ? '#201811' : c);
   }
   function logoTile(size, radius){
     if(marca.logoUrl) return '<img src="'+marca.logoUrl+'" alt="'+esc(bizName())+'" style="width:'+size+'px;height:'+size+'px;border-radius:'+radius+'px;object-fit:cover;display:block">';
     return '<div style="width:'+size+'px;height:'+size+'px;border-radius:'+radius+'px;background:linear-gradient(135deg,#F0C98D,#E7B676);display:flex;align-items:center;justify-content:center"><img src="pastelia-icon-cacao.svg" alt="'+esc(bizName())+'" style="width:'+Math.round(size*0.62)+'px;height:'+Math.round(size*0.62)+'px;display:block"></div>';
   }
+  function ownerName(){ return (marca.ownerName&&marca.ownerName.trim())?marca.ownerName.trim():'Azucena'; }
+  function ownerTitle(){ return (marca.ownerTitle&&marca.ownerTitle.trim())?marca.ownerTitle.trim():'Dueña'; }
   function renderBiz(){
     qsa('[data-biz-name]').forEach(function(el){ el.textContent=bizName(); });
+    qsa('[data-owner-name]').forEach(function(el){ el.textContent=ownerName(); });
+    qsa('[data-owner-title]').forEach(function(el){ el.textContent=ownerTitle(); });
     qsa('[data-biz-input]').forEach(function(el){ if(document.activeElement!==el && el.value!==bizName()) el.value=bizName(); });
     qsa('[data-biz-logo]').forEach(function(el){ var sz=parseInt(el.getAttribute('data-logo-size'),10)||46, rd=parseInt(el.getAttribute('data-logo-radius'),10)||16; el.innerHTML=logoTile(sz,rd); });
     // Inputs del panel de configuración
     qsa('[data-marca-field]').forEach(function(el){ var f=el.getAttribute('data-marca-field'); if(document.activeElement!==el && el.value!==(marca[f]||'')) el.value=(marca[f]||''); });
     qsa('[data-marca-logo-preview]').forEach(function(el){ el.innerHTML = marca.logoUrl ? '<img src="'+marca.logoUrl+'" style="width:96px;height:96px;object-fit:cover;border-radius:18px;display:block">' : '<div style="width:96px;height:96px;border-radius:18px;background:var(--field);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800;font-size:12px">Sin logo</div>'; });
+    qsa('[data-theme-select]').forEach(function(el){ el.value = (document.documentElement.getAttribute('data-theme')==='dark') ? 'dark' : 'light'; });
   }
   var MARCA_SWATCHES=['#7B5B4B','#B0436B','#5B7B4B','#4B5B7B','#7B4BB0','#B07B4B'];
   function marcaFormHTML(){
@@ -1246,6 +1272,10 @@
     return '<div style="'+card+'">'
       + '<div style="'+lab+'">NOMBRE DEL NEGOCIO</div>'
       + '<input type="text" data-marca-field="bakeryName" placeholder="Ej. Azucena\'s Cake Studio" value="'+esc(marca.bakeryName)+'" style="'+fin+'">'
+      + '<div style="display:flex;gap:10px;margin-top:16px">'
+      +   '<div style="flex:1;min-width:0"><div style="'+lab+'">TU NOMBRE</div><input type="text" data-marca-field="ownerName" placeholder="Azucena" value="'+esc(marca.ownerName)+'" style="'+fin+'"></div>'
+      +   '<div style="flex:1;min-width:0"><div style="'+lab+'">PUESTO</div><input type="text" data-marca-field="ownerTitle" placeholder="Dueña" value="'+esc(marca.ownerTitle)+'" style="'+fin+'"></div>'
+      + '</div>'
       + '<div style="'+lab+';margin-top:16px">LOGOTIPO</div>'
       + '<div style="display:flex;align-items:center;gap:14px">'
       +   '<div data-marca-logo-preview style="flex:none"></div>'
@@ -1265,6 +1295,12 @@
       + '<div style="'+lab+';margin-top:16px">DIRECCIÓN (para recibos)</div>'
       + '<textarea data-marca-field="direccion" rows="2" placeholder="Calle, número, colonia, ciudad" style="'+fin+';resize:vertical;min-height:52px">'+esc(marca.direccion)+'</textarea>'
       + '</div>'
+      + '<div style="'+card+';display:flex;align-items:center;justify-content:space-between;gap:14px">'
+      + '<div><div style="'+lab+';margin-bottom:2px">APARIENCIA</div><div style="font-size:11px;font-weight:700;color:var(--muted)">Modo claro u oscuro de la app.</div></div>'
+      + '<select data-theme-select style="'+fin+';width:auto;min-width:120px;font-weight:800">'
+      +   '<option value="light">Claro</option><option value="dark">Oscuro</option>'
+      + '</select>'
+      + '</div>'
       + '<div style="'+card+'">'
       + '<div style="'+lab+'">VISTA PREVIA</div>'
       + '<div style="display:flex;align-items:center;gap:12px;margin-top:4px"><div data-biz-logo data-logo-size="44" data-logo-radius="14"></div><div data-biz-name style="font-family:\'Fredoka\';font-weight:600;font-size:18px">'+esc(bizName())+'</div></div>'
@@ -1279,8 +1315,7 @@
   }
   function handleLogoFile(el){
     var file=el.files&&el.files[0]; if(!file) return;
-    if(file.size>500*1024){ toast('Logo muy pesado, comprime antes de subir (máx 500 KB)'); el.value=''; return; }
-    var rd=new FileReader(); rd.onload=function(){ marca.logoUrl=rd.result; saveMarca(); renderBiz(); toast('Logo actualizado ✓'); }; rd.readAsDataURL(file);
+    compressImage(file, function(data){ marca.logoUrl=data; saveMarca(); renderBiz(); toast('Logo actualizado ✓'); });
   }
   function pickBrandColor(c){
     marca.primaryColor=c; saveMarca(); applyBrand();
@@ -1322,25 +1357,16 @@
     };
   }
   function quoteFromPane(){ return buildOrder(); }
+  // Ticket minimalista de una sola línea con separadores.
   function waMessage(o){
-    var L=[];
-    L.push('🎂 *'+bizName()+'* — Cotización de pastel');
-    if(o.cliente) L.push('Cliente: '+o.cliente);
-    if(o.invitados) L.push('Invitados: '+o.invitados);
-    L.push('Pastel: '+(o.receta||'Pastel')+' · '+o.tamano+' ('+o.porciones+' porciones)');
-    if(o.forma) L.push('Forma: '+o.forma);
-    if(o.saborPan) L.push('Pan: '+o.saborPan);
-    if(o.rellenos && o.rellenos.length) L.push('Rellenos: '+o.rellenos.join(', '));
-    if(o.cobertura) L.push('Cobertura: '+o.cobertura);
-    if(o.extras && o.extras.length) L.push('Extras: '+o.extras.join(', '));
-    if(o.mensajePastel) L.push('Mensaje: '+o.mensajePastel);
-    if(o.alergias) L.push('⚠️ Alergias: '+o.alergias);
-    if(o.fechaEvento) L.push('Entrega: '+fFecha(o.fechaEvento)+(o.tipoEntrega==='domicilio'?' (a domicilio'+(o.direccion?': '+o.direccion:'')+')':' (recoge en local)'));
-    L.push('Total: '+money(o.total));
-    L.push('¡Gracias por tu preferencia! 💕');
-    var contacto=[]; if(marca.telefono) contacto.push('📞 '+marca.telefono); if(marca.direccion) contacto.push('📍 '+marca.direccion);
-    if(contacto.length) L.push(contacto.join('  ·  '));
-    return L.join('\n');
+    var resumen=(o.receta||'Pastel')+' · '+o.tamano+' '+o.porciones+'p';
+    return [
+      bizName()+' - Ticket',
+      'Cliente: '+(o.cliente||'—'),
+      'Fecha: '+(o.fechaEvento?fFecha(o.fechaEvento):'Por definir'),
+      'Pastel: '+resumen,
+      'Total: '+money(o.total)
+    ].join(' | ');
   }
   function sendWhatsApp(o){
     if(!o){ toast('No se encontró el pedido'); return; }
@@ -1461,12 +1487,32 @@
     if(f in state){ state[f]=el.value; }
     if(f==='_newExtraName' || f==='_newExtraPrice'){ /* solo se guarda en state */ }
   }
+  // Comprime cualquier imagen: FileReader -> Image -> Canvas (máx 800px, JPEG 0.6)
+  function compressImage(file, cb){
+    if(!file){ return; }
+    var reader=new FileReader();
+    reader.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var maxW=800, maxH=800, w=img.width||1, h=img.height||1;
+        if(w>maxW || h>maxH){ var r=Math.min(maxW/w, maxH/h); w=Math.round(w*r); h=Math.round(h*r); }
+        try{
+          var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+          var ctx=canvas.getContext('2d');
+          ctx.fillStyle='#ffffff'; ctx.fillRect(0,0,w,h);   // fondo blanco (PNG con transparencia -> JPEG)
+          ctx.drawImage(img,0,0,w,h);
+          cb(canvas.toDataURL('image/jpeg', 0.6));
+        }catch(e){ cb(reader.result); }
+      };
+      img.onerror=function(){ cb(reader.result); };
+      img.src=reader.result;
+    };
+    reader.onerror=function(){ toast('No se pudo leer la imagen'); };
+    reader.readAsDataURL(file);
+  }
   function handleImage(el){
     var file=el.files&&el.files[0]; if(!file) return;
-    if(file.size>500*1024){ toast('Imagen muy pesada, comprime antes de subir'); el.value=''; return; }
-    var rd=new FileReader();
-    rd.onload=function(){ state.imagenRef=rd.result; renderCotizar(); };
-    rd.readAsDataURL(file);
+    compressImage(file, function(data){ state.imagenRef=data; renderCotizar(); });
   }
 
   function enhance(){
@@ -1487,7 +1533,10 @@
     });
     // Panel "Mi negocio": campos de marca (texto/color), logo y paleta rápida
     document.addEventListener('input', function(ev){ var el=ev.target; var f=el.getAttribute&&el.getAttribute('data-marca-field'); if(f) handleMarcaField(el,f); });
-    document.addEventListener('change', function(ev){ var el=ev.target; if(el.hasAttribute&&el.hasAttribute('data-marca-logo-input')) handleLogoFile(el); });
+    document.addEventListener('change', function(ev){ var el=ev.target;
+      if(el.hasAttribute&&el.hasAttribute('data-marca-logo-input')){ handleLogoFile(el); return; }
+      if(el.hasAttribute&&el.hasAttribute('data-theme-select')){ if(window.pasteliaTheme) window.pasteliaTheme.setDark(el.value==='dark'); applyBrand(); renderBiz(); return; }
+    });
     // Filtros de la agenda
     Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="agenda"] [data-agenda-list]'), function(list){
       var row=list.previousElementSibling; if(!row) return;
@@ -1566,23 +1615,15 @@
 </script>
 <script>
 (function(){
-  var K='pastelia_theme', root=document.documentElement, meta=document.querySelector('meta[name="theme-color"]');
-  function isDark(){ return root.getAttribute('data-theme')==='dark'; }
-  function ico(dark){ return dark
-    ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg>'
-    : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>'; }
-  var btn=document.createElement('button');
-  btn.className='theme-toggle'; btn.type='button'; btn.setAttribute('aria-label','Cambiar modo claro u oscuro');
-  function apply(){ var d=isDark(); btn.innerHTML=ico(d); if(meta) meta.setAttribute('content', d?'#201811':'#7B5B4B'); }
-  btn.addEventListener('click', function(){
-    var d=isDark();
-    if(d) root.removeAttribute('data-theme'); else root.setAttribute('data-theme','dark');
-    try{ localStorage.setItem(K, d?'light':'dark'); }catch(e){}
-    apply();
-  });
-  apply();
-  if(document.body) document.body.appendChild(btn);
-  else document.addEventListener('DOMContentLoaded',function(){ document.body.appendChild(btn); });
+  // Toggle de tema (el control vive en el pane "Mi negocio"; ya no hay botón flotante).
+  var K='pastelia_theme', root=document.documentElement;
+  window.pasteliaTheme = {
+    isDark: function(){ return root.getAttribute('data-theme')==='dark'; },
+    setDark: function(dark){
+      if(dark) root.setAttribute('data-theme','dark'); else root.removeAttribute('data-theme');
+      try{ localStorage.setItem(K, dark?'dark':'light'); }catch(e){}
+    }
+  };
 })();
 </script>
 </body>
