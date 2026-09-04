@@ -140,6 +140,13 @@
                 <div><div style="font-size:12px;font-weight:800;color:var(--text)">Ingresos del mes<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-left:6px;vertical-align:-2px"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div data-in-mes style="font-family:'Fredoka';font-weight:600;font-size:26px">$0</div></div>
                 <div data-in-cobradas style="font-size:12px;font-weight:800;color:var(--text);background:var(--surface);border-radius:20px;padding:4px 10px">0 cobrados</div>
               </div>
+              <div style="background:var(--surface);border-radius:20px;padding:16px;margin-top:12px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                  <div style="font-family:'Fredoka';font-weight:600;font-size:15px">Ingresos cobrados</div>
+                  <div style="font-size:11px;font-weight:800;color:var(--muted)">Solo pagados</div>
+                </div>
+                <div data-inc-chart></div>
+              </div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin:20px 2px 10px">
                 <div style="font-family:'Fredoka';font-weight:600;font-size:16px">Entregas de hoy</div>
                 <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:var(--text)">Ver todas</div>
@@ -327,6 +334,15 @@
           </div>
           <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/></svg></div><div data-in-semana-n style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">0</div><div style="font-size:13px;font-weight:800;color:var(--text)">Pedidos esta semana</div></div>
           <div style="background:var(--tint);border-radius:24px;padding:22px"><div><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/></svg></div><div data-in-mes style="font-family:'Fredoka';font-weight:600;font-size:36px;line-height:1.1;margin-top:8px">$0</div><div style="font-size:13px;font-weight:800;color:var(--text)">Ingresos del mes</div></div>
+        </div>
+
+        <!-- ingresos: mini-gráfico -->
+        <div style="background:var(--surface);border-radius:24px;padding:20px 22px;margin-bottom:16px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px">
+            <div style="font-family:'Fredoka';font-weight:600;font-size:19px">Ingresos cobrados</div>
+            <div style="font-size:12px;font-weight:800;color:var(--muted)">Día · Semana · Mes (solo pagados)</div>
+          </div>
+          <div style="max-width:520px"><div data-inc-chart></div></div>
         </div>
 
         <!-- quick actions -->
@@ -549,7 +565,6 @@
     'linear-gradient(135deg,#F1E6CE,#E7B676)',
     'linear-gradient(135deg,#F5E4C6,#DDA457)'
   ];
-  var EMOJIS = ['🍫','🍋','🫐','🍓','🍑','🎂','🧁','🍰'];
   var DEFAULT_RECIPES = [
     { id:'rec_choco',  nombre:'Chocoavellana', grad:GRADS[0], photoBase64:'', forma:'Redondo', saborPan:'Chocolate',     rellenos:['Ganache','Nutella'],      cobertura:'Ganache',    detallesDiseno:'', ingredientesLista:[], insumos:210, ingredientes:6, precioPorcion:34 },
     { id:'rec_limon',  nombre:'Limón & mora',  grad:GRADS[1], photoBase64:'', forma:'Redondo', saborPan:'Vainilla',      rellenos:['Frutos rojos','Queso crema'], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:225, ingredientes:7, precioPorcion:38 },
@@ -578,13 +593,12 @@
 
   /* ---------- Insumos / Mis precios (localStorage: pastelia_insumos) ---------- */
   var INSUMOS_KEY = 'pastelia_insumos';
-  var INS_EMOJIS = ['🧈','🌾','🥚','🍫','🍶','🧂','🍓','🫙','🥛','🍋','🧀','🍯'];
   var ICON_BGS = ['#F7E7C9','#F5E7D0','#F5E4C6','#F1E6CE','#F1E6CE','#F1E6CE'];
   var DEFAULT_INSUMOS = [
-    { id:'ins_mant', nombre:'Mantequilla', emoji:'🧈', iconBg:'#F7E7C9', precio:186, cantidad:1000, unidad:'g'  },
-    { id:'ins_hari', nombre:'Harina',      emoji:'🌾', iconBg:'#F5E7D0', precio:32,  cantidad:1000, unidad:'g'  },
-    { id:'ins_hue',  nombre:'Huevo',       emoji:'🥚', iconBg:'#F5E4C6', precio:62,  cantidad:30,   unidad:'pz' },
-    { id:'ins_choc', nombre:'Chocolate',   emoji:'🍫', iconBg:'#F1E6CE', precio:145, cantidad:500,  unidad:'g'  }
+    { id:'ins_mant', nombre:'Mantequilla', iconBg:'#F7E7C9', precio:186, cantidad:1000, unidad:'g'  },
+    { id:'ins_hari', nombre:'Harina',      iconBg:'#F5E7D0', precio:32,  cantidad:1000, unidad:'g'  },
+    { id:'ins_hue',  nombre:'Huevo',       iconBg:'#F5E4C6', precio:62,  cantidad:30,   unidad:'pz' },
+    { id:'ins_choc', nombre:'Chocolate',   iconBg:'#F1E6CE', precio:145, cantidad:500,  unidad:'g'  }
   ];
   function readInsumos(){ try{ var a=JSON.parse(localStorage.getItem(INSUMOS_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
   function saveInsumos(a){ try{ localStorage.setItem(INSUMOS_KEY, JSON.stringify(a)); }catch(e){} }
@@ -593,7 +607,7 @@
   function insumoById(id){ for(var i=0;i<insumos.length;i++){ if(insumos[i].id===id) return insumos[i]; } return null; }
   function unitCost(it){ var c=(it.cantidad>0)?(it.precio/it.cantidad):0; return (c>=1?c.toFixed(2):c.toFixed(2)); }
 
-  var ICONS={home:'<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>',calendar:'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/>',cake:'<path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/>',whisk:'<path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/>',receipt:'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/>',file:'<path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/>',chat:'<path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',coin:'<circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/>',cash:'<rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/>',box:'<path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/>',save:'<path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/>',bow:'<path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/>',user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',inbox:'<path d="M4.5 13.5 6.4 6a1.5 1.5 0 0 1 1.45-1.1h8.3A1.5 1.5 0 0 1 17.6 6l1.9 7.5"/><path d="M4.5 13.5V18a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4.5"/><path d="M4.5 13.5h4l1.3 2.2h4.4l1.3-2.2h4"/>',plus:'<path d="M12 5v14M5 12h14"/>'};
+  var ICONS={home:'<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>',calendar:'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/>',cake:'<path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/>',whisk:'<path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/>',receipt:'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/>',file:'<path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/>',chat:'<path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',coin:'<circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/>',cash:'<rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/>',box:'<path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/>',save:'<path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/>',bow:'<path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/>',user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',inbox:'<path d="M4.5 13.5 6.4 6a1.5 1.5 0 0 1 1.45-1.1h8.3A1.5 1.5 0 0 1 17.6 6l1.9 7.5"/><path d="M4.5 13.5V18a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4.5"/><path d="M4.5 13.5h4l1.3 2.2h4.4l1.3-2.2h4"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="M4.5 12.5 9.5 17.5 19.5 6.5"/>',checkdouble:'<path d="M3.5 12.5 7.5 16.5 15 8"/><path d="M12.5 15.5 13.5 16.5 21 8"/>',jar:'<path d="M8 3.5h8M9 3.5V5c0 1.2-2 2-2 4v9.5A1.5 1.5 0 0 0 8.5 20h7a1.5 1.5 0 0 0 1.5-1.5V9c0-2-2-2.8-2-4V3.5"/><path d="M7 11.5h10"/>'};
   function icSvg(name,size,extra){ size=size||18; return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none'+(extra?';'+extra:'')+'">'+(ICONS[name]||'')+'</svg>'; }
   function money(n){ return '$' + Math.round(n).toLocaleString('es-MX'); }
   function sizeKey(t){ t=(t||'').trim(); for(var k in SIZES){ if(t.indexOf(k)===0) return k; } return null; }
@@ -657,8 +671,11 @@
   }
 
   function recipeRowHtml(){
+    var thumb = (state.recipe&&state.recipe.photoBase64)
+      ? '<img src="'+state.recipe.photoBase64+'" alt="" style="width:38px;height:38px;border-radius:10px;object-fit:cover;display:block">'
+      : '<div style="width:38px;height:38px;border-radius:10px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--brand-primary)">'+icSvg('cake',22)+'</div>';
     return '<div style="background:var(--sel);border:2px solid var(--accent);border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:12px">'
-      + '<div style="font-size:22px">'+(state.recipe?state.recipe.emoji:'🎂')+'</div>'
+      + thumb
       + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(state.recipe?state.recipe.nombre:'Sin receta')+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">Receta base guardada</div></div>'
       + '<div data-action="cambiar" style="font-size:12px;font-weight:800;color:var(--text);cursor:pointer">Cambiar</div></div>';
   }
@@ -829,8 +846,10 @@
   function goTo(scr){ var b=document.querySelector('[data-go="'+scr+'"]'); if(b) b.click(); }
 
   var AVA_BG = ['var(--tint2)','var(--tint)','var(--tint)','var(--tint2)'];
-  var AVA_EMO = ['🎂','🧁','🍰','🎂'];
   var ESTADOS = ['Cotizado','Apartado','Entregado'];
+  function isDone(o){ return !!o.pagado && (o.estado||'Cotizado')==='Entregado'; }
+  function doneBtnMob(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" style="margin-top:8px;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',15,'margin-right:6px;vertical-align:-3px')+'Cobrado y entregado</div>'; }
+  function doneBtnDesk(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" title="Cobrado y entregado" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',16)+'</div>'; }
   function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
   function orderSub(o){ var x = (o.modo==='personalizado' && o.forma) ? ' · '+esc(o.forma) : ''; return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+esc(o.receta||'Pastel')+x; }
   function estadoInfo(o){
@@ -847,7 +866,7 @@
       : '<div data-cobrar="'+o.id+'" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('coin',15,'margin-right:5px')+'Cobrar</div>'; }
 
   function mobCard(o,i){
-    var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
+    var ava=AVA_BG[i%AVA_BG.length];
     return '<div style="background:var(--surface);border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(123,91,75,.4)">'
       + '<div style="display:flex;align-items:center;gap:12px">'
       + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
@@ -858,15 +877,17 @@
       + '<div data-ticket="'+o.id+'" style="flex:1;text-align:center;background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('chat',15,'margin-right:5px')+'WhatsApp</div>'
       + '<div data-pdf="'+o.id+'" style="flex:1;text-align:center;background:var(--field);border-radius:12px;padding:8px;font-size:12px;font-weight:800;cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:5px"><path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/></svg>PDF</div>'
       + cobrarMob(o)
-      + '</div></div>';
+      + '</div>'
+      + doneBtnMob(o)
+      + '</div>';
   }
   function deskCard(o,i){
-    var ava=AVA_BG[i%AVA_BG.length], emo=AVA_EMO[i%AVA_EMO.length];
+    var ava=AVA_BG[i%AVA_BG.length];
     return '<div style="background:var(--surface);border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;gap:16px">'
       + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',24)+'</div>'
       + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+orderSub(o)+'</div></div>'
       + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
-      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div>'+cobrarDesk(o)+'</div>'
+      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div>'+cobrarDesk(o)+doneBtnDesk(o)+'</div>'
       + '</div>';
   }
   function emptyState(){
@@ -913,8 +934,11 @@
     });
     renderInicio();
   }
+  // renderAgenda() ya repinta el dashboard (llama a renderInicio al final): las mutaciones
+  // de la agenda actualizan contadores, lista de "Entregas de hoy" y métricas al instante.
   function cobrar(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ arr[i].pagado=true; break; } } saveOrders(arr); renderAgenda(); toast('Pedido marcado como pagado ✓'); }
   function cycleEstado(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ var e=arr[i].estado||'Cotizado'; arr[i].estado=ESTADOS[(ESTADOS.indexOf(e)+1)%ESTADOS.length]; break; } } saveOrders(arr); renderAgenda(); }
+  function cobrarEntregado(id){ var arr=readOrders(); for(var i=0;i<arr.length;i++){ if(arr[i].id===id){ arr[i].pagado=true; arr[i].estado='Entregado'; break; } } saveOrders(arr); renderAgenda(); toast('Cobrado y entregado ✓'); }
 
   /* ---------- Dashboard (Inicio) en vivo ---------- */
   var DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
@@ -931,11 +955,37 @@
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:'+(isMob?'15px':'16px')+'">'+money(o.total)+'</div>'+inicioEstadoBadge(o)+'</div>'
       + '</div>';
   }
+  // Mini gráfico de barras (HTML/CSS nativo): alturas en % relativas al máximo.
+  function incomeChartHTML(dia, sem, mes){
+    var vals=[{v:dia,l:'Día'},{v:sem,l:'Semana'},{v:mes,l:'Mes'}];
+    var mx=Math.max(dia,sem,mes,1), top=Math.max(dia,sem,mes);
+    return '<div style="display:flex;gap:12px;align-items:stretch;height:112px">'+vals.map(function(x){
+      var h=Math.max(Math.round(x.v/mx*100),2), isMax=(x.v===top && x.v>0);
+      return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;min-width:0">'
+        + '<div style="font-family:\'Fredoka\';font-weight:700;font-size:12px;color:var(--text)">'+money(x.v)+'</div>'
+        + '<div style="width:100%;flex:1;display:flex;align-items:flex-end"><div style="width:100%;height:'+h+'%;min-height:4px;background:'+(isMax?'var(--accent)':'var(--btn)')+';border-radius:8px 8px 3px 3px;transition:height .3s"></div></div>'
+        + '<div style="font-size:11px;font-weight:800;color:var(--muted)">'+x.l+'</div></div>';
+    }).join('')+'</div>';
+  }
   function renderInicio(){
     var orders=readOrders(), t=todayISO();
     var hoyList=orders.filter(function(o){ return o.fechaEvento===t; });
     var sem=0, cobrar=0, mes=0, cobradas=0, porCobrarN=0;
-    orders.forEach(function(o){ if(within7(o.fechaEvento)) sem++; if(!o.pagado){ cobrar+=(o.total||0); porCobrarN++; } if(sameMonth(o.creado)){ mes+=(o.total||0); if(o.pagado) cobradas++; } });
+    var incDia=0, incSem=0, incMes=0;   // ingresos cobrados (pagado===true) por fecha de evento
+    orders.forEach(function(o){
+      if(within7(o.fechaEvento)) sem++;
+      if(!o.pagado){ cobrar+=(o.total||0); porCobrarN++; }
+      if(sameMonth(o.creado)){ mes+=(o.total||0); if(o.pagado) cobradas++; }
+      if(o.pagado){
+        if(o.fechaEvento===t) incDia+=(o.total||0);
+        if(within7(o.fechaEvento)) incSem+=(o.total||0);
+        if(sameMonth(o.fechaEvento)) incMes+=(o.total||0);
+      }
+    });
+    qsa('[data-in-inc-dia]').forEach(function(el){ el.textContent=money(incDia); });
+    qsa('[data-in-inc-sem]').forEach(function(el){ el.textContent=money(incSem); });
+    qsa('[data-in-inc-mes]').forEach(function(el){ el.textContent=money(incMes); });
+    qsa('[data-inc-chart]').forEach(function(el){ el.innerHTML=incomeChartHTML(incDia,incSem,incMes); });
     qsa('[data-side-cobrar]').forEach(function(el){ el.textContent=money(cobrar); });
     qsa('[data-side-apartados]').forEach(function(el){ el.textContent=porCobrarN+' pedido'+(porCobrarN===1?'':'s')+' por cobrar'; });
     qsa('[data-in-saludo]').forEach(function(el){ el.textContent=saludoTxt(); });
@@ -1135,13 +1185,13 @@
   /* ---------- Mis precios: render + editor ---------- */
   function insRowMob(it){
     return '<div data-insumo="'+it.id+'" style="background:var(--surface);border-radius:18px;padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer">'
-      + '<div style="width:40px;height:40px;border-radius:12px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:20px">'+it.emoji+'</div>'
+      + '<div style="width:40px;height:40px;border-radius:12px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;color:var(--brand-primary)">'+icSvg('jar',20)+'</div>'
       + '<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div>'
       + '<div style="background:var(--field);border-radius:12px;padding:8px 12px;font-family:\'Fredoka\';font-weight:600;font-size:14px">$'+unitCost(it)+'<span style="font-size:10px;color:var(--muted)">/'+esc(it.unidad)+'</span></div>'
       + '</div>';
   }
   function insRowDesk(it){
-    return '<div data-insumo="'+it.id+'" style="background:var(--surface);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;font-size:22px">'+it.emoji+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:var(--field);border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:var(--muted)">/'+esc(it.unidad)+'</span></div></div>';
+    return '<div data-insumo="'+it.id+'" style="background:var(--surface);border-radius:18px;padding:16px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);cursor:pointer"><div style="width:44px;height:44px;border-radius:14px;background:'+it.iconBg+';display:flex;align-items:center;justify-content:center;color:var(--brand-primary)">'+icSvg('jar',22)+'</div><div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(it.nombre)+'</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+money(it.precio)+' / '+it.cantidad+' '+esc(it.unidad)+'</div></div><div style="background:var(--field);border-radius:12px;padding:10px 14px;font-family:\'Fredoka\';font-weight:600;font-size:15px">$'+unitCost(it)+'<span style="font-size:11px;color:var(--muted)">/'+esc(it.unidad)+'</span></div></div>';
   }
   function insAddTile(){ return '<div data-action="add-insumo" style="border:2px dashed var(--accent);border-radius:18px;padding:14px 16px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--text);font-weight:800;font-size:13px;cursor:pointer">'+icSvg('plus',16,'stroke-width:2')+'Añadir insumo</div>'; }
   function renderInsumos(){
@@ -1158,13 +1208,11 @@
   }
   function openInsumoEditor(item){
     var isNew=!item;
-    var it=item||{ id:'ins_'+Date.now(), nombre:'', emoji:INS_EMOJIS[insumos.length%INS_EMOJIS.length], iconBg:ICON_BGS[insumos.length%ICON_BGS.length], precio:0, cantidad:1000, unidad:'g' };
+    var it=item||{ id:'ins_'+Date.now(), nombre:'', iconBg:ICON_BGS[insumos.length%ICON_BGS.length], precio:0, cantidad:1000, unidad:'g' };
     var box=document.createElement('div');
     box.innerHTML =
       '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nuevo insumo':'Editar insumo')+'</div>'
       + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:14px">La app calcula el costo por gramo o pieza.</div>'
-      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">ÍCONO</div>'
-      + '<div id="ic-emojis" style="display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px"></div>'
       + '<div style="font-size:11px;font-weight:800;color:var(--muted)">NOMBRE</div>'
       + '<input id="ic-nombre" type="text" placeholder="Ej. Mantequilla" style="'+fieldStyle()+'">'
       + '<div style="display:flex;gap:10px;margin-top:12px">'
@@ -1183,17 +1231,10 @@
     box.querySelector('#ic-precio').value=it.precio;
     box.querySelector('#ic-cant').value=it.cantidad;
     box.querySelector('#ic-unidad').value=it.unidad;
-    var chosen=it.emoji, ep=box.querySelector('#ic-emojis');
-    INS_EMOJIS.forEach(function(em){
-      var b=document.createElement('div'); b.textContent=em;
-      b.style.cssText='width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;background:'+(em===chosen?'var(--sel)':'var(--field)')+';border:2px solid '+(em===chosen?'var(--btn)':'transparent');
-      b.addEventListener('click', function(){ chosen=em; Array.prototype.forEach.call(ep.children,function(c){ c.style.background='var(--field)'; c.style.border='2px solid transparent'; }); b.style.background='var(--sel)'; b.style.border='2px solid var(--btn)'; });
-      ep.appendChild(b);
-    });
     box.querySelector('#ic-save').addEventListener('click', function(){
       var nombre=box.querySelector('#ic-nombre').value.trim();
       if(!nombre){ toast('Escribe el nombre del insumo'); return; }
-      it.nombre=nombre; it.emoji=chosen;
+      it.nombre=nombre;
       it.precio=parseFloat(box.querySelector('#ic-precio').value)||0;
       it.cantidad=parseFloat(box.querySelector('#ic-cant').value)||0;
       it.unidad=(box.querySelector('#ic-unidad').value.trim())||'u';
@@ -1557,6 +1598,7 @@
       var gc=ev.target.closest('[data-go="cotizar"]'); if(gc){ state.step=1; state._acc='forma'; renderCotizar(); }
       var stp=ev.target.closest('[data-step-chip]'); if(stp){ state.step=parseInt(stp.getAttribute('data-step-chip'),10)||1; renderCotizar(); return; }
       var cob=ev.target.closest('[data-cobrar]'); if(cob){ cobrar(parseInt(cob.getAttribute('data-cobrar'),10)); return; }
+      var dn=ev.target.closest('[data-done]'); if(dn){ cobrarEntregado(parseInt(dn.getAttribute('data-done'),10)); return; }
       var est=ev.target.closest('[data-estado-btn]'); if(est){ cycleEstado(parseInt(est.getAttribute('data-estado-btn'),10)); return; }
       var tk=ev.target.closest('[data-ticket]'); if(tk){ sendWhatsApp(orderById(parseInt(tk.getAttribute('data-ticket'),10))); return; }
       var pf=ev.target.closest('[data-pdf]'); if(pf){ printOrder(orderById(parseInt(pf.getAttribute('data-pdf'),10))); return; }
