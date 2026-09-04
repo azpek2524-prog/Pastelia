@@ -951,7 +951,7 @@
     var av=isMob?'40px':'44px';
     return '<div data-go="agenda" style="cursor:pointer;background:var(--surface);border-radius:18px;padding:'+(isMob?'12px 14px':'14px 16px')+';display:flex;align-items:center;gap:'+(isMob?'12px':'14px')+';box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">'
       + '<div style="width:'+av+';height:'+av+';border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
-      + '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:'+(isMob?'14px':'15px')+'">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:'+(isMob?'11px':'12px')+';color:var(--muted);font-weight:700">'+esc(o.cliente||'Cliente')+'</div></div>'
+      + '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:'+(isMob?'14px':'15px')+'">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:'+(isMob?'11px':'12px')+';color:var(--muted);font-weight:700">'+esc(o.cliente||'Cliente')+' · '+esc(fFecha(o.fechaEvento))+'</div></div>'
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:'+(isMob?'15px':'16px')+'">'+money(o.total)+'</div>'+inicioEstadoBadge(o)+'</div>'
       + '</div>';
   }
@@ -970,6 +970,8 @@
   function renderInicio(){
     var orders=readOrders(), t=todayISO();
     var hoyList=orders.filter(function(o){ return o.fechaEvento===t; });
+    // Próximas entregas (fecha futura), ordenadas de más cercana a más lejana.
+    var upcoming=orders.filter(function(o){ return o.fechaEvento && o.fechaEvento>t; }).sort(function(a,b){ return a.fechaEvento<b.fechaEvento?-1:(a.fechaEvento>b.fechaEvento?1:0); });
     var sem=0, cobrar=0, mes=0, cobradas=0, porCobrarN=0;
     var incDia=0, incSem=0, incMes=0;   // ingresos cobrados (pagado===true) por fecha de evento
     orders.forEach(function(o){
@@ -995,11 +997,20 @@
     qsa('[data-in-porcobrar]').forEach(function(el){ el.textContent=money(cobrar); });
     qsa('[data-in-mes]').forEach(function(el){ el.textContent=money(mes); });
     qsa('[data-in-cobradas]').forEach(function(el){ el.textContent=cobradas+' cobrado'+(cobradas===1?'':'s'); });
-    qsa('[data-in-proxima]').forEach(function(el){ el.textContent = hoyList.length ? ('Próxima: '+(hoyList[0].cliente||'Pedido')+' · '+(hoyList[0].receta||'')) : 'Sin entregas para hoy'; });
+    qsa('[data-in-proxima]').forEach(function(el){
+      if(hoyList.length){ el.textContent='Próxima: '+(hoyList[0].cliente||'Pedido')+' · '+(hoyList[0].receta||''); }
+      else if(upcoming.length){ el.textContent='Próxima entrega: '+fFecha(upcoming[0].fechaEvento)+' · '+(upcoming[0].cliente||'Pedido'); }
+      else el.textContent='Sin entregas para hoy';
+    });
     qsa('[data-in-hoy-list]').forEach(function(list){
       var isMob=!!list.closest('#mobile');
-      if(!hoyList.length){ list.innerHTML='<div style="background:var(--surface);border-radius:18px;padding:20px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">No hay entregas para hoy</div>'; return; }
-      list.innerHTML=hoyList.map(function(o){ return inicioHoyCard(o,isMob); }).join('');
+      if(hoyList.length){ list.innerHTML=hoyList.map(function(o){ return inicioHoyCard(o,isMob); }).join(''); return; }
+      if(upcoming.length){
+        list.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 8px">Sin entregas para hoy · próximas entregas:</div>'
+          + upcoming.slice(0,5).map(function(o){ return inicioHoyCard(o,isMob); }).join('');
+        return;
+      }
+      list.innerHTML='<div style="background:var(--surface);border-radius:18px;padding:20px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">Aún no hay pedidos. Crea una cotización para verla aquí.</div>'; return;
     });
     qsa('[data-in-recetas]').forEach(function(g){
       var favs=recipes.slice(0,3);
