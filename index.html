@@ -117,14 +117,14 @@
             <div style="position:relative;padding:6px 24px 0">
               <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 18px">
                 <div style="color:var(--on-dark)">
-                  <div data-in-saludo style="font-size:13px;font-weight:800;opacity:.9">Buen día ☀️</div>
+                  <div data-in-saludo style="font-size:13px;font-weight:800;opacity:.9">Buen día</div>
                   <div data-biz-name style="font-family:'Fredoka';font-weight:600;font-size:26px;line-height:1.05">Azucena's Cake Studio</div>
                 </div>
                 <div data-go="marca" data-biz-logo data-logo-size="48" data-logo-radius="16" style="cursor:pointer"></div>
               </div>
               <div style="display:flex;align-items:flex-end;gap:14px;color:var(--on-dark);padding-bottom:6px">
                 <div data-in-hoy style="font-family:'Fredoka';font-weight:700;font-size:76px;line-height:.85">0</div>
-                <div style="padding-bottom:10px"><div style="font-family:'Fredoka';font-weight:500;font-size:20px;line-height:1">entregas</div><div style="font-size:13px;font-weight:800;opacity:.9">para hoy 🎉</div></div>
+                <div style="padding-bottom:10px"><div style="font-family:'Fredoka';font-weight:500;font-size:20px;line-height:1">entregas</div><div style="font-size:13px;font-weight:800;opacity:.9">para hoy</div></div>
               </div>
             </div>
             <div style="position:relative;padding:10px 22px 90px">
@@ -317,7 +317,7 @@
       <div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px">
           <div>
-            <div data-in-saludo style="font-size:13px;font-weight:800;color:var(--muted)">Buen día ☀️</div>
+            <div data-in-saludo style="font-size:13px;font-weight:800;color:var(--muted)">Buen día</div>
             <div data-biz-name style="font-family:'Fredoka';font-weight:600;font-size:32px;line-height:1.1">Azucena's Cake Studio</div>
           </div>
           <div style="background:var(--field);border-radius:14px;padding:11px 16px;font-weight:700;font-size:13px;color:var(--muted)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-3px"><circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/></svg>Buscar pedido, cliente…</div>
@@ -368,7 +368,7 @@
     <div class="pane" data-scr="cotizar">
       <div>
         <div style="font-family:'Fredoka';font-weight:600;font-size:32px;margin-bottom:4px">Nueva cotización</div>
-        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Llena los pasos y el precio se calcula solo ✨</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Llena los pasos y el precio se calcula solo</div>
         <div style="display:grid;grid-template-columns:1.7fr 1fr;gap:20px;align-items:start">
           <!-- left: steps -->
           <div style="display:flex;flex-direction:column;gap:16px">
@@ -829,7 +829,12 @@
   function saveOrders(a){ try{ localStorage.setItem(ORDERS_KEY, JSON.stringify(a)); }catch(e){} }
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
-  function fFecha(iso){ if(!iso) return 'Sin fecha'; var p=(''+iso).split('-'); if(p.length!==3) return iso; var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return parseInt(p[2],10)+' '+m[parseInt(p[1],10)-1]; }
+  function fFecha(iso){ if(!iso) return 'Sin fecha'; var p=(''+iso).split('T')[0].split('-'); if(p.length!==3) return iso; var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return parseInt(p[2],10)+' '+m[parseInt(p[1],10)-1]; }
+  // ---- Fecha/hora en zona horaria LOCAL del dispositivo (evita desfase por UTC) ----
+  function pad2(n){ return ('0'+n).slice(-2); }
+  function localISO(){ var d=new Date(); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds()); }
+  function fHora(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return ''; try{ return d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}); }catch(e){ return pad2(d.getHours())+':'+pad2(d.getMinutes()); } }
+  function fFechaHora(iso){ var d=iso?new Date(iso):new Date(); if(isNaN(d.getTime())) d=new Date(); try{ return d.toLocaleString('es-MX',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}); }catch(e){ return fFecha(iso)+' '+fHora(iso); } }
   function within7(iso){ if(!iso) return false; var d=new Date(iso+'T00:00:00'); var n=new Date(); n.setHours(0,0,0,0); var diff=(d-n)/86400000; return diff>=0 && diff<=7; }
 
   function toast(msg){
@@ -848,7 +853,7 @@
   function doneBtnMob(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" style="margin-top:8px;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',15,'margin-right:6px;vertical-align:-3px')+'Cobrado y entregado</div>'; }
   function doneBtnDesk(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" title="Cobrado y entregado" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',16)+'</div>'; }
   function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
-  function orderSub(o){ var x = (o.modo==='personalizado' && o.forma) ? ' · '+esc(o.forma) : ''; return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+' · '+esc(o.receta||'Pastel')+x; }
+  function orderSub(o){ var x = (o.modo==='personalizado' && o.forma) ? ' · '+esc(o.forma) : ''; var h=fHora(o.creado); return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+(h?' '+h:'')+' · '+esc(o.receta||'Pastel')+x; }
   function estadoInfo(o){
     var e=o.estado||'Cotizado';
     if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'var(--text)' };
@@ -867,7 +872,7 @@
     return '<div style="background:var(--surface);border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(123,91,75,.4)">'
       + '<div style="display:flex;align-items:center;gap:12px">'
       + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
-      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+(o.modo==='personalizado'&&o.forma?' · '+esc(o.forma):'')+'</div></div>'
+      + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+(fHora(o.creado)?' '+fHora(o.creado):'')+(o.modo==='personalizado'&&o.forma?' · '+esc(o.forma):'')+'</div></div>'
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div>'+statusHtml(o,false)+'</div>'
       + '</div>'
       + '<div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)">'
@@ -941,14 +946,19 @@
   var DIAS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
   var MESES_L=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   function qsa(s){ return Array.prototype.slice.call(document.querySelectorAll(s)); }
-  function saludoTxt(){ var d=new Date(), h=d.getHours(); var s=h<12?'Buen día ☀️':(h<19?'Buenas tardes ☀️':'Buenas noches 🌙'); return DIAS[d.getDay()]+' '+d.getDate()+' de '+MESES_L[d.getMonth()]+' · '+s; }
+  function saludoTxt(){ var d=new Date(), h=d.getHours(); var s=h<12?'Buen día':(h<19?'Buenas tardes':'Buenas noches'); return DIAS[d.getDay()]+' '+d.getDate()+' de '+MESES_L[d.getMonth()]+' · '+s; }
   function sameMonth(iso){ if(!iso) return false; var d=new Date(iso), n=new Date(); return d.getFullYear()===n.getFullYear() && d.getMonth()===n.getMonth(); }
   function inicioEstadoBadge(o){ var e=o.pagado?'Pagado':(o.estado||'Cotizado'); return '<div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:3px 9px">'+esc(e)+'</div>'; }
   function inicioHoyCard(o,isMob){
     var av=isMob?'40px':'44px';
+    // Miniatura: usa la imagen de referencia del pedido si existe; si no, el ícono de pastel.
+    var thumb = o.imagenRef
+      ? '<div style="width:'+av+';height:'+av+';border-radius:12px;overflow:hidden;flex:none"><img src="'+o.imagenRef+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>'
+      : '<div style="width:'+av+';height:'+av+';border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--brand-primary);flex:none">'+icSvg('cake',22)+'</div>';
+    var hora=fHora(o.creado);
     return '<div data-go="agenda" style="cursor:pointer;background:var(--surface);border-radius:18px;padding:'+(isMob?'12px 14px':'14px 16px')+';display:flex;align-items:center;gap:'+(isMob?'12px':'14px')+';box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">'
-      + '<div style="width:'+av+';height:'+av+';border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
-      + '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:'+(isMob?'14px':'15px')+'">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:'+(isMob?'11px':'12px')+';color:var(--muted);font-weight:700">'+esc(o.cliente||'Cliente')+' · '+esc(fFecha(o.fechaEvento))+'</div></div>'
+      + thumb
+      + '<div style="flex:1;min-width:0"><div style="font-weight:800;font-size:'+(isMob?'14px':'15px')+'">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:'+(isMob?'11px':'12px')+';color:var(--muted);font-weight:700">'+esc(o.cliente||'Cliente')+' · '+esc(fFecha(o.fechaEvento))+(hora?' · '+hora:'')+'</div></div>'
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:'+(isMob?'15px':'16px')+'">'+money(o.total)+'</div>'+inicioEstadoBadge(o)+'</div>'
       + '</div>';
   }
@@ -1001,10 +1011,19 @@
     });
     qsa('[data-in-hoy-list]').forEach(function(list){
       var isMob=!!list.closest('#mobile');
-      if(hoyList.length){ list.innerHTML=hoyList.map(function(o){ return inicioHoyCard(o,isMob); }).join(''); return; }
+      function sect(title,n){ return '<div style="display:flex;align-items:center;gap:8px;margin:0 2px 8px"><div style="font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.02em">'+title+'</div><div style="font-size:11px;font-weight:800;color:var(--brand-primary);background:var(--tint2);border-radius:20px;padding:1px 9px">'+n+'</div></div>'; }
+      function mini(txt){ return '<div style="background:var(--surface);border-radius:16px;padding:14px;text-align:center;color:var(--muted);font-weight:700;font-size:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">'+txt+'</div>'; }
+      function group(arr){ return '<div style="display:flex;flex-direction:column;gap:10px">'+arr.map(function(o){ return inicioHoyCard(o,isMob); }).join('')+'</div>'; }
+      if(hoyList.length){
+        var pend=hoyList.filter(function(o){ return (o.estado||'Cotizado')!=='Entregado'; });
+        var done=hoyList.filter(function(o){ return (o.estado||'Cotizado')==='Entregado'; });
+        list.innerHTML =
+            '<div data-in-pendientes>'+sect('Pedidos pendientes',pend.length)+(pend.length?group(pend):mini('Sin pendientes por entregar'))+'</div>'
+          + '<div data-in-entregados>'+sect('Entregados hoy',done.length)+(done.length?group(done):mini('Aún no hay entregados hoy'))+'</div>';
+        return;
+      }
       if(upcoming.length){
-        list.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 8px">Sin entregas para hoy · próximas entregas:</div>'
-          + upcoming.slice(0,5).map(function(o){ return inicioHoyCard(o,isMob); }).join('');
+        list.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 8px">Sin entregas para hoy · próximas entregas:</div>'+group(upcoming.slice(0,5));
         return;
       }
       list.innerHTML='<div style="background:var(--surface);border-radius:18px;padding:20px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">Aún no hay pedidos. Crea una cotización para verla aquí.</div>'; return;
@@ -1398,7 +1417,7 @@
       imagenRef:state.imagenRef,
       ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim(); }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
       tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
-      total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:new Date().toISOString()
+      total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:localISO()
     };
   }
   function quoteFromPane(){ return buildOrder(); }
@@ -1430,7 +1449,7 @@
     var ink='#5A4236', soft='rgba(90,66,54,.62)', cream='#FFF4E6', cream2='#F6ECD9', gold='#E7B676', line='#EBDFC9';
     function psvg(name){ return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="'+pc+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;vertical-align:middle">'+(ICONS[name]||'')+'</svg>'; }
     var extras=(o.extras&&o.extras.length)?o.extras.join(', '):'—';
-    var fecha=new Date().toLocaleDateString('es-MX'), folio='#'+String(o.id||Date.now()).slice(-5);
+    var fecha=fFechaHora(o.creado), folio='#'+String(o.id||Date.now()).slice(-5);
     var logoBlock = marca.logoUrl
       ? '<img src="'+marca.logoUrl+'" style="width:56px;height:56px;border-radius:16px;object-fit:cover;display:block">'
       : '<div style="width:56px;height:56px;border-radius:16px;background:'+pc+';display:flex;align-items:center;justify-content:center;color:#fff;font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">'+esc((bizName().trim().charAt(0)||'P').toUpperCase())+'</div>';
