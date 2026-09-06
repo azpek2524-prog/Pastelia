@@ -835,6 +835,14 @@
   function localISO(){ var d=new Date(); return d.getFullYear()+'-'+pad2(d.getMonth()+1)+'-'+pad2(d.getDate())+'T'+pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds()); }
   function fHora(iso){ if(!iso) return ''; var d=new Date(iso); if(isNaN(d.getTime())) return ''; try{ return d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit',hour12:false}); }catch(e){ return pad2(d.getHours())+':'+pad2(d.getMinutes()); } }
   function fFechaHora(iso){ var d=iso?new Date(iso):new Date(); if(isNaN(d.getTime())) d=new Date(); try{ return d.toLocaleString('es-MX',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hour12:false}); }catch(e){ return fFecha(iso)+' '+fHora(iso); } }
+  // Foto de un pedido: imagen de referencia (personalizado) o la foto de su receta guardada.
+  function orderPhoto(o){
+    if(!o) return '';
+    if(o.imagenRef) return o.imagenRef;
+    if(o.photo) return o.photo;
+    if(o.recetaId){ var r=recipeById(o.recetaId); if(r&&r.photoBase64) return r.photoBase64; }
+    return '';
+  }
   function within7(iso){ if(!iso) return false; var d=new Date(iso+'T00:00:00'); var n=new Date(); n.setHours(0,0,0,0); var diff=(d-n)/86400000; return diff>=0 && diff<=7; }
 
   function toast(msg){
@@ -867,11 +875,16 @@
       ? '<div style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;color:var(--muted)">✓ Cobrado</div>'
       : '<div data-cobrar="'+o.id+'" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('coin',15,'margin-right:5px')+'Cobrar</div>'; }
 
+  function orderAvatar(o,size,radius,iconSize,bg){
+    var foto=orderPhoto(o);
+    if(foto) return '<div style="width:'+size+'px;height:'+size+'px;border-radius:'+radius+'px;overflow:hidden;flex:none"><img src="'+foto+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>';
+    return '<div style="width:'+size+'px;height:'+size+'px;border-radius:'+radius+'px;background:'+bg+';display:flex;align-items:center;justify-content:center;color:var(--text);flex:none">'+icSvg('cake',iconSize)+'</div>';
+  }
   function mobCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length];
     return '<div style="background:var(--surface);border-radius:20px;padding:14px 16px;box-shadow:0 8px 20px -14px rgba(123,91,75,.4)">'
       + '<div style="display:flex;align-items:center;gap:12px">'
-      + '<div style="width:44px;height:44px;border-radius:14px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',22)+'</div>'
+      + orderAvatar(o,44,14,22,ava)
       + '<div style="flex:1"><div style="font-weight:800;font-size:15px">'+esc(o.receta||o.tamano)+' · '+o.porciones+'p</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+esc(o.cliente)+' · '+fFecha(o.fechaEvento)+(fHora(o.creado)?' '+fHora(o.creado):'')+(o.modo==='personalizado'&&o.forma?' · '+esc(o.forma):'')+'</div></div>'
       + '<div style="text-align:right"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px">'+money(o.total)+'</div>'+statusHtml(o,false)+'</div>'
       + '</div>'
@@ -886,7 +899,7 @@
   function deskCard(o,i){
     var ava=AVA_BG[i%AVA_BG.length];
     return '<div style="background:var(--surface);border-radius:20px;padding:18px 20px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;gap:16px">'
-      + '<div style="width:52px;height:52px;border-radius:16px;background:'+ava+';display:flex;align-items:center;justify-content:center;color:var(--text)">'+icSvg('cake',24)+'</div>'
+      + orderAvatar(o,52,16,24,ava)
       + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+orderSub(o)+'</div></div>'
       + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
       + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div>'+cobrarDesk(o)+doneBtnDesk(o)+'</div>'
@@ -951,9 +964,10 @@
   function inicioEstadoBadge(o){ var e=o.pagado?'Pagado':(o.estado||'Cotizado'); return '<div style="font-size:10px;font-weight:800;color:var(--text);background:var(--badge);border-radius:20px;padding:3px 9px">'+esc(e)+'</div>'; }
   function inicioHoyCard(o,isMob){
     var av=isMob?'40px':'44px';
-    // Miniatura: usa la imagen de referencia del pedido si existe; si no, el ícono de pastel.
-    var thumb = o.imagenRef
-      ? '<div style="width:'+av+';height:'+av+';border-radius:12px;overflow:hidden;flex:none"><img src="'+o.imagenRef+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>'
+    // Miniatura: imagen de referencia del pedido o foto de su receta; si no, ícono de pastel.
+    var foto=orderPhoto(o);
+    var thumb = foto
+      ? '<div style="width:'+av+';height:'+av+';border-radius:12px;overflow:hidden;flex:none"><img src="'+foto+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>'
       : '<div style="width:'+av+';height:'+av+';border-radius:12px;background:var(--tint2);display:flex;align-items:center;justify-content:center;color:var(--brand-primary);flex:none">'+icSvg('cake',22)+'</div>';
     var hora=fHora(o.creado);
     return '<div data-go="agenda" style="cursor:pointer;background:var(--surface);border-radius:18px;padding:'+(isMob?'12px 14px':'14px 16px')+';display:flex;align-items:center;gap:'+(isMob?'12px':'14px')+';box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">'
@@ -1415,6 +1429,7 @@
       detallesDiseno: esPers ? state.detallesDiseno.trim() : (rec.detallesDiseno||''),
       mensajePastel:state.mensajePastel.trim(), alergias:state.alergias.trim(),
       imagenRef:state.imagenRef,
+      photo: esPers ? state.imagenRef : ((state.recipe&&state.recipe.photoBase64)||''),
       ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim(); }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
       tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
       total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:localISO()
