@@ -95,6 +95,23 @@
   input,select,textarea{max-width:100%;box-sizing:border-box}
   select{min-width:0}
   [data-cotizar-form],[data-cotizar-form] *{min-width:0}
+  /* ---------- Cotizador: alineación simétrica de campos (incl. fechas) ---------- */
+  [data-sec1grid]{align-items:end}
+  [data-sec1grid] input{height:46px;box-sizing:border-box;line-height:1.2}
+  [data-sec1grid] input[type="date"]{-webkit-appearance:none;appearance:none;text-align:left}
+  [data-sec1grid] input[type="date"]::-webkit-date-and-time-value{text-align:left;margin:0}
+  [data-sec1grid] input[type="date"]::-webkit-datetime-edit{padding:0}
+  [data-sec1grid] input[type="date"]::-webkit-calendar-picker-indicator{margin-left:auto;opacity:.5}
+  /* ---------- Hero móvil con textura/profundidad (glassmorphism sutil sobre color de marca) ---------- */
+  .hero-mob{position:absolute;top:0;left:0;right:0;height:270px;overflow:hidden;
+    background:
+      radial-gradient(120% 85% at 85% -12%, rgba(255,255,255,.24), rgba(255,255,255,0) 55%),
+      radial-gradient(95% 78% at -10% 118%, rgba(0,0,0,.20), rgba(0,0,0,0) 55%),
+      linear-gradient(150deg,var(--hero1),var(--hero2))}
+  .hero-mob::before{content:'';position:absolute;inset:0;pointer-events:none;opacity:.55;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Ccircle cx='6' cy='6' r='1.4' fill='%23ffffff' fill-opacity='0.12'/%3E%3Ccircle cx='28' cy='24' r='1.1' fill='%23ffffff' fill-opacity='0.08'/%3E%3C/svg%3E")}
+  .hero-mob::after{content:'';position:absolute;left:-25%;right:-25%;top:-45%;height:150%;pointer-events:none;
+    background:radial-gradient(55% 55% at 50% 50%, rgba(255,255,255,.16), rgba(255,255,255,0) 70%);transform:rotate(-10deg)}
   .theme-toggle{position:fixed;right:18px;bottom:18px;z-index:40;width:44px;height:44px;border-radius:50%;background:var(--surface);border:1px solid var(--line);box-shadow:0 10px 24px -10px rgba(20,14,10,.35);display:flex;align-items:center;justify-content:center;color:var(--text);cursor:pointer;padding:0}
   .theme-toggle:hover{background:var(--field)}
   @media (max-width:899px){ .theme-toggle{bottom:calc(104px + env(safe-area-inset-bottom,0px))} }
@@ -111,7 +128,7 @@
         <!-- ================= INICIO ================= -->
         <div class="pane" data-scr="inicio">
           <div style="position:relative;color:var(--text);min-height:100%">
-            <div style="position:absolute;top:0;left:0;right:0;height:270px;background:linear-gradient(150deg,var(--hero1),var(--hero2))"></div>
+            <div class="hero-mob"></div>
             <svg viewBox="0 0 390 40" preserveAspectRatio="none" style="position:absolute;top:250px;left:0;width:100%;height:40px" xmlns="http://www.w3.org/2000/svg"><path d="M0 40 C 32 6, 65 6, 97 24 S 162 42, 195 24 S 260 6, 292 24 S 358 42, 390 20 L390 40 Z" fill="var(--main)"></path></svg>
             <div style="height:env(safe-area-inset-top,0px)"></div>
             <div style="position:relative;padding:6px 24px 0">
@@ -650,7 +667,7 @@
   }
 
   function sec1Html(){
-    var g = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">';
+    var g = '<div data-sec1grid style="display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:end">';
     g += '<div style="grid-column:span 2">'+fLab('NOMBRE')+fTxt('nombre','text','Marisol González',state.nombre)+'</div>';
     g += '<div>'+fLab('TELÉFONO')+fTxt('tel','tel','55 1234 5678',state.tel)+'</div>';
     g += '<div>'+fLab('NÚMERO DE INVITADOS')+fTxt('invitados','number','50',state.invitados||'')+'</div>';
@@ -1213,7 +1230,10 @@
       var active = state.recipe && state.recipe.id===r.id;
       var row=document.createElement('div');
       row.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;cursor:pointer;background:'+(active?'var(--sel)':'var(--field)')+';border:2px solid '+(active?'var(--accent)':'transparent');
-      row.innerHTML='<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark)">'+icSvg('cake',22)+'</div><div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · costo '+money(recipeInsumos(r))+'</div></div>'+(active?'<div style="color:var(--text);font-weight:800;font-size:18px">✓</div>':'');
+      var rthumb = r.photoBase64
+        ? '<div style="width:40px;height:40px;border-radius:12px;overflow:hidden;flex:none"><img src="'+r.photoBase64+'" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>'
+        : '<div style="width:40px;height:40px;border-radius:12px;background:'+r.grad+';display:flex;align-items:center;justify-content:center;color:var(--on-dark);flex:none">'+icSvg('cake',22)+'</div>';
+      row.innerHTML=rthumb+'<div style="flex:1"><div style="font-weight:800;font-size:14px">'+esc(r.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">'+recipeIngCount(r)+' ingredientes · costo '+money(recipeInsumos(r))+'</div></div>'+(active?'<div style="color:var(--text);font-weight:800;font-size:18px">✓</div>':'');
       row.addEventListener('click', function(){ state.recipe=r; state.modoReceta='receta'; renderCotizar(); modal.close(); toast('Receta: '+r.nombre); });
       list.appendChild(row);
     });
