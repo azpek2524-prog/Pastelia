@@ -149,7 +149,7 @@
                 <div data-inc-chart></div>
               </div>
               <div style="display:flex;justify-content:space-between;align-items:baseline;margin:20px 2px 10px">
-                <div style="font-family:'Fredoka';font-weight:600;font-size:16px">Entregas de hoy</div>
+                <div style="font-family:'Fredoka';font-weight:600;font-size:16px">Pedidos</div>
                 <div data-go="agenda" style="cursor:pointer;font-size:12px;font-weight:800;color:var(--text)">Ver todas</div>
               </div>
               <div data-in-hoy-list style="display:flex;flex-direction:column;gap:10px"></div>
@@ -353,7 +353,7 @@
         <!-- two columns: entregas + próximos -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
           <div>
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Entregas de hoy</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:var(--text)">Ver agenda</div></div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px"><div style="font-family:'Fredoka';font-weight:600;font-size:19px">Pedidos</div><div data-go="agenda" style="cursor:pointer;font-size:13px;font-weight:800;color:var(--text)">Ver agenda</div></div>
             <div data-in-hoy-list style="display:flex;flex-direction:column;gap:12px"></div>
           </div>
           <div>
@@ -1023,24 +1023,21 @@
       else if(upcoming.length){ el.textContent='Próxima entrega: '+fFecha(upcoming[0].fechaEvento)+' · '+(upcoming[0].cliente||'Pedido'); }
       else el.textContent='Sin entregas para hoy';
     });
+    // Listas del inicio: TODOS los pedidos (no solo los de hoy) separados por estado,
+    // para que cada pedido agregado sea visible. Pendientes por fecha más cercana; entregados, recientes.
+    var CAP_IN=8;
+    var pendAll=orders.filter(function(o){ return (o.estado||'Cotizado')!=='Entregado'; }).sort(function(a,b){ var fa=a.fechaEvento||'9999-99-99', fb=b.fechaEvento||'9999-99-99'; return fa<fb?-1:(fa>fb?1:0); });
+    var doneAll=orders.filter(function(o){ return (o.estado||'Cotizado')==='Entregado'; }).sort(function(a,b){ var ca=a.creado||'', cb=b.creado||''; return ca<cb?1:(ca>cb?-1:0); });
     qsa('[data-in-hoy-list]').forEach(function(list){
       var isMob=!!list.closest('#mobile');
       function sect(title,n){ return '<div style="display:flex;align-items:center;gap:8px;margin:0 2px 8px"><div style="font-size:12px;font-weight:800;color:var(--muted);letter-spacing:.02em">'+title+'</div><div style="font-size:11px;font-weight:800;color:var(--brand-primary);background:var(--tint2);border-radius:20px;padding:1px 9px">'+n+'</div></div>'; }
       function mini(txt){ return '<div style="background:var(--surface);border-radius:16px;padding:14px;text-align:center;color:var(--muted);font-weight:700;font-size:12px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">'+txt+'</div>'; }
       function group(arr){ return '<div style="display:flex;flex-direction:column;gap:10px">'+arr.map(function(o){ return inicioHoyCard(o,isMob); }).join('')+'</div>'; }
-      if(hoyList.length){
-        var pend=hoyList.filter(function(o){ return (o.estado||'Cotizado')!=='Entregado'; });
-        var done=hoyList.filter(function(o){ return (o.estado||'Cotizado')==='Entregado'; });
-        list.innerHTML =
-            '<div data-in-pendientes>'+sect('Pedidos pendientes',pend.length)+(pend.length?group(pend):mini('Sin pendientes por entregar'))+'</div>'
-          + '<div data-in-entregados>'+sect('Entregados hoy',done.length)+(done.length?group(done):mini('Aún no hay entregados hoy'))+'</div>';
-        return;
-      }
-      if(upcoming.length){
-        list.innerHTML='<div style="font-size:12px;font-weight:800;color:var(--muted);margin:0 2px 8px">Sin entregas para hoy · próximas entregas:</div>'+group(upcoming.slice(0,5));
-        return;
-      }
-      list.innerHTML='<div style="background:var(--surface);border-radius:18px;padding:20px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">Aún no hay pedidos. Crea una cotización para verla aquí.</div>'; return;
+      function more(total){ return total>CAP_IN ? '<div data-go="agenda" style="cursor:pointer;text-align:center;font-size:11px;font-weight:800;color:var(--brand-primary);padding:9px 0 2px">+'+(total-CAP_IN)+' más · Ver agenda</div>' : ''; }
+      if(!orders.length){ list.innerHTML='<div style="background:var(--surface);border-radius:18px;padding:20px;text-align:center;color:var(--muted);font-weight:700;font-size:13px;box-shadow:0 6px 16px -12px rgba(123,91,75,.4)">Aún no hay pedidos. Crea una cotización para verla aquí.</div>'; return; }
+      list.innerHTML =
+          '<div data-in-pendientes>'+sect('Pedidos pendientes',pendAll.length)+(pendAll.length?group(pendAll.slice(0,CAP_IN))+more(pendAll.length):mini('Sin pedidos pendientes'))+'</div>'
+        + '<div data-in-entregados style="margin-top:16px">'+sect('Entregados',doneAll.length)+(doneAll.length?group(doneAll.slice(0,CAP_IN))+more(doneAll.length):mini('Aún no hay pedidos entregados'))+'</div>';
     });
     qsa('[data-in-recetas]').forEach(function(g){
       var favs=recipes.slice(0,3);
