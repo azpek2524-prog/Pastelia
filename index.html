@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>Pastelia</title>
 <meta name="theme-color" content="#7B5B4B">
 <script>try{if(localStorage.getItem('pastelia_theme')==='dark')document.documentElement.setAttribute('data-theme','dark');}catch(e){}</script>
@@ -93,6 +93,8 @@
   ::placeholder{color:var(--muted);opacity:1}
   /* Guarda anti-desbordamiento: ningún input/select/textarea excede su contenedor */
   input,select,textarea{max-width:100%;box-sizing:border-box}
+  /* Evita el auto-zoom de iOS al enfocar campos: fuente mínima de 16px (anula estilos inline menores) */
+  input,select,textarea{font-size:16px!important}
   select{min-width:0}
   [data-cotizar-form],[data-cotizar-form] *{min-width:0}
   /* ---------- Cotizador: alineación simétrica de campos (incl. fechas) ---------- */
