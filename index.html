@@ -247,10 +247,7 @@
               <input type="text" data-buscar-insumo placeholder="🔍 Buscar insumo…" style="width:100%;box-sizing:border-box;background:var(--field);border-radius:16px;padding:12px 14px;margin-top:14px;font-weight:700;font-size:16px;color:var(--text);border:0;outline:none;font-family:inherit">
               <div data-insumos-list style="display:flex;flex-direction:column;gap:10px;margin-top:14px"></div>
               <div style="font-family:'Fredoka';font-weight:600;font-size:16px;margin:20px 2px 10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/></svg>Extras de diseño</div>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="background:var(--surface);border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
-                <div style="background:var(--surface);border-radius:18px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
-              </div>
+              <div data-extras-list style="display:flex;flex-direction:column;gap:10px"></div>
               <div style="background:var(--surface);border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;justify-content:space-between">
                 <div><div style="font-size:12px;font-weight:800;color:var(--muted)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:var(--muted)">Aplicado a cada cotización</div></div>
                 <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:var(--text)">40%</div>
@@ -477,11 +474,7 @@
           </div>
           <div style="background:var(--surface);border-radius:22px;padding:22px;box-shadow:0 10px 24px -18px rgba(123,91,75,.45)">
             <div style="font-family:'Fredoka';font-weight:600;font-size:18px;margin-bottom:14px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/></svg>Extras de diseño</div>
-            <div style="display:flex;flex-direction:column;gap:10px">
-              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--field);border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Flores naturales</div><div style="font-family:'Fredoka';font-weight:600">$120</div></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--field);border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Topper personalizado</div><div style="font-family:'Fredoka';font-weight:600">$80</div></div>
-              <div style="display:flex;justify-content:space-between;align-items:center;background:var(--field);border-radius:14px;padding:12px 16px"><div style="font-weight:800;font-size:14px">Piso extra</div><div style="font-family:'Fredoka';font-weight:600">$350</div></div>
-            </div>
+            <div data-extras-list style="display:flex;flex-direction:column;gap:10px"></div>
             <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:16px">
               <div style="font-size:12px;font-weight:800;color:var(--muted)">Margen de ganancia</div>
               <div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:var(--text)">40%</div><div style="font-size:12px;font-weight:700;color:var(--muted)">aplicado a cada cotización</div></div>
@@ -1311,6 +1304,64 @@
     box.querySelector('#ic-cancel').addEventListener('click', function(){ modal.close(); });
   }
 
+  /* ---------- Extras de diseño: render + editor (apartado Precios) ---------- */
+  function extraRow(name, isMob){
+    var custom = extrasCustom.hasOwnProperty(name);
+    var base = isMob
+      ? 'background:var(--surface);border-radius:18px;padding:12px 16px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4)'
+      : 'background:var(--field);border-radius:14px;padding:12px 16px';
+    return '<div '+(custom?'data-extra="'+esc(name)+'" ':'')+'style="'+base+';display:flex;justify-content:space-between;align-items:center;gap:10px'+(custom?';cursor:pointer':'')+'">'
+      + '<div style="font-weight:800;font-size:14px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(name)+'</div>'
+      + '<div style="display:flex;align-items:center;gap:8px;flex:none"><div style="font-family:\'Fredoka\';font-weight:600">'+money(EXTRAS[name])+'</div>'
+      + (custom?'<span style="color:var(--muted);font-weight:800;font-size:16px;line-height:1">›</span>':'')+'</div>'
+      + '</div>';
+  }
+  function extraAddTile(){
+    return '<div data-action="add-extra-precio" style="border:2px dashed var(--accent);border-radius:14px;padding:12px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--text);font-weight:800;font-size:13px;cursor:pointer">'+icSvg('plus',16,'stroke-width:2')+'Añadir extra</div>';
+  }
+  function renderExtras(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-extras-list]'), function(list){
+      var isMob=!!list.closest('#mobile');
+      var html=Object.keys(EXTRAS).map(function(k){ return extraRow(k,isMob); }).join('');
+      html+=extraAddTile();
+      list.innerHTML=html;
+    });
+  }
+  function openExtraEditor(name){
+    var isNew=!name, origName=name||'';
+    var box=document.createElement('div');
+    box.innerHTML =
+      '<div style="font-family:\'Fredoka\';font-weight:600;font-size:20px;margin-bottom:4px">'+(isNew?'Nuevo extra':'Editar extra')+'</div>'
+      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:14px">Se suma al total cuando lo activas en una cotización.</div>'
+      + '<div style="font-size:11px;font-weight:800;color:var(--muted)">NOMBRE</div>'
+      + '<input id="ex-nombre" type="text" placeholder="Ej. Piso extra" style="'+fieldStyle()+'">'
+      + '<div style="margin-top:12px"><div style="font-size:11px;font-weight:800;color:var(--muted)">PRECIO ($)</div><input id="ex-precio" type="number" min="0" step="0.01" style="'+fieldStyle()+'"></div>'
+      + '<div style="display:flex;gap:10px;margin-top:20px">'
+      +   '<div id="ex-save" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:12px;font-family:\'Fredoka\';font-weight:600;font-size:15px;cursor:pointer">Guardar</div>'
+      +   (isNew?'':'<div id="ex-del" style="text-align:center;background:var(--badge);color:#B07C33;border-radius:14px;padding:12px 16px;font-weight:800;font-size:14px;cursor:pointer">Eliminar</div>')
+      + '</div>'
+      + '<div id="ex-cancel" style="text-align:center;color:var(--muted);font-weight:700;font-size:13px;padding:12px 0 0;cursor:pointer">Cancelar</div>';
+    var modal=openModal(box);
+    box.querySelector('#ex-nombre').value=origName;
+    box.querySelector('#ex-precio').value=(name!=null?EXTRAS[name]:'');
+    box.querySelector('#ex-save').addEventListener('click', function(){
+      var nombre=box.querySelector('#ex-nombre').value.trim();
+      if(!nombre){ toast('Escribe el nombre del extra'); return; }
+      var pr=parseFloat(box.querySelector('#ex-precio').value)||0;
+      if(!isNew && origName && origName!==nombre){ delete EXTRAS[origName]; delete extrasCustom[origName]; if(state.extras[origName]){ delete state.extras[origName]; } }
+      EXTRAS[nombre]=pr; extrasCustom[nombre]=pr; saveExtrasCustom(extrasCustom);
+      renderExtras(); modal.close();
+      toast(isNew?'Extra agregado':'Extra actualizado');
+    });
+    var del=box.querySelector('#ex-del');
+    if(del) del.addEventListener('click', function(){
+      if(!confirm('¿Eliminar "'+origName+'"?')) return;
+      delete EXTRAS[origName]; delete extrasCustom[origName]; if(state.extras[origName]){ delete state.extras[origName]; }
+      saveExtrasCustom(extrasCustom); renderExtras(); modal.close(); toast('Extra eliminado');
+    });
+    box.querySelector('#ex-cancel').addEventListener('click', function(){ modal.close(); });
+  }
+
   /* ---------- Marca blanca / tenant (config de la cuenta) ---------- */
   var MARCA_KEY = 'pastelia_marca';
   var BIZ_DEFAULT = "Azucena's Cake Studio";
@@ -1643,6 +1694,7 @@
     renderRecetas();
     renderAgenda();
     renderInsumos();
+    renderExtras();
     renderMarcaForm();
     renderBiz();
     // Guardar (botón estático del resumen)
@@ -1692,6 +1744,7 @@
       var tk=ev.target.closest('[data-ticket]'); if(tk){ sendWhatsApp(orderById(parseInt(tk.getAttribute('data-ticket'),10))); return; }
       var pf=ev.target.closest('[data-pdf]'); if(pf){ printOrder(orderById(parseInt(pf.getAttribute('data-pdf'),10))); return; }
       var ins=ev.target.closest('[data-insumo]'); if(ins){ var it=insumoById(ins.getAttribute('data-insumo')); if(it) openInsumoEditor(it); return; }
+      var xr=ev.target.closest('[data-extra]'); if(xr){ openExtraEditor(xr.getAttribute('data-extra')); return; }
       var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
       var fc=ev.target.closest('[data-fchip]'); if(fc){ handleChip(fc); return; }
       var sw=ev.target.closest('[data-marca-swatch]'); if(sw){ pickBrandColor(sw.getAttribute('data-marca-swatch')); return; }
@@ -1700,6 +1753,7 @@
         if(a==='cambiar'){ openRecipeSelector(); }
         else if(a==='nueva-receta'){ openRecipeEditor(null); }
         else if(a==='add-insumo'){ openInsumoEditor(null); }
+        else if(a==='add-extra-precio'){ openExtraEditor(null); }
         else if(a==='guardar-inv'){ saveInsumos(insumos); toast('Inventario guardado ✓'); }
         else if(a==='pdf'){ printOrder(buildOrder()); }
         else if(a==='ticket'){ sendWhatsApp(buildOrder()); }
