@@ -1605,74 +1605,90 @@
     var pc = marca.primaryColor || '#7B5B4B';
     var ink='#5A4236', soft='rgba(90,66,54,.62)', cream='#FFF4E6', cream2='#F6ECD9', gold='#E7B676', line='#EBDFC9';
     function psvg(name){ return '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="'+pc+'" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="flex:none;vertical-align:middle">'+(ICONS[name]||'')+'</svg>'; }
-    var extras=(o.extras&&o.extras.length)?o.extras.join(', '):'—';
     var fecha=fFechaHora(o.creado), folio='#'+String(o.id||Date.now()).slice(-5);
-    var logoBlock = marca.logoUrl
-      ? '<img src="'+marca.logoUrl+'" style="width:56px;height:56px;border-radius:16px;object-fit:cover;display:block">'
-      : '<div style="width:56px;height:56px;border-radius:16px;background:'+pc+';display:flex;align-items:center;justify-content:center;color:#fff;font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px">'+esc((bizName().trim().charAt(0)||'P').toUpperCase())+'</div>';
-    // Filas de detalle del pastel
-    function drow(k,v){ return '<div style="display:flex;gap:10px;padding:3px 0;font-size:13px"><div style="min-width:96px;color:'+soft+';font-weight:800">'+k+'</div><div style="flex:1;color:'+ink+';font-weight:700">'+v+'</div></div>'; }
-    var det='';
-    det += drow('Tamaño', esc(o.tamano)+' · '+o.porciones+' porciones');
-    if(o.forma) det += drow('Forma', esc(o.forma));
-    if(o.saborPan) det += drow('Pan', esc(o.saborPan));
-    if(o.rellenos&&o.rellenos.length) det += drow('Rellenos', esc(o.rellenos.join(', ')));
-    if(o.cobertura) det += drow('Cobertura', esc(o.cobertura));
-    if(extras!=='—') det += drow('Extras', esc(extras));
-    if(o.mensajePastel) det += drow('Mensaje', esc(o.mensajePastel));
-    if(o.detallesDiseno) det += drow('Diseño', esc(o.detallesDiseno));
-    var entregaTxt = (o.tipoEntrega==='domicilio') ? ('A domicilio'+(o.direccion?' · '+esc(o.direccion):'')) : 'Recoge en local';
-    // PDF público del cliente: solo los NOMBRES de los ingredientes usados (sin precios ni cantidades).
-    var ingTable = '';
-    var ingUsados = (o.ingredientes||[]).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; });
-    if(ingUsados.length){
-      var ingNames = ingUsados.map(function(it){ return esc(it.nombre); }).join(', ');
-      ingTable = '<div style="margin-top:16px;background:'+cream2+';border-radius:16px;padding:16px 18px">'
-        + '<div style="font-family:Nunito,Arial,sans-serif;font-size:11px;font-weight:800;color:'+pc+';letter-spacing:.1em;margin-bottom:8px">INGREDIENTES</div>'
-        + '<div style="font-family:Nunito,Arial,sans-serif;font-size:13px;font-weight:700;color:'+ink+';line-height:1.5">'+ingNames+'</div>'
-        + '</div>';
-    }
-    var alergiasBlock = o.alergias ? '<div style="background:#FBEAE6;border-left:4px solid #C9584F;border-radius:10px;padding:10px 14px;margin-top:14px;color:#9E3B33;font-weight:800;font-size:13px">Alergias / restricciones: '+esc(o.alergias)+'</div>' : '';
-    var imgBlock = o.imagenRef ? '<div style="margin-top:16px"><div style="font-size:11px;font-weight:800;color:'+pc+';letter-spacing:.1em;margin-bottom:6px">REFERENCIA</div><img src="'+o.imagenRef+'" style="max-width:200px;border-radius:12px;border:1px solid '+line+'"></div>' : '';
-    // Pie comercial: teléfono, dirección y redes con íconos SVG
-    var foot=[];
-    if(marca.telefono) foot.push('<span style="display:inline-flex;align-items:center;gap:6px">'+psvg('phone')+esc(marca.telefono)+'</span>');
-    if(marca.direccion) foot.push('<span style="display:inline-flex;align-items:center;gap:6px">'+psvg('pin')+esc(marca.direccion)+'</span>');
-    if(marca.instagram) foot.push('<span style="display:inline-flex;align-items:center;gap:6px">'+psvg('instagram')+esc(marca.instagram)+'</span>');
-    if(marca.facebook) foot.push('<span style="display:inline-flex;align-items:center;gap:6px">'+psvg('facebook')+esc(marca.facebook)+'</span>');
-    var footBand = foot.length
-      ? '<div style="background:'+cream+';border:1px solid '+line+';border-radius:14px;padding:13px 18px;margin-top:8px;display:flex;flex-wrap:wrap;gap:8px 22px;justify-content:center;align-items:center;font-size:12px;font-weight:700;color:'+ink+'">'+foot.join('')+'</div>'
-      : '';
+    var pedidoFecha = o.fechaPedido ? fFecha(o.fechaPedido) : fecha;
+    var evFecha = o.fechaEvento ? fFecha(o.fechaEvento) : '—';
+    var enviar = (o.tipoEntrega==='domicilio'), recoger = !enviar;
+    var rellenoTxt = (o.rellenos&&o.rellenos.length)?o.rellenos.join(', '):'—';
+    var detallesTxt = 'Tamaño: '+(o.tamano||'—')+' ('+(o.porciones||0)+' porciones)'
+      + (o.extras&&o.extras.length ? '  ·  Extras: '+o.extras.join(', ') : '')
+      + (o.detallesDiseno ? '\n'+o.detallesDiseno : '');
+    // Checkbox y figuras (SVG/CSS nativo, sin emojis) en el color de marca.
+    function cbox(on){ return '<span style="display:inline-block;width:15px;height:15px;border:1.5px solid '+pc+';border-radius:3px;background:'+(on?pc:'#fff')+';vertical-align:-3px;position:relative">'+(on?'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:0;top:0"><path d="M5 12.5 10 17.5 19 6.5"/></svg>':'')+'</span>'; }
+    function fshape(cls,on){ var s='display:inline-block;border:1.6px solid '+pc+';background:'+(on?pc:'#fff')+';vertical-align:middle;'; if(cls==='circ') return '<span style="'+s+'width:18px;height:18px;border-radius:50%"></span>'; if(cls==='sq') return '<span style="'+s+'width:16px;height:16px"></span>'; return '<span style="'+s+'width:22px;height:13px"></span>'; }
+    var formaSel=(o.forma||'Redondo');
+    var formaHtml=[['Redondo','circ'],['Cuadrado','sq'],['Rectangular','rect']].map(function(f){ var on=formaSel===f[0]; return '<div style="display:flex;align-items:center;gap:7px;margin:3px 0;'+(on?'':'opacity:.45')+'">'+fshape(f[1],on)+'<span style="font-size:11px;font-weight:700;color:'+ink+'">'+esc(f[0])+'</span></div>'; }).join('');
+    var otra=!!formaSel && formaSel!=='Redondo' && formaSel!=='Cuadrado' && formaSel!=='Rectangular';
+    formaHtml += '<div style="display:flex;align-items:center;gap:7px;margin:3px 0;'+(otra?'':'opacity:.45')+'">'+cbox(otra)+'<span style="font-size:11px;font-weight:700;color:'+ink+'">OTRA</span></div>';
+    var logoBig = marca.logoUrl
+      ? '<img src="'+marca.logoUrl+'" style="width:80px;height:64px;object-fit:contain;object-position:left center;display:block">'
+      : '<div style="width:70px;height:64px;border-radius:14px;background:'+pc+';display:flex;align-items:center;justify-content:center;color:#fff;font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:30px">'+esc((bizName().trim().charAt(0)||'P').toUpperCase())+'</div>';
+    function fl(k,v){ return '<div style="font-size:12.5px;padding:5px 0;border-bottom:1px solid '+line+'"><b style="font-weight:800">'+k+'</b> <span style="font-weight:700">'+v+'</span></div>'; }
+    function bt(t){ return '<div style="font-size:12px;font-weight:800;text-align:center;color:'+pc+';letter-spacing:.03em;margin-bottom:4px">'+t+'</div>'; }
+    var tcell='padding:10px 6px;border-top:1.5px solid '+pc+';text-align:center;font-size:13px;font-weight:700';
 
+    // Comprobante para el cliente: estructura tabular estilo "Formulario de pedido" (sin insumos).
     pr.innerHTML =
-      '<div style="font-family:Nunito,Arial,sans-serif;color:'+ink+';background:#ffffff;max-width:720px;margin:0 auto">'
-      // Encabezado (banda crema)
-      + '<div style="display:flex;align-items:center;gap:16px;background:'+cream+';border:1px solid '+line+';border-radius:20px;padding:20px 22px">'+logoBlock
-      +   '<div style="flex:1"><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:26px;color:'+pc+';line-height:1.05">'+esc(bizName())+'</div>'
-      +     '<span style="display:inline-block;margin-top:8px;background:'+gold+';color:#5A4236;font-size:10px;font-weight:800;letter-spacing:.16em;padding:3px 11px;border-radius:20px">COTIZACIÓN DE PASTEL</span></div>'
-      +   '<div style="text-align:right"><div style="font-size:10px;font-weight:800;color:'+soft+';letter-spacing:.12em">FOLIO</div><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:16px;color:'+pc+'">'+folio+'</div><div style="font-size:11px;font-weight:700;color:'+soft+';margin-top:4px">'+fecha+'</div></div>'
+      '<div style="font-family:Nunito,Arial,sans-serif;color:'+ink+';background:#ffffff;max-width:760px;margin:0 auto">'
+      // HEADER: logo izquierda + título derecha + nombre de la pastelería
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px">'
+      +   '<div>'+logoBig+'</div>'
+      +   '<div style="text-align:right"><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:25px;color:'+pc+';line-height:1.02">FORMULARIO DE<br>PEDIDO DE PASTEL</div>'
+      +     '<div style="letter-spacing:.3em;color:'+gold+';font-size:12px;font-weight:800;margin-top:6px">'+esc(bizName().toUpperCase())+'</div></div>'
       + '</div>'
-      // Cliente / Entrega
-      + '<div style="display:flex;gap:14px;margin-top:14px">'
-      +   '<div style="flex:1;background:'+cream2+';border-radius:16px;padding:14px 16px"><div style="font-size:10px;font-weight:800;color:'+pc+';letter-spacing:.12em">CLIENTE</div><div style="font-weight:800;font-size:15px;margin-top:3px;color:'+ink+'">'+esc(o.cliente||'—')+'</div>'+(o.telefono?'<div style="font-size:12px;color:'+soft+';font-weight:700;margin-top:1px">'+esc(o.telefono)+'</div>':'')+(o.invitados?'<div style="font-size:12px;color:'+soft+';font-weight:700">'+o.invitados+' invitados</div>':'')+'</div>'
-      +   '<div style="flex:1;background:'+cream2+';border-radius:16px;padding:14px 16px"><div style="font-size:10px;font-weight:800;color:'+pc+';letter-spacing:.12em">ENTREGA</div><div style="font-weight:800;font-size:15px;margin-top:3px;color:'+ink+'">'+esc(o.fechaEvento?fFecha(o.fechaEvento):'Por definir')+'</div><div style="font-size:12px;color:'+soft+';font-weight:700">'+entregaTxt+'</div></div>'
+      // BLOQUE 1: dos columnas
+      + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px">'
+      +   '<div>'
+      +     fl('N° DE PEDIDO:', folio) + fl('FECHA DE PEDIDO:', esc(pedidoFecha))
+      +     fl('NOMBRE DEL CLIENTE:', esc(o.cliente||'—')) + fl('DIRECCIÓN:', esc(o.direccion||'—'))
+      +     (o.telefono?fl('TELÉFONO:', esc(o.telefono)):'')
+      +     '<div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:10px;font-size:11px;font-weight:800;color:'+ink+'">'
+      +       '<span>'+cbox(enviar)+' ENVIAR</span><span style="color:'+line+'">/</span><span>'+cbox(recoger)+' RECOGER</span>'
+      +       '<span style="width:1px;height:14px;background:'+line+';display:inline-block"></span><span>'+cbox(false)+' PEDIDO URGENTE</span>'
+      +     '</div>'
+      +   '</div>'
+      +   '<div style="border:1.5px solid '+pc+';border-radius:4px;padding:8px 10px">'+bt('DETALLES DEL EVENTO:')
+      +     fl('FECHA DEL EVENTO:', esc(evFecha)) + fl('N° DE INVITADOS:', esc(String(o.invitados||'—'))) + fl('UBICACIÓN:', esc(o.direccion||'—'))
+      +   '</div>'
       + '</div>'
-      // Pastel
-      + '<div style="background:'+cream+';border:1px solid '+line+';border-radius:16px;padding:16px 18px;margin-top:14px">'
-      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:18px;color:'+pc+';border-bottom:1px solid '+line+';padding-bottom:8px;margin-bottom:8px">'+esc(o.receta||'Pastel')+'</div>'
-      +   det + '</div>'
-      + alergiasBlock
-      + ingTable
-      + imgBlock
-      // Total (banda primario)
-      + '<div style="display:flex;justify-content:space-between;align-items:center;background:'+pc+';color:#fff;border-radius:16px;padding:16px 22px;margin-top:16px">'
-      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:600;font-size:16px;opacity:.92">Total estimado</div>'
-      +   '<div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:30px">'+money(o.total)+'</div></div>'
-      // Pie comercial
-      + '<div style="margin-top:22px;border-top:2px solid '+gold+';padding-top:16px">'
-      +   footBand
-      +   '<div style="text-align:center;color:'+soft+';font-size:11px;font-weight:700;margin-top:12px;letter-spacing:.04em">Gracias por tu preferencia · '+esc(bizName())+'</div>'
+      // BLOQUE 2: imagen + forma
+      + '<div style="display:grid;grid-template-columns:1.7fr 1fr;border:1.5px solid '+pc+';border-radius:4px;margin-top:10px;overflow:hidden">'
+      +   '<div style="padding:8px 10px;border-right:1.5px solid '+pc+'">'+bt('IMAGEN DE PASTEL:')
+      +     '<div style="height:112px;display:flex;align-items:center;justify-content:center;overflow:hidden">'+(o.imagenRef?'<img src="'+o.imagenRef+'" style="max-width:100%;max-height:100%;object-fit:contain">':'<span style="color:'+soft+';font-size:11px;font-weight:700">Sin imagen</span>')+'</div>'
+      +   '</div>'
+      +   '<div style="padding:8px 10px">'+bt('FORMA:')+'<div style="display:flex;flex-direction:column;align-items:center">'+formaHtml+'</div></div>'
       + '</div>'
+      // BLOQUE 3: sabor / relleno / cobertura
+      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1.5px solid '+pc+';border-radius:4px;margin-top:10px">'
+      +   '<div style="padding:7px 10px;border-right:1.5px solid '+pc+';min-height:54px">'+bt('SABOR:')+'<div style="font-size:12.5px;font-weight:700;text-align:center">'+esc(o.saborPan||'—')+'</div></div>'
+      +   '<div style="padding:7px 10px;border-right:1.5px solid '+pc+';min-height:54px">'+bt('RELLENO:')+'<div style="font-size:12.5px;font-weight:700;text-align:center">'+esc(rellenoTxt)+'</div></div>'
+      +   '<div style="padding:7px 10px;min-height:54px">'+bt('COBERTURA:')+'<div style="font-size:12.5px;font-weight:700;text-align:center">'+esc(o.cobertura||'—')+'</div></div>'
+      + '</div>'
+      // BLOQUE 4: detalles del pedido
+      + '<div style="border:1.5px solid '+pc+';border-top:0;padding:8px 10px">'+bt('DETALLES DEL PEDIDO:')+'<div style="font-size:12.5px;font-weight:700;white-space:pre-wrap;min-height:38px">'+esc(detallesTxt)+'</div></div>'
+      // BLOQUE 5: notas
+      + '<div style="border:1.5px solid '+pc+';border-top:0;padding:7px 10px;font-size:12.5px"><b style="font-weight:800">MENSAJE ESPECIAL EN EL PASTEL:</b> '+esc(o.mensajePastel||'—')+'</div>'
+      + '<div style="border:1.5px solid '+pc+';border-top:0;padding:7px 10px;font-size:12.5px"><b style="font-weight:800">ALERGIAS / NOTAS:</b> '+esc(o.alergias||'—')+'</div>'
+      // BLOQUE 6+7: método de pago + totales
+      + '<div style="border:1.5px solid '+pc+';border-top:0;margin-bottom:12px">'
+      +   '<div style="display:flex;align-items:center;gap:16px;padding:8px 10px;font-size:12px;font-weight:800;border-bottom:1.5px solid '+pc+'"><span>MÉTODO DE PAGO:</span><span>'+cbox(false)+' EFECTIVO</span><span>'+cbox(false)+' TRANSFERENCIA</span></div>'
+      +   '<table style="width:100%;border-collapse:collapse">'
+      +     '<tr>'+['PREPAGO','PRECIO','ENVÍO','TOTAL'].map(function(h,idx){ return '<th style="font-family:Fredoka,Nunito,sans-serif;font-size:12px;color:'+pc+';padding:6px;'+(idx<3?'border-right:1.5px solid '+pc+';':'')+'text-align:center">'+h+'</th>'; }).join('')+'</tr>'
+      +     '<tr>'
+      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">—</td>'
+      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">'+money(o.total)+'</td>'
+      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">—</td>'
+      +       '<td style="'+tcell+';font-size:14px;font-weight:800;color:'+pc+'">'+money(o.total)+'</td>'
+      +     '</tr>'
+      +   '</table>'
+      + '</div>'
+      // FOOTER: teléfono | instagram, y banda "GRACIAS POR SU COMPRA"
+      + '<div style="display:flex;align-items:center;justify-content:center;gap:16px;padding:6px 0;font-size:14px;font-weight:700;color:'+pc+'">'
+      +   (marca.telefono?'<span style="display:inline-flex;align-items:center;gap:7px">'+psvg('phone')+esc(marca.telefono)+'</span>':'')
+      +   ((marca.telefono&&marca.instagram)?'<span style="width:1px;height:16px;background:'+pc+';display:inline-block"></span>':'')
+      +   (marca.instagram?'<span style="display:inline-flex;align-items:center;gap:7px">'+psvg('instagram')+esc(marca.instagram)+'</span>':'')
+      + '</div>'
+      + '<div style="background:'+pc+';color:#fff;text-align:center;padding:9px 6px;font-size:14px;letter-spacing:.08em;font-weight:700;border-radius:4px;margin-top:4px">GRACIAS POR SU COMPRA</div>'
       + '</div>';
     window.print();
   }
