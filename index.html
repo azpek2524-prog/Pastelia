@@ -257,7 +257,7 @@
               <div data-extras-list style="display:flex;flex-direction:column;gap:10px"></div>
               <div style="background:var(--surface);border-radius:18px;padding:16px;margin-top:14px;box-shadow:0 8px 20px -16px rgba(123,91,75,.4);display:flex;align-items:center;justify-content:space-between">
                 <div><div style="font-size:12px;font-weight:800;color:var(--muted)">Margen de ganancia</div><div style="font-size:12px;font-weight:700;color:var(--muted)">Aplicado a cada cotización</div></div>
-                <div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:var(--text)">40%</div>
+                <div style="display:flex;align-items:center;gap:6px"><input data-margen-input type="number" min="0" step="1" inputmode="numeric" style="width:72px;box-sizing:border-box;background:var(--field);border:0;outline:none;border-radius:12px;padding:9px 10px;font-family:'Fredoka';font-weight:700;color:var(--text);text-align:center"><span style="font-family:'Fredoka';font-weight:700;font-size:22px;color:var(--text)">%</span></div>
               </div>
               <div data-action="guardar-inv" style="background:var(--btn);color:var(--on-dark);border-radius:18px;padding:15px;text-align:center;font-family:'Fredoka';font-weight:600;font-size:15px;margin-top:14px;box-shadow:0 12px 22px -12px rgba(123,91,75,.7);cursor:pointer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none;margin-right:8px;vertical-align:-4px"><path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/></svg>Guardar inventario</div>
             </div>
@@ -285,7 +285,7 @@
                 <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(123,91,75,.5)">‹</div>
                 <div style="font-family:'Fredoka';font-weight:600;font-size:22px">Mi negocio</div>
               </div>
-              <div style="font-size:12px;color:var(--muted);font-weight:700">Personaliza el nombre, logo y color. Se aplican a la app, al PDF y al ticket.</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:700">Personaliza el nombre y el logo. Se aplican a la app, al PDF y al ticket.</div>
               <div data-marca-form></div>
             </div>
           </div>
@@ -461,7 +461,7 @@
     <div class="pane" data-scr="marca">
       <div>
         <div style="font-family:'Fredoka';font-weight:600;font-size:32px;margin-bottom:4px">Mi negocio</div>
-        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Personaliza el nombre, logo y color de tu pastelería. Se aplican a la app, al PDF y al ticket de WhatsApp.</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Personaliza el nombre y el logo de tu pastelería. Se aplican a la app, al PDF y al ticket de WhatsApp.</div>
         <div style="max-width:560px"><div data-marca-form></div></div>
       </div>
     </div>
@@ -484,7 +484,7 @@
             <div data-extras-list style="display:flex;flex-direction:column;gap:10px"></div>
             <div style="border-top:1px solid var(--line);margin-top:16px;padding-top:16px">
               <div style="font-size:12px;font-weight:800;color:var(--muted)">Margen de ganancia</div>
-              <div style="display:flex;align-items:baseline;gap:8px"><div style="font-family:'Fredoka';font-weight:700;font-size:34px;color:var(--text)">40%</div><div style="font-size:12px;font-weight:700;color:var(--muted)">aplicado a cada cotización</div></div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:4px"><input data-margen-input type="number" min="0" step="1" inputmode="numeric" style="width:82px;box-sizing:border-box;background:var(--field);border:0;outline:none;border-radius:12px;padding:10px 12px;font-family:'Fredoka';font-weight:700;color:var(--text);text-align:center"><span style="font-family:'Fredoka';font-weight:700;font-size:24px;color:var(--text)">%</span><div style="font-size:12px;font-weight:700;color:var(--muted)">aplicado a cada cotización</div></div>
             </div>
           </div>
         </div>
@@ -540,7 +540,10 @@
   };
   var BASE   = { mano:180 };            // mano de obra base @ Mediano (los insumos vienen de la receta)
   var EXTRAS = { 'Flores':120, 'Topper':80 };
-  var MARGIN = 0.40;
+  /* ---------- Margen de ganancia editable (localStorage: pastelia_margen) ---------- */
+  var MARGEN_KEY = 'pastelia_margen';
+  var MARGIN = (function(){ try{ var m=parseFloat(localStorage.getItem(MARGEN_KEY)); return (isFinite(m)&&m>=0)?m:0.40; }catch(e){ return 0.40; } })();
+  function setMargin(pct){ var f=parseFloat(pct); if(!isFinite(f)||f<0) return; MARGIN=f/100; try{ localStorage.setItem(MARGEN_KEY, String(MARGIN)); }catch(e){} }
 
   /* ---------- Extras personalizados (localStorage: pastelia_extras_custom) ---------- */
   var EXTRAS_KEY = 'pastelia_extras_custom';
@@ -562,6 +565,8 @@
     size:'Mediano', extras:{ 'Flores':true, 'Topper':false }, recipe:null, filter:'activos',
     // sección 1 — cliente y logística
     nombre:'', tel:'', fecha:'', fechaPedido:todayISO0(), tipoEntrega:'recoge', direccion:'', invitados:0,
+    // logística / pago
+    envio:0, prepago:0,
     // sección 2 — detalles del pastel
     modoReceta:'receta', forma:'Redondo', saborPan:'', rellenos:[], rellenoOtro:'',
     cobertura:'Buttercream', coberturaOtra:'', detallesDiseno:'', mensajePastel:'', alergias:'', imagenRef:'',
@@ -714,9 +719,11 @@
     for (var k in state.extras){ if (state.extras[k]){ extras += (EXTRAS[k]||0); activos.push(k.toLowerCase()); } }
     var costo = insumos + mano + extras;
     var margen = costo * MARGIN;
-    var precio = costo + margen;
+    var precio = costo + margen;                 // precio del pastel (sin envío)
+    var envio = parseFloat(state.envio)||0;
+    var total = precio + envio;                  // total a cobrar (pastel + envío)
     return { insumos:insumos, mano:mano, extras:extras, margen:margen, precio:precio,
-             porcion: precio / s.porc, activos:activos };
+             envio:envio, total:total, porcion: precio / s.porc, activos:activos };
   }
 
   /* ---------- Formulario de cotización dinámico ---------- */
@@ -748,6 +755,7 @@
       + fChip('tipoEntrega','domicilio','Entrega a domicilio',state.tipoEntrega==='domicilio'))+'</div>';
     if (state.tipoEntrega==='domicilio'){
       entrega += '<div style="margin-top:12px">'+fLab('DIRECCIÓN')+fTxt('direccion','text','Calle, número, colonia…',state.direccion)+'</div>';
+      entrega += '<div style="margin-top:12px">'+fLab('COSTO DE ENVÍO ($)')+fTxt('envio','number','0',state.envio||'')+'</div>';
     }
     return fCard(fHead('user','Cliente y logística')+g+entrega);
   }
@@ -845,13 +853,20 @@
     var o=buildOrder(), v=calc();
     function line(k,val){ return '<div style="display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:13px"><span style="color:var(--muted);font-weight:700">'+k+'</span><span style="font-weight:800;text-align:right">'+val+'</span></div>'; }
     var rell=(o.rellenos&&o.rellenos.length)?o.rellenos.join(', '):'—';
+    var prep=parseFloat(state.prepago)||0;
+    var moneyInput='box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:10px;padding:9px 11px;font-weight:800;font-family:inherit;color:var(--text);width:104px;text-align:right';
     var body = line('Cliente', esc(o.cliente||'—'))
       + line('Entrega', o.fechaEvento?esc(fFecha(o.fechaEvento)):'Por definir')
       + line('Pastel', esc(o.receta||'—')+' · '+esc(o.tamano)+' ('+o.porciones+'p)')
       + (o.modo==='personalizado' ? line('Forma · cobertura', esc(o.forma||'—')+' · '+esc(o.cobertura||'—')) : '')
       + line('Rellenos', esc(rell))
       + line('Extras', (o.extras&&o.extras.length)?esc(o.extras.join(', ')):'—')
-      + '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px;display:flex;justify-content:space-between;align-items:center"><span style="font-weight:800">Total</span><span style="font-family:\'Fredoka\';font-weight:700;font-size:26px">'+money(v.precio)+'</span></div>'
+      + '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px"></div>'
+      + line('Precio del pastel', money(v.precio))
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:6px 0"><span style="color:var(--muted);font-weight:700;font-size:13px">Costo de envío</span><input data-field="envio" type="number" min="0" inputmode="decimal" placeholder="0" value="'+esc(state.envio||'')+'" style="'+moneyInput+'"></div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);margin-top:4px;padding-top:10px"><span style="font-weight:800">Total</span><span data-sum-total style="font-family:\'Fredoka\';font-weight:700;font-size:24px">'+money(v.total)+'</span></div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 0"><span style="color:var(--muted);font-weight:700;font-size:13px">Prepago (anticipo)</span><input data-field="prepago" type="number" min="0" inputmode="decimal" placeholder="0" value="'+esc(state.prepago||'')+'" style="'+moneyInput+'"></div>'
+      + line('Saldo por cobrar', '<span data-sum-saldo>'+money(Math.max(0, v.total-prep))+'</span>')
       + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:10px">Revisa los datos y usa <b style="color:var(--text)">Guardar</b>, <b style="color:var(--text)">PDF</b> o <b style="color:var(--text)">Ticket</b> en el panel de resumen.</div>';
     return fCard(fHead('receipt','Resumen del pedido')+body);
   }
@@ -1491,7 +1506,6 @@
     qsa('[data-marca-logo-preview]').forEach(function(el){ el.innerHTML = marca.logoUrl ? '<img src="'+marca.logoUrl+'" style="width:96px;height:96px;object-fit:cover;border-radius:18px;display:block">' : '<div style="width:96px;height:96px;border-radius:18px;background:var(--field);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800;font-size:12px">Sin logo</div>'; });
     qsa('[data-theme-select]').forEach(function(el){ el.value = (document.documentElement.getAttribute('data-theme')==='dark') ? 'dark' : 'light'; });
   }
-  var MARCA_SWATCHES=['#7B5B4B','#B0436B','#5B7B4B','#4B5B7B','#7B4BB0','#B07B4B'];
   function marcaFormHTML(){
     var card='background:var(--surface);border-radius:22px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)';
     var fin='width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:16px;font-family:inherit;color:var(--text)';
@@ -1505,49 +1519,28 @@
       +   '<div style="flex:1;min-width:0"><input type="file" accept="image/*" data-marca-logo-input style="'+fin+';font-weight:700">'
       +     '<div data-action="marca-logo-remove" style="margin-top:8px;color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar logo</div></div>'
       + '</div>'
-      + '<div style="'+lab+';margin-top:16px">COLOR DE MARCA</div>'
-      + '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
-      +   '<input type="color" data-marca-field="primaryColor" value="'+esc(marca.primaryColor)+'" style="width:52px;height:40px;border:0;background:none;border-radius:12px;cursor:pointer;padding:0">'
-      +   '<span data-marca-hex style="font-weight:800;font-size:14px;color:var(--text)">'+esc(marca.primaryColor)+'</span>'
-      +   '<div style="display:flex;gap:6px;margin-left:auto">'+MARCA_SWATCHES.map(function(c){ return '<div data-marca-swatch="'+c+'" title="'+c+'" style="width:26px;height:26px;border-radius:8px;background:'+c+';cursor:pointer;box-shadow:0 0 0 1px var(--line)"></div>'; }).join('')+'</div>'
-      + '</div>'
       + '</div>'
       + '<div style="'+card+'">'
       + '<div style="'+lab+'">TELÉFONO (para recibos)</div>'
       + '<input type="tel" data-marca-field="telefono" placeholder="55 1234 5678" value="'+esc(marca.telefono)+'" style="'+fin+'">'
-      + '<div style="'+lab+';margin-top:16px">DIRECCIÓN (para recibos)</div>'
-      + '<textarea data-marca-field="direccion" rows="2" placeholder="Calle, número, colonia, ciudad" style="'+fin+';resize:vertical;min-height:52px">'+esc(marca.direccion)+'</textarea>'
-      + '<div style="display:flex;gap:10px;margin-top:16px">'
-      +   '<div style="flex:1;min-width:0"><div style="'+lab+'">INSTAGRAM</div><input type="text" data-marca-field="instagram" placeholder="@mipasteleria" value="'+esc(marca.instagram)+'" style="'+fin+'"></div>'
-      +   '<div style="flex:1;min-width:0"><div style="'+lab+'">FACEBOOK</div><input type="text" data-marca-field="facebook" placeholder="@mipasteleria" value="'+esc(marca.facebook)+'" style="'+fin+'"></div>'
-      + '</div>'
+      + '<div style="'+lab+';margin-top:16px">INSTAGRAM</div>'
+      + '<input type="text" data-marca-field="instagram" placeholder="@mipasteleria" value="'+esc(marca.instagram)+'" style="'+fin+'">'
       + '</div>'
       + '<div style="'+card+';display:flex;align-items:center;justify-content:space-between;gap:14px">'
       + '<div><div style="'+lab+';margin-bottom:2px">APARIENCIA</div><div style="font-size:11px;font-weight:700;color:var(--muted)">Modo claro u oscuro de la app.</div></div>'
       + '<select data-theme-select style="'+fin+';width:auto;min-width:120px;font-weight:800">'
       +   '<option value="light">Claro</option><option value="dark">Oscuro</option>'
       + '</select>'
-      + '</div>'
-      + '<div style="'+card+'">'
-      + '<div style="'+lab+'">VISTA PREVIA</div>'
-      + '<div style="display:flex;align-items:center;gap:12px;margin-top:4px"><div data-biz-logo data-logo-size="44" data-logo-radius="14"></div><div data-biz-name style="font-family:\'Fredoka\';font-weight:600;font-size:18px">'+esc(bizName())+'</div></div>'
-      + '<div style="margin-top:14px;display:flex;gap:10px"><div style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:10px 16px;font-weight:800;font-size:13px">Botón principal</div><div style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:10px 16px;font-weight:800;font-size:13px">Acento</div></div>'
       + '</div>';
   }
   function renderMarcaForm(){ qsa('[data-marca-form]').forEach(function(f){ if(!f.getAttribute('data-mounted')){ f.innerHTML=marcaFormHTML(); f.setAttribute('data-mounted','1'); } }); renderBiz(); }
   function handleMarcaField(el, f){
     marca[f]=el.value; saveMarca();
-    if(f==='primaryColor'){ applyBrand(); qsa('[data-marca-hex]').forEach(function(h){ h.textContent=el.value; }); }
     renderBiz();
   }
   function handleLogoFile(el){
     var file=el.files&&el.files[0]; if(!file) return;
     compressImage(file, function(data){ marca.logoUrl=data; saveMarca(); renderBiz(); toast('Logo actualizado ✓'); });
-  }
-  function pickBrandColor(c){
-    marca.primaryColor=c; saveMarca(); applyBrand();
-    qsa('[data-marca-field="primaryColor"]').forEach(function(i){ i.value=c; });
-    qsa('[data-marca-hex]').forEach(function(h){ h.textContent=c; });
   }
 
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
@@ -1581,7 +1574,8 @@
       photo: esPers ? state.imagenRef : ((state.recipe&&state.recipe.photoBase64)||''),
       ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
       tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
-      total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:localISO()
+      precio:Math.round(v.precio), envio:Math.round(v.envio), prepago:Math.round(parseFloat(state.prepago)||0),
+      total:Math.round(v.total), estado:'Cotizado', pagado:false, creado:localISO()
     };
   }
   function quoteFromPane(){ return buildOrder(); }
@@ -1640,7 +1634,7 @@
       // HEADER: logo izquierda + título derecha + nombre de la pastelería
       + '<div style="display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:10px">'
       +   '<div>'+logoBig+'</div>'
-      +   '<div style="text-align:right"><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:25px;color:'+pc+';line-height:1.02">FORMULARIO DE<br>PEDIDO DE PASTEL</div>'
+      +   '<div style="text-align:right"><div style="font-family:Fredoka,Nunito,sans-serif;font-weight:700;font-size:25px;color:'+pc+';line-height:1.02">COMPROBANTE<br>DE PEDIDO</div>'
       +     '<div style="letter-spacing:.3em;color:'+gold+';font-size:12px;font-weight:800;margin-top:6px">'+esc(bizName().toUpperCase())+'</div></div>'
       + '</div>'
       // BLOQUE 1: dos columnas
@@ -1682,9 +1676,9 @@
       +   '<table style="width:100%;border-collapse:collapse">'
       +     '<tr>'+['PREPAGO','PRECIO','ENVÍO','TOTAL'].map(function(h,idx){ return '<th style="font-family:Fredoka,Nunito,sans-serif;font-size:12px;color:'+pc+';padding:6px;'+(idx<3?'border-right:1.5px solid '+pc+';':'')+'text-align:center">'+h+'</th>'; }).join('')+'</tr>'
       +     '<tr>'
-      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">—</td>'
-      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">'+money(o.total)+'</td>'
-      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">—</td>'
+      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">'+(o.prepago>0?money(o.prepago):'—')+'</td>'
+      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">'+money(o.precio!=null?o.precio:o.total)+'</td>'
+      +       '<td style="'+tcell+';border-right:1.5px solid '+pc+'">'+(o.envio>0?money(o.envio):'—')+'</td>'
       +       '<td style="'+tcell+';font-size:14px;font-weight:800;color:'+pc+'">'+money(o.total)+'</td>'
       +     '</tr>'
       +   '</table>'
@@ -1702,7 +1696,7 @@
 
   function resetForm(){
     state.nombre=''; state.tel=''; state.fecha=''; state.fechaPedido=todayISO0();
-    state.tipoEntrega='recoge'; state.direccion=''; state.invitados=0;
+    state.tipoEntrega='recoge'; state.direccion=''; state.invitados=0; state.envio=0; state.prepago=0;
     state.saborPan=''; state.rellenos=[]; state.rellenoOtro=''; state.coberturaOtra='';
     state.detallesDiseno=''; state.mensajePastel=''; state.alergias=''; state.imagenRef='';
     state.ingredientesManual=[]; state._addingExtra=false; state._newExtraName=''; state._newExtraPrice='';
@@ -1742,8 +1736,22 @@
     }
     if(f==='invitados'){ state.invitados=parseInt(el.value,10)||0; return; }
     if(f==='imagenRef') return; // manejado por 'change'
+    if(f==='envio'){ state.envio=el.value; updateSummaryLive(); return; }
+    if(f==='prepago'){ state.prepago=el.value; updateSummaryLive(); return; }
     if(f in state){ state[f]=el.value; }
     if(f==='_newExtraName' || f==='_newExtraPrice'){ /* solo se guarda en state */ }
+  }
+  // Actualiza en vivo Total y Saldo del resumen (sin re-render, para no perder el foco).
+  function updateSummaryLive(){
+    var v=calc(), prep=parseFloat(state.prepago)||0;
+    qsa('[data-sum-total]').forEach(function(n){ n.textContent=money(v.total); });
+    qsa('[data-sum-saldo]').forEach(function(n){ n.textContent=money(Math.max(0, v.total-prep)); });
+  }
+  // Margen editable: refleja el valor guardado en los inputs y recalcula precios en vivo.
+  function renderMargen(){ qsa('[data-margen-input]').forEach(function(i){ if(document.activeElement!==i) i.value=Math.round(MARGIN*100); }); }
+  function applyMargenLive(src){
+    qsa('[data-margen-input]').forEach(function(i){ if(i!==src) i.value=Math.round(MARGIN*100); });
+    paintResumen(); updateSummaryLive(); renderRecetas(); renderInicio();
   }
   // Comprime cualquier imagen: FileReader -> Image -> Canvas (máx 800px, JPEG 0.6)
   function compressImage(file, cb){
@@ -1790,6 +1798,11 @@
     Array.prototype.forEach.call(document.querySelectorAll('[data-buscar-insumo]'), function(s){
       s.addEventListener('input', function(){ renderInsumos(); });
     });
+    // Margen de ganancia editable (Mis precios): valor inicial + recálculo en vivo del precio
+    renderMargen();
+    document.addEventListener('input', function(ev){
+      var el=ev.target; if(el.hasAttribute && el.hasAttribute('data-margen-input')){ setMargin(el.value); applyMargenLive(el); }
+    });
     // Panel "Mi negocio": campos de marca (texto/color), logo y paleta rápida
     document.addEventListener('input', function(ev){ var el=ev.target; var f=el.getAttribute&&el.getAttribute('data-marca-field'); if(f) handleMarcaField(el,f); });
     document.addEventListener('change', function(ev){ var el=ev.target;
@@ -1832,7 +1845,6 @@
       var xr=ev.target.closest('[data-extra]'); if(xr){ openExtraEditor(xr.getAttribute('data-extra')); return; }
       var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
       var fc=ev.target.closest('[data-fchip]'); if(fc){ handleChip(fc); return; }
-      var sw=ev.target.closest('[data-marca-swatch]'); if(sw){ pickBrandColor(sw.getAttribute('data-marca-swatch')); return; }
       var ac=ev.target.closest('[data-acc]'); if(ac){ var ak=ac.getAttribute('data-acc'); state._acc=(state._acc===ak)?'':ak; renderCotizar(); return; }
       var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action');
         if(a==='cambiar'){ openRecipeSelector(); }
