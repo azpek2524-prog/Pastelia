@@ -681,6 +681,19 @@
 
   function ingTotal(){ var t=0; state.ingredientesManual.forEach(function(it){ t += (parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0); }); return t; }
 
+  // Costeo automático: precarga TODOS los insumos del catálogo "Mis precios" como renglones,
+  // cada uno con su costo por unidad de compra; el usuario solo captura la cantidad a usar.
+  // Conserva las cantidades ya escritas y añade automáticamente insumos nuevos del catálogo.
+  function syncIngredientesFromInsumos(){
+    var prev={};
+    (state.ingredientesManual||[]).forEach(function(it){ if(it._insId!=null) prev[it._insId]=it.cantidad; });
+    state.ingredientesManual = insumos.map(function(ins){
+      return { _insId:ins.id, nombre:ins.nombre, unidad:ins.unidad,
+               costoUnitario:(ins.cantidad>0?roundCost(ins.precio/ins.cantidad):0),
+               cantidad:(prev[ins.id]!=null?prev[ins.id]:'') };
+    });
+  }
+
   function calc(){
     var s = SIZES[state.size];
     var insumos;
@@ -804,23 +817,21 @@
       var note = '<div style="background:var(--field);border-radius:14px;padding:12px 14px;font-size:12px;font-weight:700;color:var(--muted)">El costo de insumos ('+money(ins)+') viene de la receta <b style="color:var(--text)">'+esc(state.recipe?state.recipe.nombre:'—')+'</b>, escalado al tamaño '+esc(state.size)+'. Cambia a “Pastel personalizado” para capturar ingredientes manualmente.</div>';
       return fCard(fHead('box','Ingredientes del pedido')+note);
     }
-    var list = '<datalist id="ing-list'+idSuf+'">'+insumos.map(function(it){ return '<option value="'+esc(it.nombre)+'">'; }).join('')+'</datalist>';
+    // Precarga automática de todos los insumos del catálogo; el usuario solo escribe la cantidad.
+    syncIngredientesFromInsumos();
+    var intro = '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px">Escribe cuánto usas de cada insumo de <b style="color:var(--text)">Mis precios</b>. El costo se calcula solo.</div>';
     var rows = state.ingredientesManual.map(function(it,i){
-      var unitOpts = UNIDADES.map(function(u){ return '<option value="'+u+'"'+(it.unidad===u?' selected':'')+'>'+u+'</option>'; }).join('');
-      return '<div data-ing-idx="'+i+'" style="background:var(--field);border-radius:14px;padding:10px;margin-bottom:8px">'
-        + '<div style="display:flex;gap:6px;align-items:center;margin-bottom:7px">'
-        +   '<input data-field="ing-nombre" list="ing-list'+idSuf+'" placeholder="Ingrediente" value="'+esc(it.nombre)+'" style="flex:1;'+FIN2+'">'
-        +   '<div data-action="del-ing" data-idx="'+i+'" title="Quitar" style="cursor:pointer;color:var(--muted);font-weight:800;font-size:16px;padding:2px 8px">×</div>'
-        + '</div>'
-        + '<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">'
-        +   '<input data-field="ing-cant" type="number" min="0" step="0.01" placeholder="Cant." value="'+esc(it.cantidad||'')+'" style="width:72px;'+FIN2+'">'
-        +   '<select data-field="ing-unidad" style="'+FIN2+';font-weight:700">'+unitOpts+'</select>'
-        +   ingCostCellHtml(it)
-        + '</div></div>';
+      var sub=(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0);
+      return '<div data-ing-idx="'+i+'" style="background:var(--field);border-radius:14px;padding:10px 12px;margin-bottom:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+        + '<div style="flex:1;min-width:130px"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">$'+fmtCost(it.costoUnitario)+'/'+esc(it.unidad)+'</div></div>'
+        + '<input data-field="ing-cant" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" value="'+esc(it.cantidad||'')+'" style="width:78px;'+FIN2+'">'
+        + '<div style="font-size:12px;font-weight:800;color:var(--muted);min-width:24px">'+esc(it.unidad)+'</div>'
+        + '<div style="margin-left:auto;font-weight:800;font-size:13px;color:var(--text);min-width:56px;text-align:right">= <span data-ing-subtotal>'+money(sub)+'</span></div>'
+        + '</div>';
     }).join('');
-    var add = '<div data-action="add-ing" style="border:2px dashed var(--accent);border-radius:14px;padding:11px;text-align:center;color:var(--text);font-weight:800;font-size:13px;cursor:pointer">+ Agregar ingrediente</div>';
+    var empty = '<div style="background:var(--field);border-radius:14px;padding:14px;font-size:12px;font-weight:700;color:var(--muted)">Aún no tienes insumos. Agrégalos en <b style="color:var(--text)">Mis precios</b> para costear.</div>';
     var total = '<div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;font-weight:800;font-size:14px"><span>Costo total insumos</span><span data-ing-total>'+money(ingTotal())+'</span></div>';
-    return fCard(fHead('box','Ingredientes del pedido')+list+(rows||'<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">Agrega los ingredientes de este pastel.</div>')+add+total);
+    return fCard(fHead('box','Ingredientes del pedido')+intro+(rows||empty)+(rows?total:''));
   }
 
   function stepSummaryHtml(){
@@ -1561,7 +1572,7 @@
       mensajePastel:state.mensajePastel.trim(), alergias:state.alergias.trim(),
       imagenRef:state.imagenRef,
       photo: esPers ? state.imagenRef : ((state.recipe&&state.recipe.photoBase64)||''),
-      ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim(); }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
+      ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
       tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
       total:Math.round(v.precio), estado:'Cotizado', pagado:false, creado:localISO()
     };
@@ -1611,13 +1622,15 @@
     if(o.mensajePastel) det += drow('Mensaje', esc(o.mensajePastel));
     if(o.detallesDiseno) det += drow('Diseño', esc(o.detallesDiseno));
     var entregaTxt = (o.tipoEntrega==='domicilio') ? ('A domicilio'+(o.direccion?' · '+esc(o.direccion):'')) : 'Recoge en local';
+    // PDF público del cliente: solo los NOMBRES de los ingredientes usados (sin precios ni cantidades).
     var ingTable = '';
-    if(o.ingredientes && o.ingredientes.length){
-      ingTable = '<div style="margin-top:16px;background:'+cream2+';border-radius:16px;padding:16px 18px"><div style="font-size:11px;font-weight:800;color:'+pc+';letter-spacing:.1em;margin-bottom:8px">INGREDIENTES</div>'
-        + '<table style="width:100%;border-collapse:collapse;font-size:12px;color:'+ink+'">'
-        + '<tr style="text-align:left;color:'+soft+'"><th style="padding:4px 4px;font-weight:800">Ingrediente</th><th style="padding:4px 4px;font-weight:800">Cant.</th><th style="padding:4px 4px;font-weight:800;text-align:right">Subtotal</th></tr>'
-        + o.ingredientes.map(function(it){ return '<tr style="border-top:1px solid '+line+'"><td style="padding:5px 4px;font-weight:700">'+esc(it.nombre)+'</td><td style="padding:5px 4px;font-weight:700">'+esc((it.cantidad||'')+' '+(it.unidad||''))+'</td><td style="padding:5px 4px;font-weight:700;text-align:right">'+money(it.subtotal||0)+'</td></tr>'; }).join('')
-        + '</table></div>';
+    var ingUsados = (o.ingredientes||[]).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; });
+    if(ingUsados.length){
+      var ingNames = ingUsados.map(function(it){ return esc(it.nombre); }).join(', ');
+      ingTable = '<div style="margin-top:16px;background:'+cream2+';border-radius:16px;padding:16px 18px">'
+        + '<div style="font-family:Nunito,Arial,sans-serif;font-size:11px;font-weight:800;color:'+pc+';letter-spacing:.1em;margin-bottom:8px">INGREDIENTES</div>'
+        + '<div style="font-family:Nunito,Arial,sans-serif;font-size:13px;font-weight:700;color:'+ink+';line-height:1.5">'+ingNames+'</div>'
+        + '</div>';
     }
     var alergiasBlock = o.alergias ? '<div style="background:#FBEAE6;border-left:4px solid #C9584F;border-radius:10px;padding:10px 14px;margin-top:14px;color:#9E3B33;font-weight:800;font-size:13px">Alergias / restricciones: '+esc(o.alergias)+'</div>' : '';
     var imgBlock = o.imagenRef ? '<div style="margin-top:16px"><div style="font-size:11px;font-weight:800;color:'+pc+';letter-spacing:.1em;margin-bottom:6px">REFERENCIA</div><img src="'+o.imagenRef+'" style="max-width:200px;border-radius:12px;border:1px solid '+line+'"></div>' : '';
@@ -1698,9 +1711,9 @@
     if(row){
       var idx=parseInt(row.getAttribute('data-ing-idx'),10), it=state.ingredientesManual[idx]; if(!it) return;
       var key=ING_FIELDS[f]; if(!key) return;
-      it[key]=el.value;
-      // El costo siempre se calcula desde el catálogo; se refresca la celda (sin tocar el input enfocado).
-      var cell=row.querySelector('[data-cost-cell]'); if(cell){ var tmp=document.createElement('div'); tmp.innerHTML=ingCostCellHtml(it); cell.parentNode.replaceChild(tmp.firstChild, cell); }
+      it[key]=el.value;   // solo se edita la cantidad; el costo unitario viene del catálogo
+      var sub=row.querySelector('[data-ing-subtotal]');
+      if(sub) sub.textContent=money((parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0));
       updateIngLive();
       return;
     }
@@ -1798,9 +1811,6 @@
       var fc=ev.target.closest('[data-fchip]'); if(fc){ handleChip(fc); return; }
       var sw=ev.target.closest('[data-marca-swatch]'); if(sw){ pickBrandColor(sw.getAttribute('data-marca-swatch')); return; }
       var ac=ev.target.closest('[data-acc]'); if(ac){ var ak=ac.getAttribute('data-acc'); state._acc=(state._acc===ak)?'':ak; renderCotizar(); return; }
-      var apr=ev.target.closest('[data-add-precio]'); var aprRow=apr&&apr.closest('[data-ing-idx]');
-      if(apr && aprRow){ var aidx=parseInt(aprRow.getAttribute('data-ing-idx'),10), ait=state.ingredientesManual[aidx];
-        openInsumoEditor(null, { prefillName:(ait&&ait.nombre)||'', onSaved:function(){ renderCotizar(); } }); return; }
       var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action');
         if(a==='cambiar'){ openRecipeSelector(); }
         else if(a==='nueva-receta'){ openRecipeEditor(null); }
@@ -1811,8 +1821,6 @@
         else if(a==='ticket'){ sendWhatsApp(buildOrder()); }
         else if(a==='pdf-latest'){ var lo=latestOrder(); if(lo) printOrder(lo); else toast('Aún no hay pedidos guardados'); }
         else if(a==='ticket-latest'){ var lt=latestOrder(); if(lt) sendWhatsApp(lt); else toast('Aún no hay pedidos guardados'); }
-        else if(a==='add-ing'){ state.ingredientesManual.push({ nombre:'', cantidad:'', unidad:'g', costoUnitario:'' }); renderCotizar(); }
-        else if(a==='del-ing'){ var di=parseInt(act.getAttribute('data-idx'),10); state.ingredientesManual.splice(di,1); renderCotizar(); }
         else if(a==='del-imagen'){ state.imagenRef=''; renderCotizar(); }
         else if(a==='marca-logo-remove'){ marca.logoUrl=''; saveMarca(); renderBiz(); toast('Logo quitado'); }
         else if(a==='add-extra'){ state._addingExtra=true; renderCotizar(); }
@@ -1830,7 +1838,7 @@
     else if(kind==='tipoEntrega') state.tipoEntrega=v;
     else if(kind==='modoReceta'){
       state.modoReceta=v;
-      if(v==='personalizado'){ if(!state.ingredientesManual.length) state.ingredientesManual.push({ nombre:'', cantidad:'', unidad:'g', costoUnitario:'' }); }
+      if(v==='personalizado'){ syncIngredientesFromInsumos(); }
       else if(!state.recipe){ state.recipe=recipes[0]||null; }
     }
     else if(kind==='relleno'){ var ix=state.rellenos.indexOf(v); if(ix>=0) state.rellenos.splice(ix,1); else state.rellenos.push(v); }
