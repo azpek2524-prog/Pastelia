@@ -572,6 +572,8 @@
     cobertura:'Buttercream', coberturaOtra:'', detallesDiseno:'', mensajePastel:'', alergias:'', imagenRef:'',
     // sección 3 — ingredientes manuales
     ingredientesManual:[],
+    // edición de pedidos existentes (null = cotización nueva)
+    editingOrderId:null, _editingLoad:false,
     // transitorios (mini-form de extras + acordeón del pastel personalizado + paso del stepper)
     _addingExtra:false, _newExtraName:'', _newExtraPrice:'', _acc:'forma', step:1
   };
@@ -681,7 +683,7 @@
     return '<div data-cost-cell style="margin-left:auto;font-weight:800;font-size:13px;color:var(--muted)">= '+money(0)+'</div>';
   }
 
-  var ICONS={home:'<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>',calendar:'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/>',cake:'<path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/>',whisk:'<path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/>',receipt:'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/>',file:'<path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/>',chat:'<path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',coin:'<circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/>',cash:'<rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/>',box:'<path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/>',save:'<path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/>',bow:'<path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/>',user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',inbox:'<path d="M4.5 13.5 6.4 6a1.5 1.5 0 0 1 1.45-1.1h8.3A1.5 1.5 0 0 1 17.6 6l1.9 7.5"/><path d="M4.5 13.5V18a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4.5"/><path d="M4.5 13.5h4l1.3 2.2h4.4l1.3-2.2h4"/>',plus:'<path d="M12 5v14M5 12h14"/>',check:'<path d="M4.5 12.5 9.5 17.5 19.5 6.5"/>',checkdouble:'<path d="M3.5 12.5 7.5 16.5 15 8"/><path d="M12.5 15.5 13.5 16.5 21 8"/>',jar:'<path d="M8 3.5h8M9 3.5V5c0 1.2-2 2-2 4v9.5A1.5 1.5 0 0 0 8.5 20h7a1.5 1.5 0 0 0 1.5-1.5V9c0-2-2-2.8-2-4V3.5"/><path d="M7 11.5h10"/>',instagram:'<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.6 7.4h.01"/>',facebook:'<rect x="4" y="4" width="16" height="16" rx="5"/><path d="M14.2 8.4h-1c-.9 0-1.5.6-1.5 1.6V16"/><path d="M10.2 11.6h3.6"/>',phone:'<path d="M6.5 4.5h3l1.2 4-2 1.3a11 11 0 0 0 5 5l1.3-2 4 1.2v3a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 5 6.1 1.5 1.5 0 0 1 6.5 4.5Z"/>',pin:'<path d="M12 21s6-5.3 6-10a6 6 0 0 0-12 0c0 4.7 6 10 6 10Z"/><circle cx="12" cy="11" r="2.2"/>'};
+  var ICONS={home:'<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>',calendar:'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/>',cake:'<path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/>',whisk:'<path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/>',receipt:'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/>',file:'<path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/>',chat:'<path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',coin:'<circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/>',cash:'<rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/>',box:'<path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/>',save:'<path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/>',bow:'<path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/>',user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',inbox:'<path d="M4.5 13.5 6.4 6a1.5 1.5 0 0 1 1.45-1.1h8.3A1.5 1.5 0 0 1 17.6 6l1.9 7.5"/><path d="M4.5 13.5V18a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4.5"/><path d="M4.5 13.5h4l1.3 2.2h4.4l1.3-2.2h4"/>',plus:'<path d="M12 5v14M5 12h14"/>',edit:'<path d="M4 20h4L18.5 9.5a2 2 0 0 0-2.8-2.8L5 17.2z"/><path d="M13.5 6.5 17.5 10.5"/>',check:'<path d="M4.5 12.5 9.5 17.5 19.5 6.5"/>',checkdouble:'<path d="M3.5 12.5 7.5 16.5 15 8"/><path d="M12.5 15.5 13.5 16.5 21 8"/>',jar:'<path d="M8 3.5h8M9 3.5V5c0 1.2-2 2-2 4v9.5A1.5 1.5 0 0 0 8.5 20h7a1.5 1.5 0 0 0 1.5-1.5V9c0-2-2-2.8-2-4V3.5"/><path d="M7 11.5h10"/>',instagram:'<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.6 7.4h.01"/>',facebook:'<rect x="4" y="4" width="16" height="16" rx="5"/><path d="M14.2 8.4h-1c-.9 0-1.5.6-1.5 1.6V16"/><path d="M10.2 11.6h3.6"/>',phone:'<path d="M6.5 4.5h3l1.2 4-2 1.3a11 11 0 0 0 5 5l1.3-2 4 1.2v3a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 5 6.1 1.5 1.5 0 0 1 6.5 4.5Z"/>',pin:'<path d="M12 21s6-5.3 6-10a6 6 0 0 0-12 0c0 4.7 6 10 6 10Z"/><circle cx="12" cy="11" r="2.2"/>'};
   function icSvg(name,size,extra){ size=size||18; return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none'+(extra?';'+extra:'')+'">'+(ICONS[name]||'')+'</svg>'; }
   function money(n){ return '$' + Math.round(n).toLocaleString('es-MX'); }
   function sizeKey(t){ t=(t||'').trim(); for(var k in SIZES){ if(t.indexOf(k)===0) return k; } return null; }
@@ -990,6 +992,7 @@
       + cobrarMob(o)
       + '</div>'
       + doneBtnMob(o)
+      + '<div data-edit="'+o.id+'" style="margin-top:8px;text-align:center;background:var(--field);color:var(--text);border-radius:12px;padding:9px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('edit',15,'margin-right:6px;vertical-align:-3px')+'Editar pedido</div>'
       + '</div>';
   }
   function deskCard(o,i){
@@ -998,7 +1001,7 @@
       + orderAvatar(o,52,16,24,ava)
       + '<div style="flex:1"><div style="font-weight:800;font-size:16px">'+esc(o.tamano)+' · '+o.porciones+'p</div><div style="font-size:12px;color:var(--muted);font-weight:700">'+orderSub(o)+'</div></div>'
       + '<div style="text-align:right;margin-right:8px"><div style="font-family:\'Fredoka\';font-weight:600;font-size:19px">'+money(o.total)+'</div>'+statusHtml(o,true)+'</div>'
-      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div>'+cobrarDesk(o)+doneBtnDesk(o)+'</div>'
+      + '<div style="display:flex;gap:8px"><div data-ticket="'+o.id+'" style="background:var(--accent);color:var(--accent-ink);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('chat',15)+'</div><div data-pdf="'+o.id+'" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('file',15)+'</div><div data-edit="'+o.id+'" title="Editar pedido" style="background:var(--field);border-radius:12px;padding:9px 14px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('edit',15)+'</div>'+cobrarDesk(o)+doneBtnDesk(o)+'</div>'
       + '</div>';
   }
   function emptyState(){
@@ -1545,6 +1548,33 @@
 
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
   function orderById(id){ var a=readOrders(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
+  // Carga un pedido existente en el estado del cotizador para editarlo (sin duplicarlo).
+  function loadOrderForEdit(id){
+    var o=orderById(id); if(!o){ toast('No se encontró el pedido'); return; }
+    state.editingOrderId=o.id;
+    state.nombre=o.cliente||''; state.tel=o.telefono||'';
+    state.fechaPedido=o.fechaPedido||todayISO0(); state.fecha=o.fechaEvento||'';
+    state.tipoEntrega=o.tipoEntrega||'recoge'; state.direccion=o.direccion||''; state.invitados=o.invitados||0;
+    state.envio=o.envio||0; state.prepago=o.prepago||0;
+    state.size=SIZES[o.tamano]?o.tamano:state.size;
+    state.extras={}; (o.extras||[]).forEach(function(k){ state.extras[k]=true; });
+    state.modoReceta=(o.modo==='personalizado')?'personalizado':'receta';
+    if(state.modoReceta==='receta'){ state.recipe=(o.recetaId?recipeById(o.recetaId):null)||state.recipe||recipes[0]||null; }
+    state.forma=o.forma||'Redondo';
+    state.saborPan=o.saborPan||'';
+    state.rellenos=(o.rellenos||[]).slice(); state.rellenoOtro='';
+    if(COBERTURAS.indexOf(o.cobertura)>=0){ state.cobertura=o.cobertura; state.coberturaOtra=''; }
+    else if(o.cobertura){ state.cobertura='Otra'; state.coberturaOtra=o.cobertura; }
+    else { state.cobertura='Buttercream'; state.coberturaOtra=''; }
+    state.detallesDiseno=o.detallesDiseno||''; state.mensajePastel=o.mensajePastel||''; state.alergias=o.alergias||'';
+    state.imagenRef=o.imagenRef||'';
+    // Restaura cantidades de insumos vinculándolas al catálogo (sec3Html preserva por _insId).
+    state.ingredientesManual=(o.ingredientes||[]).map(function(it){ var ins=insumoByName(it.nombre); return { _insId:ins?ins.id:null, nombre:it.nombre, unidad:it.unidad, costoUnitario:it.costoUnitario, cantidad:it.cantidad }; });
+    state.step=1; state._acc='forma';
+    state._editingLoad=true;   // evita que la navegación limpie la bandera de edición
+    goTo('cotizar');
+    toast('Editando pedido de '+(o.cliente||'cliente'));
+  }
   function latestOrder(){ var a=readOrders(); return a.length ? a[a.length-1] : null; }
   function buildOrder(){
     var v=calc(), activos=[]; for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
@@ -1700,18 +1730,32 @@
     state.saborPan=''; state.rellenos=[]; state.rellenoOtro=''; state.coberturaOtra='';
     state.detallesDiseno=''; state.mensajePastel=''; state.alergias=''; state.imagenRef='';
     state.ingredientesManual=[]; state._addingExtra=false; state._newExtraName=''; state._newExtraPrice='';
+    state.editingOrderId=null; state._editingLoad=false;
     state.step=1; state._acc='forma';
     renderCotizar();
   }
   function guardar(){
     if(!state.nombre.trim()){ toast('Escribe el nombre del cliente'); return; }
     var order=buildOrder();
-    var arr=readOrders(); arr.push(order); saveOrders(arr);
+    var arr=readOrders();
+    var editing=false;
+    if(state.editingOrderId!=null){
+      for(var i=0;i<arr.length;i++){
+        if(arr[i].id===state.editingOrderId){
+          // Sobrescribe conservando identidad y estado del pedido original (no duplica).
+          order.id=arr[i].id; order.creado=arr[i].creado;
+          order.estado=arr[i].estado||order.estado; order.pagado=!!arr[i].pagado;
+          arr[i]=order; editing=true; break;
+        }
+      }
+    }
+    if(!editing){ arr.push(order); }
+    saveOrders(arr);
     resetForm();
     // Reactividad: re-render inmediato de agenda y dashboard con los datos nuevos.
     renderAgenda();
     renderInicio();
-    toast('Pedido guardado en la agenda ✓');
+    toast(editing?'Pedido actualizado ✓':'Pedido guardado en la agenda ✓');
     goTo('agenda');
   }
 
@@ -1834,13 +1878,14 @@
     // Delegación para elementos dinámicos y de acción
     document.addEventListener('click', function(ev){
       // Iniciar cotización → llevar el formulario al primer paso (captura de datos).
-      var gc=ev.target.closest('[data-go="cotizar"]'); if(gc){ state.step=1; state._acc='forma'; renderCotizar(); }
+      var gc=ev.target.closest('[data-go="cotizar"]'); if(gc){ if(!state._editingLoad){ state.editingOrderId=null; } state._editingLoad=false; state.step=1; state._acc='forma'; renderCotizar(); }
       var stp=ev.target.closest('[data-step-chip]'); if(stp){ state.step=parseInt(stp.getAttribute('data-step-chip'),10)||1; renderCotizar(); return; }
       var cob=ev.target.closest('[data-cobrar]'); if(cob){ cobrar(parseInt(cob.getAttribute('data-cobrar'),10)); return; }
       var dn=ev.target.closest('[data-done]'); if(dn){ cobrarEntregado(parseInt(dn.getAttribute('data-done'),10)); return; }
       var est=ev.target.closest('[data-estado-btn]'); if(est){ cycleEstado(parseInt(est.getAttribute('data-estado-btn'),10)); return; }
       var tk=ev.target.closest('[data-ticket]'); if(tk){ sendWhatsApp(orderById(parseInt(tk.getAttribute('data-ticket'),10))); return; }
       var pf=ev.target.closest('[data-pdf]'); if(pf){ printOrder(orderById(parseInt(pf.getAttribute('data-pdf'),10))); return; }
+      var ed=ev.target.closest('[data-edit]'); if(ed){ loadOrderForEdit(parseInt(ed.getAttribute('data-edit'),10)); return; }
       var ins=ev.target.closest('[data-insumo]'); if(ins){ var it=insumoById(ins.getAttribute('data-insumo')); if(it) openInsumoEditor(it); return; }
       var xr=ev.target.closest('[data-extra]'); if(xr){ openExtraEditor(xr.getAttribute('data-extra')); return; }
       var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
