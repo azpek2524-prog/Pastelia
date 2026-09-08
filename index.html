@@ -574,16 +574,23 @@
     'linear-gradient(135deg,#F1E6CE,#E7B676)',
     'linear-gradient(135deg,#F5E4C6,#DDA457)'
   ];
-  var DEFAULT_RECIPES = [
-    { id:'rec_choco',  nombre:'Chocoavellana', grad:GRADS[0], photoBase64:'', forma:'Redondo', saborPan:'Chocolate',     rellenos:['Ganache','Nutella'],      cobertura:'Ganache',    detallesDiseno:'', ingredientesLista:[], insumos:210, ingredientes:6, precioPorcion:34 },
-    { id:'rec_limon',  nombre:'Limón & mora',  grad:GRADS[1], photoBase64:'', forma:'Redondo', saborPan:'Vainilla',      rellenos:['Frutos rojos','Queso crema'], cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:225, ingredientes:7, precioPorcion:38 },
-    { id:'rec_velvet', nombre:'Red velvet',    grad:GRADS[2], photoBase64:'', forma:'Redondo', saborPan:'Red velvet',    rellenos:['Queso crema'],            cobertura:'Buttercream', detallesDiseno:'', ingredientesLista:[], insumos:240, ingredientes:8, precioPorcion:40 },
-    { id:'rec_durazno',nombre:'Durazno crema', grad:GRADS[3], photoBase64:'', forma:'Redondo', saborPan:'Vainilla',      rellenos:['Crema pastelera','Frutos rojos'], cobertura:'Chantilly', detallesDiseno:'', ingredientesLista:[], insumos:200, ingredientes:5, precioPorcion:32 }
-  ];
   function readRecipes(){ try{ var a=JSON.parse(localStorage.getItem(RECIPES_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
   function saveRecipes(a){ try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(a)); }catch(e){} }
-  var recipes = readRecipes();
-  if (!recipes){ recipes = DEFAULT_RECIPES.slice(); saveRecipes(recipes); }
+  var recipes = readRecipes() || [];
+  // Sin recetas de ejemplo: la lista arranca vacía. Limpieza única de las
+  // recetas semilla sembradas por versiones anteriores (solo si siguen intactas:
+  // sin foto ni ingredientes personalizados), para no borrar las del usuario.
+  try{
+    if(!localStorage.getItem('pastelia_recetas_seed_cleared')){
+      var _seedIds={rec_choco:1,rec_limon:1,rec_velvet:1,rec_durazno:1};
+      recipes = recipes.filter(function(r){
+        var pristine = _seedIds[r.id] && !r.photoBase64 && (!r.ingredientesLista || !r.ingredientesLista.length);
+        return !pristine;
+      });
+      localStorage.setItem('pastelia_recetas_seed_cleared','1');
+      saveRecipes(recipes);
+    }
+  }catch(e){}
   // Migración: garantiza los campos nuevos en recetas guardadas antes de esta versión.
   recipes.forEach(function(r){
     if(!r.forma) r.forma='Redondo';
@@ -598,7 +605,8 @@
   function recipeInsumos(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return listCost(r.ingredientesLista); return (r&&r.insumos)||210; }
   function recipeIngCount(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return r.ingredientesLista.length; return (r&&r.ingredientes)||0; }
   function recipePorcion(r){ return Math.round((recipeInsumos(r)+BASE.mano)*(1+MARGIN)/20); }
-  state.recipe = recipes[0];
+  state.recipe = recipes[0] || null;
+  if (!recipes.length) state.modoReceta = 'personalizado';
 
   /* ---------- Insumos / Mis precios (localStorage: pastelia_insumos) ---------- */
   var INSUMOS_KEY = 'pastelia_insumos';
@@ -1209,9 +1217,8 @@
     if(del) del.addEventListener('click', function(){
       if(!confirm('¿Eliminar la receta "'+r.nombre+'"?')) return;
       recipes=recipes.filter(function(x){ return x.id!==r.id; });
-      if(!recipes.length) recipes=DEFAULT_RECIPES.slice();
       saveRecipes(recipes);
-      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]; renderCotizar(); }
+      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]||null; if(!recipes.length) state.modoReceta='personalizado'; renderCotizar(); }
       renderRecetas(); renderInicio(); modal.close(); toast('Receta eliminada');
     });
     box.querySelector('#rc-cancel').addEventListener('click', function(){ modal.close(); });
@@ -1779,7 +1786,7 @@
     else if(kind==='modoReceta'){
       state.modoReceta=v;
       if(v==='personalizado'){ if(!state.ingredientesManual.length) state.ingredientesManual.push({ nombre:'', cantidad:'', unidad:'g', costoUnitario:'' }); }
-      else if(!state.recipe){ state.recipe=recipes[0]; }
+      else if(!state.recipe){ state.recipe=recipes[0]||null; }
     }
     else if(kind==='relleno'){ var ix=state.rellenos.indexOf(v); if(ix>=0) state.rellenos.splice(ix,1); else state.rellenos.push(v); }
     else if(kind==='extra'){ state.extras[v]=!state.extras[v]; }
