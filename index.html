@@ -536,6 +536,7 @@
     'Chico':   { mult:0.65, porc:13 },
     'Mediano': { mult:1.00, porc:20 },
     'Grande':  { mult:1.45, porc:28 },
+    'Mega':    { mult:2.50, porc:50 },
     'Bento':   { mult:0.15, porc:2  }
   };
   var BASE   = { mano:180 };            // mano de obra base @ Mediano (los insumos vienen de la receta)
@@ -620,7 +621,7 @@
   function recipeIngCount(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return r.ingredientesLista.length; return (r&&r.ingredientes)||0; }
   function recipePorcion(r){ return Math.round((recipeInsumos(r)+BASE.mano)*(1+MARGIN)/20); }
   state.recipe = recipes[0] || null;
-  if (!recipes.length) state.modoReceta = 'personalizado';
+  state.modoReceta = 'receta';   // el cotizador siempre usa una receta guardada
 
   /* ---------- Insumos / Mis precios (localStorage: pastelia_insumos) ---------- */
   var INSUMOS_KEY = 'pastelia_insumos';
@@ -693,29 +694,9 @@
   function sizeChips(pane){ return leafDivs(pane).filter(function(d){ return sizeKey(d.textContent); }); }
   function extraChips(pane){ return leafDivs(pane).filter(function(d){ return extraKey(d.textContent); }); }
 
-  function ingTotal(){ var t=0; state.ingredientesManual.forEach(function(it){ t += (parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0); }); return t; }
-
-  // Costeo automático: precarga TODOS los insumos del catálogo "Mis precios" como renglones,
-  // cada uno con su costo por unidad de compra; el usuario solo captura la cantidad a usar.
-  // Conserva las cantidades ya escritas y añade automáticamente insumos nuevos del catálogo.
-  function syncIngredientesFromInsumos(){
-    var prev={};
-    (state.ingredientesManual||[]).forEach(function(it){ if(it._insId!=null) prev[it._insId]=it.cantidad; });
-    state.ingredientesManual = insumos.map(function(ins){
-      return { _insId:ins.id, nombre:ins.nombre, unidad:ins.unidad,
-               costoUnitario:(ins.cantidad>0?roundCost(ins.precio/ins.cantidad):0),
-               cantidad:(prev[ins.id]!=null?prev[ins.id]:'') };
-    });
-  }
-
   function calc(){
     var s = SIZES[state.size];
-    var insumos;
-    if (state.modoReceta === 'personalizado'){
-      insumos = ingTotal() * s.mult;                          // costeo manual, escalado por tamaño
-    } else {
-      insumos = recipeInsumos(state.recipe) * s.mult;
-    }
+    var insumos = recipeInsumos(state.recipe) * s.mult;       // el costo de insumos viene de la receta
     var mano = BASE.mano * s.mult;
     var extras = 0, activos = [];
     for (var k in state.extras){ if (state.extras[k]){ extras += (EXTRAS[k]||0); activos.push(k.toLowerCase()); } }
@@ -782,35 +763,27 @@
       + (open ? '<div style="padding:2px 14px 14px">'+inner+'</div>' : '')
       + '</div>';
   }
+  // Estado vacío: sin recetas no se puede cotizar. CTA que lleva a la pantalla Recetas.
+  function noRecipesEmpty(){
+    return '<div style="text-align:center;padding:22px 14px">'
+      + '<div style="color:var(--muted)">'+icSvg('whisk',40)+'</div>'
+      + '<div style="font-family:\'Fredoka\';font-weight:600;font-size:16px;margin-top:10px">Aún no tienes recetas</div>'
+      + '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-top:6px;line-height:1.5">Debes crear al menos una receta en el menú <b style="color:var(--text)">Recetas</b> para poder cotizar.</div>'
+      + '<div data-go="recetas" style="display:inline-flex;align-items:center;gap:7px;margin-top:14px;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:11px 20px;font-family:\'Fredoka\';font-weight:600;font-size:14px;cursor:pointer">'+icSvg('plus',16,'stroke-width:2')+'Ir a Recetas</div>'
+      + '</div>';
+  }
   function sec2Html(idSuf){
-    var body = '<div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px">MODO</div>'
-      + fChipsRow(
-          fChip('modoReceta','receta','Receta guardada',state.modoReceta==='receta')
-        + fChip('modoReceta','personalizado','Pastel personalizado',state.modoReceta==='personalizado'));
-    if (state.modoReceta === 'receta'){
-      body += '<div style="margin-top:14px">'+recipeRowHtml()+'</div>';
-    } else {
-      // Acordeón: agrupa los campos del pastel personalizado sin quitar ninguno.
-      var gForma = fLab('FORMA')+fChipsRow(FORMAS.map(function(f){ return fChip('forma',f,f,state.forma===f); }).join(''));
-      var gPan = fLab('SABOR DEL PAN')+fTxt('saborPan','text','Ej. Vainilla, chocolate…',state.saborPan)
-        + '<div style="margin-top:12px">'+fLab('RELLENOS')+fChipsRow(RELLENOS_BASE.map(function(r){ return fMChip('relleno',r,state.rellenos.indexOf(r)>=0); }).join(''))
-          + '<div style="margin-top:8px">'+fTxt('rellenoOtro','text','+ Otro relleno…',state.rellenoOtro)+'</div></div>'
-        + '<div style="margin-top:12px">'+fLab('COBERTURA')+fChipsRow(COBERTURAS.map(function(c){ return fChip('cobertura',c,c,state.cobertura===c); }).join(''))
-          + (state.cobertura==='Otra' ? '<div style="margin-top:8px">'+fTxt('coberturaOtra','text','¿Cuál cobertura?',state.coberturaOtra)+'</div>' : '') + '</div>';
-      var gDiseno = fLab('DETALLES DEL DISEÑO')+'<textarea data-field="detallesDiseno" rows="3" placeholder="Colores, temática, referencias…" style="'+FIN+';resize:vertical;min-height:60px">'+esc(state.detallesDiseno)+'</textarea>'
-        + '<div style="margin-top:12px">'+fLab('MENSAJE EN EL PASTEL')+fTxt('mensajePastel','text','Ej. Feliz cumpleaños Ana',state.mensajePastel)+'</div>'
-        + '<div style="margin-top:12px">'+fLab('ALERGIAS / RESTRICCIONES')+fTxt('alergias','text','Ej. Sin nuez, sin gluten…',state.alergias)+'</div>';
-      var gImagen = fLab('IMAGEN DE REFERENCIA')
+    if(!recipes.length){ return fCard(fHead('cake','El pastel')+noRecipesEmpty()); }
+    if(!state.recipe){ state.recipe=recipes[0]; }
+    // El cotizador usa siempre una receta guardada (su forma, sabor, rellenos y
+    // cobertura vienen de la receta); aquí solo se capturan datos del pedido.
+    var body = recipeRowHtml()
+      + '<div style="margin-top:14px">'+fLab('MENSAJE EN EL PASTEL')+fTxt('mensajePastel','text','Ej. Feliz cumpleaños Ana',state.mensajePastel)+'</div>'
+      + '<div style="margin-top:12px">'+fLab('ALERGIAS / RESTRICCIONES')+fTxt('alergias','text','Ej. Sin nuez, sin gluten…',state.alergias)+'</div>'
+      + '<div style="margin-top:12px">'+fLab('IMAGEN DE REFERENCIA')
         + '<input type="file" accept="image/*" data-field="imagenRef" style="'+FIN+';font-weight:700">'
-        + (state.imagenRef ? '<div style="margin-top:8px;display:flex;align-items:center;gap:10px"><img src="'+state.imagenRef+'" style="width:120px;height:120px;object-fit:cover;border-radius:14px"><div data-action="del-imagen" style="color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar imagen</div></div>' : '');
-      body += '<div style="margin-top:12px">'
-        + accItem('forma','1 · Forma', gForma)
-        + accItem('pan','2 · Pan, relleno y cobertura', gPan)
-        + accItem('diseno','3 · Diseño, mensaje y alergias', gDiseno)
-        + accItem('imagen','4 · Imagen de referencia', gImagen)
-        + '</div>';
-    }
-    body += '<div style="margin-top:14px">'+fLab('TAMAÑO')+fChipsRow(sizeChipsHtml())+'</div>';
+        + (state.imagenRef ? '<div style="margin-top:8px;display:flex;align-items:center;gap:10px"><img src="'+state.imagenRef+'" style="width:120px;height:120px;object-fit:cover;border-radius:14px"><div data-action="del-imagen" style="color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar imagen</div></div>' : '')+'</div>'
+      + '<div style="margin-top:14px">'+fLab('TAMAÑO')+fChipsRow(sizeChipsHtml())+'</div>';
     return fCard(fHead('cake','El pastel')+body);
   }
 
@@ -829,26 +802,21 @@
   }
 
   function sec3Html(idSuf){
-    if (state.modoReceta === 'receta'){
-      var ins = recipeInsumos(state.recipe) * SIZES[state.size].mult;
-      var note = '<div style="background:var(--field);border-radius:14px;padding:12px 14px;font-size:12px;font-weight:700;color:var(--muted)">El costo de insumos ('+money(ins)+') viene de la receta <b style="color:var(--text)">'+esc(state.recipe?state.recipe.nombre:'—')+'</b>, escalado al tamaño '+esc(state.size)+'. Cambia a “Pastel personalizado” para capturar ingredientes manualmente.</div>';
-      return fCard(fHead('box','Ingredientes del pedido')+note);
+    if(!recipes.length || !state.recipe){ return fCard(fHead('box','Costo del pedido')+noRecipesEmpty()); }
+    // El costo se importa dinámicamente de la receta seleccionada y "Mis precios".
+    var v=calc();
+    function row(k,val,strong){
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:'+(strong?'12px 0 2px':'6px 0')+';font-size:'+(strong?'15px':'13px')+(strong?';border-top:1px solid var(--line);margin-top:6px;font-weight:800':'')+'">'
+        + '<span style="color:'+(strong?'var(--text)':'var(--muted)')+';font-weight:'+(strong?'800':'700')+'">'+k+'</span>'
+        + '<span style="font-weight:800'+(strong?';font-family:\'Fredoka\';font-size:20px':'')+'">'+val+'</span></div>';
     }
-    // Precarga automática de todos los insumos del catálogo; el usuario solo escribe la cantidad.
-    syncIngredientesFromInsumos();
-    var intro = '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px">Escribe cuánto usas de cada insumo de <b style="color:var(--text)">Mis precios</b>. El costo se calcula solo.</div>';
-    var rows = state.ingredientesManual.map(function(it,i){
-      var sub=(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0);
-      return '<div data-ing-idx="'+i+'" style="background:var(--field);border-radius:14px;padding:10px 12px;margin-bottom:8px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
-        + '<div style="flex:1;min-width:130px"><div style="font-weight:800;font-size:14px">'+esc(it.nombre)+'</div><div style="font-size:11px;color:var(--muted);font-weight:700">$'+fmtCost(it.costoUnitario)+'/'+esc(it.unidad)+'</div></div>'
-        + '<input data-field="ing-cant" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0" value="'+esc(it.cantidad||'')+'" style="width:78px;'+FIN2+'">'
-        + '<div style="font-size:12px;font-weight:800;color:var(--muted);min-width:24px">'+esc(it.unidad)+'</div>'
-        + '<div style="margin-left:auto;font-weight:800;font-size:13px;color:var(--text);min-width:56px;text-align:right">= <span data-ing-subtotal>'+money(sub)+'</span></div>'
-        + '</div>';
-    }).join('');
-    var empty = '<div style="background:var(--field);border-radius:14px;padding:14px;font-size:12px;font-weight:700;color:var(--muted)">Aún no tienes insumos. Agrégalos en <b style="color:var(--text)">Mis precios</b> para costear.</div>';
-    var total = '<div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;font-weight:800;font-size:14px"><span>Costo total insumos</span><span data-ing-total>'+money(ingTotal())+'</span></div>';
-    return fCard(fHead('box','Ingredientes del pedido')+intro+(rows||empty)+(rows?total:''));
+    var body = '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px">El costo se importa de la receta <b style="color:var(--text)">'+esc(state.recipe.nombre)+'</b> y de <b style="color:var(--text)">Mis precios</b>, escalado al tamaño <b style="color:var(--text)">'+esc(state.size)+'</b>.</div>'
+      + row('Insumos', money(v.insumos))
+      + row('Mano de obra', money(v.mano))
+      + row('Extras'+(v.activos.length?' ('+v.activos.join(', ')+')':''), money(v.extras))
+      + row('Margen '+Math.round(MARGIN*100)+'%', money(v.margen))
+      + row('Precio sugerido', money(v.precio), true);
+    return fCard(fHead('box','Costo del pedido')+body);
   }
 
   function stepSummaryHtml(){
@@ -960,10 +928,13 @@
   function doneBtnDesk(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" title="Cobrado y entregado" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',16)+'</div>'; }
   function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
   function orderSub(o){ var x = (o.modo==='personalizado' && o.forma) ? ' · '+esc(o.forma) : ''; var h=fHora(o.creado); return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+(h?' '+h:'')+' · '+esc(o.receta||'Pastel')+x; }
+  // Colores por estado: Cotizado (gris), Apartado (ámbar/advertencia), Entregado (verde).
+  var ESTADO_COLOR = { 'Cotizado':'var(--muted)', 'Apartado':'#B07C33', 'Entregado':'#4E8A5B' };
   function estadoInfo(o){
     var e=o.estado||'Cotizado';
-    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado ✓':'Pagado ✓'), color:'var(--text)' };
-    return { txt:e, color:'var(--text)' };
+    var color=ESTADO_COLOR[e]||'var(--muted)';
+    if(o.pagado) return { txt:(e==='Entregado'?'Entregado · Pagado':e+' · Pagado'), color:color };
+    return { txt:e, color:color };
   }
   function statusHtml(o,big){ var info=estadoInfo(o); return '<div data-estado-btn="'+o.id+'" title="Cambiar estado" style="font-size:'+(big?'11px':'10px')+';font-weight:800;color:'+info.color+';cursor:pointer">'+esc(info.txt)+'</div>'; }
   function cobrarMob(o){ return o.pagado
@@ -1306,7 +1277,7 @@
       if(!confirm('¿Eliminar la receta "'+r.nombre+'"?')) return;
       recipes=recipes.filter(function(x){ return x.id!==r.id; });
       saveRecipes(recipes);
-      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]||null; if(!recipes.length) state.modoReceta='personalizado'; renderCotizar(); }
+      if(state.recipe && state.recipe.id===r.id){ state.recipe=recipes[0]||null; renderCotizar(); }
       renderRecetas(); renderInicio(); modal.close(); toast('Receta eliminada');
     });
     box.querySelector('#rc-cancel').addEventListener('click', function(){ modal.close(); });
@@ -1558,18 +1529,10 @@
     state.envio=o.envio||0; state.prepago=o.prepago||0;
     state.size=SIZES[o.tamano]?o.tamano:state.size;
     state.extras={}; (o.extras||[]).forEach(function(k){ state.extras[k]=true; });
-    state.modoReceta=(o.modo==='personalizado')?'personalizado':'receta';
-    if(state.modoReceta==='receta'){ state.recipe=(o.recetaId?recipeById(o.recetaId):null)||state.recipe||recipes[0]||null; }
-    state.forma=o.forma||'Redondo';
-    state.saborPan=o.saborPan||'';
-    state.rellenos=(o.rellenos||[]).slice(); state.rellenoOtro='';
-    if(COBERTURAS.indexOf(o.cobertura)>=0){ state.cobertura=o.cobertura; state.coberturaOtra=''; }
-    else if(o.cobertura){ state.cobertura='Otra'; state.coberturaOtra=o.cobertura; }
-    else { state.cobertura='Buttercream'; state.coberturaOtra=''; }
-    state.detallesDiseno=o.detallesDiseno||''; state.mensajePastel=o.mensajePastel||''; state.alergias=o.alergias||'';
+    state.modoReceta='receta';
+    state.recipe=(o.recetaId?recipeById(o.recetaId):null)||state.recipe||recipes[0]||null;
+    state.mensajePastel=o.mensajePastel||''; state.alergias=o.alergias||'';
     state.imagenRef=o.imagenRef||'';
-    // Restaura cantidades de insumos vinculándolas al catálogo (sec3Html preserva por _insId).
-    state.ingredientesManual=(o.ingredientes||[]).map(function(it){ var ins=insumoByName(it.nombre); return { _insId:ins?ins.id:null, nombre:it.nombre, unidad:it.unidad, costoUnitario:it.costoUnitario, cantidad:it.cantidad }; });
     state.step=1; state._acc='forma';
     state._editingLoad=true;   // evita que la navegación limpie la bandera de edición
     goTo('cotizar');
@@ -1578,9 +1541,6 @@
   function latestOrder(){ var a=readOrders(); return a.length ? a[a.length-1] : null; }
   function buildOrder(){
     var v=calc(), activos=[]; for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
-    var rellenos = state.rellenos.slice(); if(state.rellenoOtro.trim()) rellenos.push(state.rellenoOtro.trim());
-    var cob = state.cobertura==='Otra' ? (state.coberturaOtra.trim()||'Otra') : state.cobertura;
-    var esPers = state.modoReceta==='personalizado';
     var rec = state.recipe || {};
     // Si no se indicó fecha del evento, cae en la fecha del pedido (hoy por defecto)
     // para que el pedido entre en los rangos "hoy" y "esta semana" del dashboard.
@@ -1590,19 +1550,19 @@
       cliente:state.nombre.trim(), telefono:state.tel.trim(),
       fechaPedido:state.fechaPedido||todayISO0(), fechaEvento:fechaEvento,
       tipoEntrega:state.tipoEntrega, direccion:state.direccion.trim(), invitados:state.invitados||0,
-      modo:state.modoReceta,
-      recetaId: (!esPers && state.recipe)?state.recipe.id:null,
-      receta: esPers ? (state.saborPan.trim()||'Pastel personalizado') : (state.recipe?state.recipe.nombre:'Pastel'),
-      // En modo receta, hereda los detalles guardados de la receta; en personalizado, del formulario.
-      forma: esPers ? state.forma : (rec.forma||''),
-      saborPan: esPers ? state.saborPan.trim() : (rec.saborPan||''),
-      rellenos: esPers ? rellenos : ((rec.rellenos||[]).slice()),
-      cobertura: esPers ? cob : (rec.cobertura||''),
-      detallesDiseno: esPers ? state.detallesDiseno.trim() : (rec.detallesDiseno||''),
+      modo:'receta',
+      recetaId: state.recipe?state.recipe.id:null,
+      receta: state.recipe?state.recipe.nombre:'Pastel',
+      // La forma, sabor, rellenos y cobertura se heredan de la receta seleccionada.
+      forma: rec.forma||'',
+      saborPan: rec.saborPan||'',
+      rellenos: (rec.rellenos||[]).slice(),
+      cobertura: rec.cobertura||'',
+      detallesDiseno: rec.detallesDiseno||'',
       mensajePastel:state.mensajePastel.trim(), alergias:state.alergias.trim(),
       imagenRef:state.imagenRef,
-      photo: esPers ? state.imagenRef : ((state.recipe&&state.recipe.photoBase64)||''),
-      ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
+      photo: state.imagenRef || ((state.recipe&&state.recipe.photoBase64)||''),
+      ingredientes: (rec.ingredientesLista||[]).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
       tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
       precio:Math.round(v.precio), envio:Math.round(v.envio), prepago:Math.round(parseFloat(state.prepago)||0),
       total:Math.round(v.total), estado:'Cotizado', pagado:false, creado:localISO()
@@ -1735,6 +1695,7 @@
     renderCotizar();
   }
   function guardar(){
+    if(!recipes.length || !state.recipe){ toast('Crea al menos una receta para poder cotizar'); goTo('recetas'); return; }
     if(!state.nombre.trim()){ toast('Escribe el nombre del cliente'); return; }
     var order=buildOrder();
     var arr=readOrders();
@@ -1760,24 +1721,8 @@
   }
 
   /* ---------- Sincronización de campos del formulario ---------- */
-  var ING_FIELDS = { 'ing-nombre':'nombre', 'ing-cant':'cantidad', 'ing-unidad':'unidad' };
-  function updateIngLive(){
-    var t=ingTotal();
-    Array.prototype.forEach.call(document.querySelectorAll('[data-ing-total]'), function(n){ n.textContent=money(t); });
-    paintResumen();
-  }
   function handleField(el){
     var f=el.getAttribute('data-field');
-    var row=el.closest('[data-ing-idx]');
-    if(row){
-      var idx=parseInt(row.getAttribute('data-ing-idx'),10), it=state.ingredientesManual[idx]; if(!it) return;
-      var key=ING_FIELDS[f]; if(!key) return;
-      it[key]=el.value;   // solo se edita la cantidad; el costo unitario viene del catálogo
-      var sub=row.querySelector('[data-ing-subtotal]');
-      if(sub) sub.textContent=money((parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0));
-      updateIngLive();
-      return;
-    }
     if(f==='invitados'){ state.invitados=parseInt(el.value,10)||0; return; }
     if(f==='imagenRef') return; // manejado por 'change'
     if(f==='envio'){ state.envio=el.value; updateSummaryLive(); return; }
@@ -1916,11 +1861,6 @@
     else if(kind==='forma') state.forma=v;
     else if(kind==='cobertura') state.cobertura=v;
     else if(kind==='tipoEntrega') state.tipoEntrega=v;
-    else if(kind==='modoReceta'){
-      state.modoReceta=v;
-      if(v==='personalizado'){ syncIngredientesFromInsumos(); }
-      else if(!state.recipe){ state.recipe=recipes[0]||null; }
-    }
     else if(kind==='relleno'){ var ix=state.rellenos.indexOf(v); if(ix>=0) state.rellenos.splice(ix,1); else state.rellenos.push(v); }
     else if(kind==='extra'){ state.extras[v]=!state.extras[v]; }
     renderCotizar();
