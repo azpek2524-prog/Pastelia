@@ -1,9 +1,11 @@
 # Roadmap y Estado del Proyecto: Pastelia Core
 
-> Documento de estado actualizado el 7 de septiembre de 2026.
+> Documento de estado actualizado el 12 de septiembre de 2026.
 > **Propósito:** Mantener el registro exacto de dónde nos quedamos para retomar el desarrollo sin perder contexto.
 
-## Estado Actual (Completado hoy)
+## Estado Actual — Funcionalidad Core 100% Terminada
+
+> **Etapa 1 concluida.** La funcionalidad central de la aplicación (MVP) está **100% terminada y validada**. Pastelia opera de forma completa como PWA de una sola página (Vanilla JS + `localStorage`, sin librerías externas) para cotizar, agendar y gestionar pedidos con marca blanca.
 
 Se ejecutó exitosamente el **Refactor Ultracode** con las siguientes implementaciones integradas y validadas:
 1. Parche de reactividad en el Dashboard (actualización instantánea al registrar pagos/entregas).
@@ -14,17 +16,29 @@ Se ejecutó exitosamente el **Refactor Ultracode** con las siguientes implementa
 6. Optimización y limpieza del formato del Ticket de exportación para WhatsApp.
 7. Incorporación de acción rápida "Cobrado + Entregado" en la Agenda.
 8. Nuevas métricas y minigráfico en HTML/CSS nativo para Ingreso Diario y Semanal en el Dashboard.
+9. **Configuración dinámica y personalizable de tamaños de pasteles:** cada pastelería puede editar desde "Mi negocio" el **nombre**, el **multiplicador** (que escala insumos y mano de obra) y las **porciones** de cada tamaño, con alta, baja y restablecer a valores por defecto. Todo respaldado en `localStorage` (`pastelia_sizes`) y consumido en vivo por la función `calc()`, para reflejar correctamente los precios de diferentes pastelerías.
 
 ---
 
-## 🚀 Plan de Acción Inmediato (Próxima sesión)
+## 🚀 Plan de Acción Inmediato (Próxima sesión) — Etapa 2: Integración de Agente IA
 
-### 1. Conexiones y "Cables" Finales
-- [x] **Inventario Dinámico:** Asegurar que el cotizador tome los precios directamente del array de `pastelia_insumos` y no de costos base fijos (si es que falta ajustarlo).
-- [x] **Recetario Dinámico:** Que al guardar una receta nueva, aparezca inmediatamente en el desplegable de cotización.
+**Objetivo principal:** iniciar la **Integración de Agente IA** en Pastelia.
 
-### 2. Seguridad y Exportación
-- [x] **Sistema de Backup:** Botones para Exportar/Importar los datos de `localStorage` como un archivo `.json` para evitar pérdida de datos si se borra la caché.
+Con la funcionalidad core cerrada, la Etapa 2 arranca preparando la interfaz para dar cabida al Agente IA y definiendo su punto de acceso dentro de la app.
+
+### 1. Refactorización de UI para el Agente IA
+- [ ] **Reubicar "Mis Precios":** mover el apartado actual de **"Mis Precios"** —hoy accesible desde la **esquina superior derecha en la vista móvil**— hacia el interior de la categoría **"Mi Negocio"**, junto a Tamaños, Personalización de marca, Apariencia y Respaldo (Backup).
+- [ ] **Liberar la esquina superior derecha:** asignar el espacio que deja "Mis Precios" como el nuevo **botón / punto de acceso al "Agente IA"**.
+- [ ] **Lógica del Agente IA por definir:** la lógica técnica y de implementación interna del Agente IA (proveedor del LLM, prompts, flujo de datos y conexión con el cotizador y la agenda) **aún está por definirse** y se especificará en su propia sesión de diseño.
+
+### Historial de la Etapa 1 (completado)
+
+#### Conexiones y "Cables" Finales
+- [x] **Inventario Dinámico:** el cotizador toma los precios directamente del array de `pastelia_insumos` y no de costos base fijos.
+- [x] **Recetario Dinámico:** al guardar una receta nueva, aparece inmediatamente en el desplegable de cotización.
+
+#### Seguridad y Exportación
+- [x] **Sistema de Backup:** botones para Exportar/Importar los datos de `localStorage` como un archivo `.json` para evitar pérdida de datos si se borra la caché.
 
 ---
 
