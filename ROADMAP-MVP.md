@@ -20,11 +20,11 @@ Se ejecutó exitosamente el **Refactor Ultracode** con las siguientes implementa
 ## 🚀 Plan de Acción Inmediato (Próxima sesión)
 
 ### 1. Conexiones y "Cables" Finales
-- [ ] **Inventario Dinámico:** Asegurar que el cotizador tome los precios directamente del array de `pastelia_insumos` y no de costos base fijos (si es que falta ajustarlo).
-- [ ] **Recetario Dinámico:** Que al guardar una receta nueva, aparezca inmediatamente en el desplegable de cotización.
+- [x] **Inventario Dinámico:** Asegurar que el cotizador tome los precios directamente del array de `pastelia_insumos` y no de costos base fijos (si es que falta ajustarlo).
+- [x] **Recetario Dinámico:** Que al guardar una receta nueva, aparezca inmediatamente en el desplegable de cotización.
 
 ### 2. Seguridad y Exportación
-- [ ] **Sistema de Backup:** Botones para Exportar/Importar los datos de `localStorage` como un archivo `.json` para evitar pérdida de datos si se borra la caché.
+- [x] **Sistema de Backup:** Botones para Exportar/Importar los datos de `localStorage` como un archivo `.json` para evitar pérdida de datos si se borra la caché.
 
 ---
 

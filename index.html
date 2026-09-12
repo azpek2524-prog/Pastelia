@@ -616,7 +616,20 @@
     if(!r.ingredientesLista) r.ingredientesLista=[];
     if(r.photoBase64==null) r.photoBase64='';
   });
-  function listCost(list){ var t=0; (list||[]).forEach(function(it){ t+=(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0); }); return t; }
+    function listCost(list){
+      var t=0;
+      (list||[]).forEach(function(it){
+        var c=parseFloat(it.costoUnitario)||0;
+        if(it.nombre){
+          var nm=it.nombre.toLowerCase().trim();
+          for(var j=0; j<insumos.length; j++){
+            if((insumos[j].nombre||'').toLowerCase()===nm){ c=parseFloat(unitCost(insumos[j]))||0; break; }
+          }
+        }
+        t+=(parseFloat(it.cantidad)||0)*c;
+      });
+      return t;
+    }
   function recipeInsumos(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return listCost(r.ingredientesLista); return (r&&r.insumos)||210; }
   function recipeIngCount(r){ if(r && r.ingredientesLista && r.ingredientesLista.length) return r.ingredientesLista.length; return (r&&r.ingredientes)||0; }
   function recipePorcion(r){ return Math.round((recipeInsumos(r)+BASE.mano)*(1+MARGIN)/20); }
@@ -694,7 +707,7 @@
   function sizeChips(pane){ return leafDivs(pane).filter(function(d){ return sizeKey(d.textContent); }); }
   function extraChips(pane){ return leafDivs(pane).filter(function(d){ return extraKey(d.textContent); }); }
 
-  function ingTotal(){ var t=0; state.ingredientesManual.forEach(function(it){ t += (parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0); }); return t; }
+    function ingTotal(){ return listCost(state.ingredientesManual); }
 
   // Estilo libre: precarga TODOS los insumos del catálogo "Mis precios" como renglones,
   // cada uno con su costo por unidad de compra; el usuario solo captura la cantidad usada.
@@ -1330,7 +1343,7 @@
       if(!r.grad) r.grad=GRADS[recipes.length%GRADS.length];
       if(isNew) recipes.push(r);
       saveRecipes(recipes);
-      if(state.recipe && state.recipe.id===r.id){ state.recipe=r; renderCotizar(); }
+      if((state.recipe && state.recipe.id===r.id) || isNew){ state.recipe=r; state.modoReceta='receta'; renderCotizar(); }
       renderRecetas(); renderInicio(); modal.close();
       toast(isNew?'Receta creada ✓':'Receta actualizada ✓');
     });
@@ -1567,6 +1580,17 @@
       + '<select data-theme-select style="'+fin+';width:auto;min-width:120px;font-weight:800">'
       +   '<option value="light">Claro</option><option value="dark">Oscuro</option>'
       + '</select>'
+      + '</div>'
+      + '<div style="'+card+'">'
+      + '<div style="'+lab+'">RESPALDO DE DATOS (BACKUP)</div>'
+      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:12px">Descarga o restaura tu informaci&oacute;n (recetas, insumos, pedidos y configuraci&oacute;n).</div>'
+      + '<div style="display:flex;gap:10px">'
+      +   '<div data-action="backup-export" style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:12px;padding:10px;font-weight:800;font-size:13px;cursor:pointer">Exportar .json</div>'
+      +   '<div style="flex:1;position:relative">'
+      +     '<input type="file" accept=".json" data-backup-import style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer">'
+      +     '<div style="text-align:center;background:var(--field);color:var(--text);border-radius:12px;padding:10px;font-weight:800;font-size:13px;cursor:pointer">Importar .json</div>'
+      +   '</div>'
+      + '</div>'
       + '</div>';
   }
   function renderMarcaForm(){ qsa('[data-marca-form]').forEach(function(f){ if(!f.getAttribute('data-mounted')){ f.innerHTML=marcaFormHTML(); f.setAttribute('data-mounted','1'); } }); renderBiz(); }
@@ -1890,6 +1914,20 @@
     document.addEventListener('change', function(ev){ var el=ev.target;
       if(el.hasAttribute&&el.hasAttribute('data-marca-logo-input')){ handleLogoFile(el); return; }
       if(el.hasAttribute&&el.hasAttribute('data-theme-select')){ if(window.pasteliaTheme) window.pasteliaTheme.setDark(el.value==='dark'); applyBrand(); renderBiz(); return; }
+      if(el.hasAttribute&&el.hasAttribute('data-backup-import')){
+        var f=el.files&&el.files[0]; if(!f) return;
+        var reader=new FileReader();
+        reader.onload=function(e){
+          try{
+            var data=JSON.parse(e.target.result), count=0;
+            for(var k in data){ if(k.startsWith('pastelia_')){ localStorage.setItem(k, data[k]); count++; } }
+            toast('Backup importado ('+count+' datos). Recargando...');
+            setTimeout(function(){ location.reload(); }, 1500);
+          }catch(err){ toast('Error al leer el backup'); }
+        };
+        reader.readAsText(f);
+        return;
+      }
     });
     // Filtros de la agenda
     Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="agenda"] [data-agenda-list]'), function(list){
@@ -1944,6 +1982,14 @@
         else if(a==='add-extra'){ state._addingExtra=true; renderCotizar(); }
         else if(a==='cancel-extra'){ state._addingExtra=false; state._newExtraName=''; state._newExtraPrice=''; renderCotizar(); }
         else if(a==='confirm-extra'){ addCustomExtra(); }
+        else if(a==='backup-export'){
+          var data={};
+          for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.startsWith('pastelia_')) data[k]=localStorage.getItem(k); }
+          var blob=new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+          var url=URL.createObjectURL(blob), aLink=document.createElement('a');
+          aLink.href=url; aLink.download='pastelia_backup_'+todayISO()+'.json'; aLink.click();
+          URL.revokeObjectURL(url); toast('Backup exportado ✓');
+        }
       }
     });
   }
