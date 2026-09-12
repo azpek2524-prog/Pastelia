@@ -709,7 +709,7 @@
 
     function ingTotal(){ return listCost(state.ingredientesManual); }
 
-  // Estilo libre: precarga TODOS los insumos del catálogo "Mis precios" como renglones,
+  // modo Personalizado: precarga TODOS los insumos del catálogo "Mis precios" como renglones,
   // cada uno con su costo por unidad de compra; el usuario solo captura la cantidad usada.
   // Sin campo de costo libre => el costo siempre viene del catálogo (evita cálculos erróneos).
   function syncIngredientesFromInsumos(){
@@ -724,7 +724,7 @@
 
   function calc(){
     var s = SIZES[state.size];
-    // El costo de insumos viene de la receta guardada, o de "Mis precios" en Estilo libre.
+    // El costo de insumos viene de la receta guardada, o de "Mis precios" en modo Personalizado.
     var insumos = (state.modoReceta==='personalizado' ? ingTotal() : recipeInsumos(state.recipe)) * s.mult;
     var mano = BASE.mano * s.mult;
     var extras = 0, activos = [];
@@ -811,7 +811,7 @@
     var body = '<div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px">MODO</div>'
       + fChipsRow(
           fChip('modoReceta','receta','Receta guardada',state.modoReceta==='receta')
-        + fChip('modoReceta','personalizado','Estilo libre',state.modoReceta==='personalizado'));
+        + fChip('modoReceta','personalizado','Personalizado',state.modoReceta==='personalizado'));
     if (state.modoReceta === 'receta'){
       if(!recipes.length){
         body += '<div style="margin-top:14px">'+noRecipesEmpty()+'</div>';
@@ -824,7 +824,7 @@
         + '<div style="margin-top:12px">'+fLab('ALERGIAS / RESTRICCIONES')+fTxt('alergias','text','Ej. Sin nuez, sin gluten…',state.alergias)+'</div>'
         + '<div style="margin-top:12px">'+imgRefHtml()+'</div>';
     } else {
-      // Estilo libre: captura de diseño en acordeón (el costo se calcula en el paso 3 con "Mis precios").
+      // modo Personalizado: captura de diseño en acordeón (el costo se calcula en el paso 3 con "Mis precios").
       var gForma = fLab('FORMA')+fChipsRow(FORMAS.map(function(f){ return fChip('forma',f,f,state.forma===f); }).join(''));
       var gPan = fLab('SABOR DEL PAN')+fTxt('saborPan','text','Ej. Vainilla, chocolate…',state.saborPan)
         + '<div style="margin-top:12px">'+fLab('RELLENOS')+fChipsRow(RELLENOS_BASE.map(function(r){ return fMChip('relleno',r,state.rellenos.indexOf(r)>=0); }).join(''))
@@ -860,7 +860,7 @@
   }
 
   function sec3Html(idSuf){
-    // Estilo libre: costeo desde "Mis precios" (insumos precargados, solo cantidad editable; sin costo libre).
+    // modo Personalizado: costeo desde "Mis precios" (insumos precargados, solo cantidad editable; sin costo libre).
     if (state.modoReceta === 'personalizado'){
       syncIngredientesFromInsumos();
       var intro = '<div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px">Escribe cuánto usas de cada insumo de <b style="color:var(--text)">Mis precios</b>. El costo se calcula solo.</div>';
@@ -1632,7 +1632,7 @@
     if(state.modoReceta==='receta'){
       state.recipe=(o.recetaId?recipeById(o.recetaId):null)||state.recipe||recipes[0]||null;
     } else {
-      // Estilo libre: restaura el diseño libre y las cantidades de insumos (vinculadas al catálogo).
+      // modo Personalizado: restaura el diseño libre y las cantidades de insumos (vinculadas al catálogo).
       state.forma=o.forma||'Redondo'; state.saborPan=o.saborPan||'';
       state.rellenos=(o.rellenos||[]).slice(); state.rellenoOtro='';
       if(COBERTURAS.indexOf(o.cobertura)>=0){ state.cobertura=o.cobertura; state.coberturaOtra=''; }
@@ -1665,8 +1665,8 @@
       tipoEntrega:state.tipoEntrega, direccion:state.direccion.trim(), invitados:state.invitados||0,
       modo:state.modoReceta,
       recetaId: (!esPers && state.recipe)?state.recipe.id:null,
-      receta: esPers ? (state.saborPan.trim()||'Estilo libre') : (state.recipe?state.recipe.nombre:'Pastel'),
-      // En modo receta hereda los detalles de la receta; en Estilo libre, del formulario.
+      receta: esPers ? (state.saborPan.trim()||'Personalizado') : (state.recipe?state.recipe.nombre:'Pastel'),
+      // En modo receta hereda los detalles de la receta; en modo Personalizado, del formulario.
       forma: esPers ? state.forma : (rec.forma||''),
       saborPan: esPers ? state.saborPan.trim() : (rec.saborPan||''),
       rellenos: esPers ? rellenos : ((rec.rellenos||[]).slice()),
@@ -1808,7 +1808,7 @@
     renderCotizar();
   }
   function guardar(){
-    if(state.modoReceta==='receta' && !state.recipe){ toast('Selecciona una receta o cambia a "Estilo libre"'); if(!recipes.length) goTo('recetas'); return; }
+    if(state.modoReceta==='receta' && !state.recipe){ toast('Selecciona una receta o cambia a "Personalizado"'); if(!recipes.length) goTo('recetas'); return; }
     if(!state.nombre.trim()){ toast('Escribe el nombre del cliente'); return; }
     var order=buildOrder();
     var arr=readOrders();
@@ -1835,7 +1835,7 @@
 
   /* ---------- Sincronización de campos del formulario ---------- */
   var ING_FIELDS = { 'ing-cant':'cantidad' };
-  // Recalcula el total de insumos (Estilo libre) en vivo, sin re-render.
+  // Recalcula el total de insumos (modo Personalizado) en vivo, sin re-render.
   function updateIngLive(){
     var t=ingTotal();
     Array.prototype.forEach.call(document.querySelectorAll('[data-ing-total]'), function(n){ n.textContent=money(t); });
