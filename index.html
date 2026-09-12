@@ -1720,6 +1720,100 @@
     saveSizes(); rebuildSizes(); renderSizesRows(); toast('Tamaños restablecidos ✓');
   }
 
+  /* ================= AGENTE IA (Rebanada 1: chat + contexto del negocio) =================
+     La clave del modelo NUNCA vive aquí. La app solo habla con un proxy (Cloudflare Worker)
+     que guarda la clave como secreto del servidor. Pega abajo la URL del Worker desplegado. */
+  var AGENT_PROXY_URL = '';   // <-- URL del Cloudflare Worker (la ponemos nosotros; el cliente no toca nada)
+  var agentState = { sending:false, messages:[] };
+
+  // Arma el contexto del negocio a partir de localStorage (precios, tamaños, margen, recetas).
+  function agentContext(){
+    var L=[];
+    L.push('Negocio: '+bizName());
+    L.push('');
+    L.push('Tamaños de pastel (nombre — multiplicador que escala insumos y mano de obra — porciones):');
+    sizesData.forEach(function(s){ L.push('- '+s.nombre+': x'+s.mult+', '+s.porc+' porciones'); });
+    L.push('');
+    L.push('Insumos / "Mis precios" (nombre — precio de compra por cantidad y unidad):');
+    (insumos||[]).forEach(function(it){ L.push('- '+it.nombre+': $'+it.precio+' por '+it.cantidad+' '+it.unidad); });
+    L.push('');
+    L.push('Mano de obra base (tamaño Mediano, x1.00): $'+BASE.mano);
+    L.push('Margen de ganancia aplicado al costo: '+Math.round(MARGIN*100)+'%');
+    L.push('Extras disponibles (costo fijo): '+Object.keys(EXTRAS).map(function(k){ return k+' ($'+EXTRAS[k]+')'; }).join(', '));
+    if(recipes && recipes.length){ L.push('Recetas guardadas: '+recipes.map(function(r){ return r.nombre; }).join(', ')); }
+    return L.join('\n');
+  }
+
+  function agentIcon(sz){ return '<svg width="'+sz+'" height="'+sz+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none"><path d="M12 3l1.7 4.6L18 9l-4.3 1.4L12 15l-1.7-4.6L6 9l4.3-1.4z"/><path d="M18.5 13.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z"/></svg>'; }
+
+  function ensureAgentPanel(){
+    if(document.getElementById('pastelia-agent')) return;
+    var wrap=document.createElement('div'); wrap.id='pastelia-agent';
+    wrap.style.cssText='position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;background:rgba(42,31,23,.5);padding:16px';
+    wrap.innerHTML=''
+      + '<div style="width:100%;max-width:460px;max-height:88vh;display:flex;flex-direction:column;background:var(--surface);border-radius:22px;overflow:hidden;box-shadow:0 24px 60px -20px rgba(42,31,23,.6)">'
+      +   '<div style="display:flex;align-items:center;gap:10px;padding:16px 18px;background:var(--btn);color:var(--on-dark)">'
+      +     '<span style="color:var(--accent)">'+agentIcon(22)+'</span>'
+      +     '<div style="flex:1;min-width:0"><div style="font-family:\'Fredoka\';font-weight:600;font-size:17px;line-height:1">Agente IA</div><div style="font-size:11px;font-weight:700;opacity:.85">Asistente de cotización · beta</div></div>'
+      +     '<div data-agent-close title="Cerrar" style="cursor:pointer;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:rgba(255,255,255,.14)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M6 6l12 12M18 6 6 18"/></svg></div>'
+      +   '</div>'
+      +   '<div data-agent-msgs style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--main)"></div>'
+      +   '<div style="display:flex;gap:8px;align-items:flex-end;padding:12px;border-top:1px solid var(--line);background:var(--surface)">'
+      +     '<textarea data-agent-input rows="1" placeholder="Escribe tu consulta…" style="flex:1;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:14px;padding:11px 13px;font-weight:600;font-size:16px;font-family:inherit;color:var(--text);resize:none;max-height:120px"></textarea>'
+      +     '<div data-agent-send title="Enviar" style="cursor:pointer;flex:none;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:14px;background:var(--btn);color:var(--on-dark)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="M5 12h13M12 5l7 7-7 7"/></svg></div>'
+      +   '</div>'
+      + '</div>';
+    document.body.appendChild(wrap);
+    wrap.addEventListener('click', function(ev){ if(ev.target===wrap) closeAgent(); });
+    wrap.querySelector('[data-agent-close]').addEventListener('click', closeAgent);
+    wrap.querySelector('[data-agent-send]').addEventListener('click', sendAgent);
+    var ta=wrap.querySelector('[data-agent-input]');
+    ta.addEventListener('keydown', function(ev){ if(ev.key==='Enter' && !ev.shiftKey){ ev.preventDefault(); sendAgent(); } });
+  }
+  function openAgent(){
+    ensureAgentPanel();
+    if(!agentState.messages.length){
+      agentState.messages.push({ role:'assistant', content: AGENT_PROXY_URL
+        ? 'Hola, soy tu asistente de cotización. Puedo estimar precios con tus insumos y tamaños. ¿Qué pastel quieres cotizar?'
+        : 'Hola. El Agente IA todavía no está conectado (falta configurar el servidor). Muy pronto podrás cotizar aquí de forma automática.' });
+    }
+    document.getElementById('pastelia-agent').style.display='flex';
+    renderAgentMessages();
+    var ta=document.querySelector('#pastelia-agent [data-agent-input]'); if(ta) setTimeout(function(){ ta.focus(); }, 50);
+  }
+  function closeAgent(){ var p=document.getElementById('pastelia-agent'); if(p) p.style.display='none'; }
+  function renderAgentMessages(){
+    var box=document.querySelector('#pastelia-agent [data-agent-msgs]'); if(!box) return;
+    var html=agentState.messages.map(function(m){
+      var mine=m.role==='user';
+      return '<div style="align-self:'+(mine?'flex-end':'flex-start')+';max-width:85%;background:'+(mine?'var(--btn)':'var(--surface)')+';color:'+(mine?'var(--on-dark)':'var(--text)')+';border-radius:16px;padding:10px 13px;font-size:14px;font-weight:600;line-height:1.4;white-space:pre-wrap;box-shadow:0 6px 16px -12px rgba(123,91,75,.5)">'+esc(m.content)+'</div>';
+    }).join('');
+    if(agentState.sending){ html+='<div style="align-self:flex-start;background:var(--surface);color:var(--muted);border-radius:16px;padding:10px 13px;font-size:14px;font-weight:700">Escribiendo…</div>'; }
+    box.innerHTML=html;
+    box.scrollTop=box.scrollHeight;
+  }
+  function sendAgent(){
+    var ta=document.querySelector('#pastelia-agent [data-agent-input]'); if(!ta) return;
+    var txt=(ta.value||'').trim(); if(!txt || agentState.sending) return;
+    agentState.messages.push({ role:'user', content:txt }); ta.value='';
+    if(!AGENT_PROXY_URL){
+      agentState.messages.push({ role:'assistant', content:'El Agente IA todavía no está conectado. Falta configurar la URL del proxy en la app (lo hacemos nosotros, tú no necesitas hacer nada).' });
+      renderAgentMessages(); return;
+    }
+    renderAgentMessages();
+    agentState.sending=true; renderAgentMessages();
+    var payload={ messages: agentState.messages.filter(function(m){ return m.role==='user'||m.role==='assistant'; }).map(function(m){ return { role:m.role, content:m.content }; }), context: agentContext() };
+    fetch(AGENT_PROXY_URL, { method:'POST', headers:{ 'Content-Type':'application/json' }, body:JSON.stringify(payload) })
+      .then(function(r){ return r.json().then(function(j){ return { ok:r.ok, j:j }; }, function(){ return { ok:false, j:null }; }); })
+      .then(function(res){
+        agentState.sending=false;
+        if(res.ok && res.j && res.j.reply){ agentState.messages.push({ role:'assistant', content:res.j.reply }); }
+        else { agentState.messages.push({ role:'assistant', content:'(No se pudo obtener respuesta) '+((res.j&&res.j.error)||'Intenta de nuevo en un momento.') }); }
+        renderAgentMessages();
+      })
+      .catch(function(e){ agentState.sending=false; agentState.messages.push({ role:'assistant', content:'(Error de conexión) '+e.message }); renderAgentMessages(); });
+  }
+
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
   function orderById(id){ var a=readOrders(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
   // Carga un pedido existente en el estado del cotizador para editarlo (sin duplicarlo).
@@ -2107,7 +2201,7 @@
         else if(a==='size-add'){ addSize(); }
         else if(a==='size-del'){ delSize(act.getAttribute('data-size-id')); }
         else if(a==='size-reset'){ resetSizes(); }
-        else if(a==='agente-ia'){ toast('Agente IA en construcción...'); }
+        else if(a==='agente-ia'){ openAgent(); }
         else if(a==='add-forma'){ state._addingForma=true; renderCotizar(); }
         else if(a==='cancel-forma'){ state._addingForma=false; state._newFormaName=''; renderCotizar(); }
         else if(a==='confirm-forma'){ addCustomForma(); }
