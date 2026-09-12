@@ -529,15 +529,44 @@
 (function(){
   // Modelo base tomado del propio diseño: Mediano 20p con Insumos $210 y Mano de obra $180,
   // Flores +$120 y margen 40% => $714 ($35.70/porción). Se conserva idéntico al arranque.
-  // porc = porciones representativas (dentro del rango mostrado al cotizar); rango = etiqueta visible.
-  var SIZES = {
-    'Bento':        { mult:0.15, porc:2,  rango:'1-2'   },
-    'Petit':        { mult:0.45, porc:9,  rango:'8-10'  },
-    'Chico':        { mult:0.65, porc:13, rango:'12-14' },
-    'Mediano':      { mult:1.00, porc:20, rango:'15-20' },
-    'Grande':       { mult:1.45, porc:28, rango:'25-30' },
-    'Extra grande': { mult:2.00, porc:38, rango:'35-40' }
-  };
+  /* ---------- Tamaños de pastel dinámicos (localStorage: pastelia_sizes) ----------
+     Cada tamaño: { id, nombre, mult, porc }.
+     mult escala insumos y mano de obra (Mediano = 1.00). porc = porciones para el
+     "precio por porción". Editable por el usuario en "Mi negocio". */
+  var SIZES_KEY = 'pastelia_sizes';
+  var DEFAULT_SIZES = [
+    { id:'s_bento',   nombre:'Bento',        mult:0.15, porc:2  },
+    { id:'s_petit',   nombre:'Petit',        mult:0.45, porc:9  },
+    { id:'s_chico',   nombre:'Chico',        mult:0.65, porc:13 },
+    { id:'s_mediano', nombre:'Mediano',      mult:1.00, porc:20 },
+    { id:'s_grande',  nombre:'Grande',       mult:1.45, porc:28 },
+    { id:'s_xl',      nombre:'Extra grande', mult:2.00, porc:38 }
+  ];
+  function defaultSizes(){ return DEFAULT_SIZES.map(function(s){ return { id:s.id, nombre:s.nombre, mult:s.mult, porc:s.porc }; }); }
+  function readSizes(){
+    try{
+      var a=JSON.parse(localStorage.getItem(SIZES_KEY));
+      if(Array.isArray(a) && a.length){
+        return a.map(function(s,i){
+          var m=parseFloat(s&&s.mult), p=parseInt(s&&s.porc,10);
+          return { id:(s&&s.id)||('s_'+i+'_'+Date.now()),
+                   nombre:((s&&s.nombre)||'Tamaño'),
+                   mult:(isFinite(m)&&m>=0)?m:1,
+                   porc:(isFinite(p)&&p>0)?p:1 };
+        });
+      }
+    }catch(e){}
+    return defaultSizes();
+  }
+  var sizesData = readSizes();
+  function saveSizes(){ try{ localStorage.setItem(SIZES_KEY, JSON.stringify(sizesData)); }catch(e){} }
+  var SIZES = {};   // espejo indexado por nombre para consumidores legados
+  function rebuildSizes(){ SIZES={}; sizesData.forEach(function(s){ SIZES[s.nombre]={ mult:s.mult, porc:s.porc, id:s.id }; }); }
+  rebuildSizes();
+  function sizeById(id){ for(var i=0;i<sizesData.length;i++){ if(sizesData[i].id===id) return sizesData[i]; } return null; }
+  function sizeDefByName(n){ for(var i=0;i<sizesData.length;i++){ if(sizesData[i].nombre===n) return sizesData[i]; } return null; }
+  function firstSizeName(){ return sizesData.length?sizesData[0].nombre:'Mediano'; }
+  function currentSizeDef(){ return sizeDefByName(state.size) || sizesData[0] || { mult:1, porc:1, nombre:'Mediano' }; }
   var BASE   = { mano:180 };            // mano de obra base @ Mediano (los insumos vienen de la receta)
   var EXTRAS = { 'Flores':120, 'Topper':80 };
   /* ---------- Margen de ganancia editable (localStorage: pastelia_margen) ---------- */
@@ -702,7 +731,7 @@
     return '<div data-cost-cell style="margin-left:auto;font-weight:800;font-size:13px;color:var(--muted)">= '+money(0)+'</div>';
   }
 
-  var ICONS={home:'<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>',calendar:'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/>',cake:'<path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/>',whisk:'<path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/>',receipt:'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/>',file:'<path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/>',chat:'<path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',coin:'<circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/>',cash:'<rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/>',box:'<path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/>',save:'<path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/>',bow:'<path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/>',user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',inbox:'<path d="M4.5 13.5 6.4 6a1.5 1.5 0 0 1 1.45-1.1h8.3A1.5 1.5 0 0 1 17.6 6l1.9 7.5"/><path d="M4.5 13.5V18a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4.5"/><path d="M4.5 13.5h4l1.3 2.2h4.4l1.3-2.2h4"/>',plus:'<path d="M12 5v14M5 12h14"/>',edit:'<path d="M4 20h4L18.5 9.5a2 2 0 0 0-2.8-2.8L5 17.2z"/><path d="M13.5 6.5 17.5 10.5"/>',check:'<path d="M4.5 12.5 9.5 17.5 19.5 6.5"/>',checkdouble:'<path d="M3.5 12.5 7.5 16.5 15 8"/><path d="M12.5 15.5 13.5 16.5 21 8"/>',jar:'<path d="M8 3.5h8M9 3.5V5c0 1.2-2 2-2 4v9.5A1.5 1.5 0 0 0 8.5 20h7a1.5 1.5 0 0 0 1.5-1.5V9c0-2-2-2.8-2-4V3.5"/><path d="M7 11.5h10"/>',instagram:'<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.6 7.4h.01"/>',facebook:'<rect x="4" y="4" width="16" height="16" rx="5"/><path d="M14.2 8.4h-1c-.9 0-1.5.6-1.5 1.6V16"/><path d="M10.2 11.6h3.6"/>',phone:'<path d="M6.5 4.5h3l1.2 4-2 1.3a11 11 0 0 0 5 5l1.3-2 4 1.2v3a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 5 6.1 1.5 1.5 0 0 1 6.5 4.5Z"/>',pin:'<path d="M12 21s6-5.3 6-10a6 6 0 0 0-12 0c0 4.7 6 10 6 10Z"/><circle cx="12" cy="11" r="2.2"/>'};
+  var ICONS={home:'<path d="M4 11.5 12 5l8 6.5"/><path d="M6 10.5V19a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-8.5"/><path d="M10 20v-5h4v5"/>',calendar:'<rect x="4" y="5" width="16" height="15" rx="2.5"/><path d="M4 9.5h16M8 3.5v3M16 3.5v3"/><path d="M8 13h.01M12 13h.01M16 13h.01M8 16.5h.01M12 16.5h.01"/>',cake:'<path d="M5 20h14"/><path d="M6 20v-6.5h12V20"/><path d="M8 13.5V10h8v3.5"/><path d="M12 10V6.6"/><path d="M12 5.4v.15"/><path d="M6 16.7c1.2 0 1.2 1 2.4 1s1.2-1 2.4-1 1.2 1 2.4 1 1.2-1 2.4-1"/>',whisk:'<path d="M12 14v6M10 20h4"/><path d="M12 3.4c-2.2 1.6-3.3 4.9-2.5 8 .3 1.3 1.4 2.3 2.5 2.3s2.2-1 2.5-2.3c.8-3.1-.3-6.4-2.5-8Z"/><path d="M9.7 6.4c1.5.9 3.1.9 4.6 0M9.3 9.4c1.8 1 3.6 1 5.4 0M9.5 12.4c1.6.9 3.4.9 5 0"/>',receipt:'<path d="M6 3.5h12v17l-2-1.3-2 1.3-2-1.3-2 1.3-2-1.3-2 1.3z"/><path d="M9 8h6M9 11.5h6M9 15h3.5"/>',file:'<path d="M14 3.5H7A1.5 1.5 0 0 0 5.5 5v14A1.5 1.5 0 0 0 7 20.5h10A1.5 1.5 0 0 0 18.5 19V8z"/><path d="M14 3.5V8h4.5"/><path d="M8.5 13h7M8.5 16h5"/>',chat:'<path d="M5 5.5h14A1.5 1.5 0 0 1 20.5 7v7A1.5 1.5 0 0 1 19 15.5H10l-4 3.2V15.5H5A1.5 1.5 0 0 1 3.5 14V7A1.5 1.5 0 0 1 5 5.5Z"/><path d="M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01"/>',coin:'<circle cx="12" cy="12" r="8"/><path d="M12 7.3v9.4M14.3 9.2c-.6-.7-1.5-1.1-2.3-1.1-1.3 0-2.3.8-2.3 1.9 0 2.5 4.7 1.4 4.7 3.9 0 1.1-1 1.9-2.4 1.9-1 0-1.9-.4-2.5-1.1"/>',cash:'<rect x="3.5" y="7" width="17" height="10" rx="1.5"/><circle cx="12" cy="12" r="2.3"/><path d="M6.5 9.5h.01M17.5 14.5h.01"/>',box:'<path d="M20 8.4 12 4 4 8.4v7.2L12 20l8-4.4z"/><path d="M4 8.4 12 13l8-4.6M12 13v7M8 6.2l8 4.6"/>',save:'<path d="M5 4.5h10.5L19 8v10.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V5a.5.5 0 0 1 .5-.5Z"/><path d="M8 4.5v4.5h6V4.5"/><rect x="8" y="12" width="8" height="7"/>',search:'<circle cx="11" cy="11" r="6"/><path d="m20 20-3.4-3.4"/>',bow:'<path d="M12 12c-2.4-2.6-6.5-2.9-6.5.2 0 2.9 4.1 2.4 6.5-.2Z"/><path d="M12 12c2.4-2.6 6.5-2.9 6.5.2 0 2.9-4.1 2.4-6.5-.2Z"/><circle cx="12" cy="12" r="1.4"/><path d="m10.7 13.1-2 5.4M13.3 13.1l2 5.4"/>',user:'<circle cx="12" cy="8.5" r="3.5"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',inbox:'<path d="M4.5 13.5 6.4 6a1.5 1.5 0 0 1 1.45-1.1h8.3A1.5 1.5 0 0 1 17.6 6l1.9 7.5"/><path d="M4.5 13.5V18a1.5 1.5 0 0 0 1.5 1.5h12a1.5 1.5 0 0 0 1.5-1.5v-4.5"/><path d="M4.5 13.5h4l1.3 2.2h4.4l1.3-2.2h4"/>',plus:'<path d="M12 5v14M5 12h14"/>',trash:'<path d="M5 7h14M10 7V5.5A1.5 1.5 0 0 1 11.5 4h1A1.5 1.5 0 0 1 14 5.5V7M6.5 7l.7 11a1.5 1.5 0 0 0 1.5 1.4h6.6a1.5 1.5 0 0 0 1.5-1.4l.7-11"/><path d="M10 11v5M14 11v5"/>',edit:'<path d="M4 20h4L18.5 9.5a2 2 0 0 0-2.8-2.8L5 17.2z"/><path d="M13.5 6.5 17.5 10.5"/>',check:'<path d="M4.5 12.5 9.5 17.5 19.5 6.5"/>',checkdouble:'<path d="M3.5 12.5 7.5 16.5 15 8"/><path d="M12.5 15.5 13.5 16.5 21 8"/>',jar:'<path d="M8 3.5h8M9 3.5V5c0 1.2-2 2-2 4v9.5A1.5 1.5 0 0 0 8.5 20h7a1.5 1.5 0 0 0 1.5-1.5V9c0-2-2-2.8-2-4V3.5"/><path d="M7 11.5h10"/>',instagram:'<rect x="4" y="4" width="16" height="16" rx="5"/><circle cx="12" cy="12" r="3.6"/><path d="M16.6 7.4h.01"/>',facebook:'<rect x="4" y="4" width="16" height="16" rx="5"/><path d="M14.2 8.4h-1c-.9 0-1.5.6-1.5 1.6V16"/><path d="M10.2 11.6h3.6"/>',phone:'<path d="M6.5 4.5h3l1.2 4-2 1.3a11 11 0 0 0 5 5l1.3-2 4 1.2v3a1.5 1.5 0 0 1-1.6 1.5A15.5 15.5 0 0 1 5 6.1 1.5 1.5 0 0 1 6.5 4.5Z"/>',pin:'<path d="M12 21s6-5.3 6-10a6 6 0 0 0-12 0c0 4.7 6 10 6 10Z"/><circle cx="12" cy="11" r="2.2"/>'};
   function icSvg(name,size,extra){ size=size||18; return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:middle;flex:none'+(extra?';'+extra:'')+'">'+(ICONS[name]||'')+'</svg>'; }
   function money(n){ return '$' + Math.round(n).toLocaleString('es-MX'); }
   function sizeKey(t){ t=(t||'').trim(); for(var k in SIZES){ if(t.indexOf(k)===0) return k; } return null; }
@@ -728,10 +757,11 @@
   }
 
   function calc(){
-    var s = SIZES[state.size];
+    var s = currentSizeDef();   // lee el tamaño dinámico seleccionado (respaldado en localStorage)
+    var mult = (isFinite(s.mult)&&s.mult>=0)?s.mult:1, porc = (parseInt(s.porc,10)>0)?parseInt(s.porc,10):1;
     // El costo de insumos viene de la receta guardada, o de "Mis precios" en modo Personalizado.
-    var insumos = (state.modoReceta==='personalizado' ? ingTotal() : recipeInsumos(state.recipe)) * s.mult;
-    var mano = BASE.mano * s.mult;
+    var insumos = (state.modoReceta==='personalizado' ? ingTotal() : recipeInsumos(state.recipe)) * mult;
+    var mano = BASE.mano * mult;
     var extras = 0, activos = [];
     for (var k in state.extras){ if (state.extras[k]){ extras += (EXTRAS[k]||0); activos.push(k.toLowerCase()); } }
     var costo = insumos + mano + extras;
@@ -740,7 +770,7 @@
     var envio = parseFloat(state.envio)||0;
     var total = precio + envio;                  // total a cobrar (pastel + envío)
     return { insumos:insumos, mano:mano, extras:extras, margen:margen, precio:precio,
-             envio:envio, total:total, porcion: precio / s.porc, activos:activos };
+             envio:envio, total:total, porcion: precio / porc, activos:activos };
   }
 
   /* ---------- Formulario de cotización dinámico ---------- */
@@ -755,7 +785,8 @@
   function fChipsRow(html){ return '<div style="display:flex;flex-wrap:wrap;gap:8px">'+html+'</div>'; }
 
   function sizeChipsHtml(){
-    return Object.keys(SIZES).map(function(k){ return fChip('size',k,k+' · '+(SIZES[k].rango||SIZES[k].porc)+'p',state.size===k); }).join('');
+    if(!sizeDefByName(state.size)) state.size=firstSizeName();   // reconcilia si el tamaño se renombró/eliminó
+    return sizesData.map(function(s){ var n=(s.nombre||'').trim()||'Tamaño'; return fChip('size',n,n+' · '+s.porc+'p',state.size===n); }).join('');
   }
 
   function sec1Html(){
@@ -1601,6 +1632,14 @@
       + '</select>'
       + '</div>'
       + '<div style="'+card+'">'
+      + '<div style="'+lab+'">TAMAÑOS DE PASTEL</div>'
+      + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:12px">Ajusta el nombre, el multiplicador (Mediano = 1.00; escala insumos y mano de obra) y las porciones de cada tamaño.</div>'
+      + '<div style="display:flex;gap:8px;padding:0 2px 6px;font-size:10px;font-weight:800;color:var(--muted)"><div style="flex:1;min-width:88px">NOMBRE</div><div style="width:78px;text-align:center">MULT.</div><div style="width:66px;text-align:center">PORC.</div><div style="width:34px"></div></div>'
+      + '<div data-sizes-rows>'+sizesEditorRowsHTML()+'</div>'
+      + '<div data-action="size-add" style="border:2px dashed var(--accent);border-radius:12px;padding:11px;display:flex;align-items:center;justify-content:center;gap:8px;color:var(--text);font-weight:800;font-size:13px;cursor:pointer;margin-top:6px">'+icSvg('plus',16,'stroke-width:2')+'Añadir tamaño</div>'
+      + '<div data-action="size-reset" style="margin-top:10px;text-align:center;color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Restablecer tamaños por defecto</div>'
+      + '</div>'
+      + '<div style="'+card+'">'
       + '<div style="'+lab+'">RESPALDO DE DATOS (BACKUP)</div>'
       + '<div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:12px">Descarga o restaura tu informaci&oacute;n (recetas, insumos, pedidos y configuraci&oacute;n).</div>'
       + '<div style="display:flex;gap:10px">'
@@ -1628,6 +1667,54 @@
     qsa('[data-marca-hex]').forEach(function(h){ h.textContent=c; });
   }
 
+  /* ---------- Editor de tamaños dinámicos (en "Mi negocio") ---------- */
+  function sizesEditorRowsHTML(){
+    var finRow='box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:10px;padding:9px 8px;font-weight:700;font-size:16px;font-family:inherit;color:var(--text)';
+    return sizesData.map(function(s){
+      return '<div data-size-row="'+esc(s.id)+'" style="display:flex;gap:8px;align-items:center;margin-bottom:8px">'
+        + '<input data-size-prop="nombre" value="'+esc(s.nombre)+'" placeholder="Nombre" style="flex:1;min-width:88px;'+finRow+'">'
+        + '<input data-size-prop="mult" type="number" min="0" step="0.05" value="'+esc(String(s.mult))+'" style="width:78px;text-align:center;'+finRow+'">'
+        + '<input data-size-prop="porc" type="number" min="1" step="1" value="'+esc(String(s.porc))+'" style="width:66px;text-align:center;'+finRow+'">'
+        + '<div data-action="size-del" data-size-id="'+esc(s.id)+'" title="Eliminar tamaño" style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--field);color:var(--muted);cursor:pointer">'+icSvg('trash',16)+'</div>'
+        + '</div>';
+    }).join('');
+  }
+  function renderSizesRows(){ qsa('[data-sizes-rows]').forEach(function(c){ c.innerHTML=sizesEditorRowsHTML(); }); }
+  function handleSizeEdit(el){
+    var row=el.closest('[data-size-row]'); if(!row) return;
+    var sz=sizeById(row.getAttribute('data-size-row')); if(!sz) return;
+    var prop=el.getAttribute('data-size-prop');
+    if(prop==='nombre'){ var oldName=sz.nombre; sz.nombre=el.value; if(state.size===oldName) state.size=el.value; }
+    else if(prop==='mult'){ var m=parseFloat(el.value); if(isFinite(m)&&m>=0) sz.mult=m; }
+    else if(prop==='porc'){ var p=parseInt(el.value,10); if(isFinite(p)&&p>0) sz.porc=p; }
+    saveSizes(); rebuildSizes();
+  }
+  function normalizeSizeField(el){
+    var row=el.closest('[data-size-row]'); if(!row) return;
+    var sz=sizeById(row.getAttribute('data-size-row')); if(!sz) return;
+    var prop=el.getAttribute('data-size-prop');
+    if(prop==='nombre' && !(sz.nombre||'').trim()){ var old=sz.nombre; sz.nombre='Tamaño'; if(state.size===old) state.size='Tamaño'; }
+    else if(prop==='mult'){ var m=parseFloat(el.value); sz.mult=(isFinite(m)&&m>=0)?m:0; }
+    else if(prop==='porc'){ var p=parseInt(el.value,10); sz.porc=(isFinite(p)&&p>0)?p:1; }
+    saveSizes(); rebuildSizes(); renderSizesRows();
+  }
+  function addSize(){
+    var n=1; while(sizeDefByName('Nuevo '+n)) n++;
+    sizesData.push({ id:'s_'+Date.now(), nombre:'Nuevo '+n, mult:1.00, porc:10 });
+    saveSizes(); rebuildSizes(); renderSizesRows(); toast('Tamaño agregado ✓');
+  }
+  function delSize(id){
+    if(sizesData.length<=1){ toast('Debe quedar al menos un tamaño'); return; }
+    var sz=sizeById(id); if(!sz) return;
+    sizesData=sizesData.filter(function(s){ return s.id!==id; });
+    if(state.size===sz.nombre) state.size=firstSizeName();
+    saveSizes(); rebuildSizes(); renderSizesRows(); toast('Tamaño eliminado');
+  }
+  function resetSizes(){
+    sizesData=defaultSizes(); if(!sizeDefByName(state.size)) state.size=firstSizeName();
+    saveSizes(); rebuildSizes(); renderSizesRows(); toast('Tamaños restablecidos ✓');
+  }
+
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
   function orderById(id){ var a=readOrders(); for(var i=0;i<a.length;i++){ if(a[i].id===id) return a[i]; } return null; }
   // Carga un pedido existente en el estado del cotizador para editarlo (sin duplicarlo).
@@ -1638,7 +1725,7 @@
     state.fechaPedido=o.fechaPedido||todayISO0(); state.fecha=o.fechaEvento||'';
     state.tipoEntrega=o.tipoEntrega||'recoge'; state.direccion=o.direccion||''; state.invitados=o.invitados||0;
     state.envio=o.envio||0; state.prepago=o.prepago||0;
-    state.size=SIZES[o.tamano]?o.tamano:state.size;
+    state.size=sizeDefByName(o.tamano)?o.tamano:firstSizeName();
     state.extras={}; (o.extras||[]).forEach(function(k){ state.extras[k]=true; });
     state.modoReceta=(o.modo==='personalizado')?'personalizado':'receta';
     if(state.modoReceta==='receta'){
@@ -1688,7 +1775,7 @@
       imagenRef:state.imagenRef,
       photo: esPers ? state.imagenRef : (state.imagenRef || ((state.recipe&&state.recipe.photoBase64)||'')),
       ingredientes: (esPers ? state.ingredientesManual : (rec.ingredientesLista||[])).filter(function(it){ return (it.nombre||'').trim() && (parseFloat(it.cantidad)||0)>0; }).map(function(it){ return { nombre:it.nombre, cantidad:it.cantidad, unidad:it.unidad, costoUnitario:it.costoUnitario, subtotal:(parseFloat(it.cantidad)||0)*(parseFloat(it.costoUnitario)||0) }; }),
-      tamano:state.size, porciones:SIZES[state.size].porc, extras:activos,
+      tamano:state.size, porciones:currentSizeDef().porc, extras:activos,
       precio:Math.round(v.precio), envio:Math.round(v.envio), prepago:Math.round(parseFloat(state.prepago)||0),
       total:Math.round(v.total), estado:'Cotizado', pagado:false, creado:localISO()
     };
@@ -1936,8 +2023,11 @@
       var el=ev.target; if(el.hasAttribute && el.hasAttribute('data-margen-input')){ setMargin(el.value); applyMargenLive(el); }
     });
     // Panel "Mi negocio": campos de marca (texto/color), logo y paleta rápida
-    document.addEventListener('input', function(ev){ var el=ev.target; var f=el.getAttribute&&el.getAttribute('data-marca-field'); if(f) handleMarcaField(el,f); });
+    document.addEventListener('input', function(ev){ var el=ev.target;
+      if(el.getAttribute&&el.getAttribute('data-size-prop')){ handleSizeEdit(el); return; }
+      var f=el.getAttribute&&el.getAttribute('data-marca-field'); if(f) handleMarcaField(el,f); });
     document.addEventListener('change', function(ev){ var el=ev.target;
+      if(el.getAttribute&&el.getAttribute('data-size-prop')){ normalizeSizeField(el); return; }
       if(el.hasAttribute&&el.hasAttribute('data-marca-logo-input')){ handleLogoFile(el); return; }
       if(el.hasAttribute&&el.hasAttribute('data-theme-select')){ if(window.pasteliaTheme) window.pasteliaTheme.setDark(el.value==='dark'); applyBrand(); renderBiz(); return; }
       if(el.hasAttribute&&el.hasAttribute('data-backup-import')){
@@ -2009,6 +2099,9 @@
         else if(a==='add-extra'){ state._addingExtra=true; renderCotizar(); }
         else if(a==='cancel-extra'){ state._addingExtra=false; state._newExtraName=''; state._newExtraPrice=''; renderCotizar(); }
         else if(a==='confirm-extra'){ addCustomExtra(); }
+        else if(a==='size-add'){ addSize(); }
+        else if(a==='size-del'){ delSize(act.getAttribute('data-size-id')); }
+        else if(a==='size-reset'){ resetSizes(); }
         else if(a==='add-forma'){ state._addingForma=true; renderCotizar(); }
         else if(a==='cancel-forma'){ state._addingForma=false; state._newFormaName=''; renderCotizar(); }
         else if(a==='confirm-forma'){ addCustomForma(); }
