@@ -531,13 +531,14 @@
 (function(){
   // Modelo base tomado del propio diseño: Mediano 20p con Insumos $210 y Mano de obra $180,
   // Flores +$120 y margen 40% => $714 ($35.70/porción). Se conserva idéntico al arranque.
+  // porc = porciones representativas (dentro del rango mostrado al cotizar); rango = etiqueta visible.
   var SIZES = {
-    'Petit':   { mult:0.45, porc:9  },
-    'Chico':   { mult:0.65, porc:13 },
-    'Mediano': { mult:1.00, porc:20 },
-    'Grande':  { mult:1.45, porc:28 },
-    'Mega':    { mult:2.50, porc:50 },
-    'Bento':   { mult:0.15, porc:2  }
+    'Bento':        { mult:0.15, porc:2,  rango:'1-2'   },
+    'Petit':        { mult:0.45, porc:9,  rango:'8-10'  },
+    'Chico':        { mult:0.65, porc:13, rango:'12-14' },
+    'Mediano':      { mult:1.00, porc:20, rango:'15-20' },
+    'Grande':       { mult:1.45, porc:28, rango:'25-30' },
+    'Extra grande': { mult:2.00, porc:38, rango:'35-40' }
   };
   var BASE   = { mano:180 };            // mano de obra base @ Mediano (los insumos vienen de la receta)
   var EXTRAS = { 'Flores':120, 'Topper':80 };
@@ -555,6 +556,12 @@
 
   /* ---------- Catálogos del formulario ---------- */
   var FORMAS        = ['Redondo','Cuadrado','Número','Figura','Pisos'];
+  /* Formas personalizadas (localStorage: pastelia_formas_custom) */
+  var FORMAS_KEY = 'pastelia_formas_custom';
+  function readFormasCustom(){ try{ return JSON.parse(localStorage.getItem(FORMAS_KEY)) || []; }catch(e){ return []; } }
+  function saveFormasCustom(a){ try{ localStorage.setItem(FORMAS_KEY, JSON.stringify(a)); }catch(e){} }
+  var formasCustom = readFormasCustom();
+  formasCustom.forEach(function(f){ if(FORMAS.indexOf(f)<0) FORMAS.push(f); });
   var RELLENOS_BASE = ['Crema pastelera','Nutella','Frutos rojos','Dulce de leche','Ganache','Mermelada','Queso crema'];
   var COBERTURAS    = ['Fondant','Buttercream','Ganache','Naked','Chantilly','Otra'];
   var UNIDADES      = ['g','kg','ml','L','pz','cdas','tazas'];
@@ -576,7 +583,7 @@
     // edición de pedidos existentes (null = cotización nueva)
     editingOrderId:null, _editingLoad:false,
     // transitorios (mini-form de extras + acordeón del pastel personalizado + paso del stepper)
-    _addingExtra:false, _newExtraName:'', _newExtraPrice:'', _acc:'forma', step:1
+    _addingExtra:false, _newExtraName:'', _newExtraPrice:'', _addingForma:false, _newFormaName:'', _acc:'forma', step:1
   };
 
   /* ---------- Recetas (localStorage: pastelia_recetas) ---------- */
@@ -750,7 +757,7 @@
   function fChipsRow(html){ return '<div style="display:flex;flex-wrap:wrap;gap:8px">'+html+'</div>'; }
 
   function sizeChipsHtml(){
-    return Object.keys(SIZES).map(function(k){ return fChip('size',k,k+' · '+SIZES[k].porc+'p',state.size===k); }).join('');
+    return Object.keys(SIZES).map(function(k){ return fChip('size',k,k+' · '+(SIZES[k].rango||SIZES[k].porc)+'p',state.size===k); }).join('');
   }
 
   function sec1Html(){
@@ -825,7 +832,15 @@
         + '<div style="margin-top:12px">'+imgRefHtml()+'</div>';
     } else {
       // modo Personalizado: captura de diseño en acordeón (el costo se calcula en el paso 3 con "Mis precios").
-      var gForma = fLab('FORMA')+fChipsRow(FORMAS.map(function(f){ return fChip('forma',f,f,state.forma===f); }).join(''));
+      var formaChips = FORMAS.map(function(f){ return fChip('forma',f,f,state.forma===f); }).join('')
+        + '<div data-action="add-forma" style="background:var(--field);color:var(--muted);border-radius:20px;padding:7px 14px;font-size:12px;font-weight:800;cursor:pointer">+ Añadir</div>';
+      var gForma = fLab('FORMA')+fChipsRow(formaChips);
+      if(state._addingForma){
+        gForma += '<div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;align-items:center">'
+          + '<input data-field="_newFormaName" placeholder="Nueva forma" value="'+esc(state._newFormaName)+'" style="flex:1;min-width:130px;'+FIN+'">'
+          + '<div data-action="confirm-forma" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 13px;font-weight:800;font-size:12px;cursor:pointer">Agregar</div>'
+          + '<div data-action="cancel-forma" style="color:var(--muted);font-weight:800;font-size:12px;padding:9px;cursor:pointer">Cancelar</div></div>';
+      }
       var gPan = fLab('SABOR DEL PAN')+fTxt('saborPan','text','Ej. Vainilla, chocolate…',state.saborPan)
         + '<div style="margin-top:12px">'+fLab('RELLENOS')+fChipsRow(RELLENOS_BASE.map(function(r){ return fMChip('relleno',r,state.rellenos.indexOf(r)>=0); }).join(''))
           + '<div style="margin-top:8px">'+fTxt('rellenoOtro','text','+ Otro relleno…',state.rellenoOtro)+'</div></div>'
@@ -1803,6 +1818,7 @@
     state.saborPan=''; state.rellenos=[]; state.rellenoOtro=''; state.coberturaOtra='';
     state.detallesDiseno=''; state.mensajePastel=''; state.alergias=''; state.imagenRef='';
     state.ingredientesManual=[]; state._addingExtra=false; state._newExtraName=''; state._newExtraPrice='';
+    state._addingForma=false; state._newFormaName='';
     state.editingOrderId=null; state._editingLoad=false;
     state.step=1; state._acc='forma';
     renderCotizar();
@@ -1996,6 +2012,9 @@
         else if(a==='add-extra'){ state._addingExtra=true; renderCotizar(); }
         else if(a==='cancel-extra'){ state._addingExtra=false; state._newExtraName=''; state._newExtraPrice=''; renderCotizar(); }
         else if(a==='confirm-extra'){ addCustomExtra(); }
+        else if(a==='add-forma'){ state._addingForma=true; renderCotizar(); }
+        else if(a==='cancel-forma'){ state._addingForma=false; state._newFormaName=''; renderCotizar(); }
+        else if(a==='confirm-forma'){ addCustomForma(); }
         else if(a==='backup-export'){
           var data={};
           for(var i=0;i<localStorage.length;i++){ var k=localStorage.key(i); if(k&&k.startsWith('pastelia_')) data[k]=localStorage.getItem(k); }
@@ -2029,6 +2048,15 @@
     state.extras[nm]=true;
     state._addingExtra=false; state._newExtraName=''; state._newExtraPrice='';
     renderCotizar(); toast('Extra agregado ✓');
+  }
+  function addCustomForma(){
+    var nm=(state._newFormaName||'').trim();
+    if(!nm){ toast('Escribe el nombre de la forma'); return; }
+    var exists=FORMAS.some(function(f){ return f.toLowerCase()===nm.toLowerCase(); });
+    if(!exists){ FORMAS.push(nm); formasCustom.push(nm); saveFormasCustom(formasCustom); }
+    state.forma=nm;
+    state._addingForma=false; state._newFormaName='';
+    renderCotizar(); toast(exists?'Esa forma ya existe':'Forma agregada ✓');
   }
 
   if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', enhance);
