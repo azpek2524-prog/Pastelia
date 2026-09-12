@@ -27,8 +27,8 @@ Se ejecutó exitosamente el **Refactor Ultracode** con las siguientes implementa
 Con la funcionalidad core cerrada, la Etapa 2 arranca preparando la interfaz para dar cabida al Agente IA y definiendo su punto de acceso dentro de la app.
 
 ### 1. Refactorización de UI para el Agente IA
-- [ ] **Reubicar "Mis Precios":** mover el apartado actual de **"Mis Precios"** —hoy accesible desde la **esquina superior derecha en la vista móvil**— hacia el interior de la categoría **"Mi Negocio"**, junto a Tamaños, Personalización de marca, Apariencia y Respaldo (Backup).
-- [ ] **Liberar la esquina superior derecha:** asignar el espacio que deja "Mis Precios" como el nuevo **botón / punto de acceso al "Agente IA"**.
+- [ ] **Reubicar "Mis Precios":** mover el apartado actual de **"Mis Precios"** —hoy accesible desde la **esquina inferior derecha en la vista móvil**— hacia el interior de la categoría **"Mi Negocio"**, junto a Tamaños, Personalización de marca, Apariencia y Respaldo (Backup).
+- [ ] **Liberar la esquina inferior derecha:** asignar el espacio que deja "Mis Precios" como el nuevo **botón / punto de acceso al "Agente IA"**.
 - [ ] **Lógica del Agente IA por definir:** la lógica técnica y de implementación interna del Agente IA (proveedor del LLM, prompts, flujo de datos y conexión con el cotizador y la agenda) **aún está por definirse** y se especificará en su propia sesión de diseño.
 
 ### Historial de la Etapa 1 (completado)
