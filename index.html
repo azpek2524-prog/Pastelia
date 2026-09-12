@@ -285,7 +285,7 @@
                 <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(123,91,75,.5)">‹</div>
                 <div style="font-family:'Fredoka';font-weight:600;font-size:22px">Mi negocio</div>
               </div>
-              <div style="font-size:12px;color:var(--muted);font-weight:700">Personaliza el nombre y el logo. Se aplican a la app, al PDF y al ticket.</div>
+              <div style="font-size:12px;color:var(--muted);font-weight:700">Personaliza el nombre, logo y color. Se aplican a la app, al PDF y al ticket.</div>
               <div data-marca-form></div>
             </div>
           </div>
@@ -461,7 +461,7 @@
     <div class="pane" data-scr="marca">
       <div>
         <div style="font-family:'Fredoka';font-weight:600;font-size:32px;margin-bottom:4px">Mi negocio</div>
-        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Personaliza el nombre y el logo de tu pastelería. Se aplican a la app, al PDF y al ticket de WhatsApp.</div>
+        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Personaliza el nombre, logo y color de tu pastelería. Se aplican a la app, al PDF y al ticket de WhatsApp.</div>
         <div style="max-width:560px"><div data-marca-form></div></div>
       </div>
     </div>
@@ -1555,6 +1555,7 @@
     qsa('[data-marca-logo-preview]').forEach(function(el){ el.innerHTML = marca.logoUrl ? '<img src="'+marca.logoUrl+'" style="width:96px;height:96px;object-fit:cover;border-radius:18px;display:block">' : '<div style="width:96px;height:96px;border-radius:18px;background:var(--field);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800;font-size:12px">Sin logo</div>'; });
     qsa('[data-theme-select]').forEach(function(el){ el.value = (document.documentElement.getAttribute('data-theme')==='dark') ? 'dark' : 'light'; });
   }
+  var MARCA_SWATCHES=['#7B5B4B','#B0436B','#5B7B4B','#4B5B7B','#7B4BB0','#B07B4B'];
   function marcaFormHTML(){
     var card='background:var(--surface);border-radius:22px;padding:18px;margin-top:14px;box-shadow:0 10px 24px -16px rgba(123,91,75,.45)';
     var fin='width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:12px;padding:11px 13px;font-weight:700;font-size:16px;font-family:inherit;color:var(--text)';
@@ -1567,6 +1568,12 @@
       +   '<div data-marca-logo-preview style="flex:none"></div>'
       +   '<div style="flex:1;min-width:0"><input type="file" accept="image/*" data-marca-logo-input style="'+fin+';font-weight:700">'
       +     '<div data-action="marca-logo-remove" style="margin-top:8px;color:var(--muted);font-weight:800;font-size:12px;cursor:pointer">Quitar logo</div></div>'
+      + '</div>'
+      + '<div style="'+lab+';margin-top:16px">COLOR DE MARCA</div>'
+      + '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">'
+      +   '<input type="color" data-marca-field="primaryColor" value="'+esc(marca.primaryColor)+'" style="width:52px;height:40px;border:0;background:none;border-radius:12px;cursor:pointer;padding:0">'
+      +   '<span data-marca-hex style="font-weight:800;font-size:14px;color:var(--text)">'+esc(marca.primaryColor)+'</span>'
+      +   '<div style="display:flex;gap:6px;margin-left:auto">'+MARCA_SWATCHES.map(function(c){ return '<div data-marca-swatch="'+c+'" title="'+c+'" style="width:26px;height:26px;border-radius:8px;background:'+c+';cursor:pointer;box-shadow:0 0 0 1px var(--line)"></div>'; }).join('')+'</div>'
       + '</div>'
       + '</div>'
       + '<div style="'+card+'">'
@@ -1596,11 +1603,17 @@
   function renderMarcaForm(){ qsa('[data-marca-form]').forEach(function(f){ if(!f.getAttribute('data-mounted')){ f.innerHTML=marcaFormHTML(); f.setAttribute('data-mounted','1'); } }); renderBiz(); }
   function handleMarcaField(el, f){
     marca[f]=el.value; saveMarca();
+    if(f==='primaryColor'){ applyBrand(); qsa('[data-marca-hex]').forEach(function(h){ h.textContent=el.value; }); }
     renderBiz();
   }
   function handleLogoFile(el){
     var file=el.files&&el.files[0]; if(!file) return;
     compressImage(file, function(data){ marca.logoUrl=data; saveMarca(); renderBiz(); toast('Logo actualizado ✓'); });
+  }
+  function pickBrandColor(c){
+    marca.primaryColor=c; saveMarca(); applyBrand();
+    qsa('[data-marca-field="primaryColor"]').forEach(function(i){ i.value=c; });
+    qsa('[data-marca-hex]').forEach(function(h){ h.textContent=c; });
   }
 
   /* ---------- Cotización/pedido: PDF + Ticket de WhatsApp ---------- */
@@ -1967,6 +1980,7 @@
       var rec=ev.target.closest('[data-receta]'); if(rec){ var r=recipeById(rec.getAttribute('data-receta')); if(r) openRecipeEditor(r); return; }
       var fc=ev.target.closest('[data-fchip]'); if(fc){ handleChip(fc); return; }
       var ac=ev.target.closest('[data-acc]'); if(ac){ var ak=ac.getAttribute('data-acc'); state._acc=(state._acc===ak)?'':ak; renderCotizar(); return; }
+      var sw=ev.target.closest('[data-marca-swatch]'); if(sw){ pickBrandColor(sw.getAttribute('data-marca-swatch')); return; }
       var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action');
         if(a==='cambiar'){ openRecipeSelector(); }
         else if(a==='nueva-receta'){ openRecipeEditor(null); }
