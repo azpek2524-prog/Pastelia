@@ -236,7 +236,6 @@
               <div style="display:flex;gap:8px;margin:16px 0 14px;overflow-x:auto">
                 <div style="flex:none;background:var(--btn);color:var(--on-dark);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Activos</div>
                 <div style="flex:none;background:var(--surface);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Todos</div>
-                <div style="flex:none;background:var(--surface);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Apartados</div>
                 <div style="flex:none;background:var(--surface);color:var(--muted);border-radius:20px;padding:8px 16px;font-size:12px;font-weight:800">Entregados</div>
               </div>
               <div data-agenda-list style="display:flex;flex-direction:column;gap:12px"></div>
@@ -438,7 +437,6 @@
         <div style="display:flex;gap:8px;margin-bottom:16px">
           <div style="background:var(--btn);color:var(--on-dark);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Activos</div>
           <div style="background:var(--surface);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Todos</div>
-          <div style="background:var(--surface);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Apartados</div>
           <div style="background:var(--surface);color:var(--muted);border-radius:20px;padding:9px 18px;font-size:13px;font-weight:800">Entregados</div>
         </div>
         <div data-agenda-list style="display:flex;flex-direction:column;gap:14px"></div>
@@ -981,7 +979,7 @@
 
   /* ---------- Etapa 2: guardado + agenda ---------- */
   var ORDERS_KEY = 'pastelia_pedidos';
-  function readOrders(){ try{ return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }catch(e){ return []; } }
+  function readOrders(){ try{ var a=JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; a.forEach(function(o){ if(o && o.estado==='Apartado') o.estado='Cotizado'; }); return a; }catch(e){ return []; } }
   function saveOrders(a){ try{ localStorage.setItem(ORDERS_KEY, JSON.stringify(a)); }catch(e){} }
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
@@ -1012,14 +1010,14 @@
   function goTo(scr){ var b=document.querySelector('[data-go="'+scr+'"]'); if(b) b.click(); }
 
   var AVA_BG = ['var(--tint2)','var(--tint)','var(--tint)','var(--tint2)'];
-  var ESTADOS = ['Cotizado','Apartado','Entregado'];
+  var ESTADOS = ['Cotizado','Entregado'];
   function isDone(o){ return !!o.pagado && (o.estado||'Cotizado')==='Entregado'; }
   function doneBtnMob(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" style="margin-top:8px;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px;font-size:12px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',15,'margin-right:6px;vertical-align:-3px')+'Cobrado y entregado</div>'; }
   function doneBtnDesk(o){ return isDone(o) ? '' : '<div data-done="'+o.id+'" title="Cobrado y entregado" style="background:var(--btn);color:var(--on-dark);border-radius:12px;padding:9px 12px;font-size:13px;font-weight:800;cursor:pointer">'+icSvg('checkdouble',16)+'</div>'; }
   function recipeById(id){ for(var i=0;i<recipes.length;i++){ if(recipes[i].id===id) return recipes[i]; } return null; }
   function orderSub(o){ var x = (o.modo==='personalizado' && o.forma) ? ' · '+esc(o.forma) : ''; var h=fHora(o.creado); return esc(o.cliente)+' · '+fFecha(o.fechaEvento)+(h?' '+h:'')+' · '+esc(o.receta||'Pastel')+x; }
-  // Colores por estado: Cotizado (gris), Apartado (ámbar/advertencia), Entregado (verde).
-  var ESTADO_COLOR = { 'Cotizado':'var(--muted)', 'Apartado':'#B07C33', 'Entregado':'#4E8A5B' };
+  // Colores por estado: Cotizado (gris), Entregado (verde).
+  var ESTADO_COLOR = { 'Cotizado':'var(--muted)', 'Entregado':'#4E8A5B' };
   function estadoInfo(o){
     var e=o.estado||'Cotizado';
     var color=ESTADO_COLOR[e]||'var(--muted)';
@@ -1079,15 +1077,14 @@
     var f=state.filter, e=o.estado||'Cotizado';
     if(f==='todos') return true;
     if(f==='activos') return e!=='Entregado';
-    if(f==='Apartado') return e==='Apartado';
     if(f==='Entregado') return e==='Entregado';
     return true;
   }
-  var FILTER_KEYS=['activos','todos','Apartado','Entregado'];
+  var FILTER_KEYS=['activos','todos','Entregado'];
   function styleFilters(pane){
     var list=pane.querySelector('[data-agenda-list]'); if(!list) return;
     var row=list.previousElementSibling; if(!row) return;
-    for(var i=0;i<row.children.length && i<4;i++){
+    for(var i=0;i<row.children.length && i<FILTER_KEYS.length;i++){
       var on = state.filter===FILTER_KEYS[i];
       row.children[i].style.background = on?'var(--btn)':'var(--surface)';
       row.children[i].style.color = on?'var(--on-dark)':'var(--muted)';
@@ -1961,7 +1958,7 @@
     // Filtros de la agenda
     Array.prototype.forEach.call(document.querySelectorAll('.pane[data-scr="agenda"] [data-agenda-list]'), function(list){
       var row=list.previousElementSibling; if(!row) return;
-      Array.prototype.forEach.call(row.children, function(chip,i){ if(i>3) return; chip.addEventListener('click', function(){ state.filter=FILTER_KEYS[i]; renderAgenda(); }); });
+      Array.prototype.forEach.call(row.children, function(chip,i){ if(i>=FILTER_KEYS.length) return; chip.addEventListener('click', function(){ state.filter=FILTER_KEYS[i]; renderAgenda(); }); });
     });
     // Campos del formulario de cotización (texto/número/select/textarea)
     document.addEventListener('input', function(ev){
