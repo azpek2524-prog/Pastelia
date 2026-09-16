@@ -1,6 +1,6 @@
 # Roadmap y Estado del Proyecto: Pastelia Core
 
-> Documento de estado actualizado el 12 de septiembre de 2026.
+> Documento de estado actualizado el 16 de septiembre de 2026.
 > **Propósito:** Mantener el registro exacto de dónde nos quedamos para retomar el desarrollo sin perder contexto.
 
 ## Estado Actual — Funcionalidad Core 100% Terminada
@@ -20,16 +20,22 @@ Se ejecutó exitosamente el **Refactor Ultracode** con las siguientes implementa
 
 ---
 
-## 🚀 Plan de Acción Inmediato (Próxima sesión) — Etapa 2: Integración de Agente IA
+## 🚀 Plan de Acción Inmediato (Próxima sesión) — Etapa 2: Agente IA (Tool-Use)
 
-**Objetivo principal:** iniciar la **Integración de Agente IA** en Pastelia.
+**Objetivo principal:** Implementar **Tool-Use (Function Calling)** para el Agente IA.
 
-Con la funcionalidad core cerrada, la Etapa 2 arranca preparando la interfaz para dar cabida al Agente IA y definiendo su punto de acceso dentro de la app.
+La Fase 1 (Rebanada 1) ya está completada: El Agente IA tiene su interfaz en la app, se conecta exitosamente a través de un proxy en Cloudflare Worker usando Gemini 3.1 Pro, y recibe el contexto del negocio (insumos, tamaños, etc.) para conversar.
 
-### 1. Refactorización de UI para el Agente IA
-- [x] **Reubicar "Mis Precios":** mover el apartado actual de **"Mis Precios"** —hoy accesible desde la **esquina inferior derecha en la vista móvil**— hacia el interior de la categoría **"Mi Negocio"**, junto a Tamaños, Personalización de marca, Apariencia y Respaldo (Backup).
-- [x] **Liberar la esquina inferior derecha:** asignar el espacio que deja "Mis Precios" como el nuevo **botón / punto de acceso al "Agente IA"**.
-- [x] **Lógica del Agente IA por definir:** la lógica técnica y de implementación interna del Agente IA (proveedor del LLM, prompts, flujo de datos y conexión con el cotizador y la agenda) **aún está por definirse** y se especificará en su propia sesión de diseño.
+**Siguientes pasos (Rebanadas 2 y 3):**
+Darle al Agente la capacidad de interactuar activamente con Pastelia:
+- [ ] **Llenar Cotizador Automáticamente:** Definir las herramientas (tools) en el proxy de Gemini para que el Agente pueda interpretar la solicitud del cliente (ej. "pastel para 20 personas") y pre-llenar los campos del cotizador en la app.
+- [ ] **Guardar en la Agenda:** Permitir que el Agente guarde un pedido confirmado directamente en la agenda de pedidos.
+- [ ] **Límites / Anti-abuso:** Implementar validaciones en el Worker (CORS origin o token) antes de un lanzamiento a producción.
+
+### Historial de la Etapa 2.1 (completado)
+- [x] **Refactor de UI:** "Mis Precios" reubicado a "Mi Negocio". Botón del Agente IA anclado en la esquina inferior derecha.
+- [x] **Backend Proxy:** Cloudflare Worker desplegado y funcional con clave API de Gemini protegida. URL del proxy vinculada en `index.html`.
+
 
 ### Historial de la Etapa 1 (completado)
 
