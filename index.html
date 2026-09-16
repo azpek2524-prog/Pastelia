@@ -1723,7 +1723,7 @@
   /* ================= AGENTE IA (Rebanada 1: chat + contexto del negocio) =================
      La clave del modelo NUNCA vive aquí. La app solo habla con un proxy (Cloudflare Worker)
      que guarda la clave como secreto del servidor. Pega abajo la URL del Worker desplegado. */
-  var AGENT_PROXY_URL = '';   // <-- URL del Cloudflare Worker (la ponemos nosotros; el cliente no toca nada)
+  var AGENT_PROXY_URL = 'https://pastelia-agent.azpek2524.workers.dev';   // <-- URL del Cloudflare Worker
   var agentState = { sending:false, messages:[] };
 
   // Arma el contexto del negocio a partir de localStorage (precios, tamaños, margen, recetas).
