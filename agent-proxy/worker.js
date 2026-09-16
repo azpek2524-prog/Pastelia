@@ -32,7 +32,9 @@ const BASE_SYSTEM = [
 ].join(' ');
 
 function corsHeaders(origin, allowed) {
-  const o = (allowed && allowed !== '*') ? allowed : (origin || '*');
+  // Sin ALLOWED_ORIGIN configurado -> permite cualquier origen (funciona desde file:// y cualquier host).
+  // Con ALLOWED_ORIGIN configurado -> restringe a ese dominio.
+  const o = (allowed && allowed !== '*') ? allowed : '*';
   return {
     'Access-Control-Allow-Origin': o,
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
