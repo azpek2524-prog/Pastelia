@@ -28,8 +28,31 @@ const BASE_SYSTEM = [
   'Eres el asistente de cotización de una pastelería, integrado en la app Pastelia.',
   'Ayudas a la dueña a cotizar pasteles y a resolver dudas de precios usando EXCLUSIVAMENTE los datos del negocio que se te entregan.',
   'Responde en español, breve y claro. No inventes precios, insumos ni tamaños que no estén en los datos; si falta información, dilo y sugiere qué registrar.',
-  'Cuando estimes un costo, explica en una línea cómo lo calculaste: (insumos + mano de obra) escalados por el multiplicador del tamaño, más los extras (costo fijo), y al final el margen de ganancia.'
+  'Cuando estimes un costo, explica en una línea cómo lo calculaste: (insumos + mano de obra) escalados por el multiplicador del tamaño, más los extras (costo fijo), y al final el margen de ganancia.',
+  'IMPORTANTE: SÍ tienes la capacidad de crear pedidos directamente en la app usando la herramienta crear_pedido_directo. Nunca digas que no puedes crear pedidos ni que la dueña debe hacerlo manualmente.',
+  'Cuando el usuario confirme o pida generar un pedido y tengas al menos el nombre del cliente y el tamaño (idealmente también la receta/sabor, la fecha y los extras), LLAMA a la herramienta crear_pedido_directo con esos datos. Si falta el nombre del cliente o el tamaño, pídelos antes de llamar la herramienta.',
+  'Usa los nombres de tamaños, recetas y extras EXACTAMENTE como aparecen en los datos del negocio.'
 ].join(' ');
+
+// Herramienta (function calling) que el frontend ejecuta para crear el pedido en el state y guardarlo.
+const TOOLS = [{
+  functionDeclarations: [{
+    name: 'crear_pedido_directo',
+    description: 'Crea y guarda un pedido de pastel en la agenda de la pastelería con los datos indicados por el cliente. Úsala cuando el usuario confirme un pedido.',
+    parameters: {
+      type: 'object',
+      properties: {
+        nombre_cliente: { type: 'string', description: 'Nombre de la persona que hace el pedido.' },
+        fecha_evento: { type: 'string', description: 'Fecha del evento/entrega en formato ISO YYYY-MM-DD. Si no se indica, déjalo vacío.' },
+        nombre_receta: { type: 'string', description: 'Nombre de la receta o sabor del pastel (ej. "Red velvet", "Chocolate"). Usa una de las recetas guardadas si aplica.' },
+        tamano: { type: 'string', description: 'Tamaño del pastel, EXACTAMENTE como aparece en los tamaños del negocio (ej. Bento, Petit, Chico, Mediano, Grande, Extra grande).' },
+        extras: { type: 'array', items: { type: 'string' }, description: 'Extras de diseño solicitados, con el nombre exacto del catálogo (ej. ["Flores", "Topper"]). Vacío si no hay.' }
+      },
+      required: ['nombre_cliente', 'tamano']
+    }
+  }]
+}];
+const TOOL_CONFIG = { functionCallingConfig: { mode: 'AUTO' } };
 
 function corsHeaders(origin, allowed) {
   // Sin ALLOWED_ORIGIN configurado -> permite cualquier origen (funciona desde file:// y cualquier host).
@@ -80,6 +103,8 @@ export default {
     const payload = {
       system_instruction: { parts: [{ text: systemText }] },
       contents: contents,
+      tools: TOOLS,
+      toolConfig: TOOL_CONFIG,
       generationConfig: {
         maxOutputTokens: MAX_OUTPUT_TOKENS,
         thinkingConfig: { thinkingLevel: THINKING_LEVEL }
@@ -116,6 +141,19 @@ export default {
       .join('')
       .trim();
 
+    // ¿El modelo pidió ejecutar una herramienta? (function calling)
+    let toolCall = null;
+    for (let i = 0; i < parts.length; i++) {
+      if (parts[i] && parts[i].functionCall && parts[i].functionCall.name) {
+        toolCall = { name: parts[i].functionCall.name, args: parts[i].functionCall.args || {} };
+        break;
+      }
+    }
+
+    if (toolCall) {
+      // Si hay tool call, el frontend ejecuta la acción; el texto es opcional.
+      return json({ reply: reply, toolCall: toolCall }, 200, headers);
+    }
     if (!reply && cand && cand.finishReason === 'MAX_TOKENS') {
       return json({ error: 'La respuesta se cortó por el límite de tokens; sube MAX_OUTPUT_TOKENS o baja el nivel de pensamiento.' }, 200, headers);
     }

@@ -1855,6 +1855,66 @@
     var txt=(ta.value||'').trim(); if(!txt) return;
     ta.value=''; sendAgentText(txt);
   }
+  /* ---- Tool-Use: el agente crea pedidos mapeando sus argumentos al state real ---- */
+  function agentNorm(s){ return (s==null?'':String(s)).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/\s+/g,' ').trim(); }
+  function bestRecipeMatch(str){
+    var q=agentNorm(str); if(!q || !recipes || !recipes.length) return null;
+    var best=null, bestScore=0;
+    recipes.forEach(function(r){
+      var n=agentNorm(r.nombre); if(!n) return;
+      var score=0;
+      if(n===q) score=100;
+      else if(n.indexOf(q)>=0 || q.indexOf(n)>=0) score=70;
+      else { var qw=q.split(' '), nw=n.split(' '), hits=0; qw.forEach(function(w){ if(w.length>2 && nw.indexOf(w)>=0) hits++; }); score=hits*20; }
+      if(score>bestScore){ bestScore=score; best=r; }
+    });
+    return bestScore>0?best:null;
+  }
+  function matchByName(list, str){
+    var q=agentNorm(str); if(!q) return null;
+    var exact=null, partial=null;
+    list.forEach(function(name){ var n=agentNorm(name); if(n===q) exact=name; else if(!partial && (n.indexOf(q)>=0 || q.indexOf(n)>=0)) partial=name; });
+    return exact||partial||null;
+  }
+  function normalizeFecha(str){
+    var s=(str==null?'':String(str)).trim(); if(!s) return '';
+    if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
+    var d=new Date(s); if(!isNaN(d.getTime())) return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
+    return '';
+  }
+  // Inyecta los argumentos del modelo en el objeto global `state` y guarda el pedido.
+  function applyPedidoFromAgent(a){
+    a=a||{};
+    var nombre=(a.nombre_cliente!=null?String(a.nombre_cliente):'').trim();
+    // Receta: busca la más parecida entre las guardadas; si no hay, cae en Personalizado con el sabor dado.
+    var rec=bestRecipeMatch(a.nombre_receta);
+    if(rec){ state.modoReceta='receta'; state.recipe=rec; }
+    else { state.modoReceta='personalizado'; state.recipe=null; state.saborPan=(a.nombre_receta!=null?String(a.nombre_receta):'').trim(); }
+    // Tamaño: mapea al nombre exacto de un tamaño existente.
+    var sz=matchByName(sizesData.map(function(s){ return s.nombre; }), a.tamano); if(sz) state.size=sz;
+    // Extras: limpia todos y marca en true los recibidos.
+    var ex={}; Object.keys(EXTRAS).forEach(function(k){ ex[k]=false; });
+    var reqExtras=Array.isArray(a.extras)?a.extras:(a.extras?[a.extras]:[]);
+    reqExtras.forEach(function(name){ var key=matchByName(Object.keys(EXTRAS), name); if(key) ex[key]=true; });
+    state.extras=ex;
+    // Cliente + fecha.
+    state.nombre=nombre; state.fecha=normalizeFecha(a.fecha_evento);
+    state.editingOrderId=null; state._editingLoad=false; state.step=1;
+
+    if(!state.nombre){
+      agentState.messages.push({ role:'assistant', content:'Para guardar el pedido necesito el nombre del cliente. ¿A nombre de quién lo registro?' });
+      renderAgentMessages(); return;
+    }
+    var resumen=(state.recipe?state.recipe.nombre:(state.saborPan||'Pastel'))+' · '+state.size;
+    var beforeN=readOrders().length;
+    guardar();   // valida, construye el pedido, guarda en localStorage y re-renderiza agenda + inicio
+    var ok=readOrders().length>beforeN;
+    agentState.messages.push({ role:'assistant', content: ok
+      ? ('¡Listo! He generado el pedido y ya está en tu agenda. ('+resumen+' · '+nombre+')')
+      : 'No pude guardar el pedido automáticamente. Revisa los datos e inténtalo de nuevo.' });
+    renderAgentMessages();
+    goTo('agente');   // guardar() navega a la agenda; volvemos al chat para mostrar la confirmación
+  }
   function sendAgentText(txt){
     txt=(txt||'').trim(); if(!txt || agentState.sending) return;
     agentState.messages.push({ role:'user', content:txt });
@@ -1869,6 +1929,12 @@
       .then(function(r){ return r.json().then(function(j){ return { ok:r.ok, j:j }; }, function(){ return { ok:false, j:null }; }); })
       .then(function(res){
         agentState.sending=false;
+        // El modelo pidió ejecutar una herramienta -> crear el pedido en la app.
+        if(res.ok && res.j && res.j.toolCall && res.j.toolCall.name==='crear_pedido_directo'){
+          if(res.j.reply){ agentState.messages.push({ role:'assistant', content:res.j.reply }); }
+          applyPedidoFromAgent(res.j.toolCall.args||{});
+          return;
+        }
         if(res.ok && res.j && res.j.reply){ agentState.messages.push({ role:'assistant', content:res.j.reply }); }
         else { agentState.messages.push({ role:'assistant', content:'(No se pudo obtener respuesta) '+((res.j&&res.j.error)||'Intenta de nuevo en un momento.') }); }
         renderAgentMessages();
