@@ -28,9 +28,9 @@ La Fase 1 (Rebanada 1) ya está completada: El Agente IA tiene su interfaz en la
 
 **Siguientes pasos (Rebanadas 2 y 3):**
 Darle al Agente la capacidad de interactuar activamente con Pastelia:
-- [ ] **Llenar Cotizador Automáticamente:** Definir las herramientas (tools) en el proxy de Gemini para que el Agente pueda interpretar la solicitud del cliente (ej. "pastel para 20 personas") y pre-llenar los campos del cotizador en la app.
-- [ ] **Guardar en la Agenda:** Permitir que el Agente guarde un pedido confirmado directamente en la agenda de pedidos.
-- [ ] **Límites / Anti-abuso:** Implementar validaciones en el Worker (CORS origin o token) antes de un lanzamiento a producción.
+- [x] **Llenar Cotizador Automáticamente:** Definir las herramientas (tools) en el proxy de Gemini para que el Agente pueda interpretar la solicitud del cliente (ej. "pastel para 20 personas") y pre-llenar los campos del cotizador en la app.
+- [x] **Guardar en la Agenda:** Permitir que el Agente guarde un pedido confirmado directamente en la agenda de pedidos.
+- [x] **Límites / Anti-abuso:** Implementar validaciones en el Worker (CORS origin o token) antes de un lanzamiento a producción.
 
 ### Historial de la Etapa 2.1 (completado)
 - [x] **Refactor de UI:** "Mis Precios" reubicado a "Mi Negocio". Botón del Agente IA anclado en la esquina inferior derecha.

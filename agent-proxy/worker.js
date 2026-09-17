@@ -98,6 +98,12 @@ export default {
     }).filter(function (c) { return c.parts[0].text; });
     if (!contents.length) return json({ error: 'Mensajes vacíos' }, 400, headers);
 
+    // Validaciones anti-abuso / límite (ROADMAP-MVP Rebanada 3)
+    // Se requiere que la petición venga de un origen permitido, o use un token (opcional, aquí delegamos al Origin).
+    if (env.ALLOWED_ORIGIN && origin && !origin.includes(env.ALLOWED_ORIGIN) && env.ALLOWED_ORIGIN !== '*') {
+      return json({ error: 'Origen no autorizado' }, 403, headers);
+    }
+
     const systemText = BASE_SYSTEM + (context ? ('\n\nDatos del negocio (usa solo esto):\n' + context.slice(0, 12000)) : '');
 
     const payload = {
@@ -135,28 +141,26 @@ export default {
 
     const cand = data && Array.isArray(data.candidates) ? data.candidates[0] : null;
     const parts = cand && cand.content && Array.isArray(cand.content.parts) ? cand.content.parts : [];
+    
+    let toolCall = null;
     const reply = parts
-      .filter(function (p) { return p && p.thought !== true && typeof p.text === 'string'; })
+      .filter(function (p) {
+        if (p.functionCall) toolCall = { name: p.functionCall.name, args: p.functionCall.args };
+        return p && p.thought !== true && typeof p.text === 'string';
+      })
       .map(function (p) { return p.text; })
       .join('')
       .trim();
-
-    // ¿El modelo pidió ejecutar una herramienta? (function calling)
-    let toolCall = null;
-    for (let i = 0; i < parts.length; i++) {
-      if (parts[i] && parts[i].functionCall && parts[i].functionCall.name) {
-        toolCall = { name: parts[i].functionCall.name, args: parts[i].functionCall.args || {} };
-        break;
-      }
-    }
 
     if (toolCall) {
       // Si hay tool call, el frontend ejecuta la acción; el texto es opcional.
       return json({ reply: reply, toolCall: toolCall }, 200, headers);
     }
-    if (!reply && cand && cand.finishReason === 'MAX_TOKENS') {
+    
+    if (!reply && !toolCall && cand && cand.finishReason === 'MAX_TOKENS') {
       return json({ error: 'La respuesta se cortó por el límite de tokens; sube MAX_OUTPUT_TOKENS o baja el nivel de pensamiento.' }, 200, headers);
     }
-    return json({ reply: reply || '(sin respuesta)' }, 200, headers);
+    
+    return json({ reply: reply || '(sin respuesta)', toolCall: toolCall }, 200, headers);
   }
 };
