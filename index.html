@@ -2591,11 +2591,11 @@
 <style>@keyframes pspin{to{transform:rotate(360deg)}}</style>
 <!-- ================= AUTENTICACIÓN (Login / Registro) ================= -->
 <div id="pastelia-auth" style="position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px">
-  <div data-auth-loading hidden style="display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted)">
+  <div data-auth-loading style="display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted)">
     <div style="width:44px;height:44px;border-radius:50%;border:4px solid var(--field);border-top-color:var(--accent);animation:pspin 0.9s linear infinite"></div>
     <div style="font-weight:800;font-size:14px">Cargando tu pasteler&iacute;a&hellip;</div>
   </div>
-  <div data-auth-card style="width:100%;max-width:380px;background:var(--surface);border-radius:24px;padding:26px 22px;box-shadow:0 24px 60px -24px rgba(123,91,75,.5)">
+  <div data-auth-card hidden style="width:100%;max-width:380px;background:var(--surface);border-radius:24px;padding:26px 22px;box-shadow:0 24px 60px -24px rgba(123,91,75,.5)">
     <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px">
       <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;margin-bottom:12px"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:34px;height:34px" onerror="this.style.display='none'"></div>
       <div style="font-family:'Fredoka';font-weight:600;font-size:24px;color:var(--text)">Pastelia</div>
@@ -2645,8 +2645,8 @@
   var card = overlay && overlay.querySelector('[data-auth-card]');
   var loading = overlay && overlay.querySelector('[data-auth-loading]');
   var CONFIGURED = !!(cfg.apiKey && cfg.apiKey.indexOf('PEGA_AQUI') < 0 && typeof firebase !== 'undefined');
-  function showLogin(){ if(overlay) overlay.style.display='flex'; if(card) card.hidden=false; if(loading) loading.hidden=true; }
-  function showLoading(){ if(overlay) overlay.style.display='flex'; if(card) card.hidden=true; if(loading) loading.hidden=false; }
+  function showLogin(){ if(overlay) overlay.style.display='flex'; if(card){ card.hidden=false; } if(loading){ loading.hidden=true; loading.style.display='none'; } }
+  function showLoading(){ if(overlay) overlay.style.display='flex'; if(card){ card.hidden=true; } if(loading){ loading.hidden=false; loading.style.display='flex'; } }
   function hideOverlay(){ if(overlay) overlay.style.display='none'; }
   function setAccountUI(user){
     document.querySelectorAll('[data-account-card]').forEach(function(c){ c.hidden = !user; });
