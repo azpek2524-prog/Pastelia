@@ -647,7 +647,7 @@
     return defaultSizes();
   }
   var sizesData = readSizes();
-  function saveSizes(){ try{ localStorage.setItem(SIZES_KEY, JSON.stringify(sizesData)); }catch(e){} }
+  function saveSizes(){ try{ localStorage.setItem(SIZES_KEY, JSON.stringify(sizesData)); }catch(e){} cloudSave('catalog','sizes',{items:sizesData||[]}); }
   var SIZES = {};   // espejo indexado por nombre para consumidores legados
   function rebuildSizes(){ SIZES={}; sizesData.forEach(function(s){ SIZES[s.nombre]={ mult:s.mult, porc:s.porc, id:s.id }; }); }
   rebuildSizes();
@@ -660,12 +660,12 @@
   /* ---------- Margen de ganancia editable (localStorage: pastelia_margen) ---------- */
   var MARGEN_KEY = 'pastelia_margen';
   var MARGIN = (function(){ try{ var m=parseFloat(localStorage.getItem(MARGEN_KEY)); return (isFinite(m)&&m>=0)?m:0.40; }catch(e){ return 0.40; } })();
-  function setMargin(pct){ var f=parseFloat(pct); if(!isFinite(f)||f<0) return; MARGIN=f/100; try{ localStorage.setItem(MARGEN_KEY, String(MARGIN)); }catch(e){} }
+  function setMargin(pct){ var f=parseFloat(pct); if(!isFinite(f)||f<0) return; MARGIN=f/100; try{ localStorage.setItem(MARGEN_KEY, String(MARGIN)); }catch(e){} cloudSave('config','settings',{margen:MARGIN}); }
 
   /* ---------- Extras personalizados (localStorage: pastelia_extras_custom) ---------- */
   var EXTRAS_KEY = 'pastelia_extras_custom';
   function readExtrasCustom(){ try{ return JSON.parse(localStorage.getItem(EXTRAS_KEY)) || {}; }catch(e){ return {}; } }
-  function saveExtrasCustom(o){ try{ localStorage.setItem(EXTRAS_KEY, JSON.stringify(o)); }catch(e){} }
+  function saveExtrasCustom(o){ try{ localStorage.setItem(EXTRAS_KEY, JSON.stringify(o)); }catch(e){} cloudSave('catalog','extras',{map:o||{}}); }
   var extrasCustom = readExtrasCustom();
   for (var _ek in extrasCustom){ EXTRAS[_ek] = extrasCustom[_ek]; }
 
@@ -674,7 +674,7 @@
   /* Formas personalizadas (localStorage: pastelia_formas_custom) */
   var FORMAS_KEY = 'pastelia_formas_custom';
   function readFormasCustom(){ try{ return JSON.parse(localStorage.getItem(FORMAS_KEY)) || []; }catch(e){ return []; } }
-  function saveFormasCustom(a){ try{ localStorage.setItem(FORMAS_KEY, JSON.stringify(a)); }catch(e){} }
+  function saveFormasCustom(a){ try{ localStorage.setItem(FORMAS_KEY, JSON.stringify(a)); }catch(e){} cloudSave('catalog','formas',{items:a||[]}); }
   var formasCustom = readFormasCustom();
   formasCustom.forEach(function(f){ if(FORMAS.indexOf(f)<0) FORMAS.push(f); });
   var RELLENOS_BASE = ['Crema pastelera','Nutella','Frutos rojos','Dulce de leche','Ganache','Mermelada','Queso crema'];
@@ -768,7 +768,7 @@
     { id:'ins_choc', nombre:'Chocolate',   iconBg:'#F1E6CE', precio:145, cantidad:500,  unidad:'g'  }
   ];
   function readInsumos(){ try{ var a=JSON.parse(localStorage.getItem(INSUMOS_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
-  function saveInsumos(a){ try{ localStorage.setItem(INSUMOS_KEY, JSON.stringify(a)); }catch(e){} }
+  function saveInsumos(a){ try{ localStorage.setItem(INSUMOS_KEY, JSON.stringify(a)); }catch(e){} cloudSave('catalog','insumos',{items:a||[]}); }
   var insumos = readInsumos();
   if (!insumos){ insumos = DEFAULT_INSUMOS.slice(); saveInsumos(insumos); }
   function insumoById(id){ for(var i=0;i<insumos.length;i++){ if(insumos[i].id===id) return insumos[i]; } return null; }
@@ -1647,7 +1647,7 @@
     try{ var old=localStorage.getItem('pastelia_negocio'); if(old&&old.trim()) d.bakeryName=old.trim(); }catch(e){}
     return d;
   }
-  function saveMarca(){ try{ localStorage.setItem(MARCA_KEY, JSON.stringify(marca)); }catch(e){} }
+  function saveMarca(){ try{ localStorage.setItem(MARCA_KEY, JSON.stringify(marca)); }catch(e){} cloudSave('config','marca', JSON.parse(JSON.stringify(marca||{}))); }
   var marca = readMarca();
   function bizName(){ return (marca.bakeryName&&marca.bakeryName.trim())?marca.bakeryName.trim():BIZ_DEFAULT; }
   function saveBizName(n){ marca.bakeryName=n; saveMarca(); }
@@ -2410,8 +2410,64 @@
     renderCotizar(); toast(exists?'Esa forma ya existe':'Forma agregada ✓');
   }
 
-  if (document.readyState==='loading') document.addEventListener('DOMContentLoaded', enhance);
-  else enhance();
+  /* ================= 7.2 — Persistencia en la nube (Firestore) =================
+     Modo 'local' = localStorage (idéntico a hoy). Modo 'cloud' = Firestore por tenant.
+     El catálogo se hidrata ANTES del primer enhance(), así la UI sigue síncrona.
+     (Pedidos y recetas se migran en 7.3; por ahora siguen en localStorage.) */
+  var STORE_MODE='local', STORE_TENANT=null, STORE_DB=null, __booted=false;
+  function cloudDoc(seg1, seg2){ return STORE_DB.collection('tenants').doc(STORE_TENANT).collection(seg1).doc(seg2); }
+  function cloudSave(seg1, seg2, data){
+    if(STORE_MODE!=='cloud' || !STORE_DB || !STORE_TENANT) return;
+    try{ cloudDoc(seg1,seg2).set(data); }catch(e){ console.error('[Pastelia] cloudSave '+seg1+'/'+seg2, e); }
+  }
+  function bootOnce(){
+    if(__booted) return; __booted=true;
+    function go(){ enhance(); var o=document.getElementById('pastelia-auth'); if(o) o.style.display='none'; }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', go); else go();
+  }
+  function applyCloudCatalog(d){
+    if(d.marca && d.marca.exists){ var mm=d.marca.data(); if(mm && typeof mm==='object') marca=mm; }
+    if(d.settings && d.settings.exists){ var s=d.settings.data()||{}; if(isFinite(parseFloat(s.margen))) MARGIN=parseFloat(s.margen); }
+    if(d.insumos && d.insumos.exists){ var it=(d.insumos.data()||{}).items; if(Array.isArray(it)) insumos=it; }
+    if(d.sizes && d.sizes.exists){ var sz=(d.sizes.data()||{}).items; if(Array.isArray(sz)&&sz.length){ sizesData=sz; rebuildSizes(); } }
+    if(d.extras && d.extras.exists){ var mp=(d.extras.data()||{}).map; if(mp && typeof mp==='object'){ extrasCustom=mp; EXTRAS=Object.assign({'Flores':120,'Topper':80}, extrasCustom); } }
+    if(d.formas && d.formas.exists){ var fm=(d.formas.data()||{}).items; if(Array.isArray(fm)){ formasCustom=fm; formasCustom.forEach(function(f){ if(FORMAS.indexOf(f)<0) FORMAS.push(f); }); } }
+  }
+  function seedCloudFromCurrent(){
+    // Nuevo tenant: sube lo que ya hay (migra el localStorage actual o los defaults ya cargados).
+    cloudDoc('config','marca').set(JSON.parse(JSON.stringify(marca||{})));
+    cloudDoc('config','settings').set({ margen: MARGIN });
+    cloudDoc('catalog','insumos').set({ items: insumos||[] });
+    cloudDoc('catalog','sizes').set({ items: sizesData||[] });
+    cloudDoc('catalog','extras').set({ map: extrasCustom||{} });
+    cloudDoc('catalog','formas').set({ items: formasCustom||[] });
+  }
+  function hydrateCloud(uid){
+    STORE_TENANT=uid; STORE_DB=firebase.firestore();
+    var base=STORE_DB.collection('tenants').doc(uid);
+    Promise.all([
+      base.collection('config').doc('marca').get(),
+      base.collection('config').doc('settings').get(),
+      base.collection('catalog').doc('insumos').get(),
+      base.collection('catalog').doc('sizes').get(),
+      base.collection('catalog').doc('extras').get(),
+      base.collection('catalog').doc('formas').get()
+    ]).then(function(r){
+      STORE_MODE='cloud';
+      var hasAny=r.some(function(s){ return s && s.exists; });
+      if(hasAny){ applyCloudCatalog({ marca:r[0], settings:r[1], insumos:r[2], sizes:r[3], extras:r[4], formas:r[5] }); }
+      else { seedCloudFromCurrent(); }
+    }).catch(function(e){
+      console.error('[Pastelia] No se pudo cargar la nube; uso la caché local.', e);
+      STORE_MODE='cloud';
+    }).then(function(){ bootOnce(); });
+  }
+  // La capa de auth (script de abajo) llama a onUser tras resolver la sesión.
+  window.__pastelia = { onUser: function(user){ if(user && !__booted){ hydrateCloud(user.uid); } } };
+
+  // Arranque: modo local (sin Firebase) arranca ya; modo nube espera al login.
+  var __willGate = !!(window.PASTELIA_FIREBASE_CONFIG && String((window.PASTELIA_FIREBASE_CONFIG||{}).apiKey||'').indexOf('PEGA_AQUI')<0 && typeof firebase!=='undefined');
+  if(!__willGate){ STORE_MODE='local'; bootOnce(); }
 })();
 </script>
 <script>
@@ -2428,9 +2484,14 @@
 })();
 </script>
 
+<style>@keyframes pspin{to{transform:rotate(360deg)}}</style>
 <!-- ================= AUTENTICACIÓN (Login / Registro) ================= -->
 <div id="pastelia-auth" style="position:fixed;inset:0;z-index:20000;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px">
-  <div style="width:100%;max-width:380px;background:var(--surface);border-radius:24px;padding:26px 22px;box-shadow:0 24px 60px -24px rgba(123,91,75,.5)">
+  <div data-auth-loading hidden style="display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted)">
+    <div style="width:44px;height:44px;border-radius:50%;border:4px solid var(--field);border-top-color:var(--accent);animation:pspin 0.9s linear infinite"></div>
+    <div style="font-weight:800;font-size:14px">Cargando tu pasteler&iacute;a&hellip;</div>
+  </div>
+  <div data-auth-card style="width:100%;max-width:380px;background:var(--surface);border-radius:24px;padding:26px 22px;box-shadow:0 24px 60px -24px rgba(123,91,75,.5)">
     <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:18px">
       <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;margin-bottom:12px"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:34px;height:34px" onerror="this.style.display='none'"></div>
       <div style="font-family:'Fredoka';font-weight:600;font-size:24px;color:var(--text)">Pastelia</div>
@@ -2452,8 +2513,11 @@
      Si Firebase no está configurado o el SDK no cargó, la app corre en "modo local" (como hoy, sin gate). */
   var cfg = window.PASTELIA_FIREBASE_CONFIG || {};
   var overlay = document.getElementById('pastelia-auth');
+  var card = overlay && overlay.querySelector('[data-auth-card]');
+  var loading = overlay && overlay.querySelector('[data-auth-loading]');
   var CONFIGURED = !!(cfg.apiKey && cfg.apiKey.indexOf('PEGA_AQUI') < 0 && typeof firebase !== 'undefined');
-  function showOverlay(){ if(overlay) overlay.style.display='flex'; }
+  function showLogin(){ if(overlay) overlay.style.display='flex'; if(card) card.hidden=false; if(loading) loading.hidden=true; }
+  function showLoading(){ if(overlay) overlay.style.display='flex'; if(card) card.hidden=true; if(loading) loading.hidden=false; }
   function hideOverlay(){ if(overlay) overlay.style.display='none'; }
   function setAccountUI(user){
     document.querySelectorAll('[data-account-card]').forEach(function(c){ c.hidden = !user; });
@@ -2505,13 +2569,17 @@
   els.google.addEventListener('click', google);
   els.toggle.addEventListener('click', function(){ setMode(mode==='login'?'signup':'login'); });
   els.pass.addEventListener('keydown', function(ev){ if(ev.key==='Enter'){ ev.preventDefault(); submitEmail(); } });
-  document.addEventListener('click', function(ev){ if(ev.target.closest && ev.target.closest('[data-action="logout"]')){ auth.signOut(); } });
+  document.addEventListener('click', function(ev){ if(ev.target.closest && ev.target.closest('[data-action="logout"]')){ auth.signOut().then(function(){ try{ location.reload(); }catch(e){} }); } });
   setMode('login');
   auth.onAuthStateChanged(function(user){
     window.PASTELIA_USER = user||null;
-    window.PASTELIA_TENANT_ID = user ? user.uid : null;   // 7.2/7.3 usarán esto como tenantId
-    if(user){ hideOverlay(); setAccountUI(user); }
-    else { showOverlay(); setAccountUI(null); if(els.pass) els.pass.value=''; }
+    window.PASTELIA_TENANT_ID = user ? user.uid : null;   // tenantId para la nube
+    if(user){
+      showLoading(); setAccountUI(user);
+      if(window.__pastelia) window.__pastelia.onUser(user);   // hidrata Firestore y arranca la app (oculta el overlay al terminar)
+    } else {
+      showLogin(); setAccountUI(null); if(els.pass) els.pass.value='';
+    }
   });
 })();
 </script>
