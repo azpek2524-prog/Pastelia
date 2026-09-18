@@ -2413,15 +2413,48 @@
     renderCotizar(); toast(exists?'Esa forma ya existe':'Forma agregada ✓');
   }
 
+  /* ================= 7.4 — Onboarding (bienvenida: configura la marca) ================= */
+  function obEl(sel){ var ov=document.getElementById('pastelia-onboarding'); return ov?ov.querySelector(sel):null; }
+  function obLogoPreview(){ var el=obEl('[data-ob-logo-preview]'); if(!el) return;
+    el.innerHTML = marca.logoUrl ? '<img src="'+marca.logoUrl+'" style="width:72px;height:72px;object-fit:cover;border-radius:16px;display:block">' : '<div style="width:72px;height:72px;border-radius:16px;background:var(--field);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800;font-size:11px">Sin logo</div>'; }
+  function renderObSwatches(){ var w=obEl('[data-ob-swatches]'); if(!w) return; w.innerHTML=MARCA_SWATCHES.map(function(c){ return '<div data-ob-swatch="'+c+'" title="'+c+'" style="width:26px;height:26px;border-radius:8px;background:'+c+';cursor:pointer;box-shadow:0 0 0 1px var(--line)"></div>'; }).join(''); }
+  function showOnboarding(){
+    var ov=document.getElementById('pastelia-onboarding'); if(!ov) return;
+    var name=obEl('[data-ob-name]'); if(name){ var n=marca.bakeryName||''; name.value=(n && n!=="Azucena's Cake Studio")?n:''; }
+    var color=obEl('[data-ob-color]'); if(color) color.value=marca.primaryColor||'#7B5B4B';
+    var hex=obEl('[data-ob-hex]'); if(hex) hex.textContent=marca.primaryColor||'#7B5B4B';
+    renderObSwatches(); obLogoPreview();
+    ov.hidden=false;
+    setTimeout(function(){ if(name) try{ name.focus(); }catch(e){} }, 60);
+  }
+  function setOnboardingDone(){ __needsOnboarding=false; cloudSave('config','settings',{ onboardingDone:true }); }
+  function finishOnboarding(){
+    var name=obEl('[data-ob-name]'); var nm=(name&&name.value||'').trim();
+    if(nm) marca.bakeryName=nm;
+    saveMarca(); applyBrand(); renderBiz();
+    setOnboardingDone();
+    var ov=document.getElementById('pastelia-onboarding'); if(ov) ov.hidden=true;
+  }
+  document.addEventListener('click', function(ev){
+    if(ev.target.closest && ev.target.closest('[data-ob-start]')){ finishOnboarding(); return; }
+    var sw=ev.target.closest && ev.target.closest('[data-ob-swatch]');
+    if(sw){ var c=sw.getAttribute('data-ob-swatch'); marca.primaryColor=c; applyBrand();
+      var ci=obEl('[data-ob-color]'); if(ci) ci.value=c; var hx=obEl('[data-ob-hex]'); if(hx) hx.textContent=c; return; }
+  });
+  document.addEventListener('input', function(ev){ var el=ev.target;
+    if(el.hasAttribute && el.hasAttribute('data-ob-color')){ marca.primaryColor=el.value; applyBrand(); var hx=obEl('[data-ob-hex]'); if(hx) hx.textContent=el.value; } });
+  document.addEventListener('change', function(ev){ var el=ev.target;
+    if(el.hasAttribute && el.hasAttribute('data-ob-logo')){ var f=el.files&&el.files[0]; if(f) compressImage(f, function(data){ marca.logoUrl=data; obLogoPreview(); }); } });
+
   /* ================= 7.2 — Persistencia en la nube (Firestore) =================
      Modo 'local' = localStorage (idéntico a hoy). Modo 'cloud' = Firestore por tenant.
      El catálogo se hidrata ANTES del primer enhance(), así la UI sigue síncrona.
      (Pedidos y recetas se migran en 7.3; por ahora siguen en localStorage.) */
-  var STORE_MODE='local', STORE_TENANT=null, STORE_DB=null, __booted=false;
+  var STORE_MODE='local', STORE_TENANT=null, STORE_DB=null, __booted=false, __needsOnboarding=false;
   function cloudDoc(seg1, seg2){ return STORE_DB.collection('tenants').doc(STORE_TENANT).collection(seg1).doc(seg2); }
   function cloudSave(seg1, seg2, data){
     if(STORE_MODE!=='cloud' || !STORE_DB || !STORE_TENANT) return;
-    try{ cloudDoc(seg1,seg2).set(data); }catch(e){ console.error('[Pastelia] cloudSave '+seg1+'/'+seg2, e); }
+    try{ cloudDoc(seg1,seg2).set(data, {merge:true}); }catch(e){ console.error('[Pastelia] cloudSave '+seg1+'/'+seg2, e); }
   }
   /* 7.3 — Pedidos y recetas como colecciones (1 doc por item), sincronizadas por diff. */
   var ordersCache=[], recipesSnap=[];
@@ -2444,7 +2477,8 @@
   function syncRecipesCloud(newArr){ recipesSnap = syncCollectionDiff('recetas', newArr||[], recipesSnap); }
   function bootOnce(){
     if(__booted) return; __booted=true;
-    function go(){ enhance(); var o=document.getElementById('pastelia-auth'); if(o) o.style.display='none'; }
+    function go(){ enhance(); var o=document.getElementById('pastelia-auth'); if(o) o.style.display='none';
+      if(__needsOnboarding && STORE_MODE==='cloud'){ try{ showOnboarding(); }catch(e){} } }
     if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', go); else go();
   }
   function applyCloudCatalog(d){
@@ -2458,7 +2492,7 @@
   function seedCloudFromCurrent(){
     // Nuevo tenant: sube lo que ya hay (migra el localStorage actual o los defaults ya cargados).
     cloudDoc('config','marca').set(JSON.parse(JSON.stringify(marca||{})));
-    cloudDoc('config','settings').set({ margen: MARGIN });
+    cloudDoc('config','settings').set({ margen: MARGIN, onboardingDone:false });
     cloudDoc('catalog','insumos').set({ items: insumos||[] });
     cloudDoc('catalog','sizes').set({ items: sizesData||[] });
     cloudDoc('catalog','extras').set({ map: extrasCustom||{} });
@@ -2488,8 +2522,10 @@
         applyCloudCatalog({ marca:r[0], settings:r[1], insumos:r[2], sizes:r[3], extras:r[4], formas:r[5] });
         ordersCache = snapToArray(r[6]); ordersCache.forEach(apartadoFix);
         recipes = snapToArray(r[7]); recipesSnap = cloneArr(recipes);
+        var _st=(r[1]&&r[1].exists)?(r[1].data()||{}):{}; __needsOnboarding = (_st.onboardingDone===false);
       } else {
         seedCloudFromCurrent();   // nuevo tenant: siembra catálogo + migra pedidos/recetas locales
+        __needsOnboarding = true;
       }
     }).catch(function(e){
       console.error('[Pastelia] No se pudo cargar la nube; uso la caché local.', e);
@@ -2538,6 +2574,31 @@
     <div style="display:flex;align-items:center;gap:10px;margin:14px 0"><div style="flex:1;height:1px;background:var(--line)"></div><div style="font-size:11px;font-weight:800;color:var(--muted)">O</div><div style="flex:1;height:1px;background:var(--line)"></div></div>
     <div data-auth-google style="display:flex;align-items:center;justify-content:center;gap:10px;background:var(--field);color:var(--text);border-radius:14px;padding:12px;font-weight:800;font-size:14px;cursor:pointer"><svg width="18" height="18" viewBox="0 0 48 48" style="flex:none"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continuar con Google</div>
     <div data-auth-toggle style="text-align:center;font-size:13px;font-weight:700;color:var(--muted);margin-top:16px;cursor:pointer">&iquest;No tienes cuenta? <b style="color:var(--text)">Reg&iacute;strate</b></div>
+  </div>
+</div>
+
+<!-- ================= ONBOARDING (bienvenida: configura la marca) ================= -->
+<div id="pastelia-onboarding" hidden style="position:fixed;inset:0;z-index:19000;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;overflow-y:auto">
+  <div style="width:100%;max-width:420px;background:var(--surface);border-radius:24px;padding:26px 22px;box-shadow:0 24px 60px -24px rgba(123,91,75,.5)">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:34px;height:34px" onerror="this.style.display='none'"></div>
+      <div style="font-family:'Fredoka';font-weight:600;font-size:23px;color:var(--text)">&iexcl;Bienvenida a Pastelia!</div>
+      <div style="font-size:13px;font-weight:700;color:var(--muted);margin-top:2px">Configura tu marca en menos de un minuto.</div>
+    </div>
+    <div style="font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px">NOMBRE DEL NEGOCIO</div>
+    <input data-ob-name type="text" placeholder="Ej. Pasteler&iacute;a Dulce Hogar" style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:14px;padding:13px 14px;font-weight:700;font-size:16px;color:var(--text);font-family:inherit">
+    <div style="font-size:11px;font-weight:800;color:var(--muted);margin:16px 0 6px">LOGOTIPO (opcional)</div>
+    <div style="display:flex;align-items:center;gap:14px">
+      <div data-ob-logo-preview style="flex:none"></div>
+      <div style="flex:1;min-width:0"><input type="file" accept="image/*" data-ob-logo style="width:100%;box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:14px;padding:11px 13px;font-weight:700;font-size:14px;color:var(--text);font-family:inherit"></div>
+    </div>
+    <div style="font-size:11px;font-weight:800;color:var(--muted);margin:16px 0 6px">COLOR DE MARCA</div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <input type="color" data-ob-color value="#7B5B4B" style="width:52px;height:40px;border:0;background:none;border-radius:12px;cursor:pointer;padding:0">
+      <span data-ob-hex style="font-weight:800;font-size:14px;color:var(--text)">#7B5B4B</span>
+      <div data-ob-swatches style="display:flex;gap:6px;margin-left:auto"></div>
+    </div>
+    <div data-ob-start style="margin-top:22px;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:14px;padding:14px;font-family:'Fredoka';font-weight:600;font-size:15px;cursor:pointer">Empezar a usar Pastelia</div>
   </div>
 </div>
 
