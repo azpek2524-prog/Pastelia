@@ -1865,6 +1865,7 @@
   function renderAgentMessages(){
     var boxes=qsa('.pane[data-scr="agente"] [data-agent-msgs]'); if(!boxes.length) return;
     var html=agentState.messages.map(function(m){
+      if(m.type==='confirm'){ return confirmCardHtml(m); }
       var mine=m.role==='user';
       var av=mine?'':'<div class="chat-mini">'+agentIcon(17)+'</div>';
       return '<div class="chat-row '+(mine?'me':'bot')+'">'+av+'<div class="chat-bubble">'+esc(m.content)+'</div></div>';
@@ -1906,38 +1907,69 @@
     var d=new Date(s); if(!isNaN(d.getTime())) return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);
     return '';
   }
-  // Inyecta los argumentos del modelo en el objeto global `state` y guarda el pedido.
-  function applyPedidoFromAgent(a){
+  // Mapea los argumentos del modelo al objeto global `state` (sin guardar).
+  function mapPedidoToState(a){
     a=a||{};
     var nombre=(a.nombre_cliente!=null?String(a.nombre_cliente):'').trim();
-    // Receta: busca la más parecida entre las guardadas; si no hay, cae en Personalizado con el sabor dado.
     var rec=bestRecipeMatch(a.nombre_receta);
     if(rec){ state.modoReceta='receta'; state.recipe=rec; }
     else { state.modoReceta='personalizado'; state.recipe=null; state.saborPan=(a.nombre_receta!=null?String(a.nombre_receta):'').trim(); }
-    // Tamaño: mapea al nombre exacto de un tamaño existente.
     var sz=matchByName(sizesData.map(function(s){ return s.nombre; }), a.tamano); if(sz) state.size=sz;
-    // Extras: limpia todos y marca en true los recibidos.
     var ex={}; Object.keys(EXTRAS).forEach(function(k){ ex[k]=false; });
     var reqExtras=Array.isArray(a.extras)?a.extras:(a.extras?[a.extras]:[]);
     reqExtras.forEach(function(name){ var key=matchByName(Object.keys(EXTRAS), name); if(key) ex[key]=true; });
     state.extras=ex;
-    // Cliente + fecha.
     state.nombre=nombre; state.fecha=normalizeFecha(a.fecha_evento);
     state.editingOrderId=null; state._editingLoad=false; state.step=1;
-
-    if(!state.nombre){
-      agentState.messages.push({ role:'assistant', content:'Para guardar el pedido necesito el nombre del cliente. ¿A nombre de quién lo registro?' });
+  }
+  // 7.5 — Confirmación: se calcula un resumen SIN tocar el state (snapshot/restore).
+  var _AGENT_SNAP=['modoReceta','recipe','saborPan','size','extras','nombre','fecha','editingOrderId','_editingLoad','step'];
+  function snapAgentState(){ var s={}; _AGENT_SNAP.forEach(function(k){ s[k]=(k==='extras')?Object.assign({},state.extras):state[k]; }); return s; }
+  function restoreAgentState(s){ _AGENT_SNAP.forEach(function(k){ state[k]=s[k]; }); }
+  function previewPedidoFromAgent(a){
+    a=a||{};
+    var snap=snapAgentState();
+    mapPedidoToState(a);
+    var v=calc(), activos=[]; for(var k in state.extras){ if(state.extras[k]) activos.push(k); }
+    var summary={ cliente:state.nombre, receta:(state.recipe?state.recipe.nombre:(state.saborPan||'Personalizado')),
+      tamano:state.size, extras:activos, fecha:(state.fecha?fFecha(state.fecha):'Por definir'), precio:money(v.total) };
+    var missingName=!state.nombre;
+    restoreAgentState(snap);
+    if(missingName){
+      agentState.messages.push({ role:'assistant', content:'Para registrar el pedido necesito el nombre del cliente. ¿A nombre de quién lo dejo?' });
       renderAgentMessages(); return;
     }
-    var resumen=(state.recipe?state.recipe.nombre:(state.saborPan||'Pastel'))+' · '+state.size;
+    var msg={ role:'assistant', type:'confirm', status:'pending', summary:summary, args:a };
+    agentState.pendingConfirm=msg; agentState.messages.push(msg); renderAgentMessages();
+  }
+  function confirmPedido(){
+    var msg=agentState.pendingConfirm; if(!msg || msg.status!=='pending') return;
+    mapPedidoToState(msg.args);
+    if(!state.nombre){ agentState.messages.push({ role:'assistant', content:'Falta el nombre del cliente para guardar.' }); renderAgentMessages(); return; }
     var beforeN=readOrders().length;
-    guardar();   // valida, construye el pedido, guarda en localStorage y re-renderiza agenda + inicio
+    guardar();   // valida, construye el pedido, lo guarda (Firestore/local) y re-renderiza agenda + inicio
     var ok=readOrders().length>beforeN;
-    agentState.messages.push({ role:'assistant', content: ok
-      ? ('¡Listo! He generado el pedido y ya está en tu agenda. ('+resumen+' · '+nombre+')')
-      : 'No pude guardar el pedido automáticamente. Revisa los datos e inténtalo de nuevo.' });
+    msg.status='confirmed'; agentState.pendingConfirm=null;
+    agentState.messages.push({ role:'assistant', content: ok ? '¡Listo! El pedido ya está en tu agenda.' : 'No pude guardar el pedido. Revisa los datos e inténtalo de nuevo.' });
+    renderAgentMessages(); goTo('agente');   // guardar() navega a la agenda; volvemos al chat
+  }
+  function cancelPedido(){
+    var msg=agentState.pendingConfirm; if(!msg || msg.status!=='pending') return;
+    msg.status='cancelled'; agentState.pendingConfirm=null;
+    agentState.messages.push({ role:'assistant', content:'Listo, cancelé ese pedido. ¿Ajustamos algo?' });
     renderAgentMessages();
-    goTo('agente');   // guardar() navega a la agenda; volvemos al chat para mostrar la confirmación
+  }
+  function agentRow(label,val){ return '<div style="display:flex;justify-content:space-between;gap:10px;font-size:13px;font-weight:600;padding:2px 0"><span style="color:var(--muted)">'+esc(label)+'</span><span style="color:var(--text);text-align:right">'+esc(val||'—')+'</span></div>'; }
+  function confirmCardHtml(m){
+    var s=m.summary;
+    var rows=agentRow('Cliente',s.cliente)+agentRow('Pastel',s.receta)+agentRow('Tamaño',s.tamano)
+      +(s.extras&&s.extras.length?agentRow('Extras',s.extras.join(', ')):'')+agentRow('Fecha',s.fecha)
+      +'<div style="display:flex;justify-content:space-between;margin-top:6px;padding-top:8px;border-top:1px solid var(--line)"><span style="font-weight:800;color:var(--text)">Precio estimado</span><span style="font-family:\'Fredoka\';font-weight:700;color:var(--text)">'+esc(s.precio)+'</span></div>';
+    var footer = (m.status==='pending')
+      ? '<div style="display:flex;gap:8px;margin-top:12px"><div data-agent-confirm style="flex:1;text-align:center;background:var(--btn);color:var(--on-dark);border-radius:12px;padding:11px;font-weight:800;font-size:13px;cursor:pointer">Confirmar y guardar</div><div data-agent-cancel style="flex:none;text-align:center;background:var(--field);color:var(--muted);border-radius:12px;padding:11px 14px;font-weight:800;font-size:13px;cursor:pointer">Cancelar</div></div>'
+      : '<div style="margin-top:10px;font-size:12px;font-weight:800;color:'+(m.status==='confirmed'?'#4E8A5B':'var(--muted)')+'">'+(m.status==='confirmed'?'Confirmado y guardado':'Cancelado')+'</div>';
+    return '<div class="chat-row bot" style="max-width:100%;width:100%"><div class="chat-mini">'+agentIcon(17)+'</div>'
+      +'<div class="chat-bubble" style="flex:1;min-width:0"><div style="font-weight:800;font-size:13px;color:var(--text);margin-bottom:8px">Confirma el pedido</div>'+rows+footer+'</div></div>';
   }
   function sendAgentText(txt){
     txt=(txt||'').trim(); if(!txt || agentState.sending) return;
@@ -1956,7 +1988,7 @@
         // El modelo pidió ejecutar una herramienta -> crear el pedido en la app.
         if(res.ok && res.j && res.j.toolCall && res.j.toolCall.name==='crear_pedido_directo'){
           if(res.j.reply){ agentState.messages.push({ role:'assistant', content:res.j.reply }); }
-          applyPedidoFromAgent(res.j.toolCall.args||{});
+          previewPedidoFromAgent(res.j.toolCall.args||{});
           return;
         }
         if(res.ok && res.j && res.j.reply){ agentState.messages.push({ role:'assistant', content:res.j.reply }); }
@@ -1971,6 +2003,8 @@
     if(t.closest('[data-go="agente"]')){ enterAgente(); return; }
     if(t.closest('[data-agent-send]')){ sendAgent(); return; }
     if(t.closest('[data-agent-clear]')){ clearAgente(); return; }
+    if(t.closest('[data-agent-confirm]')){ confirmPedido(); return; }
+    if(t.closest('[data-agent-cancel]')){ cancelPedido(); return; }
     var sg=t.closest('[data-agent-suggest]'); if(sg){ sendAgentText(sg.getAttribute('data-agent-suggest')); return; }
   });
   document.addEventListener('keydown', function(ev){
@@ -2424,7 +2458,7 @@
     var color=obEl('[data-ob-color]'); if(color) color.value=marca.primaryColor||'#7B5B4B';
     var hex=obEl('[data-ob-hex]'); if(hex) hex.textContent=marca.primaryColor||'#7B5B4B';
     renderObSwatches(); obLogoPreview();
-    ov.hidden=false;
+    ov.style.display='flex';
     setTimeout(function(){ if(name) try{ name.focus(); }catch(e){} }, 60);
   }
   function setOnboardingDone(){ __needsOnboarding=false; cloudSave('config','settings',{ onboardingDone:true }); }
@@ -2433,7 +2467,7 @@
     if(nm) marca.bakeryName=nm;
     saveMarca(); applyBrand(); renderBiz();
     setOnboardingDone();
-    var ov=document.getElementById('pastelia-onboarding'); if(ov) ov.hidden=true;
+    var ov=document.getElementById('pastelia-onboarding'); if(ov) ov.style.display='none';
   }
   document.addEventListener('click', function(ev){
     if(ev.target.closest && ev.target.closest('[data-ob-start]')){ finishOnboarding(); return; }
@@ -2578,7 +2612,7 @@
 </div>
 
 <!-- ================= ONBOARDING (bienvenida: configura la marca) ================= -->
-<div id="pastelia-onboarding" hidden style="position:fixed;inset:0;z-index:19000;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;overflow-y:auto">
+<div id="pastelia-onboarding" style="position:fixed;inset:0;z-index:19000;display:none;align-items:center;justify-content:center;background:var(--bg);padding:20px;overflow-y:auto">
   <div style="width:100%;max-width:420px;background:var(--surface);border-radius:24px;padding:26px 22px;box-shadow:0 24px 60px -24px rgba(123,91,75,.5)">
     <div style="text-align:center;margin-bottom:20px">
       <div style="width:56px;height:56px;border-radius:18px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;margin:0 auto 12px"><img src="pastelia-icon-cacao.svg" alt="Pastelia" style="width:34px;height:34px" onerror="this.style.display='none'"></div>

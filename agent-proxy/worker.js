@@ -30,7 +30,7 @@ const BASE_SYSTEM = [
   'Responde en espanol, breve y claro. No inventes precios, insumos ni tamanos que no esten en los datos; si falta informacion, dilo y sugiere que registrar.',
   'Cuando estimes un costo, explica en una linea como lo calculaste: (insumos + mano de obra) escalados por el multiplicador del tamano, mas los extras (costo fijo), y al final el margen de ganancia.',
   'IMPORTANTE: SI tienes la capacidad de crear pedidos directamente en la app usando la herramienta crear_pedido_directo. Nunca digas que no puedes crear pedidos ni que la duena debe hacerlo manualmente.',
-  'Cuando el usuario confirme o pida generar un pedido y tengas al menos el nombre del cliente y el tamano (idealmente tambien la receta/sabor, la fecha y los extras), LLAMA a la herramienta crear_pedido_directo con esos datos. Si falta el nombre del cliente o el tamano, pidelos antes de llamar la herramienta.',
+  'En cuanto tengas al menos el nombre del cliente y el tamano (idealmente tambien la receta/sabor, la fecha y los extras), LLAMA a la herramienta crear_pedido_directo con esos datos. NO pidas confirmacion por texto: la app mostrara un resumen con el precio estimado y la duena confirmara o cancelara ahi. Si falta el nombre del cliente o el tamano, pidelos primero (esos si por texto).',
   'Usa los nombres de tamanos, recetas y extras EXACTAMENTE como aparecen en los datos del negocio.'
 ].join(' ');
 
