@@ -712,7 +712,7 @@
     'linear-gradient(135deg,#F5E4C6,#DDA457)'
   ];
   function readRecipes(){ try{ var a=JSON.parse(localStorage.getItem(RECIPES_KEY)); return (a&&a.length)?a:null; }catch(e){ return null; } }
-  function saveRecipes(a){ try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(a)); }catch(e){} }
+  function saveRecipes(a){ a=a||[]; try{ localStorage.setItem(RECIPES_KEY, JSON.stringify(a)); }catch(e){} if(STORE_MODE==='cloud') syncRecipesCloud(a); }
   var recipes = readRecipes() || [];
   // Sin recetas de ejemplo: la lista arranca vacía. Limpieza única de las
   // recetas semilla sembradas por versiones anteriores (solo si siguen intactas:
@@ -1098,8 +1098,11 @@
 
   /* ---------- Etapa 2: guardado + agenda ---------- */
   var ORDERS_KEY = 'pastelia_pedidos';
-  function readOrders(){ try{ var a=JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; a.forEach(function(o){ if(o && o.estado==='Apartado') o.estado='Cotizado'; }); return a; }catch(e){ return []; } }
-  function saveOrders(a){ try{ localStorage.setItem(ORDERS_KEY, JSON.stringify(a)); }catch(e){} }
+  function readOrders(){
+    if(STORE_MODE==='cloud'){ try{ return JSON.parse(JSON.stringify(ordersCache)); }catch(e){ return ordersCache.slice(); } }
+    try{ var a=JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; a.forEach(function(o){ if(o && o.estado==='Apartado') o.estado='Cotizado'; }); return a; }catch(e){ return []; }
+  }
+  function saveOrders(a){ a=a||[]; try{ localStorage.setItem(ORDERS_KEY, JSON.stringify(a)); }catch(e){} if(STORE_MODE==='cloud') syncOrdersCloud(a); }
   function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]; }); }
   function todayISO(){ var d=new Date(); return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
   function fFecha(iso){ if(!iso) return 'Sin fecha'; var p=(''+iso).split('T')[0].split('-'); if(p.length!==3) return iso; var m=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic']; return parseInt(p[2],10)+' '+m[parseInt(p[1],10)-1]; }
@@ -2420,6 +2423,25 @@
     if(STORE_MODE!=='cloud' || !STORE_DB || !STORE_TENANT) return;
     try{ cloudDoc(seg1,seg2).set(data); }catch(e){ console.error('[Pastelia] cloudSave '+seg1+'/'+seg2, e); }
   }
+  /* 7.3 — Pedidos y recetas como colecciones (1 doc por item), sincronizadas por diff. */
+  var ordersCache=[], recipesSnap=[];
+  function cloudColDoc(col, id){ return STORE_DB.collection('tenants').doc(STORE_TENANT).collection(col).doc(String(id)); }
+  function snapToArray(snap){ var a=[]; if(snap && snap.forEach){ snap.forEach(function(d){ a.push(d.data()); }); } return a; }
+  function cloneArr(a){ try{ return JSON.parse(JSON.stringify(a||[])); }catch(e){ return []; } }
+  function apartadoFix(o){ if(o && o.estado==='Apartado') o.estado='Cotizado'; return o; }
+  function syncCollectionDiff(col, newArr, snapArr){
+    if(STORE_MODE!=='cloud' || !STORE_DB || !STORE_TENANT) return snapArr;
+    var oldById={}; snapArr.forEach(function(x){ if(x&&x.id!=null) oldById[String(x.id)]=x; });
+    var newIds={};
+    newArr.forEach(function(x){ if(!x||x.id==null) return; var id=String(x.id); newIds[id]=1;
+      var prev=oldById[id];
+      if(!prev || JSON.stringify(prev)!==JSON.stringify(x)){ try{ cloudColDoc(col, id).set(JSON.parse(JSON.stringify(x))); }catch(e){ console.error('[Pastelia] set '+col, e); } }
+    });
+    snapArr.forEach(function(x){ if(!x||x.id==null) return; var id=String(x.id); if(!newIds[id]){ try{ cloudColDoc(col, id).delete(); }catch(e){ console.error('[Pastelia] del '+col, e); } } });
+    return cloneArr(newArr);
+  }
+  function syncOrdersCloud(newArr){ ordersCache = syncCollectionDiff('pedidos', newArr||[], ordersCache); }
+  function syncRecipesCloud(newArr){ recipesSnap = syncCollectionDiff('recetas', newArr||[], recipesSnap); }
   function bootOnce(){
     if(__booted) return; __booted=true;
     function go(){ enhance(); var o=document.getElementById('pastelia-auth'); if(o) o.style.display='none'; }
@@ -2441,6 +2463,11 @@
     cloudDoc('catalog','sizes').set({ items: sizesData||[] });
     cloudDoc('catalog','extras').set({ map: extrasCustom||{} });
     cloudDoc('catalog','formas').set({ items: formasCustom||[] });
+    // Pedidos y recetas existentes (migra el localStorage actual, si lo hay).
+    (recipes||[]).forEach(function(r){ if(r&&r.id!=null){ try{ cloudColDoc('recetas', r.id).set(JSON.parse(JSON.stringify(r))); }catch(e){} } });
+    var localOrders=[]; try{ localOrders=JSON.parse(localStorage.getItem(ORDERS_KEY))||[]; }catch(e){}
+    localOrders.forEach(function(o){ if(o&&o.id!=null){ apartadoFix(o); try{ cloudColDoc('pedidos', o.id).set(JSON.parse(JSON.stringify(o))); }catch(e){} } });
+    ordersCache = cloneArr(localOrders); recipesSnap = cloneArr(recipes);
   }
   function hydrateCloud(uid){
     STORE_TENANT=uid; STORE_DB=firebase.firestore();
@@ -2451,12 +2478,19 @@
       base.collection('catalog').doc('insumos').get(),
       base.collection('catalog').doc('sizes').get(),
       base.collection('catalog').doc('extras').get(),
-      base.collection('catalog').doc('formas').get()
+      base.collection('catalog').doc('formas').get(),
+      base.collection('pedidos').get(),
+      base.collection('recetas').get()
     ]).then(function(r){
       STORE_MODE='cloud';
-      var hasAny=r.some(function(s){ return s && s.exists; });
-      if(hasAny){ applyCloudCatalog({ marca:r[0], settings:r[1], insumos:r[2], sizes:r[3], extras:r[4], formas:r[5] }); }
-      else { seedCloudFromCurrent(); }
+      var hasAnyCatalog=r.slice(0,6).some(function(s){ return s && s.exists; });
+      if(hasAnyCatalog){
+        applyCloudCatalog({ marca:r[0], settings:r[1], insumos:r[2], sizes:r[3], extras:r[4], formas:r[5] });
+        ordersCache = snapToArray(r[6]); ordersCache.forEach(apartadoFix);
+        recipes = snapToArray(r[7]); recipesSnap = cloneArr(recipes);
+      } else {
+        seedCloudFromCurrent();   // nuevo tenant: siembra catálogo + migra pedidos/recetas locales
+      }
     }).catch(function(e){
       console.error('[Pastelia] No se pudo cargar la nube; uso la caché local.', e);
       STORE_MODE='cloud';
