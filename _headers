@@ -1,0 +1,8 @@
+# Cloudflare Pages — encabezados
+# El HTML y el service worker no deben cachearse (para que las actualizaciones lleguen ya).
+/index.html
+  Cache-Control: no-cache
+/sw.js
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Cache-Control: no-cache
