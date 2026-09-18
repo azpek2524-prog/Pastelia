@@ -1,0 +1,10 @@
+# Archivos que NO se publican como sitio (código fuente, docs, diseño).
+.git/
+.agents/
+rediseño/
+agent-proxy/
+*.md
+INSPO1.webp
+wrangler.toml
+.assetsignore
+.nojekyll

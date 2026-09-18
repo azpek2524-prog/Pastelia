@@ -1,0 +1,7 @@
+# Cloudflare Workers — sirve la PWA como sitio estático (solo assets, sin script).
+# Deploy: npx wrangler deploy  (desde la raíz del repo).
+name = "pastelia"
+compatibility_date = "2024-11-01"
+
+[assets]
+directory = "./"
