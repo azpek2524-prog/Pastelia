@@ -70,14 +70,14 @@
   .chat{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--main)}
   .chat-head{flex:none;display:flex;align-items:center;gap:11px;padding:14px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
   .chat-hbtn{cursor:pointer;flex:none;width:34px;height:34px;border-radius:11px;background:var(--field);display:flex;align-items:center;justify-content:center;color:var(--text)}
-  .chat-av{flex:none;width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;color:var(--btn)}
+  .chat-av{flex:none;width:40px;height:40px;border-radius:14px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;color:var(--accent-ink)}
   .chat-msgs{flex:1;min-height:0;overflow-y:auto;padding:18px 16px;display:flex;flex-direction:column;gap:12px}
   .chat-msgs::-webkit-scrollbar{width:6px}
   .chat-msgs::-webkit-scrollbar-thumb{background:var(--muted);border-radius:8px}
   .chat-row{display:flex;gap:9px;align-items:flex-end;max-width:88%}
   .chat-row.me{align-self:flex-end;flex-direction:row-reverse}
   .chat-row.bot{align-self:flex-start}
-  .chat-mini{flex:none;width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;color:var(--btn)}
+  .chat-mini{flex:none;width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,#F0C98D,var(--accent));display:flex;align-items:center;justify-content:center;color:var(--accent-ink)}
   .chat-bubble{border-radius:16px;padding:11px 14px;font-size:14px;font-weight:600;line-height:1.45;white-space:pre-wrap;word-break:break-word;box-shadow:0 6px 16px -12px rgba(123,91,75,.5)}
   .chat-row.me .chat-bubble{background:var(--btn);color:var(--on-dark);border-bottom-right-radius:6px}
   .chat-row.bot .chat-bubble{background:var(--surface);color:var(--text);border-bottom-left-radius:6px}
@@ -1665,16 +1665,34 @@
     function h2(c){ return ('0'+c.toString(16)).slice(-2); }
     return '#'+h2(mix(r))+h2(mix(g))+h2(mix(b));
   }
-  // Inyecta el color de marca en las variables CSS de raíz (botones, hero, paneles, acentos activos)
+  // --- Contraste automático (WCAG) para que el color de marca del cliente siempre sea legible ---
+  function _rgb(hex){ hex=(hex||'').replace('#',''); if(hex.length===3){hex=hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];} if(hex.length!==6) return null; return [parseInt(hex.slice(0,2),16),parseInt(hex.slice(2,4),16),parseInt(hex.slice(4,6),16)]; }
+  function _lum(hex){ var c=_rgb(hex); if(!c) return 0; var a=c.map(function(v){ v/=255; return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4); }); return 0.2126*a[0]+0.7152*a[1]+0.0722*a[2]; }
+  function _contrast(a,b){ var l1=_lum(a), l2=_lum(b), hi=Math.max(l1,l2), lo=Math.min(l1,l2); return (hi+0.05)/(lo+0.05); }
+  // Mejor color de TEXTO (crema clara u oscuro) para ir ENCIMA de un fondo dado.
+  function onColor(bg){ var light='#FFF7EC', dark='#2A1F17'; return _contrast(bg,dark)>=_contrast(bg,light)?dark:light; }
+  // Ajusta el color de marca para que sea legible como TEXTO sobre 'surf' (oscurece en tema claro, aclara en oscuro).
+  function readableInk(fg, surf, target){
+    target=target||4.5;
+    if(_contrast(fg,surf)>=target) return fg;
+    var darken=_lum(surf)>0.5, best=fg;
+    for(var p=4;p<=100;p+=4){ best=shade(fg, darken?-p:p); if(_contrast(best,surf)>=target) return best; }
+    return best; // lo más contrastado posible si el objetivo no se alcanza
+  }
+  // Inyecta el color de marca en las variables CSS de raíz, garantizando contraste legible en cualquier color.
   function applyBrand(){
     var c=marca.primaryColor||'#7B5B4B', d=shade(c,-16);
+    var dm=document.documentElement.getAttribute('data-theme');
+    var isDark = dm==='dark' || (!dm && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    var surf = isDark ? '#2C231D' : '#ffffff';     // superficie de tarjeta según tema (peor caso para el texto)
     var rs=document.documentElement.style;
-    rs.setProperty('--brand-primary', c);          // color de marca (fuente única)
-    rs.setProperty('--btn', c);                    // botones y acciones primarias
+    rs.setProperty('--btn', c);                          // relleno de botones y acciones primarias
     rs.setProperty('--hero1', c);  rs.setProperty('--hero2', d);
     rs.setProperty('--panel1', c); rs.setProperty('--panel2', d);
+    rs.setProperty('--on-dark', onColor(c));             // texto/íconos ENCIMA del color de marca (auto claro/oscuro)
+    rs.setProperty('--brand-primary', readableInk(c, surf)); // color de marca usado como TEXTO, siempre legible
     var meta=document.querySelector('meta[name="theme-color"]');
-    if(meta) meta.setAttribute('content', document.documentElement.getAttribute('data-theme')==='dark' ? '#201811' : c);
+    if(meta) meta.setAttribute('content', isDark ? '#201811' : c);
   }
   function logoTile(size, radius){
     if(marca.logoUrl) return '<img src="'+marca.logoUrl+'" alt="'+esc(bizName())+'" style="width:'+size+'px;height:'+size+'px;border-radius:'+radius+'px;object-fit:cover;display:block">';
