@@ -168,6 +168,40 @@
 </head>
 <body>
 
+<style>
+/* ===== Mi negocio — rediseño (colores mapeados a las variables del tema/marca) ===== */
+.mn-wrap{color:var(--text)}
+.mn-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.mn-title{font-family:'Fredoka';font-weight:600;letter-spacing:-.01em;color:var(--text)}
+.mn-card{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:20px 22px;box-shadow:0 12px 26px -20px rgba(20,14,10,.4)}
+.mn-h{font-weight:800;font-size:15px;letter-spacing:-.01em;color:var(--text)}
+.mn-sub{font-size:12.5px;color:var(--muted);margin-top:3px;font-weight:600}
+.mn-rule{height:1px;background:var(--line);margin:16px 0}
+.mn-lab{display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.mn-in{width:100%;box-sizing:border-box;background:var(--field);border:1px solid var(--line);border-radius:11px;padding:12px 14px;color:var(--text);font-weight:600;font-size:16px;font-family:inherit;outline:none}
+.mn-in:focus{border-color:var(--accent)}
+.mn-btn{border:0;border-radius:10px;padding:11px 16px;background:var(--btn);color:var(--on-dark);font-weight:800;font-size:13px;font-family:inherit;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.mn-ghost{background:transparent;border:1px solid var(--line);color:var(--text);font-weight:700}
+.mn-seg{display:flex;gap:3px;padding:3px;border-radius:11px;background:var(--field);border:1px solid var(--line)}
+.mn-seg>button{flex:1;border:0;cursor:pointer;border-radius:9px;padding:9px 14px;font-weight:600;font-size:13px;font-family:inherit;background:transparent;color:var(--muted);transition:background .15s,color .15s}
+.mn-seg>button[data-active="1"]{background:var(--sel);color:var(--text);font-weight:800;box-shadow:inset 0 0 0 1px var(--accent)}
+.mn-swatch{width:28px;height:28px;border-radius:999px;border:0;cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transform:scale(.92);transition:transform .15s,box-shadow .15s}
+.mn-swatch[data-active="1"]{transform:scale(1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18),0 0 0 2px var(--surface),0 0 0 4px currentColor}
+.mn-hexchip{display:inline-flex;align-items:center;gap:9px;padding:6px 12px 6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--field)}
+.mn-colorin{width:22px;height:22px;border:0;background:none;border-radius:6px;padding:0;cursor:pointer}
+.mn-srow{display:grid;grid-template-columns:1fr 72px 72px 34px;gap:8px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+.mn-srow input{box-sizing:border-box;background:var(--field);border:1px solid var(--line);border-radius:9px;padding:9px 10px;color:var(--text);font-weight:700;font-size:16px;font-family:inherit;outline:none;width:100%}
+.mn-srow input.mn-name{background:transparent;border-color:transparent}
+.mn-srow input.mn-name:focus{background:var(--field);border-color:var(--accent)}
+.mn-srow input.mn-num{text-align:right}
+.mn-srow input:focus{border-color:var(--accent)}
+.mn-del{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:0;border-radius:9px;background:transparent;color:var(--muted);cursor:pointer}
+.mn-add{width:100%;padding:11px;border:1px dashed var(--accent);border-radius:11px;background:transparent;color:var(--accent);font-weight:800;font-size:13px;font-family:inherit;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:12px}
+.mn-list{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden}
+.mn-litem{padding:13px 16px}
+.mn-litem+.mn-litem{border-top:1px solid var(--line)}
+.mn-between{display:flex;align-items:center;justify-content:space-between;gap:12px}
+</style>
 <div id="mobile">
 <div class="ph">
   <div class="ph-scr">
@@ -317,15 +351,112 @@
 
         <!-- ================= MI NEGOCIO (MARCA) ================= -->
         <div class="pane" data-scr="marca">
-          <div style="color:var(--text);padding:0 0 90px">
+          <div class="mn-wrap" style="padding:0 0 96px">
             <div style="height:env(safe-area-inset-top,0px)"></div>
-            <div style="padding:6px 22px 0">
-              <div style="display:flex;align-items:center;gap:12px;margin:6px 0 4px">
-                <div data-go="inicio" style="cursor:pointer;width:38px;height:38px;border-radius:12px;background:var(--surface);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 6px 14px -10px rgba(123,91,75,.5)">‹</div>
-                <div style="font-family:'Fredoka';font-weight:600;font-size:22px">Mi negocio</div>
+            <!-- Encabezado -->
+            <div style="padding:14px 16px 6px">
+              <div class="mn-between">
+                <div data-go="inicio" style="cursor:pointer;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:11px;color:var(--text)"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg></div>
+                <span class="mn-eyebrow">Configuración</span>
+                <button type="button" class="mn-btn" data-action="marca-save" style="padding:8px 14px">Guardar</button>
               </div>
-              <div style="font-size:12px;color:var(--muted);font-weight:700">Personaliza el nombre, logo y color. Se aplican a la app, al PDF y al ticket.</div>
-              <div data-marca-form></div>
+              <div class="mn-title" style="font-size:28px;margin-top:16px">Mi negocio</div>
+              <div style="font-size:13px;color:var(--muted);font-weight:600;margin-top:5px">Se aplica a la app, al PDF y al ticket.</div>
+            </div>
+
+            <div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:20px">
+              <!-- Logo -->
+              <div class="mn-card" style="display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px">
+                <div data-biz-logo data-logo-size="62" data-logo-radius="16" style="flex:none"></div>
+                <div style="min-width:0;flex:1">
+                  <div data-biz-name style="font-weight:700;font-size:16px;color:var(--text)">Mi pasteler&iacute;a</div>
+                  <div style="font-size:12px;color:var(--muted);margin-top:2px">Logo PNG o SVG &middot; 512 px</div>
+                  <div style="display:flex;gap:8px;margin-top:9px">
+                    <label class="mn-btn mn-ghost" style="padding:7px 12px;font-size:12px">Cambiar logo<input type="file" accept="image/*" data-marca-logo-input hidden></label>
+                    <button type="button" class="mn-btn mn-ghost" data-action="marca-logo-remove" style="padding:7px 12px;font-size:12px;color:var(--muted)">Quitar</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Datos del negocio -->
+              <div>
+                <div class="mn-lab" style="padding:0 4px 9px">Datos del negocio</div>
+                <div class="mn-list">
+                  <div class="mn-litem">
+                    <div style="font-size:11.5px;color:var(--muted);font-weight:700">Nombre</div>
+                    <input data-marca-field="bakeryName" placeholder="Mi pasteler&iacute;a" style="width:100%;box-sizing:border-box;margin-top:4px;background:transparent;border:0;padding:0;color:var(--text);font-weight:600;font-size:16px;outline:none;font-family:inherit">
+                  </div>
+                  <div class="mn-litem">
+                    <div style="font-size:11.5px;color:var(--muted);font-weight:700">Tel&eacute;fono</div>
+                    <input data-marca-field="telefono" type="tel" placeholder="55 1234 5678" style="width:100%;box-sizing:border-box;margin-top:4px;background:transparent;border:0;padding:0;color:var(--text);font-weight:600;font-size:16px;outline:none;font-family:inherit">
+                  </div>
+                  <div class="mn-litem">
+                    <div style="font-size:11.5px;color:var(--muted);font-weight:700">Instagram</div>
+                    <input data-marca-field="instagram" placeholder="@mipasteleria" style="width:100%;box-sizing:border-box;margin-top:4px;background:transparent;border:0;padding:0;color:var(--text);font-weight:600;font-size:16px;outline:none;font-family:inherit">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Color de marca -->
+              <div>
+                <div class="mn-lab" style="padding:0 4px 9px">Color de marca</div>
+                <div class="mn-card" style="padding:16px;border-radius:18px">
+                  <div data-marca-swatches style="display:flex;gap:10px;flex-wrap:wrap"></div>
+                  <div style="display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">
+                    <input type="color" class="mn-colorin" data-marca-field="primaryColor" value="#7B5B4B">
+                    <span data-marca-hex style="font-weight:800;font-size:13px;color:var(--text)">#7B5B4B</span>
+                    <span style="flex:1"></span>
+                    <span style="font-size:12px;color:var(--muted)">Se usa en el ticket</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Apariencia -->
+              <div>
+                <div class="mn-lab" style="padding:0 4px 9px">Apariencia</div>
+                <div class="mn-seg">
+                  <button type="button" data-theme-opt="light">Claro</button>
+                  <button type="button" data-theme-opt="dark">Oscuro</button>
+                </div>
+              </div>
+
+              <!-- Tamaños de pastel -->
+              <div>
+                <div class="mn-between" style="align-items:baseline;padding:0 4px 9px">
+                  <div class="mn-lab">Tama&ntilde;os de pastel</div>
+                  <button type="button" data-action="size-reset" style="background:transparent;border:0;color:var(--muted);font-weight:700;font-size:11.5px;cursor:pointer;font-family:inherit">Restablecer</button>
+                </div>
+                <div class="mn-card" style="padding:14px 16px;border-radius:18px">
+                  <div data-sizes-rows></div>
+                  <button type="button" class="mn-add" data-action="size-add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>A&ntilde;adir tama&ntilde;o</button>
+                </div>
+              </div>
+
+              <!-- Datos / accesos -->
+              <div>
+                <div class="mn-lab" style="padding:0 4px 9px">Datos</div>
+                <div class="mn-list">
+                  <div class="mn-litem mn-between" data-go="precios" style="cursor:pointer">
+                    <div><div style="font-weight:700;font-size:15px;color:var(--text)">Cat&aacute;logo de insumos</div><div style="font-size:11.5px;color:var(--muted);margin-top:2px"><span data-mn-insumos>0</span> insumos &middot; <span data-mn-recetas>0</span> recetas</div></div>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted);flex:none"><path d="M9 6l6 6-6 6"></path></svg>
+                  </div>
+                  <div class="mn-litem">
+                    <div style="font-weight:700;font-size:15px;color:var(--text)">Copia de seguridad</div>
+                    <div style="font-size:11.5px;color:var(--muted);margin-top:2px">Recetas, insumos, pedidos y configuraci&oacute;n.</div>
+                    <div style="display:flex;gap:10px;margin-top:11px">
+                      <button type="button" class="mn-btn mn-ghost" data-action="backup-export" style="flex:1">Guardar copia</button>
+                      <label class="mn-btn mn-ghost" style="flex:1;position:relative;overflow:hidden">Restaurar<input type="file" accept=".json" data-backup-import style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cuenta -->
+              <div class="mn-card" data-account-card hidden style="border-radius:18px">
+                <div class="mn-lab">Cuenta</div>
+                <div style="font-size:12.5px;color:var(--text);font-weight:600;margin:8px 0 14px">Sesi&oacute;n iniciada como <span data-account-email style="color:var(--muted)">&mdash;</span></div>
+                <button type="button" class="mn-btn mn-ghost" data-action="logout" style="width:100%">Cerrar sesi&oacute;n</button>
+              </div>
             </div>
           </div>
         </div>
@@ -521,10 +652,131 @@
 
     <!-- ===== MI NEGOCIO (MARCA) ===== -->
     <div class="pane" data-scr="marca">
-      <div>
-        <div style="font-family:'Fredoka';font-weight:600;font-size:32px;margin-bottom:4px">Mi negocio</div>
-        <div style="font-size:13px;font-weight:700;color:var(--muted);margin-bottom:20px">Personaliza el nombre, logo y color de tu pastelería. Se aplican a la app, al PDF y al ticket de WhatsApp.</div>
-        <div style="max-width:560px"><div data-marca-form></div></div>
+      <div class="mn-wrap">
+        <!-- Encabezado + barra de guardado -->
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:22px">
+          <div>
+            <div class="mn-eyebrow" style="margin-bottom:7px">Configuraci&oacute;n</div>
+            <div class="mn-title" style="font-size:30px">Mi negocio</div>
+            <div style="font-size:13px;color:var(--muted);font-weight:600;max-width:520px;margin-top:6px">Nombre, logo y color de tu pasteler&iacute;a. Se aplican a la app, al PDF y al ticket de WhatsApp.</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex:none">
+            <span data-mn-saved style="font-size:12px;color:var(--muted);font-weight:600">Guardado autom&aacute;tico activado</span>
+            <button type="button" class="mn-btn mn-ghost" data-action="ticket-latest">Ver ticket</button>
+            <button type="button" class="mn-btn" data-action="marca-save">Guardar cambios</button>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start;max-width:1040px">
+          <!-- Columna izquierda -->
+          <div style="display:flex;flex-direction:column;gap:22px">
+
+            <div class="mn-card">
+              <div class="mn-h">Identidad</div>
+              <div class="mn-sub">C&oacute;mo te ven tus clientes en cada documento.</div>
+              <div class="mn-rule"></div>
+              <label class="mn-lab">Nombre del negocio</label>
+              <input class="mn-in" style="margin-top:8px" type="text" data-marca-field="bakeryName" placeholder="Ej. Azucena's Cake Studio">
+
+              <label class="mn-lab" style="margin-top:20px">Logotipo</label>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:9px;padding:12px;border:1px dashed var(--line);border-radius:13px;background:var(--field)">
+                <div data-biz-logo data-logo-size="56" data-logo-radius="12" style="flex:none"></div>
+                <div style="min-width:0;flex:1">
+                  <div style="font-weight:700;font-size:13px;color:var(--text)">Logo de tu marca</div>
+                  <div style="font-size:11.5px;color:var(--muted);margin-top:2px">PNG o SVG &middot; m&iacute;nimo 512 px &middot; fondo transparente</div>
+                </div>
+                <div style="display:flex;gap:8px;flex:none">
+                  <label class="mn-btn mn-ghost" style="padding:8px 13px;font-size:12.5px">Cambiar<input type="file" accept="image/*" data-marca-logo-input hidden></label>
+                  <button type="button" class="mn-btn mn-ghost" data-action="marca-logo-remove" style="padding:8px 12px;font-size:12.5px;color:var(--muted)">Quitar</button>
+                </div>
+              </div>
+
+              <label class="mn-lab" style="margin-top:20px">Color de marca</label>
+              <div style="display:flex;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap">
+                <div data-marca-swatches style="display:flex;gap:9px;flex-wrap:wrap"></div>
+                <div style="width:1px;height:26px;background:var(--line)"></div>
+                <div class="mn-hexchip">
+                  <input type="color" class="mn-colorin" data-marca-field="primaryColor" value="#7B5B4B">
+                  <span data-marca-hex style="font-weight:800;font-size:13px;color:var(--text);letter-spacing:.02em">#7B5B4B</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mn-card">
+              <div class="mn-h">Contacto en recibos</div>
+              <div class="mn-rule"></div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <div>
+                  <label class="mn-lab">Tel&eacute;fono</label>
+                  <input class="mn-in" style="margin-top:8px" type="tel" data-marca-field="telefono" placeholder="55 1234 5678">
+                </div>
+                <div>
+                  <label class="mn-lab">Instagram</label>
+                  <input class="mn-in" style="margin-top:8px" type="text" data-marca-field="instagram" placeholder="@mipasteleria">
+                </div>
+              </div>
+            </div>
+
+            <div class="mn-card" style="display:flex;align-items:center;justify-content:space-between;gap:20px">
+              <div>
+                <div class="mn-h">Apariencia</div>
+                <div class="mn-sub">Modo claro u oscuro de la app.</div>
+              </div>
+              <div class="mn-seg" style="flex:none;min-width:200px">
+                <button type="button" data-theme-opt="light">Claro</button>
+                <button type="button" data-theme-opt="dark">Oscuro</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna derecha -->
+          <div style="display:flex;flex-direction:column;gap:22px">
+
+            <div class="mn-card">
+              <div class="mn-between" style="align-items:baseline">
+                <div>
+                  <div class="mn-h">Tama&ntilde;os de pastel</div>
+                  <div class="mn-sub">El multiplicador escala insumos y mano de obra. Mediano = 1.00.</div>
+                </div>
+                <button type="button" data-action="size-reset" style="flex:none;background:transparent;border:0;color:var(--muted);font-weight:700;font-size:12px;cursor:pointer;font-family:inherit">Restablecer</button>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 72px 72px 34px;gap:8px;padding:16px 0 2px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">
+                <div>Nombre</div><div style="text-align:right">Mult.</div><div style="text-align:right">Porc.</div><div></div>
+              </div>
+              <div data-sizes-rows></div>
+              <button type="button" class="mn-add" data-action="size-add"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>A&ntilde;adir tama&ntilde;o</button>
+            </div>
+
+            <div class="mn-card">
+              <div class="mn-between">
+                <div>
+                  <div class="mn-h">Cat&aacute;logo de insumos</div>
+                  <div class="mn-sub">El cotizador calcula costos a partir de estos precios.</div>
+                </div>
+                <div data-go="precios" class="mn-btn" style="flex:none;background:var(--accent);color:var(--accent-ink)">Abrir mis precios</div>
+              </div>
+              <div style="display:flex;gap:30px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
+                <div><div data-mn-insumos style="font-weight:800;font-size:19px;color:var(--text)">0</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">insumos</div></div>
+                <div><div data-mn-recetas style="font-weight:800;font-size:19px;color:var(--text)">0</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">recetas</div></div>
+              </div>
+            </div>
+
+            <div class="mn-card">
+              <div class="mn-h">Copia de seguridad</div>
+              <div class="mn-sub">Recetas, insumos, pedidos y configuraci&oacute;n.</div>
+              <div style="display:flex;gap:10px;margin-top:16px">
+                <button type="button" class="mn-btn mn-ghost" data-action="backup-export" style="flex:1">Guardar copia</button>
+                <label class="mn-btn mn-ghost" style="flex:1;position:relative;overflow:hidden">Restaurar<input type="file" accept=".json" data-backup-import style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>
+              </div>
+            </div>
+
+            <div class="mn-card" data-account-card hidden>
+              <div class="mn-h">Cuenta</div>
+              <div style="font-size:12.5px;color:var(--text);font-weight:600;margin:8px 0 14px">Sesi&oacute;n iniciada como <span data-account-email style="color:var(--muted)">&mdash;</span></div>
+              <button type="button" class="mn-btn mn-ghost" data-action="logout">Cerrar sesi&oacute;n</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1705,7 +1957,14 @@
     // Inputs del panel de configuración
     qsa('[data-marca-field]').forEach(function(el){ var f=el.getAttribute('data-marca-field'); if(document.activeElement!==el && el.value!==(marca[f]||'')) el.value=(marca[f]||''); });
     qsa('[data-marca-logo-preview]').forEach(function(el){ el.innerHTML = marca.logoUrl ? '<img src="'+marca.logoUrl+'" style="width:96px;height:96px;object-fit:cover;border-radius:18px;display:block">' : '<div style="width:96px;height:96px;border-radius:18px;background:var(--field);display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:800;font-size:12px">Sin logo</div>'; });
-    qsa('[data-theme-select]').forEach(function(el){ el.value = (document.documentElement.getAttribute('data-theme')==='dark') ? 'dark' : 'light'; });
+    qsa('[data-marca-hex]').forEach(function(el){ el.textContent = marca.primaryColor||''; });
+    // Rediseño "Mi negocio": pintar swatch activo, tema activo y contadores
+    qsa('[data-marca-swatch]').forEach(function(b){ var on=String(b.getAttribute('data-marca-swatch')||'').toLowerCase()===String(marca.primaryColor||'').toLowerCase(); b.setAttribute('data-active', on?'1':'0'); });
+    var dmk = (document.documentElement.getAttribute('data-theme')==='dark') ? 'dark' : 'light';
+    qsa('[data-theme-opt]').forEach(function(b){ b.setAttribute('data-active', b.getAttribute('data-theme-opt')===dmk ? '1':'0'); });
+    qsa('[data-theme-select]').forEach(function(el){ el.value = dmk; });
+    qsa('[data-mn-insumos]').forEach(function(e){ try{ e.textContent=String((typeof insumos!=='undefined'&&insumos)?insumos.length:0); }catch(_e){} });
+    qsa('[data-mn-recetas]').forEach(function(e){ try{ e.textContent=String((typeof recipes!=='undefined'&&recipes)?recipes.length:0); }catch(_e){} });
   }
   var MARCA_SWATCHES=['#7B5B4B','#B0436B','#5B7B4B','#4B5B7B','#7B4BB0','#B07B4B'];
   function marcaFormHTML(){
@@ -1770,7 +2029,22 @@
       + '</div>'
       + '</div>';
   }
-  function renderMarcaForm(){ qsa('[data-marca-form]').forEach(function(f){ if(!f.getAttribute('data-mounted')){ f.innerHTML=marcaFormHTML(); f.setAttribute('data-mounted','1'); } }); renderBiz(); }
+  // Rediseño "Mi negocio": el markup vive estático en los panes (desktop 1a / mobile 1b);
+  // aquí solo inyectamos las listas dinámicas (swatches, tamaños) y sincronizamos valores.
+  function swatchHTML(){
+    return MARCA_SWATCHES.map(function(c){
+      var on=String(c).toLowerCase()===String(marca.primaryColor||'').toLowerCase();
+      return '<button type="button" class="mn-swatch" data-marca-swatch="'+esc(c)+'" data-active="'+(on?'1':'0')+'" title="'+esc(c)+'" style="background:'+esc(c)+';color:'+esc(c)+'"></button>';
+    }).join('');
+  }
+  function renderSwatches(){ qsa('[data-marca-swatches]').forEach(function(c){ c.innerHTML=swatchHTML(); }); }
+  function renderMarcaForm(){ renderSwatches(); renderSizesRows(); renderBiz(); }
+  function flashSaved(){
+    qsa('[data-mn-saved]').forEach(function(e){ e.textContent='Cambios guardados'; });
+    clearTimeout(flashSaved._t);
+    flashSaved._t=setTimeout(function(){ qsa('[data-mn-saved]').forEach(function(e){ e.textContent='Guardado automático activado'; }); }, 2200);
+  }
+  function marcaSaveNow(){ saveMarca(); saveSizes(); applyBrand(); flashSaved(); toast('Cambios guardados ✓'); }
   function handleMarcaField(el, f){
     marca[f]=el.value; saveMarca();
     if(f==='primaryColor'){ applyBrand(); qsa('[data-marca-hex]').forEach(function(h){ h.textContent=el.value; }); }
@@ -1784,17 +2058,17 @@
     marca.primaryColor=c; saveMarca(); applyBrand();
     qsa('[data-marca-field="primaryColor"]').forEach(function(i){ i.value=c; });
     qsa('[data-marca-hex]').forEach(function(h){ h.textContent=c; });
+    renderBiz();   // repinta el swatch activo
   }
 
   /* ---------- Editor de tamaños dinámicos (en "Mi negocio") ---------- */
   function sizesEditorRowsHTML(){
-    var finRow='box-sizing:border-box;border:0;outline:none;background:var(--field);border-radius:10px;padding:9px 8px;font-weight:700;font-size:16px;font-family:inherit;color:var(--text)';
     return sizesData.map(function(s){
-      return '<div data-size-row="'+esc(s.id)+'" style="display:flex;gap:8px;align-items:center;margin-bottom:8px">'
-        + '<input data-size-prop="nombre" value="'+esc(s.nombre)+'" placeholder="Nombre" style="flex:1;min-width:88px;'+finRow+'">'
-        + '<input data-size-prop="mult" type="number" min="0" step="0.05" value="'+esc(String(s.mult))+'" style="width:78px;text-align:center;'+finRow+'">'
-        + '<input data-size-prop="porc" type="number" min="1" step="1" value="'+esc(String(s.porc))+'" style="width:66px;text-align:center;'+finRow+'">'
-        + '<div data-action="size-del" data-size-id="'+esc(s.id)+'" title="Eliminar tamaño" style="width:34px;height:34px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--field);color:var(--muted);cursor:pointer">'+icSvg('trash',16)+'</div>'
+      return '<div class="mn-srow" data-size-row="'+esc(s.id)+'">'
+        + '<input class="mn-name" data-size-prop="nombre" value="'+esc(s.nombre)+'" placeholder="Nombre">'
+        + '<input class="mn-num" data-size-prop="mult" type="number" inputmode="decimal" min="0" step="0.05" value="'+esc(String(s.mult))+'">'
+        + '<input class="mn-num" data-size-prop="porc" type="number" inputmode="numeric" min="1" step="1" value="'+esc(String(s.porc))+'">'
+        + '<button type="button" class="mn-del" data-action="size-del" data-size-id="'+esc(s.id)+'" title="Eliminar tamaño">'+icSvg('trash',16)+'</button>'
         + '</div>';
     }).join('');
   }
@@ -2400,6 +2674,7 @@
       var fc=ev.target.closest('[data-fchip]'); if(fc){ handleChip(fc); return; }
       var ac=ev.target.closest('[data-acc]'); if(ac){ var ak=ac.getAttribute('data-acc'); state._acc=(state._acc===ak)?'':ak; renderCotizar(); return; }
       var sw=ev.target.closest('[data-marca-swatch]'); if(sw){ pickBrandColor(sw.getAttribute('data-marca-swatch')); return; }
+      var topt=ev.target.closest('[data-theme-opt]'); if(topt){ if(window.pasteliaTheme) window.pasteliaTheme.setDark(topt.getAttribute('data-theme-opt')==='dark'); applyBrand(); renderBiz(); return; }
       var act=ev.target.closest('[data-action]'); if(act){ var a=act.getAttribute('data-action');
         if(a==='cambiar'){ openRecipeSelector(); }
         else if(a==='nueva-receta'){ openRecipeEditor(null); }
@@ -2418,6 +2693,7 @@
         else if(a==='size-add'){ addSize(); }
         else if(a==='size-del'){ delSize(act.getAttribute('data-size-id')); }
         else if(a==='size-reset'){ resetSizes(); }
+        else if(a==='marca-save'){ marcaSaveNow(); }
         else if(a==='add-forma'){ state._addingForma=true; renderCotizar(); }
         else if(a==='cancel-forma'){ state._addingForma=false; state._newFormaName=''; renderCotizar(); }
         else if(a==='confirm-forma'){ addCustomForma(); }
