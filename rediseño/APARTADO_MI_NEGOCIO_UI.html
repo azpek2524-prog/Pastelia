@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics><meta name="design_doc_mode" content="canvas"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>
+body{margin:0;background:#efe9e1;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+a{color:#a8632a;text-decoration:none}a:hover{color:#8d4f1d}
+input,select,button{font-family:inherit}
+input::placeholder{color:#7a6552}
+.dv-turn{padding:40px 44px 32px;border-bottom:1px solid rgba(0,0,0,.08);scroll-margin-top:16px}
+.dv-thd{display:flex;align-items:baseline;gap:10px;margin:0 0 20px}
+.dv-tid{font:600 10px ui-monospace,Menlo,monospace;padding:3px 7px;background:#1a1a1a;color:#fff;border-radius:4px;text-decoration:none}
+.dv-tname{font:600 13px/1.2 'Plus Jakarta Sans',system-ui;color:#1a1a1a}
+.dv-opts{display:flex;flex-wrap:wrap;gap:32px;align-items:flex-start}
+.dv-opt{flex:none;display:flex;flex-direction:column;gap:9px;scroll-margin-top:16px}
+.dv-oid{font:600 10.5px ui-monospace,Menlo,monospace;padding:3px 7px;background:rgba(0,0,0,.08);color:#1a1a1a;border-radius:5px;text-decoration:none}
+.dv-olabel{display:flex;align-items:baseline;gap:8px;font:400 11px/1.3 'Plus Jakarta Sans',system-ui;color:rgba(0,0,0,.55)}
+.dv-card{max-width:100%;background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:10px;box-shadow:0 2px 10px rgba(0,0,0,.07);overflow:hidden}
+.dv-opt:target .dv-oid{background:#2a78d6;color:#fff}
+.dv-next{margin:22px 0 0;font:12px/1.5 'Plus Jakarta Sans',system-ui;color:rgba(0,0,0,.5)}
+.sc::-webkit-scrollbar{width:9px}.sc::-webkit-scrollbar-thumb{background:rgba(240,214,182,.14);border-radius:9px}.sc::-webkit-scrollbar-track{background:transparent}
+</style></helmet>
+
+<section class="dv-turn" id="t1">
+<div class="dv-thd"><a class="dv-tid" href="#t1">1</a><span class="dv-tname">Mi negocio — rediseño limpio (misma base, jerarquía nueva)</span></div>
+<div class="dv-opts">
+
+<div class="dv-opt" id="1a"><div class="dv-olabel"><a class="dv-oid" href="#1a">1a</a>Escritorio · dos columnas, tarjetas sin anidar, barra de guardado</div>
+<div class="dv-card" style="width:1340px;background:#130c06">
+<div style="display:flex;height:860px;color:#f6ece0;font-size:14px">
+
+<div style="width:244px;flex:none;box-sizing:border-box;padding:18px 16px;background:#0e0904;border-right:1px solid rgba(240,214,182,.07);display:flex;flex-direction:column;gap:18px">
+<div style="display:flex;align-items:center;gap:11px;padding:4px 6px">
+<div style="width:38px;height:38px;flex:none;border-radius:11px;background:linear-gradient(140deg,#e3a85c,#b8722f);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;color:#2a1a08">DV</div>
+<div style="min-width:0">
+<div style="font-weight:700;font-size:13.5px;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">dulce vainilla</div>
+<div style="font-size:11px;color:#a08a72;margin-top:1px">Plan Pastelera</div>
+</div>
+</div>
+
+<button style="width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 14px;border:0;border-radius:11px;background:#e3a85c;color:#2a1a08;font-weight:700;font-size:13.5px;cursor:pointer;box-shadow:0 6px 18px rgba(227,168,92,.18)" style-hover="background:#efb670">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+Nueva cotización
+</button>
+
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#6f5c4a;padding:6px 10px 8px">Taller</div>
+<a href="#1a" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;color:#c3ac96;font-weight:600;font-size:13.5px" style-hover="background:rgba(240,214,182,.05);color:#f6ece0">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Inicio</a>
+<a href="#1a" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;color:#c3ac96;font-weight:600;font-size:13.5px" style-hover="background:rgba(240,214,182,.05);color:#f6ece0">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>Agenda de pedidos</a>
+<a href="#1a" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;color:#c3ac96;font-weight:600;font-size:13.5px" style-hover="background:rgba(240,214,182,.05);color:#f6ece0">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"></path><path d="M9 8h6"></path></svg>Recetas</a>
+<a href="#1a" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;color:#c3ac96;font-weight:600;font-size:13.5px" style-hover="background:rgba(240,214,182,.05);color:#f6ece0">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.9L19 9.6l-4.3 3.2L15.4 18 12 15.4 8.6 18l.7-5.2L5 9.6l5.2-1.7z"></path></svg>Agente IA</a>
+<div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#6f5c4a;padding:16px 10px 8px">Configuración</div>
+<a href="#1a" style="display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:10px;background:rgba(227,168,92,.13);color:#f3dcbd;font-weight:700;font-size:13.5px;box-shadow:inset 0 0 0 1px rgba(227,168,92,.18)">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V7l2-3h12l2 3v2a2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0z"></path><path d="M5 11v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"></path></svg>Mi negocio</a>
+</div>
+
+<div style="flex:1"></div>
+<div style="border:1px solid rgba(240,214,182,.08);border-radius:13px;padding:13px 14px;background:#150e07">
+<div style="font:600 10px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#a08a72">Por cobrar</div>
+<div style="font-weight:800;font-size:23px;letter-spacing:-.02em;margin-top:5px">$0</div>
+<div style="font-size:11.5px;color:#a08a72;margin-top:2px">0 pedidos pendientes</div>
+</div>
+</div>
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:26px 36px 20px;border-bottom:1px solid rgba(240,214,182,.07)">
+<div>
+<div style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.14em;text-transform:uppercase;color:#a08a72;margin-bottom:7px">Configuración</div>
+<h1 style="margin:0;font-weight:800;font-size:27px;letter-spacing:-.025em">Mi negocio</h1>
+<p style="margin:6px 0 0;font-size:13px;color:#a8907a;max-width:520px">Nombre, logo y color de tu pastelería. Se aplican a la app, al PDF y al ticket de WhatsApp.</p>
+</div>
+<div style="display:flex;align-items:center;gap:10px;flex:none">
+<span style="font-size:12px;color:#a08a72">{{ savedLabel }}</span>
+<button style="padding:10px 15px;border-radius:10px;border:1px solid rgba(240,214,182,.14);background:transparent;color:#e7d6c1;font-weight:600;font-size:13px;cursor:pointer" style-hover="background:rgba(240,214,182,.06)">Ver ticket</button>
+<button onClick="{{ save }}" style="padding:10px 18px;border-radius:10px;border:0;background:#e3a85c;color:#2a1a08;font-weight:700;font-size:13px;cursor:pointer" style-hover="background:#efb670">Guardar cambios</button>
+</div>
+</div>
+
+<div class="sc" style="flex:1;overflow:auto;padding:26px 36px 40px">
+<div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start;max-width:1040px">
+
+<div style="display:flex;flex-direction:column;gap:22px">
+
+<div style="background:#1c130b;border:1px solid rgba(240,214,182,.08);border-radius:16px;padding:22px 24px 24px">
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">Identidad</div>
+<div style="font-size:12.5px;color:#a08a72;margin-top:3px">Cómo te ven tus clientes en cada documento.</div>
+<div style="height:1px;background:rgba(240,214,182,.07);margin:18px 0"></div>
+
+<label style="display:block;font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#9c8570">Nombre del negocio</label>
+<input defaultValue="dulce vainilla" style="width:100%;box-sizing:border-box;margin-top:8px;background:#120b06;border:1px solid rgba(240,214,182,.12);border-radius:11px;padding:12px 14px;color:#f6ece0;font-weight:600;font-size:14.5px;outline:none" style-focus="border-color:rgba(227,168,92,.55);box-shadow:0 0 0 3px rgba(227,168,92,.12)">
+
+<label style="display:block;font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#9c8570;margin-top:22px">Logotipo</label>
+<div style="display:flex;align-items:center;gap:14px;margin-top:9px;padding:12px;border:1px dashed rgba(240,214,182,.16);border-radius:13px;background:#150e08">
+<div style="width:56px;height:56px;flex:none;border-radius:12px;background:linear-gradient(140deg,#e3a85c,#a9622a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;color:#2a1a08">DV</div>
+<div style="min-width:0;flex:1">
+<div style="font-weight:600;font-size:13px">logo-dulce-vainilla.png</div>
+<div style="font-size:11.5px;color:#a08a72;margin-top:2px">PNG o SVG · mínimo 512 px · fondo transparente</div>
+</div>
+<div style="display:flex;gap:8px;flex:none">
+<button style="padding:8px 13px;border-radius:9px;border:1px solid rgba(240,214,182,.14);background:transparent;color:#e7d6c1;font-weight:600;font-size:12.5px;cursor:pointer" style-hover="background:rgba(240,214,182,.06)">Cambiar</button>
+<button style="padding:8px 11px;border-radius:9px;border:1px solid rgba(240,214,182,.1);background:transparent;color:#a8907a;font-weight:600;font-size:12.5px;cursor:pointer" style-hover="color:#f0b9b9;border-color:rgba(240,150,150,.3)">Quitar</button>
+</div>
+</div>
+
+<label style="display:block;font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#9c8570;margin-top:22px">Color de marca</label>
+<div style="display:flex;align-items:center;gap:14px;margin-top:10px">
+<div style="display:flex;gap:9px">
+<sc-for list="{{ swatches }}" as="sw" hint-placeholder-count="6">
+<button onClick="{{ sw.pick }}" title="{{ sw.hex }}" style="{{ sw.style }}"></button>
+</sc-for>
+</div>
+<div style="width:1px;height:26px;background:rgba(240,214,182,.1)"></div>
+<div style="display:flex;align-items:center;gap:9px;padding:7px 12px 7px 9px;border:1px solid rgba(240,214,182,.12);border-radius:10px;background:#120b06">
+<div style="width:18px;height:18px;border-radius:5px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);background:{{ brand }}"></div>
+<span style="font:600 12.5px ui-monospace,Menlo,monospace;color:#e7d6c1;letter-spacing:.02em">{{ brand }}</span>
+</div>
+</div>
+</div>
+
+<div style="background:#1c130b;border:1px solid rgba(240,214,182,.08);border-radius:16px;padding:22px 24px 24px">
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">Contacto en recibos</div>
+<div style="height:1px;background:rgba(240,214,182,.07);margin:16px 0 18px"></div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div>
+<label style="display:block;font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#9c8570">Teléfono</label>
+<input defaultValue="55 1234 5678" style="width:100%;box-sizing:border-box;margin-top:8px;background:#120b06;border:1px solid rgba(240,214,182,.12);border-radius:11px;padding:11px 14px;color:#f6ece0;font-weight:600;font-size:14px;outline:none" style-focus="border-color:rgba(227,168,92,.55);box-shadow:0 0 0 3px rgba(227,168,92,.12)">
+</div>
+<div>
+<label style="display:block;font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#9c8570">Instagram</label>
+<input defaultValue="@dulcevainilla" style="width:100%;box-sizing:border-box;margin-top:8px;background:#120b06;border:1px solid rgba(240,214,182,.12);border-radius:11px;padding:11px 14px;color:#f6ece0;font-weight:600;font-size:14px;outline:none" style-focus="border-color:rgba(227,168,92,.55);box-shadow:0 0 0 3px rgba(227,168,92,.12)">
+</div>
+</div>
+</div>
+
+<div style="background:#1c130b;border:1px solid rgba(240,214,182,.08);border-radius:16px;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px">
+<div>
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">Apariencia</div>
+<div style="font-size:12.5px;color:#a08a72;margin-top:3px">Modo claro u oscuro de la app.</div>
+</div>
+<div style="display:flex;gap:3px;padding:3px;border-radius:11px;background:#120b06;border:1px solid rgba(240,214,182,.1);flex:none">
+<sc-for list="{{ themes }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:22px">
+
+<div style="background:#1c130b;border:1px solid rgba(240,214,182,.08);border-radius:16px;padding:22px 24px 24px">
+<div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px">
+<div>
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">Tamaños de pastel</div>
+<div style="font-size:12.5px;color:#a08a72;margin-top:3px">El multiplicador escala insumos y mano de obra. Mediano = 1.00.</div>
+</div>
+<button onClick="{{ resetSizes }}" style="flex:none;background:transparent;border:0;color:#a8907a;font-weight:600;font-size:12px;cursor:pointer;padding:4px 0" style-hover="color:#e3a85c">Restablecer</button>
+</div>
+<div style="display:grid;grid-template-columns:1fr 84px 84px 34px;gap:10px;padding:18px 0 9px;font:600 10px 'Plus Jakarta Sans';letter-spacing:.1em;text-transform:uppercase;color:#ab9480">
+<div>Nombre</div><div style="text-align:right">Mult.</div><div style="text-align:right">Porciones</div><div></div>
+</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ sizes }}" as="s" hint-placeholder-count="6">
+<div style="display:grid;grid-template-columns:1fr 84px 84px 34px;gap:10px;align-items:center;padding:7px 0;border-top:1px solid rgba(240,214,182,.06)">
+<input value="{{ s.name }}" onChange="{{ s.onName }}" style="background:transparent;border:1px solid transparent;border-radius:9px;padding:8px 10px;color:#f6ece0;font-weight:600;font-size:13.5px;outline:none;width:100%;box-sizing:border-box" style-hover="border-color:rgba(240,214,182,.12)" style-focus="border-color:rgba(227,168,92,.5);background:#120b06">
+<input value="{{ s.mult }}" onChange="{{ s.onMult }}" style="background:#120b06;border:1px solid rgba(240,214,182,.1);border-radius:9px;padding:8px 10px;color:#e7d6c1;font:600 13.5px ui-monospace,Menlo,monospace;text-align:right;outline:none;width:100%;box-sizing:border-box" style-focus="border-color:rgba(227,168,92,.5)">
+<input value="{{ s.por }}" onChange="{{ s.onPor }}" style="background:#120b06;border:1px solid rgba(240,214,182,.1);border-radius:9px;padding:8px 10px;color:#e7d6c1;font:600 13.5px ui-monospace,Menlo,monospace;text-align:right;outline:none;width:100%;box-sizing:border-box" style-focus="border-color:rgba(227,168,92,.5)">
+<button onClick="{{ s.onRemove }}" title="Eliminar" style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border:0;border-radius:9px;background:transparent;color:#ab9480;cursor:pointer" style-hover="background:rgba(240,150,150,.1);color:#eda3a3">
+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"></path></svg>
+</button>
+</div>
+</sc-for>
+</div>
+<button onClick="{{ addSize }}" style="width:100%;margin-top:14px;padding:11px;border:1px dashed rgba(240,214,182,.18);border-radius:11px;background:transparent;color:#c3ac96;font-weight:600;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px" style-hover="border-color:rgba(227,168,92,.5);color:#e3a85c">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Añadir tamaño
+</button>
+</div>
+
+<div style="background:#1c130b;border:1px solid rgba(240,214,182,.08);border-radius:16px;padding:22px 24px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:16px">
+<div>
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">Catálogo de insumos</div>
+<div style="font-size:12.5px;color:#a08a72;margin-top:3px">El cotizador calcula costos a partir de estos precios.</div>
+</div>
+<button style="flex:none;padding:10px 16px;border-radius:10px;border:1px solid rgba(227,168,92,.35);background:rgba(227,168,92,.1);color:#f0c88b;font-weight:700;font-size:13px;cursor:pointer" style-hover="background:rgba(227,168,92,.18)">Abrir mis precios</button>
+</div>
+<div style="display:flex;gap:26px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(240,214,182,.07)">
+<div><div style="font-weight:800;font-size:19px;letter-spacing:-.02em">48</div><div style="font-size:11.5px;color:#a08a72;margin-top:1px">insumos</div></div>
+<div><div style="font-weight:800;font-size:19px;letter-spacing:-.02em">12</div><div style="font-size:11.5px;color:#a08a72;margin-top:1px">recetas base</div></div>
+<div><div style="font-weight:800;font-size:19px;letter-spacing:-.02em">hace 3 d</div><div style="font-size:11.5px;color:#a08a72;margin-top:1px">última edición</div></div>
+</div>
+</div>
+
+<div style="background:#1c130b;border:1px solid rgba(240,214,182,.08);border-radius:16px;padding:22px 24px">
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">Respaldo de datos</div>
+<div style="font-size:12.5px;color:#a08a72;margin-top:3px">Recetas, insumos, pedidos y configuración.</div>
+<div style="display:flex;gap:10px;margin-top:16px">
+<button style="flex:1;padding:10px 14px;border-radius:10px;border:1px solid rgba(240,214,182,.14);background:transparent;color:#e7d6c1;font-weight:600;font-size:13px;cursor:pointer" style-hover="background:rgba(240,214,182,.06)">Descargar respaldo</button>
+<button style="flex:1;padding:10px 14px;border-radius:10px;border:1px solid rgba(240,214,182,.14);background:transparent;color:#e7d6c1;font-weight:600;font-size:13px;cursor:pointer" style-hover="background:rgba(240,214,182,.06)">Restaurar</button>
+</div>
+<div style="font-size:11.5px;color:#ab9480;margin-top:11px">Último respaldo: 12 sep 2026, 9:41</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="dv-opt" id="1b"><div class="dv-olabel"><a class="dv-oid" href="#1b">1b</a>Móvil · lista agrupada, controles grandes, guardado fijo</div>
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="height:100%;background:#130c06;color:#f6ece0;font-family:'Plus Jakarta Sans',system-ui;display:flex;flex-direction:column">
+<div style="flex:none;padding:56px 20px 14px;background:#130c06;border-bottom:1px solid rgba(240,214,182,.07)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+<button style="width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(240,214,182,.12);border-radius:11px;background:transparent;color:#e7d6c1;cursor:pointer">
+<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg>
+</button>
+<span style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.14em;text-transform:uppercase;color:#a08a72">Configuración</span>
+<button onClick="{{ save }}" style="padding:8px 14px;border:0;border-radius:11px;background:#e3a85c;color:#2a1a08;font-weight:700;font-size:13px;cursor:pointer">Guardar</button>
+</div>
+<h1 style="margin:16px 0 0;font-weight:800;font-size:28px;letter-spacing:-.03em">Mi negocio</h1>
+<p style="margin:5px 0 0;font-size:13px;color:#a8907a">Se aplica a la app, al PDF y al ticket.</p>
+</div>
+
+<div class="sc" style="flex:1;overflow:auto;padding:18px 16px 26px;display:flex;flex-direction:column;gap:20px">
+
+<div style="display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:#1c130b;border:1px solid rgba(240,214,182,.08)">
+<div style="width:62px;height:62px;flex:none;border-radius:16px;background:linear-gradient(140deg,#e3a85c,#a9622a);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px;color:#2a1a08">DV</div>
+<div style="min-width:0;flex:1">
+<div style="font-weight:700;font-size:16px;letter-spacing:-.01em">dulce vainilla</div>
+<div style="font-size:12px;color:#a08a72;margin-top:2px">Logo PNG · 512 px</div>
+<div style="display:flex;gap:8px;margin-top:9px">
+<button style="padding:7px 12px;border-radius:9px;border:1px solid rgba(240,214,182,.14);background:transparent;color:#e7d6c1;font-weight:600;font-size:12px;cursor:pointer">Cambiar logo</button>
+<button style="padding:7px 12px;border-radius:9px;border:1px solid rgba(240,214,182,.1);background:transparent;color:#a8907a;font-weight:600;font-size:12px;cursor:pointer">Quitar</button>
+</div>
+</div>
+</div>
+
+<div>
+<div style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#ab9480;padding:0 4px 9px">Datos del negocio</div>
+<div style="border-radius:18px;background:#1c130b;border:1px solid rgba(240,214,182,.08);overflow:hidden">
+<div style="padding:13px 16px">
+<div style="font-size:11.5px;color:#a08a72;font-weight:600">Nombre</div>
+<input defaultValue="dulce vainilla" style="width:100%;box-sizing:border-box;margin-top:4px;background:transparent;border:0;padding:0;color:#f6ece0;font-weight:600;font-size:16px;outline:none">
+</div>
+<div style="height:1px;background:rgba(240,214,182,.07);margin-left:16px"></div>
+<div style="padding:13px 16px">
+<div style="font-size:11.5px;color:#a08a72;font-weight:600">Teléfono</div>
+<input defaultValue="55 1234 5678" style="width:100%;box-sizing:border-box;margin-top:4px;background:transparent;border:0;padding:0;color:#f6ece0;font-weight:600;font-size:16px;outline:none">
+</div>
+<div style="height:1px;background:rgba(240,214,182,.07);margin-left:16px"></div>
+<div style="padding:13px 16px">
+<div style="font-size:11.5px;color:#a08a72;font-weight:600">Instagram</div>
+<input defaultValue="@dulcevainilla" style="width:100%;box-sizing:border-box;margin-top:4px;background:transparent;border:0;padding:0;color:#f6ece0;font-weight:600;font-size:16px;outline:none">
+</div>
+</div>
+</div>
+
+<div>
+<div style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#ab9480;padding:0 4px 9px">Color de marca</div>
+<div style="border-radius:18px;background:#1c130b;border:1px solid rgba(240,214,182,.08);padding:16px">
+<div style="display:flex;gap:10px;flex-wrap:wrap">
+<sc-for list="{{ swatchesM }}" as="sw" hint-placeholder-count="6">
+<button onClick="{{ sw.pick }}" style="{{ sw.style }}"></button>
+</sc-for>
+</div>
+<div style="display:flex;align-items:center;gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(240,214,182,.07)">
+<div style="width:20px;height:20px;border-radius:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.14);background:{{ brand }}"></div>
+<span style="font:600 13px ui-monospace,Menlo,monospace;color:#e7d6c1">{{ brand }}</span>
+<span style="flex:1"></span>
+<span style="font-size:12px;color:#a08a72">Se usa en el ticket</span>
+</div>
+</div>
+</div>
+
+<div>
+<div style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#ab9480;padding:0 4px 9px">Apariencia</div>
+<div style="display:flex;gap:3px;padding:4px;border-radius:14px;background:#1c130b;border:1px solid rgba(240,214,182,.08)">
+<sc-for list="{{ themesM }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.pick }}" style="{{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</div>
+</div>
+
+<div>
+<div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px 9px">
+<div style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#ab9480">Tamaños de pastel</div>
+<button onClick="{{ resetSizes }}" style="background:transparent;border:0;color:#a8907a;font-weight:600;font-size:11.5px;cursor:pointer;padding:0">Restablecer</button>
+</div>
+<div style="border-radius:18px;background:#1c130b;border:1px solid rgba(240,214,182,.08);overflow:hidden">
+<sc-for list="{{ sizes }}" as="s" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid rgba(240,214,182,.06)">
+<div style="flex:1;min-width:0">
+<div style="font-weight:700;font-size:15px;letter-spacing:-.01em">{{ s.name }}</div>
+<div style="font-size:11.5px;color:#a08a72;margin-top:2px">{{ s.porLabel }}</div>
+</div>
+<div style="flex:none;padding:6px 11px;border-radius:9px;background:#120b06;border:1px solid rgba(240,214,182,.1);font:600 13px ui-monospace,Menlo,monospace;color:#e7d6c1">×{{ s.mult }}</div>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6f5c4a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+</div>
+</sc-for>
+<button onClick="{{ addSize }}" style="width:100%;padding:14px;border:0;border-top:1px solid rgba(240,214,182,.06);background:transparent;color:#e3a85c;font-weight:700;font-size:13.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px">
+<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Añadir tamaño
+</button>
+</div>
+</div>
+
+<div>
+<div style="font:600 10.5px 'Plus Jakarta Sans';letter-spacing:.12em;text-transform:uppercase;color:#ab9480;padding:0 4px 9px">Datos</div>
+<div style="border-radius:18px;background:#1c130b;border:1px solid rgba(240,214,182,.08);overflow:hidden">
+<div style="display:flex;align-items:center;gap:12px;padding:15px 16px">
+<div style="flex:1"><div style="font-weight:600;font-size:15px">Catálogo de insumos</div><div style="font-size:11.5px;color:#a08a72;margin-top:2px">48 insumos · 12 recetas</div></div>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6f5c4a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+</div>
+<div style="height:1px;background:rgba(240,214,182,.07);margin-left:16px"></div>
+<div style="display:flex;align-items:center;gap:12px;padding:15px 16px">
+<div style="flex:1"><div style="font-weight:600;font-size:15px">Respaldo de datos</div><div style="font-size:11.5px;color:#a08a72;margin-top:2px">Último: 12 sep, 9:41</div></div>
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6f5c4a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg>
+</div>
+</div>
+</div>
+<div style="height:58px"></div>
+</div>
+
+<div style="flex:none;position:relative;display:flex;align-items:stretch;gap:2px;padding:8px 10px 30px;background:#0e0904;border-top:1px solid rgba(240,214,182,.07)">
+<button style="position:absolute;left:50%;top:-26px;transform:translateX(-50%);width:58px;height:58px;border-radius:999px;border:4px solid #0e0904;background:#e3a85c;color:#2a1a08;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 10px 24px rgba(227,168,92,.28);z-index:5" style-hover="background:#efb670" title="Nueva cotización">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+</button>
+<a href="#1b" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:#ab9480;font-weight:600;font-size:10.5px">
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 4l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"></path></svg>Inicio</a>
+<a href="#1b" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:#ab9480;font-weight:600;font-size:10.5px">
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M8 3v4M16 3v4M3 11h18"></path></svg>Agenda</a>
+<div style="width:74px;flex:none"></div>
+<a href="#1b" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:#ab9480;font-weight:600;font-size:10.5px">
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"></path><path d="M9 8h6"></path></svg>Recetas</a>
+<a href="#1b" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 0;color:#f3dcbd;font-weight:700;font-size:10.5px">
+<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e3a85c" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V7l2-3h12l2 3v2a2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0 2 2 0 0 1-4 0z"></path><path d="M5 11v8a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8"></path></svg>Negocio</a>
+</div>
+</div>
+</x-import>
+</div>
+
+</div>
+<p class="dv-next">Prueba: "quiero <a class="dv-oid" href="#1a">1a</a> pero con los tamaños en una sola columna" · "en <a class="dv-oid" href="#1b">1b</a> abre los tamaños en una pantalla aparte" · "más contraste / más aire"</p>
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DEFAULT_SIZES = [
+  { name: 'Bento', mult: '0.15', por: '2' },
+  { name: 'Petit', mult: '0.45', por: '9' },
+  { name: 'Chico', mult: '0.65', por: '13' },
+  { name: 'Mediano', mult: '1.00', por: '20' },
+  { name: 'Grande', mult: '1.45', por: '28' },
+  { name: 'Extra grande', mult: '2.00', por: '38' },
+];
+const PALETTE = ['#e3a85c', '#b08878', '#e8579f', '#7fbf6a', '#6a8ec9', '#c95fd0'];
+
+class Component extends DCLogic {
+  state = { brand: '#e3a85c', theme: 'Oscuro', sizes: DEFAULT_SIZES, saved: false };
+
+  save = () => {
+    this.setState({ saved: true });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ saved: false }), 2200);
+  };
+
+  setSize(i, key, val) {
+    this.setState(s => ({ sizes: s.sizes.map((row, j) => (j === i ? { ...row, [key]: val } : row)) }));
+  }
+
+  swatch(hex, big) {
+    const on = this.state.brand === hex;
+    const d = big ? 34 : 26;
+    return {
+      hex,
+      pick: () => this.setState({ brand: hex }),
+      style: `width:${d}px;height:${d}px;border-radius:999px;border:0;cursor:pointer;background:${hex};padding:0;`
+        + `box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)${on ? ',0 0 0 2px #130c06,0 0 0 4px ' + hex : ''};`
+        + `transform:scale(${on ? 1 : 0.94});transition:transform .15s,box-shadow .15s`,
+    };
+  }
+
+  themeOpt(label, big) {
+    const on = this.state.theme === label;
+    return {
+      label,
+      pick: () => this.setState({ theme: label }),
+      style: `flex:1;border:0;cursor:pointer;border-radius:${big ? 11 : 9}px;padding:${big ? '11px 14px' : '7px 15px'};`
+        + `font-weight:${on ? 700 : 600};font-size:${big ? 13.5 : 12.5}px;font-family:inherit;transition:background .15s,color .15s;`
+        + (on ? 'background:rgba(227,168,92,.16);color:#f3dcbd;box-shadow:inset 0 0 0 1px rgba(227,168,92,.22)' : 'background:transparent;color:#a8907a'),
+    };
+  }
+
+  renderVals() {
+    const sizes = this.state.sizes.map((s, i) => ({
+      ...s,
+      porLabel: s.por + ' porciones',
+      onName: e => this.setSize(i, 'name', e.target.value),
+      onMult: e => this.setSize(i, 'mult', e.target.value),
+      onPor: e => this.setSize(i, 'por', e.target.value),
+      onRemove: () => this.setState(st => ({ sizes: st.sizes.filter((_, j) => j !== i) })),
+    }));
+    return {
+      brand: this.state.brand,
+      sizes,
+      swatches: PALETTE.map(h => this.swatch(h, false)),
+      swatchesM: PALETTE.map(h => this.swatch(h, true)),
+      themes: ['Claro', 'Oscuro', 'Sistema'].map(l => this.themeOpt(l, false)),
+      themesM: ['Claro', 'Oscuro', 'Sistema'].map(l => this.themeOpt(l, true)),
+      savedLabel: this.state.saved ? 'Cambios guardados' : 'Guardado automático activado',
+      save: this.save,
+      addSize: () => this.setState(s => ({ sizes: [...s.sizes, { name: 'Nuevo tamaño', mult: '1.00', por: '20' }] })),
+      resetSizes: () => this.setState({ sizes: DEFAULT_SIZES }),
+    };
+  }
+}
+
+</script>
+</body>
+</html>
