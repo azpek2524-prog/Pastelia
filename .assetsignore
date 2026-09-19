@@ -1,6 +1,9 @@
 # Archivos que NO se publican como sitio (código fuente, docs, diseño).
 .git/
 .github/
+node_modules/
+package.json
+package-lock.json
 .agents/
 rediseño/
 agent-proxy/
