@@ -1,0 +1,22 @@
+# Auto-deploy: publica Pastelia en Cloudflare automáticamente en cada cambio a main.
+# Solo necesita 2 secretos en GitHub (una sola vez): CLOUDFLARE_API_TOKEN y CLOUDFLARE_ACCOUNT_ID.
+name: Desplegar Pastelia en Cloudflare
+
+on:
+  push:
+    branches: [ main ]      # cada push a main se publica solo
+  workflow_dispatch:        # y también puedes lanzarlo a mano desde la pestaña "Actions"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Desplegar con Wrangler
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: deploy

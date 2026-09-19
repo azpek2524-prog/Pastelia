@@ -1,5 +1,6 @@
 # Archivos que NO se publican como sitio (código fuente, docs, diseño).
 .git/
+.github/
 .agents/
 rediseño/
 agent-proxy/
