@@ -667,7 +667,7 @@
           </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start;max-width:1040px">
+        <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:22px;align-items:start;max-width:1600px">
           <!-- Columna izquierda -->
           <div style="display:flex;flex-direction:column;gap:22px">
 
@@ -727,6 +727,15 @@
                 <button type="button" data-theme-opt="dark">Oscuro</button>
               </div>
             </div>
+
+            <div class="mn-card">
+              <div class="mn-h">Copia de seguridad</div>
+              <div class="mn-sub">Recetas, insumos, pedidos y configuraci&oacute;n.</div>
+              <div style="display:flex;gap:10px;margin-top:16px">
+                <button type="button" class="mn-btn mn-ghost" data-action="backup-export" style="flex:1">Guardar copia</button>
+                <label class="mn-btn mn-ghost" style="flex:1;position:relative;overflow:hidden">Restaurar<input type="file" accept=".json" data-backup-import style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>
+              </div>
+            </div>
           </div>
 
           <!-- Columna derecha -->
@@ -758,15 +767,6 @@
               <div style="display:flex;gap:30px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)">
                 <div><div data-mn-insumos style="font-weight:800;font-size:19px;color:var(--text)">0</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">insumos</div></div>
                 <div><div data-mn-recetas style="font-weight:800;font-size:19px;color:var(--text)">0</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">recetas</div></div>
-              </div>
-            </div>
-
-            <div class="mn-card">
-              <div class="mn-h">Copia de seguridad</div>
-              <div class="mn-sub">Recetas, insumos, pedidos y configuraci&oacute;n.</div>
-              <div style="display:flex;gap:10px;margin-top:16px">
-                <button type="button" class="mn-btn mn-ghost" data-action="backup-export" style="flex:1">Guardar copia</button>
-                <label class="mn-btn mn-ghost" style="flex:1;position:relative;overflow:hidden">Restaurar<input type="file" accept=".json" data-backup-import style="position:absolute;inset:0;opacity:0;cursor:pointer"></label>
               </div>
             </div>
 
