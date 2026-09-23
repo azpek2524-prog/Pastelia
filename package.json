@@ -1,0 +1,25 @@
+{
+  "name": "pastelia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sw.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/azpek2524-prog/Pastelia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/azpek2524-prog/Pastelia/issues"
+  },
+  "homepage": "https://github.com/azpek2524-prog/Pastelia#readme",
+  "dependencies": {
+    "@typesafe-ai/sdk": "^0.6.0",
+    "dotenv": "^18.0.3"
+  }
+}
