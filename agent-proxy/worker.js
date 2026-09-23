@@ -61,6 +61,9 @@ const TOOL_CONFIG = { functionCallingConfig: { mode: 'AUTO' } };
 // Contrato REST derivado del SDK oficial @typesafe-ai/sdk (POST /v1/systemone,
 // Authorization: Bearer). Los primitivos se serializan como { type, instructions, criteria }.
 const TYPESAFE_URL = 'https://api.typesafe.ai/v1/systemone';
+// El endpoint /v1/systemone requiere 'model' en el body (el SDK oficial siempre lo
+// envia, con este mismo default). Se puede sobreescribir con la variable TYPESAFE_MODEL.
+const TYPESAFE_MODEL = 'jev-latest';
 const JEV_QUESTIONS = {
   intencion: {
     type: 'choice',
@@ -165,6 +168,7 @@ async function callGemini(env, contents, context) {
 // Llama a Jev (TypeSafe) para clasificar un mensaje. Devuelve { answers, usage } o { error, status }.
 async function runTriage(env, mensaje, context) {
   const body = {
+    model: env.TYPESAFE_MODEL || TYPESAFE_MODEL,
     state: {
       mensaje_cliente: String(mensaje).slice(0, 4000),
       contexto_negocio: context ? String(context).slice(0, 8000) : ''

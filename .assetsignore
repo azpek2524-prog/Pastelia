@@ -4,6 +4,10 @@
 node_modules/
 package.json
 package-lock.json
+.wrangler/
+jev.mjs
+.env
+.env.local
 .agents/
 rediseño/
 agent-proxy/
