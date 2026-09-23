@@ -90,6 +90,35 @@ const JEV_QUESTIONS = {
   }
 };
 
+// ===== Ruteo por intención: cómo redacta Gemini el borrador según lo que decidió Jev =====
+// Solo 'cotizacion' habilita la herramienta de crear pedido; las demás redactan un
+// borrador para que la dueña lo revise y responda, sin crear nada en la agenda.
+const PROMPTS_INTENCION = {
+  cotizacion: { system: BASE_SYSTEM, useTools: true },
+  duda: {
+    useTools: false,
+    system: 'Eres el asistente de una pasteleria integrado en Pastelia. El cliente hace una PREGUNTA de informacion (sabores, horarios, ubicacion, disponibilidad), no pide cotizacion. Responde en espanol, breve y amable, usando SOLO los datos del negocio que se te entregan. Si el dato no esta, dilo con honestidad y ofrece que la duena lo confirme. No inventes precios ni crees pedidos.'
+  },
+  pago: {
+    useTools: false,
+    system: 'Eres el asistente de una pasteleria integrado en Pastelia. El cliente quiere PAGAR, pregunta como/donde pagar, o avisa de un comprobante. Responde en espanol, breve y claro, indicando los pasos de pago con los datos del negocio disponibles; si no hay datos de pago registrados, dilo y sugiere que la duena los comparta. Agradece el comprobante si lo menciona. No inventes montos ni crees pedidos.'
+  },
+  queja: {
+    useTools: false,
+    system: 'Eres el asistente de una pasteleria integrado en Pastelia. El cliente presenta una QUEJA o reporta un problema. Responde en espanol con empatia y calma: reconoce el problema, ofrece una disculpa sincera, pide los datos necesarios (numero o detalle del pedido y que sucedio) y avisa que la duena lo revisara pronto. No prometas reembolsos ni soluciones concretas por tu cuenta, no inventes informacion y no crees pedidos.'
+  }
+};
+function draftConfigFor(intencion) {
+  return PROMPTS_INTENCION[intencion] || PROMPTS_INTENCION.duda;
+}
+// Deriva una prioridad simple a partir del score de urgencia (rango 0..niveles-1).
+// Umbrales PROVISIONALES: calibralos con mensajes reales (ver JEV.md, regla 5).
+function prioridadDe(urgenciaScore, niveles) {
+  const max = (niveles || 1) - 1;
+  const n = max > 0 ? Math.max(0, Math.min(1, urgenciaScore / max)) : 0;
+  return n >= 0.66 ? 'alta' : (n >= 0.33 ? 'media' : 'baja');
+}
+
 function corsHeaders(origin, allowed) {
   // Sin ALLOWED_ORIGIN configurado -> permite cualquier origen (funciona desde file:// y cualquier host).
   // Con ALLOWED_ORIGIN configurado -> restringe a ese dominio.
@@ -112,18 +141,23 @@ function json(obj, status, headers) {
 
 // Llama a Gemini y devuelve { reply, toolCall } o { error, status }. Compartida por
 // el chat (/) y por el triage (/triage) para no duplicar la integración del modelo.
-async function callGemini(env, contents, context) {
-  const systemText = BASE_SYSTEM + (context ? ('\n\nDatos del negocio (usa solo esto):\n' + context.slice(0, 12000)) : '');
+// opts.system: persona/instrucciones base (default BASE_SYSTEM). opts.useTools: si
+// se ofrece la herramienta crear_pedido_directo (default true; el triage la apaga
+// para intenciones que no son 'cotizacion').
+async function callGemini(env, contents, context, opts) {
+  opts = opts || {};
+  const baseSystem = opts.system || BASE_SYSTEM;
+  const useTools = (opts.useTools !== undefined) ? opts.useTools : true;
+  const systemText = baseSystem + (context ? ('\n\nDatos del negocio (usa solo esto):\n' + context.slice(0, 12000)) : '');
   const payload = {
     system_instruction: { parts: [{ text: systemText }] },
     contents: contents,
-    tools: TOOLS,
-    toolConfig: TOOL_CONFIG,
     generationConfig: {
       maxOutputTokens: MAX_OUTPUT_TOKENS,
       thinkingConfig: { thinkingLevel: THINKING_LEVEL }
     }
   };
+  if (useTools) { payload.tools = TOOLS; payload.toolConfig = TOOL_CONFIG; }
 
   let resp;
   try {
@@ -235,16 +269,20 @@ export default {
       const confianza = (a.intencion && typeof a.intencion.confidence === 'number') ? a.intencion.confidence : null;
       const mencionaFecha = (a.menciona_fecha && typeof a.menciona_fecha.noul === 'number') ? a.menciona_fecha.noul : 0;
       const urgencia = (a.urgencia && typeof a.urgencia.score === 'number') ? a.urgencia.score : 0;
+      const nivelesUrgencia = (JEV_QUESTIONS.urgencia.criteria || []).length;
+      const prioridad = prioridadDe(urgencia, nivelesUrgencia);
 
-      // El código enruta: en cotización o cuando menciona fecha, Gemini redacta la
-      // respuesta y puede proponer crear el pedido. En otros casos también redacta un
-      // borrador para que la dueña conteste, pero la etiqueta ayuda a priorizar.
+      // El CÓDIGO ENRUTA según la intención que decidió Jev: 'cotizacion' usa la persona
+      // que cotiza y puede proponer crear el pedido (con herramienta); 'duda'/'pago'/'queja'
+      // redactan un borrador adecuado para que la dueña lo revise, SIN crear pedidos.
       let respuesta = '';
       let toolCall = null;
       let aviso = null;
       if (env.GEMINI_API_KEY) {
-        const g = await callGemini(env, [{ role: 'user', parts: [{ text: mensaje }] }], context);
-        if (g.error) { aviso = g.error; } else { respuesta = g.reply; toolCall = g.toolCall || null; }
+        const draft = draftConfigFor(intencion);
+        const g = await callGemini(env, [{ role: 'user', parts: [{ text: mensaje }] }], context, draft);
+        if (g.error) { aviso = g.error; }
+        else { respuesta = g.reply; toolCall = draft.useTools ? (g.toolCall || null) : null; }
       } else {
         aviso = 'GEMINI_API_KEY no está configurada: se devuelve solo la clasificación de Jev (sin respuesta redactada).';
       }
@@ -254,6 +292,7 @@ export default {
         confianza: confianza,
         menciona_fecha: mencionaFecha,
         urgencia: urgencia,
+        prioridad: prioridad,
         respuesta_sugerida: respuesta,
         toolCall: toolCall,
         aviso: aviso,
