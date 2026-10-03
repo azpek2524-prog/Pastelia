@@ -55,4 +55,4 @@ Archivo: `v2-subtitulos.srt` (tiempos aproximados; ajústalos al audio real).
 - [ ] Reemplaza [TU TIEMPO REAL] en el gancho, en la escena "Resultado", en los subtítulos y en el caption con lo que marque el cronómetro.
 - [ ] Graba con receta, logo e insumos ya cargados y deja visible "con receta y precios ya guardados".
 - [ ] Faltan tus clips (grabación de la demo y del cronómetro). Mándamelos y edito el Reel en 9:16 con subtítulos y tarjeta final.
-- [ ] URL de la app, precio de Pastelia y mercado: por confirmar.
+- [ ] Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).

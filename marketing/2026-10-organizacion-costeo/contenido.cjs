@@ -16,33 +16,28 @@
 // - El anticipo (prepago) y el saldo se ven en el paso "$ Total"; el PDF muestra PREPAGO, PRECIO, ENVÍO y TOTAL.
 // - Ticket de WhatsApp: una línea; abre wa.me con el teléfono del cliente. El anticipo no va en el ticket.
 
-const CAMPANA = 'bloque01-organizacion-costeo';
-// URL pública de la app: por confirmar. Por la config de Cloudflare (worker "pastelia" en la cuenta
-// del agente pastelia-agent.azpek2524.workers.dev) lo más probable es la de abajo.
-const URL_APP = null;
-const URL_PROBABLE = 'https://pastelia.azpek2524.workers.dev';
-
-function link(red, palabra) {
-  const base = URL_APP || '[URL DE LA APP]';
-  return `${base}/?utm_source=${red}&utm_medium=social&utm_campaign=${CAMPANA}&utm_content=${palabra.toLowerCase()}`;
-}
-
-const datos = {
-  mercado: { valor: null, supuesto: 'México (precios en pesos, español de México)' },
-  precio: { valor: null, supuesto: 'No se menciona precio hasta confirmarlo' },
-  url: { valor: URL_APP, supuesto: URL_PROBABLE + ' (deducida de la configuración; no se pudo abrir desde aquí)' },
-  frases: { valor: null, supuesto: 'Sin frases reales: no se usan testimonios ni citas de clientas' }
-};
+// Respuestas del dueño (3 oct 2026):
+// - URL: no hay link oficial ni landing; solo una URL de prueba. La app no tiene analítica, así que
+//   la medición es por palabra clave (comentarios → DM → cuentas creadas), no por UTM.
+// - Precio: no se menciona todavía (será suscripción mensual más adelante). Nada dice "gratis".
+// - Mercado: México y Latinoamérica. Ejemplo en pesos mexicanos; horas del centro de México.
+// - Frases reales de clientas: no hay todavía. No se usan testimonios.
+const URL_PRUEBA = '[TU URL DE PRUEBA]';
 
 const hashtags = {
   instagram: '#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento',
   tiktok: '#reposteria #pasteleria #pastelesporencargo #emprendimiento'
 };
 
-function dm(palabra) {
-  return `¡Hola! Aquí está el link de Pastelia: ${link('instagram', palabra)}\n`
-    + 'Crea tu cuenta con tu correo o con Google, llena "Mi negocio" (nombre, logo y color) y guarda tu primera receta. Con eso ya puedes hacer tu primera cotización.';
+function dm() {
+  return `¡Hola! Gracias por comentar. Aquí está el link para probar Pastelia: ${URL_PRUEBA}
+
+Crea tu cuenta con tu correo o con Google, llena "Mi negocio" (nombre, logo y color) y guarda tu primera receta. Con eso ya puedes hacer tu primera cotización.
+
+¿Me cuentas qué te pareció? Tu opinión nos ayuda a mejorarla.`;
 }
+
+const dmListaEspera = `¡Gracias por comentar! Pastelia todavía está en prueba. ¿Te aviso por aquí en cuanto abra?`;
 
 const piezas = [
   // ───────────────────────────── VIDEO 1 ─────────────────────────────
@@ -92,7 +87,7 @@ const piezas = [
       'La agenda no muestra el anticipo de cada pedido: el anticipo y el saldo se ven en el paso "$ Total" de la cotización y en el PDF. Por eso el guion lo enseña ahí.',
       '"Por cobrar" suma el total de los pedidos que no has marcado como cobrados; no descuenta anticipos. No digas "lo que te falta cobrar".',
       'Faltan tus clips: libreta, chats difuminados, calculadora de noche y la grabación de pantalla. Mándamelos por el chat y edito el Reel con subtítulos y tarjeta final.',
-      'URL de la app, precio de Pastelia y mercado: por confirmar (ver "Datos por confirmar").'
+      'Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).'
     ],
     captions: {
       instagram: () => `¿Tu agenda de pedidos es una libreta… y el WhatsApp? 📒💬
@@ -183,7 +178,7 @@ Pastelia junta todo en tu celular: abres la app y ves tus entregas de hoy y los 
       'Reemplaza [TU TIEMPO REAL] en el gancho, en la escena "Resultado", en los subtítulos y en el caption con lo que marque el cronómetro.',
       'Graba con receta, logo e insumos ya cargados y deja visible "con receta y precios ya guardados".',
       'Faltan tus clips (grabación de la demo y del cronómetro). Mándamelos y edito el Reel en 9:16 con subtítulos y tarjeta final.',
-      'URL de la app, precio de Pastelia y mercado: por confirmar.'
+      'Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).'
     ],
     captions: {
       instagram: () => `¿Cuánto tardas en cotizar un pastel para 20 personas? ⏱
@@ -232,12 +227,13 @@ Si quieres probarla, comenta COTIZA y te mando el link.`
         visual: 'Cuatro bloques apilados que forman una etiqueta de precio.', ilustracion: 'formula' },
       { kicker: 'Paso 1', titulo: 'Costea por gramo',
         texto: 'Mantequilla a $186 el kilo = $0.186 por gramo. Lo mismo con cada insumo.',
-        nota: 'Ejemplo con precios de arranque de Pastelia',
+        nota: 'Precios de ejemplo en pesos mexicanos',
         visual: 'Captura real de "Mis precios" recortada a la fila de Mantequilla: $186 / 1000 g → $0.186/g.',
         captura: { archivo: '02b-mis-precios.png', recorte: [40, 30, 1130, 232], ancho: 888 }, captura2: { archivo: '02b-mis-precios.png', recorte: [40, 448, 1130, 668], ancho: 888 } },
       { kicker: 'Ejemplo · Mediano, 20 porciones', titulo: 'Costo: $510',
         bloques: [['Insumos', '$210'], ['Mano de obra', '$180'], ['Flores', '$120']],
         texto: 'Eso cuesta hacerlo, antes de ganar un peso.',
+        nota: 'En pesos mexicanos',
         visual: 'Tres bloques (insumos $210, mano de obra $180, flores $120) que suman $510.', ilustracion: 'suma' },
       { kicker: 'Paso 2', titulo: 'Súmale tu ganancia',
         texto: 'Margen de 40%: $204.',
@@ -259,14 +255,14 @@ Si quieres probarla, comenta COTIZA y te mando el link.`
     antes: [
       'El $210 de insumos es el costo base que la app usa para un Mediano cuando la receta no tiene ingredientes capturados. Es un ejemplo, no el costo de una receta real.',
       'La mano de obra ($180 en Mediano) es fija en la app hoy: el carrusel no promete que la puedas cambiar.',
-      'URL de la app, precio de Pastelia y mercado: por confirmar.'
+      'Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).'
     ],
     captions: {
       instagram: () => `¿Cobras lo que cobra la pastelería de enfrente? Ese error te puede salir caro 👇
 
 Su precio sale de SUS insumos, SU receta y SU tiempo. Si ese precio no cubre tu costo, cada pastel sale de tu bolsa.
 
-En el ejemplo (pastel Mediano, 20 porciones):
+En el ejemplo (pastel Mediano, 20 porciones, en pesos mexicanos):
 • Insumos $210 + mano de obra $180 + flores $120 = $510 de costo
 • Margen de 40 %: $204
 • Precio sugerido: $714, o $35.70 por porción
@@ -280,7 +276,7 @@ ${hashtags.instagram}`,
 
 El precio de otra pastelería sale de sus insumos, su receta y su tiempo. No de los tuyos.
 
-Ejemplo con los valores de arranque de Pastelia, pastel Mediano de 20 porciones: hacerlo cuesta $510 (insumos $210, mano de obra $180 y flores $120) antes de ganar un peso. Con 40 % de margen, el precio sugerido es $714, o $35.70 por porción.
+Ejemplo con los valores de arranque de Pastelia, en pesos mexicanos, pastel Mediano de 20 porciones: hacerlo cuesta $510 (insumos $210, mano de obra $180 y flores $120) antes de ganar un peso. Con 40 % de margen, el precio sugerido es $714, o $35.70 por porción.
 
 Comenta COSTEO y te mando el link para que costees el tuyo.`
     }
@@ -323,7 +319,7 @@ Comenta COSTEO y te mando el link para que costees el tuyo.`
     ],
     antes: [
       'Ojo con la promesa: el carrusel da consejos para que el cliente confíe; no promete que te paguen más rápido ni da cifras.',
-      'URL de la app, precio de Pastelia y mercado: por confirmar.'
+      'Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).'
     ],
     captions: {
       instagram: () => `Una cotización por chat se pierde entre mensajes. Una con tu marca, todo por escrito y números claros le da a tu cliente la confianza para dejar el anticipo.
@@ -350,14 +346,14 @@ En Pastelia ese PDF sale de tu cotización, con tu logo. Comenta ANTICIPO y te m
   }
 ];
 
-// DM que mandas a quien comente la palabra (cambia el utm_content según la pieza).
-piezas.forEach((p) => { p.dm = dm(p.palabra); p.links = {}; ['instagram', 'tiktok', 'facebook'].forEach((r) => { p.links[r] = link(r, p.palabra); }); });
+// DM que mandas a quien comente la palabra clave de cada pieza.
+piezas.forEach((p) => { p.dm = dm(); });
 
 const porConfirmar = [
-  { campo: 'Mercado', estado: 'Supuesto: México (pesos, español de México). Afecta hashtags, horarios y moneda.' },
-  { campo: 'Precio de Pastelia', estado: 'Vacío. No se menciona precio en ninguna pieza. Si es "gratis por ahora", se agrega una línea a cada caption.' },
-  { campo: 'URL de la app para los CTA', estado: 'Vacío. Probable: ' + URL_PROBABLE + ' (deducida de la config de Cloudflare; no la pude abrir desde aquí). Los links con UTM ya están armados, solo falta la URL.' },
-  { campo: 'Frases reales de clientas', estado: 'Vacío. No se usa ningún testimonio ni cita. Si me pasas frases reales (con permiso), las meto en el Bloque 02.' }
+  { campo: 'Mercado', estado: 'Confirmado: México y Latinoamérica. El ejemplo está en pesos mexicanos y las horas son del centro de México. Donde dicen "torta" en vez de "pastel", conviene adaptar el texto.' },
+  { campo: 'Precio de Pastelia', estado: 'Confirmado: no se menciona. Será suscripción mensual más adelante; ningún texto dice "gratis".' },
+  { campo: 'URL para los CTA', estado: 'Por confirmar: no hay link oficial ni landing, solo la URL de prueba. El DM lleva [TU URL DE PRUEBA]; pégala antes de responder. Si todavía no quieres abrir la prueba, usa la respuesta de lista de espera.' },
+  { campo: 'Frases reales de clientas', estado: 'Confirmado: no hay todavía, así que no se usa ningún testimonio. El DM pide opinión para juntar frases reales para el Bloque 02.' }
 ];
 
-module.exports = { CAMPANA, URL_APP, URL_PROBABLE, datos, piezas, porConfirmar, link };
+module.exports = { URL_PRUEBA, piezas, porConfirmar, dmListaEspera };

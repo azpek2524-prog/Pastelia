@@ -2,6 +2,6 @@
 
 El precio de otra pastelería sale de sus insumos, su receta y su tiempo. No de los tuyos.
 
-Ejemplo con los valores de arranque de Pastelia, pastel Mediano de 20 porciones: hacerlo cuesta $510 (insumos $210, mano de obra $180 y flores $120) antes de ganar un peso. Con 40 % de margen, el precio sugerido es $714, o $35.70 por porción.
+Ejemplo con los valores de arranque de Pastelia, en pesos mexicanos, pastel Mediano de 20 porciones: hacerlo cuesta $510 (insumos $210, mano de obra $180 y flores $120) antes de ganar un peso. Con 40 % de margen, el precio sugerido es $714, o $35.70 por porción.
 
 Comenta COSTEO y te mando el link para que costees el tuyo.

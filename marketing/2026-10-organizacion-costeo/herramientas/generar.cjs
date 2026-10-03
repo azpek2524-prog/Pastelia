@@ -345,7 +345,7 @@ function calendarioMD() {
   const orden = [...C.piezas].sort((a, b) => a.fecha.localeCompare(b.fecha));
   return `# Calendario · Bloque 01 (semana del 5 al 11 de octubre de 2026)
 
-Horas sugeridas (ajústalas con tus estadísticas). Una palabra clave por pieza para medir cuál trae registros.
+Horas sugeridas, del centro de México (ajústalas con tus estadísticas). Mercado: México y Latinoamérica. Una palabra clave por pieza para medir cuál trae registros.
 
 | Día | Pieza | Red | Hora | Palabra clave |
 |---|---|---|---|---|

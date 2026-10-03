@@ -36,8 +36,7 @@ function antes(p) {
 function captions(p) {
   const nombres = { instagram: 'Instagram', tiktok: 'TikTok', facebook: 'Facebook' };
   return `<h4>Captions</h4><div class="captions">${Object.entries(p.captions).map(([r, fn]) => copiable(nombres[r], fn().trim())).join('')}</div>
-  <h4>Respuesta por DM a quien comente ${esc(p.palabra)}</h4>${copiable('Mensaje directo', p.dm)}
-  <details class="links"><summary>Links con UTM por red</summary><div class="tabla-envoltura"><table><tbody>${Object.entries(p.links).map(([r, l]) => `<tr><th>${esc(nombres[r])}</th><td><code>${esc(l)}</code></td></tr>`).join('')}</tbody></table></div></details>`;
+  <h4>Respuesta por DM a quien comente ${esc(p.palabra)}</h4>${copiable('Mensaje directo (pega tu URL de prueba)', p.dm)}`;
 }
 
 function video(p) {
@@ -98,7 +97,7 @@ function diaCorto(dia) { const [d, n, , m] = dia.split(' '); return `${d.slice(0
 
 function pagina() {
   const orden = [...C.piezas].sort((a, b) => a.fecha.localeCompare(b.fecha));
-  const zipKey = 'descargas/' + ZIP; archivos[zipKey] = rel(path.join(BASE, 'salida', ZIP));
+  const planillaKey = 'descargas/pastelia-bloque01-medicion.csv'; archivos[planillaKey] = rel(path.join(SALIDA, 'medicion.csv'));
   return `<title>Kit de contenido Pastelia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap">
@@ -194,7 +193,7 @@ footer{padding-top:28px;color:var(--suave);font-size:14px}
   <p class="eyebrow">Bloque 01 · Organización y costeo · semana del 5 al 11 de octubre de 2026</p>
   <h1>Kit de contenido Pastelia</h1>
   <p class="bajada">Objetivo: conseguir usuarias atacando dos dolores, organizarse con libreta y WhatsApp, y no saber cuánto cobrar. Dos videos y dos carruseles, cada uno con su palabra clave para medir cuál trae registros.</p>
-  <ul class="indice">${orden.map((p) => `<li><a href="#${p.id}">${esc(p.dia.split(' ')[0])} · ${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#calendario">Calendario</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
+  <ul class="indice">${orden.map((p) => `<li><a href="#${p.id}">${esc(p.dia.split(' ')[0])} · ${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#calendario">Calendario</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
 </header>
 
 <section id="confirmar">
@@ -204,11 +203,26 @@ footer{padding-top:28px;color:var(--suave);font-size:14px}
 
 <section id="calendario">
   <h2>Calendario de publicación</h2>
-  <div class="tabla-envoltura"><table class="cal"><thead><tr><th>Día</th><th>Pieza</th><th>Red</th><th>Hora sugerida</th><th>Palabra clave</th></tr></thead><tbody>
+  <div class="tabla-envoltura"><table class="cal"><thead><tr><th>Día</th><th>Pieza</th><th>Red</th><th>Hora (centro de México)</th><th>Palabra clave</th></tr></thead><tbody>
   ${orden.map((p) => `<tr><td class="num">${esc(diaCorto(p.dia))}</td><td><a href="#${p.id}" style="color:inherit">${esc(p.titulo)}</a><br><small>${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} · ${esc(p.estructura)}</small></td><td>${esc(p.redes.join(', '))}</td><td class="num">${esc(p.hora)}</td><td><span class="palabra">${esc(p.palabra)}</span></td></tr>`).join('')}
   </tbody></table></div>
   <p class="ayuda" style="margin-top:12px">Horas sugeridas; ajústalas con las estadísticas de tus cuentas.</p>
-  <div class="zip">${descargar(zipKey, ZIP, 'Descargar ZIP de la semana', '')}<span class="ayuda" style="margin:0">PNG, captions .txt, guiones, subtítulos .srt y calendario. Sin MP4 todavía: faltan tus clips.</span></div>
+  <p class="ayuda">El ZIP de la semana (${esc(ZIP)}: PNG, captions .txt, guiones, subtítulos .srt, calendario y plantilla de medición) va como archivo en el chat. Sin MP4 todavía: faltan tus clips.</p>
+</section>
+
+<section id="medir">
+  <h2>Cómo medir qué pieza trae registros</h2>
+  <p class="bajada">Todavía no hay landing ni analítica en la app, así que cada pieza usa su propia palabra clave. Cuenta tres cosas por palabra:</p>
+  <div class="tabla-envoltura" style="margin-top:16px"><table><thead><tr><th>Palabra</th><th>Pieza</th><th>Comentarios con la palabra</th><th>DM enviados</th><th>Cuentas creadas</th></tr></thead><tbody>
+  ${orden.map((p) => `<tr><td><span class="palabra">${esc(p.palabra)}</span></td><td>${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} · ${esc(diaCorto(p.dia))}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>`).join('')}
+  </tbody></table></div>
+  <ul style="margin-top:14px">
+    <li>Responde cada comentario con la palabra y manda el DM el mismo día.</li>
+    <li>"Cuentas creadas": pregunta en el DM si ya se registró, o compara las altas nuevas en Firebase (Authentication) con los días en que mandaste cada link.</li>
+    <li>Al final de la semana, la palabra con más cuentas creadas te dice qué tema repetir en el Bloque 02.</li>
+  </ul>
+  <div class="zip">${descargar(planillaKey, 'pastelia-bloque01-medicion.csv', 'Descargar plantilla (CSV)', '')}</div>
+  ${copiable('Respuesta alternativa si todavía no quieres abrir la prueba', C.dmListaEspera)}
 </section>
 
 ${orden.map((p) => (p.tipo === 'video' ? video(p) : carrusel(p))).join('\n')}
@@ -222,7 +236,7 @@ ${orden.map((p) => (p.tipo === 'video' ? video(p) : carrusel(p))).join('\n')}
     <tr><th>Mano de obra</th><td>$180 en Mediano, fija en el código (escala con el tamaño; hoy no se edita)</td></tr>
     <tr><th>Extras</th><td>Flores $120 (activo por defecto) · Topper $80</td></tr>
     <tr><th>Margen</th><td>40 % por defecto (editable en Mis precios)</td></tr>
-    <tr><th>Resultado</th><td>Costo $510 · margen $204 · precio sugerido $714 · $35.70 por porción</td></tr>
+    <tr><th>Resultado</th><td>Costo $510 · margen $204 · precio sugerido $714 · $35.70 por porción (pesos mexicanos)</td></tr>
     <tr><th>Costo por gramo</th><td>Mantequilla de arranque: $186 / 1000 g = $0.186 por gramo</td></tr>
     <tr><th>Anticipo del ejemplo</th><td>$357 (50 % de $714), solo como ejemplo · saldo por cobrar $357</td></tr>
   </tbody></table></div>
@@ -266,15 +280,22 @@ ${orden.map((p) => (p.tipo === 'video' ? video(p) : carrusel(p))).join('\n')}
 </script>`;
 }
 
+function medicion() {
+  const orden = [...C.piezas].sort((a, b) => a.fecha.localeCompare(b.fecha));
+  return 'palabra,pieza,fecha_publicacion,comentarios,dm_enviados,cuentas_creadas,notas\n'
+    + orden.map((p) => `${p.palabra},"${p.titulo}",${p.fecha},,,,`).join('\n') + '\n';
+}
+
 function leeme() {
   return `Pastelia · Bloque 01 · Organización y costeo
 Semana del 5 al 11 de octubre de 2026
 
 carruseles/   PNG 1080x1350 listos para Instagram y Facebook (c1 = COSTEO, c2 = ANTICIPO)
 storyboards/  Escenas 1080x1920 de los videos, storyboard completo y tarjetas finales (v1 = AGENDA, v2 = COTIZA)
-captions/     Captions por red (.txt) y respuesta por DM para cada palabra clave
+captions/     Captions por red (.txt) y respuesta por DM para cada palabra clave (pega tu URL de prueba)
 guiones/      Guiones con tiempos, notas de producción y subtítulos .srt
-calendario.md Día, pieza, red, hora sugerida y palabra clave
+calendario.md Día, pieza, red, hora sugerida (centro de México) y palabra clave
+medicion.csv  Plantilla para contar comentarios, DM y cuentas creadas por palabra clave
 
 Sin MP4 todavía: faltan tus clips. Mándalos por el chat y edito los Reels.
 
@@ -285,6 +306,7 @@ ${C.porConfirmar.map((d) => '- ' + d.campo + ': ' + d.estado).join('\n')}
 
 function zip() {
   fs.writeFileSync(path.join(SALIDA, 'LEEME.txt'), leeme());
+  fs.writeFileSync(path.join(SALIDA, 'medicion.csv'), medicion());
   const out = path.join(BASE, 'salida', ZIP);
   if (fs.existsSync(out)) fs.unlinkSync(out);
   execFileSync('python3', ['-c', `

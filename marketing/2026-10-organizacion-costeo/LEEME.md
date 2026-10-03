@@ -2,6 +2,8 @@
 
 Fuentes del "Kit de contenido Pastelia" de la semana del 5 al 11 de octubre de 2026: 2 videos (AGENDA, COTIZA) y 2 carruseles (COSTEO, ANTICIPO).
 
+**Página publicada:** https://claude.ai/artifact/UTvekWzAYnhiX2XshDNFtt (privada; cada actualización del kit se publica en este mismo link).
+
 ## Qué hay aquí
 
 | Carpeta / archivo | Qué es |

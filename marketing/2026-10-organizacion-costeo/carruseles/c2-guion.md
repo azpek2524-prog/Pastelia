@@ -20,4 +20,4 @@
 
 ## Antes de publicar
 - [ ] Ojo con la promesa: el carrusel da consejos para que el cliente confíe; no promete que te paguen más rápido ni da cifras.
-- [ ] URL de la app, precio de Pastelia y mercado: por confirmar.
+- [ ] Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).

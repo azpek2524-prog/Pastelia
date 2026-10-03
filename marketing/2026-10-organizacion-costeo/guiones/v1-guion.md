@@ -45,4 +45,4 @@ Archivo: `v1-subtitulos.srt` (tiempos aproximados; ajústalos al audio real).
 - [ ] La agenda no muestra el anticipo de cada pedido: el anticipo y el saldo se ven en el paso "$ Total" de la cotización y en el PDF. Por eso el guion lo enseña ahí.
 - [ ] "Por cobrar" suma el total de los pedidos que no has marcado como cobrados; no descuenta anticipos. No digas "lo que te falta cobrar".
 - [ ] Faltan tus clips: libreta, chats difuminados, calculadora de noche y la grabación de pantalla. Mándamelos por el chat y edito el Reel con subtítulos y tarjeta final.
-- [ ] URL de la app, precio de Pastelia y mercado: por confirmar (ver "Datos por confirmar").
+- [ ] Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).

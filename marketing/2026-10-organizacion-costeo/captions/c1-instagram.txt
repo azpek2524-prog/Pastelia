@@ -2,7 +2,7 @@
 
 Su precio sale de SUS insumos, SU receta y SU tiempo. Si ese precio no cubre tu costo, cada pastel sale de tu bolsa.
 
-En el ejemplo (pastel Mediano, 20 porciones):
+En el ejemplo (pastel Mediano, 20 porciones, en pesos mexicanos):
 • Insumos $210 + mano de obra $180 + flores $120 = $510 de costo
 • Margen de 40 %: $204
 • Precio sugerido: $714, o $35.70 por porción
