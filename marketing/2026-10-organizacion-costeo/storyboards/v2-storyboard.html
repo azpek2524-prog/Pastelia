@@ -1,0 +1,68 @@
+<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><title>v2 · storyboard</title><link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet"><style>:root{--marron:#7B5B4B;--crema:#FFF4E6;--dorado:#E7B676;--tinta:#5A4236;--campo:#F5E7D0;--tinte:#F1E6CE;--blanco:#FFFFFF;--suave:rgba(90,66,54,.66);--display:'Fredoka','Nunito',system-ui,sans-serif;--texto:'Nunito',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#CDBBA6;padding:40px;display:flex;flex-direction:column;align-items:center;gap:40px;font-family:var(--texto)}
+.recorte{position:relative;overflow:hidden;flex:none}.recorte img{position:absolute;max-width:none;display:block}
+.frame{width:1080px;height:1920px;position:relative;overflow:hidden;background:#2B201A;color:var(--crema)}
+.frame.claro{background:var(--crema);color:var(--tinta)}
+.chips{position:absolute;left:48px;top:48px;right:48px;display:flex;gap:14px;flex-wrap:wrap;z-index:5}
+.chip{font:800 30px/1 var(--texto);padding:16px 24px;border-radius:999px;background:var(--crema);color:var(--tinta)}
+.chip.d{background:var(--dorado)}
+.overlay{position:absolute;left:60px;right:60px;top:150px;z-index:4;text-align:center;font:700 70px/1.12 var(--display);color:#fff;text-shadow:0 0 1px #2B201A,0 4px 0 #2B201A,0 -3px 0 #2B201A,3px 0 0 #2B201A,-3px 0 0 #2B201A,0 10px 30px rgba(0,0,0,.45);text-wrap:balance}
+.overlay mark{background:none;color:var(--dorado)}
+.sub{position:absolute;left:90px;right:90px;bottom:210px;z-index:4;text-align:center;font:900 50px/1.2 var(--texto);color:#fff;text-shadow:0 0 2px #000,0 3px 0 #1d1511,0 -2px 0 #1d1511,2px 0 0 #1d1511,-2px 0 0 #1d1511}
+.telefono{position:absolute;left:50%;top:440px;width:580px;height:1256px;margin-left:-290px;border-radius:84px;background:#1d1511;padding:20px;box-shadow:0 40px 90px rgba(0,0,0,.5)}
+.telefono .pantalla{width:100%;height:100%;border-radius:66px;overflow:hidden;background:var(--crema)}
+.telefono img{width:100%;display:block}
+.crono{position:absolute;right:40px;top:470px;z-index:6;background:var(--crema);color:var(--tinta);border-radius:28px;padding:20px 28px;font:700 46px/1 var(--display);box-shadow:0 18px 40px rgba(0,0,0,.4);display:flex;gap:14px;align-items:center}
+.ilus{position:absolute;inset:450px 60px 400px;display:flex;align-items:center;justify-content:center}
+.libreta{width:620px;height:820px;background:#FFF9EF;border-radius:20px;transform:rotate(-7deg);padding:70px 60px;background-image:repeating-linear-gradient(transparent 0 66px,#E9D9C1 66px 69px);box-shadow:0 30px 60px rgba(0,0,0,.45);position:relative}
+.libreta .renglon{height:14px;border-radius:7px;background:#8B6B5A;margin:26px 0 40px;opacity:.75}
+.libreta .tachado{position:relative}.libreta .tachado:after{content:"";position:absolute;left:-10px;right:-10px;top:4px;height:6px;background:#B5523B;transform:rotate(-3deg)}
+.cel{position:absolute;right:30px;bottom:-30px;width:380px;height:720px;border-radius:52px;background:#1d1511;padding:14px;transform:rotate(9deg);box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.cel .p{width:100%;height:100%;border-radius:40px;background:#F6EEE3;padding:40px 24px;display:flex;flex-direction:column;gap:22px;filter:blur(1.4px)}
+.chat{display:flex;gap:16px;align-items:center}.chat i{width:62px;height:62px;border-radius:50%;background:#CDB8A2;flex:none}.chat span{flex:1;display:flex;flex-direction:column;gap:10px}.chat b{height:14px;border-radius:7px;background:#9C8270;width:70%}.chat u{height:12px;border-radius:6px;background:#D6C6B6}
+.panel3{display:flex;flex-direction:column;gap:30px;width:100%}
+.mini{height:330px;border-radius:30px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.calc{display:grid;grid-template-columns:repeat(4,80px);gap:16px}.calc i{height:80px;border-radius:50%;background:#4A3A30}.calc i:nth-child(4n){background:var(--dorado)}
+.reloj{width:640px;height:640px;border-radius:50%;background:var(--crema);border:34px solid var(--marron);display:flex;align-items:center;justify-content:center;font:700 92px/1 var(--display);color:var(--tinta);position:relative}
+.reloj:before{content:"";position:absolute;top:-110px;left:50%;width:90px;height:70px;margin-left:-45px;background:var(--marron);border-radius:18px}
+.toma{position:absolute;left:60px;right:60px;bottom:40px;z-index:4;font:700 30px/1.35 var(--texto);color:rgba(255,244,230,.8);text-align:center}
+.final{background:linear-gradient(165deg,var(--tinta),var(--marron));display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:var(--crema)}
+.final .logo{width:640px;height:168px}
+.final .c{font:800 56px/1 var(--texto);margin-top:150px;opacity:.9}
+.final .k{margin-top:36px;background:var(--dorado);color:var(--tinta);font:700 150px/1 var(--display);padding:40px 70px;border-radius:44px;letter-spacing:.02em}
+.final .y{font:800 52px/1.2 var(--texto);margin-top:40px;opacity:.9}
+.hoja{width:1600px;background:var(--crema);color:var(--tinta);padding:80px;display:flex;flex-direction:column;gap:40px}
+.hoja h1{font:600 64px/1.05 var(--display)}
+.hoja .meta{font:800 28px/1.4 var(--texto);color:var(--marron)}
+.hoja .hook{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.hoja .hook div{background:var(--blanco);border-radius:22px;padding:24px;font:700 25px/1.4 var(--texto)}
+.hoja .hook b{display:block;font:800 22px/1 var(--texto);letter-spacing:.08em;text-transform:uppercase;color:var(--marron);margin-bottom:10px}
+.esc{display:grid;grid-template-columns:300px 1fr;gap:40px;background:var(--blanco);border-radius:28px;padding:30px;align-items:start}
+.esc img{width:300px;border-radius:18px;display:block}
+.esc .t{font:800 24px/1 var(--texto);background:var(--dorado);display:inline-block;padding:10px 16px;border-radius:999px}
+.esc h2{font:600 44px/1.1 var(--display);margin:16px 0 14px}
+.esc p{font:700 26px/1.42 var(--texto);margin-top:12px;color:var(--tinta)}.esc p b{color:var(--marron);font-weight:900}</style></head><body>
+<section class="frame" data-id="e1"><div class="chips"><div class="chip d">Escena 1 · 0–3 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">Pastel para 20 ⏱ <mark>[TU TIEMPO REAL]</mark></div><div class="telefono"><div class="pantalla"><img src="../capturas/10-pdf-comprobante.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>[TU TIEMPO]</div><div class="sub">Pastel para 20 personas: cotizado,<br>en PDF y en WhatsApp.</div></section>
+<section class="frame" data-id="e2"><div class="chips"><div class="chip d">Escena 2 · 3–6 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">4 pasos<br>cronómetro real, sin cortes</div><div class="telefono"><div class="pantalla"><img src="../capturas/03-cotizar-paso1-cliente.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>0:00</div><div class="sub">Son cuatro pasos.</div></section>
+<section class="frame" data-id="e3"><div class="chips"><div class="chip d">Escena 3 · 6–14 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">Paso 1: Cliente</div><div class="telefono"><div class="pantalla"><img src="../capturas/03-cotizar-paso1-cliente.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>corriendo</div><div class="sub">Uno: nombre,<br>teléfono y fecha del evento.</div></section>
+<section class="frame" data-id="e4"><div class="chips"><div class="chip d">Escena 4 · 14–23 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">Paso 2: Pastel<br>Mediano 20p</div><div class="telefono"><div class="pantalla"><img src="../capturas/04-cotizar-paso2-pastel.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>corriendo</div><div class="sub">Dos: tu receta,<br>tamaño Mediano de 20 porciones,</div></section>
+<section class="frame" data-id="e5"><div class="chips"><div class="chip d">Escena 5 · 23–31 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">Paso 3: precio sugerido<br>y por porción</div><div class="telefono"><div class="pantalla"><img src="../capturas/06-cotizar-paso3-costeo.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>corriendo</div><div class="sub">Tres: el precio sale solo,<br>con tus insumos,</div></section>
+<section class="frame" data-id="e6"><div class="chips"><div class="chip d">Escena 6 · 31–37 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">Paso 4: anticipo → saldo</div><div class="telefono"><div class="pantalla"><img src="../capturas/09-resumen-pedido-anticipo.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>corriendo</div><div class="sub">Cuatro: pones el anticipo<br>y ves el saldo.</div></section>
+<section class="frame" data-id="e7"><div class="chips"><div class="chip d">Escena 7 · 37–45 s</div><div class="chip">Grabación de pantalla</div></div><div class="overlay">PDF con tu logo<br>Ticket a WhatsApp</div><div class="telefono"><div class="pantalla"><img src="../capturas/10-pdf-comprobante.png" alt=""></div></div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>se detiene</div><div class="sub">PDF con tu logo…</div></section>
+<section class="frame" data-id="e8"><div class="chips"><div class="chip d">Escena 8 · 45–50 s</div><div class="chip">Toma real</div></div><div class="overlay">⏱ <mark>[TU TIEMPO REAL]</mark><br>con receta y precios ya guardados</div><div class="ilus"><div class="reloj">[TU TIEMPO]</div></div><div class="toma">Primer plano del cronómetro detenido.</div><div class="crono"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M10 2h4M19 6l-1.5 1.5"/></svg>[TU TIEMPO]</div><div class="sub">Todo en [di<br>tu tiempo real].</div></section>
+<section class="frame final" data-id="e9"><div class="chips"><div class="chip d">Escena 9 · 50–54 s</div><div class="chip">Tarjeta final</div></div><div class="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 100" width="100%" height="100%">
+  <rect width="100" height="100" rx="24" fill="#3A2A24"></rect>
+  <rect x="28" y="24" width="14" height="54" rx="7" fill="#FDF5EC"></rect>
+  <circle cx="53" cy="38" r="16" fill="none" stroke="#FDF5EC" stroke-width="14"></circle>
+  <circle cx="73" cy="72" r="7" fill="#EF7C8E"></circle>
+  <text x="120" y="68" font-family="Fredoka, Nunito, sans-serif" font-size="46" font-weight="600" letter-spacing="-0.7" fill="#FDF5EC">Pastelia</text>
+</svg></div><div class="c">Comenta</div><div class="k">COTIZA</div><div class="y">y te mando el link</div></section>
+<section class="frame final" data-id="tarjeta"><div class="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 100" width="100%" height="100%">
+  <rect width="100" height="100" rx="24" fill="#3A2A24"></rect>
+  <rect x="28" y="24" width="14" height="54" rx="7" fill="#FDF5EC"></rect>
+  <circle cx="53" cy="38" r="16" fill="none" stroke="#FDF5EC" stroke-width="14"></circle>
+  <circle cx="73" cy="72" r="7" fill="#EF7C8E"></circle>
+  <text x="120" y="68" font-family="Fredoka, Nunito, sans-serif" font-size="46" font-weight="600" letter-spacing="-0.7" fill="#FDF5EC">Pastelia</text>
+</svg></div><div class="c">Comenta</div><div class="k">COTIZA</div><div class="y">y te mando el link</div></section>
+</body></html>
