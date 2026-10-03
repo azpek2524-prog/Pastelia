@@ -9,6 +9,9 @@ jev.mjs
 .env
 .env.local
 .agents/
+.claude/
+skills-lock.json
+marketing/
 rediseño/
 agent-proxy/
 *.md
