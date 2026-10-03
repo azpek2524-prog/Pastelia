@@ -1,5 +1,5 @@
 // Arma la página "Kit de contenido Pastelia" (kit/index.html), el mapa de archivos para publicarla
-// (kit/archivos.json) y los ZIP de la semana, uno por paleta (salida/…-<paleta>.zip). Correr después de generar.cjs.
+// (kit/archivos.json) y el ZIP de la semana (salida/…zip). Correr después de generar.cjs.
 // Uso: node marketing/2026-10-organizacion-costeo/herramientas/generar-kit.cjs
 const fs = require('fs');
 const path = require('path');
@@ -7,7 +7,6 @@ const { execFileSync } = require('child_process');
 const C = require('../contenido.cjs');
 const { contar } = require('./contar-palabras.cjs');
 const { subtitulos } = require('./generar.cjs');
-const PALETAS = require('./paletas.cjs');
 
 const BASE = path.resolve(__dirname, '..');
 const ROOT = path.resolve(BASE, '../..');
@@ -20,11 +19,7 @@ const LOCKUP = fs.readFileSync(path.join(ROOT, 'pastelia-lockup.svg'), 'utf8').r
 
 const archivos = {};
 function img(sub, nombre) { const k = `img/${nombre}`; archivos[k] = rel(path.join(SALIDA, sub, nombre)); return k; }
-function imgPaleta(pal, nombre) { const k = `img/${pal}/${nombre}`; archivos[k] = rel(path.join(SALIDA, 'carruseles', pal, nombre)); return k; }
-const muestra = (pal) => `<i class="muestra" style="background:linear-gradient(135deg,${pal.c1},${pal.c2})"></i>`;
-function selector() {
-  return `<div class="selector" role="group" aria-label="Paleta de los carruseles">${PALETAS.map((pal, k) => `<button type="button" class="opcion" data-elegir-paleta="${pal.id}" aria-pressed="${k === 0}">${muestra(pal)}${esc(pal.nombre)}</button>`).join('')}</div>`;
-}
+const tipoPieza = (p) => (p.tipo === 'video' ? 'Video' : p.etiqueta === 'Manifiesto' ? 'Manifiesto' : `Carrusel ${p.etiqueta.replace('Opción ', '')}`);
 
 let nCopia = 0;
 function copiable(titulo, texto, extraClase) {
@@ -80,31 +75,34 @@ function video(p) {
 
 function carrusel(p) {
   const { filas } = contar();
-  const paneles = PALETAS.map((pal, k) => {
-    const slides = p.slides.map((s, i) => {
-      const nombre = `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`; const key = imgPaleta(pal.id, nombre);
-      return `<figure class="slide"><img src="${key}" alt="Slide ${i + 1}, paleta ${esc(pal.nombre)}" loading="lazy" width="1080" height="1350"><figcaption><b>${i + 1} / ${p.slides.length}</b>${descargar(key, `${p.id}-${pal.id}-slide-${String(i + 1).padStart(2, '0')}.png`)}</figcaption></figure>`;
-    }).join('');
-    const tira = imgPaleta(pal.id, `${p.id}-tira.png`);
-    return `<div class="panel-paleta" data-paleta="${pal.id}"${k ? ' hidden' : ''}>
-      <p class="ayuda">Tira completa: así se ve el carrusel continuo al deslizar.</p>
-      <div class="tira"><img src="${tira}" alt="Carrusel completo, paleta ${esc(pal.nombre)}" loading="lazy"></div>
-      <div class="carril carril-slides">${slides}</div></div>`;
+  const slides = p.slides.map((s, i) => {
+    const nombre = `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`; const key = img('carruseles', nombre);
+    return `<figure class="slide"><img src="${key}" alt="Slide ${i + 1}: ${esc(s.titulo)}" loading="lazy" width="1080" height="1350"><figcaption><b>${i + 1} / ${p.slides.length}</b>${descargar(key, nombre)}</figcaption></figure>`;
   }).join('');
+  const tira = img('carruseles', `${p.id}-tira.png`);
   return `<article class="pieza" id="${p.id}">
-  <p class="eyebrow">Carrusel · ${esc(p.estructura)}</p>
+  <p class="eyebrow">${esc(p.etiqueta)} · Carrusel · ${esc(p.estructura)}</p>
   <h3>${esc(p.titulo)}</h3>
   ${chips(p)}
-  ${selector()}
-  ${paneles}
-  <h4>Slides, palabras y visual</h4>
-  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>#</th><th>Texto</th><th>Palabras</th><th>Visual</th></tr></thead><tbody>
-  ${p.slides.map((s, i) => { const f = filas.find((x) => x.pieza === p.id && x.slide === i + 1); return `<tr><td class="num">${i + 1}</td><td>${esc(f.texto)}</td><td class="num">${f.palabras} <small>(${esc(f.limite)}) ${f.cumple ? '✓' : '✗'}</small></td><td>${esc(s.visual)}</td></tr>`; }).join('')}
+  <h4>Carrusel completo</h4>
+  <p class="ayuda">Lienzo continuo: algunos elementos cruzan de un slide al siguiente para invitar a deslizar. Al pie de cada slide va el ciclo abierto en dorado.</p>
+  <div class="tira"><img src="${tira}" alt="Carrusel ${esc(p.palabra)} completo" loading="lazy"></div>
+  <div class="carril carril-slides">${slides}</div>
+  <h4>Slides, palabras y diseño</h4>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>#</th><th>Texto que se ve</th><th>Palabras</th><th>Diseño</th></tr></thead><tbody>
+  ${p.slides.map((s, i) => { const f = filas.find((x) => x.pieza === p.id && x.slide === i + 1); return `<tr><td class="num">${i + 1}</td><td>${esc(f.texto)}${s.loop ? `<br><small class="loop">Ciclo abierto: ${esc(s.loop)}</small>` : ''}</td><td class="num">${f.palabras} <small>(${esc(f.limite)}) ${f.cumple ? '✓' : '✗'}</small></td><td>${esc(s.visual)}</td></tr>`; }).join('')}
   </tbody></table></div>
   <h4>Notas</h4><ul>${p.notas.map((n) => `<li>${esc(n)}</li>`).join('')}</ul>
   ${captions(p)}
   ${antes(p)}
 </article>`;
+}
+
+// Comparativa de las 3 opciones de carrusel: portada, gancho, ciclos abiertos y palabra clave.
+function opciones() {
+  const ops = C.piezas.filter((p) => p.tipo === 'carrusel' && p.etiqueta.startsWith('Opción'));
+  const mecanismo = { cA: 'Una cifra que duele ($180) y una cuenta que el lector termina solo: 10 × $180 = ?', cB: 'Una pregunta incómoda y una cadena de precios copiados que se rompe con el costeo por gramo.', cC: 'Una escena que toda repostera vivió: el mensaje del sábado, el pedido perdido y el final feliz.' };
+  return `<div class="opciones">${ops.map((p) => { const k = img('carruseles', `${p.id}-slide-01.png`); return `<a class="opcion-c" href="#${p.id}"><img src="${k}" alt="Portada ${esc(p.etiqueta)}" loading="lazy" width="1080" height="1350"><span class="eyebrow">${esc(p.etiqueta)} · ${esc(diaCorto(p.dia))}</span><b>${esc(p.slides[0].titulo)}</b><span>${esc(mecanismo[p.id] || '')}</span><span>Ciclos abiertos: ${p.slides.filter((s) => s.loop).length} · CTA <span class="palabra">${esc(p.palabra)}</span></span></a>`; }).join('')}</div>`;
 }
 
 function diaCorto(dia) { const [d, n, , m] = dia.split(' '); return `${d.slice(0, 3)} ${n} ${m.slice(0, 3)}`; }
@@ -124,11 +122,11 @@ function pagina() {
   --display:'Fredoka','Nunito',system-ui,sans-serif; --texto:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --fondo:#1C1511; --papel:#271E18; --campo:#33281F; --tinte:#3A2E25;
+  --fondo:#150E0A; --papel:#21170F; --campo:#2E2118; --tinte:#36281D;
   --tinta:#F6EADB; --marron:#E9D6C2; --suave:#BFA894; --dorado:#E7B676; --dorado-tinta:#2A1F17;
   --linea:rgba(246,234,219,.14); --aviso:#3A2C1C; --aviso-borde:#B98A4C; color-scheme:dark }}
 :root[data-theme="dark"]{
-  --fondo:#1C1511; --papel:#271E18; --campo:#33281F; --tinte:#3A2E25;
+  --fondo:#150E0A; --papel:#21170F; --campo:#2E2118; --tinte:#36281D;
   --tinta:#F6EADB; --marron:#E9D6C2; --suave:#BFA894; --dorado:#E7B676; --dorado-tinta:#2A1F17;
   --linea:rgba(246,234,219,.14); --aviso:#3A2C1C; --aviso-borde:#B98A4C; color-scheme:dark }
 *{box-sizing:border-box}
@@ -172,19 +170,20 @@ table.cal td:nth-child(2){min-width:220px}table.cal td:nth-child(3){min-width:17
 .carril{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
 .carril figure{margin:0;flex:none;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
 .frame{width:min(200px,46vw)}.slide{width:min(280px,72vw)}
-.selector{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 14px}
-.opcion{appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font:800 14px/1 var(--texto);padding:9px 14px 9px 9px;border-radius:999px;border:2px solid var(--linea);background:var(--papel);color:var(--tinta)}
-.opcion[aria-pressed="true"]{border-color:var(--tinta)}
-.opcion:focus-visible{outline:3px solid var(--dorado);outline-offset:2px}
-.muestra{display:inline-block;width:22px;height:22px;border-radius:50%;flex:none}
 .tira{overflow-x:auto;border-radius:12px;border:1px solid var(--linea);margin-bottom:14px;background:var(--campo)}
 .tira img{display:block;height:300px;width:auto;max-width:none}
-.paletas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-.paleta{background:var(--papel);border:1px solid var(--linea);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
-.paleta .portadas{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.paleta .portadas img{width:100%;height:auto;display:block;border-radius:8px}
-.paleta h3{font-size:22px;margin:0;display:flex;align-items:center;gap:8px}
-.paleta .hex{font:500 12px/1.4 var(--mono);color:var(--suave)}
+.opciones{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:18px}
+.opcion-c{display:flex;flex-direction:column;gap:8px;min-width:0;background:var(--papel);border:1px solid var(--linea);border-radius:16px;padding:12px;color:var(--tinta);text-decoration:none}
+.opcion-c:hover{border-color:var(--dorado)}
+.opcion-c:focus-visible{outline:3px solid var(--dorado);outline-offset:2px}
+.opcion-c img{width:100%;height:auto;display:block;border-radius:10px}
+.opcion-c b{font:600 21px/1.15 var(--display);text-wrap:balance}
+.opcion-c span{font-size:14px;color:var(--marron)}
+.opcion-c .eyebrow{color:var(--suave);font-size:12px}
+small.loop{color:var(--marron);font-style:italic}
+.novedades{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));list-style:none;padding:0;margin:0}
+.novedades li{margin:0;background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;min-width:0}
+.novedades b{display:block;font:600 18px/1.2 var(--display);margin-bottom:4px}
 .carril img,.mini img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--linea);background:var(--campo)}
 figcaption{display:flex;flex-direction:column;gap:6px;font-size:13px}
 figcaption b{font-weight:800}
@@ -217,11 +216,21 @@ footer{padding-top:28px;color:var(--suave);font-size:14px}
 <div class="envoltura">
 <header class="cab">
   ${LOCKUP}
-  <p class="eyebrow">Bloque 01 · Organización y costeo · semana del 5 al 11 de octubre de 2026</p>
+  <p class="eyebrow">Bloque 01 · Lanzamiento, organización y costeo · semana del 5 al 11 de octubre de 2026</p>
   <h1>Kit de contenido Pastelia</h1>
-  <p class="bajada">Objetivo: conseguir usuarias atacando dos dolores, organizarse con libreta y WhatsApp, y no saber cuánto cobrar. Dos videos y dos carruseles, cada uno con su palabra clave para medir cuál trae registros.</p>
-  <ul class="indice">${orden.map((p) => `<li><a href="#${p.id}">${esc(p.dia.split(' ')[0])} · ${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#calendario">Calendario</a></li><li><a href="#paletas">Paletas</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
+  <p class="bajada">Primero el manifiesto que presenta el perfil. Después, tres opciones de carrusel con gancho de curiosidad y ciclos abiertos, y los dos videos. Todo en la paleta cacao de Pastelia, y cada pieza con su palabra clave para medir cuál trae registros.</p>
+  <ul class="indice">${orden.map((p) => `<li><a href="#${p.id}">${esc(p.dia.split(' ')[0])} · ${esc(tipoPieza(p))} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#opciones">Las 3 opciones</a></li><li><a href="#calendario">Calendario</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
 </header>
+
+<section id="novedades">
+  <h2>Qué cambió en esta versión</h2>
+  <ul class="novedades">
+    <li><b>Manifiesto nuevo</b>Post fundacional para lanzar el perfil: por qué nace Pastelia y qué viene a resolver. Se publica primero y se fija arriba.</li>
+    <li><b>Tres carruseles nuevos</b>Opción A, B y C, con portada de curiosidad, un ciclo abierto en dorado al pie de cada slide y un elemento visual por slide (gráfico, captura real o ilustración).</li>
+    <li><b>Video AGENDA</b>El gancho y el agitar quedan igual. La solución y el CTA se reescribieron con una pausa de transición y el look cacao.</li>
+    <li><b>Paleta cacao</b>Fondos café casi negro, texto crema y acentos dorados. Las capturas de la app ahora son en modo oscuro.</li>
+  </ul>
+</section>
 
 <section id="confirmar">
   <h2>Datos por confirmar</h2>
@@ -231,26 +240,23 @@ footer{padding-top:28px;color:var(--suave);font-size:14px}
 <section id="calendario">
   <h2>Calendario de publicación</h2>
   <div class="tabla-envoltura"><table class="cal"><thead><tr><th>Día</th><th>Pieza</th><th>Red</th><th>Hora (centro de México)</th><th>Palabra clave</th></tr></thead><tbody>
-  ${orden.map((p) => `<tr><td class="num">${esc(diaCorto(p.dia))}</td><td><a href="#${p.id}" style="color:inherit">${esc(p.titulo)}</a><br><small>${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} · ${esc(p.estructura)}</small></td><td>${esc(p.redes.join(', '))}</td><td class="num">${esc(p.hora)}</td><td><span class="palabra">${esc(p.palabra)}</span></td></tr>`).join('')}
+  ${orden.map((p) => `<tr><td class="num">${esc(diaCorto(p.dia))}</td><td><a href="#${p.id}" style="color:inherit">${esc(p.titulo)}</a><br><small>${esc(tipoPieza(p))} · ${esc(p.estructura)}</small></td><td>${esc(p.redes.join(', '))}</td><td class="num">${esc(p.hora)}</td><td><span class="palabra">${esc(p.palabra)}</span></td></tr>`).join('')}
   </tbody></table></div>
   <p class="ayuda" style="margin-top:12px">Horas sugeridas; ajústalas con las estadísticas de tus cuentas.</p>
-  <p class="ayuda">El ZIP de la semana va como archivo en el chat, uno por paleta (${esc(ZIP.replace('.zip', '-<paleta>.zip'))}): PNG, captions .txt, guiones, subtítulos .srt, calendario y plantilla de medición. Sin MP4 todavía: faltan tus clips.</p>
+  <p class="ayuda">El paquete de la semana va como archivo en el chat (${esc(ZIP)}${ZIP_PARTES > 1 ? ', en dos partes por tamaño: carruseles y videos' : ''}): PNG, captions .txt, guiones, subtítulos .srt, calendario y plantilla de medición. Sin MP4 todavía: faltan tus clips.</p>
 </section>
 
-<section id="paletas">
-  <h2>Elige la paleta de los carruseles</h2>
-  <p class="bajada">Mismo texto y mismas capturas reales en cuatro paletas. En cada una, el teléfono muestra la app con ese color de marca, que tú cambias en Mi negocio. Dime cuál te gusta y la dejo como la paleta de marketing.</p>
-  <div class="paletas" style="margin-top:18px">${PALETAS.map((pal) => `<div class="paleta"><h3>${muestra(pal)}${esc(pal.nombre)}</h3>
-    <div class="portadas"><img src="${imgPaleta(pal.id, 'c1-slide-01.png')}" alt="Portada COSTEO en ${esc(pal.nombre)}" loading="lazy" width="1080" height="1350"><img src="${imgPaleta(pal.id, 'c2-slide-01.png')}" alt="Portada ANTICIPO en ${esc(pal.nombre)}" loading="lazy" width="1080" height="1350"></div>
-    <span class="hex">${esc(pal.c1)} → ${esc(pal.c2)} · app ${esc(pal.app)}</span>
-    <button type="button" class="btn btn-sec" data-elegir-paleta="${pal.id}">Ver los carruseles en ${esc(pal.nombre)}</button></div>`).join('')}</div>
+<section id="opciones">
+  <h2>Las 3 opciones de carrusel</h2>
+  <p class="bajada">Las tres atacan los mismos dos dolores con un gancho distinto. El calendario las publica las tres en la semana para comparar sus palabras clave; si prefieres una sola, quédate con la que más comentarios traiga.</p>
+  ${opciones()}
 </section>
 
 <section id="medir">
   <h2>Cómo medir qué pieza trae registros</h2>
   <p class="bajada">Todavía no hay landing ni analítica en la app, así que cada pieza usa su propia palabra clave. Cuenta tres cosas por palabra:</p>
   <div class="tabla-envoltura" style="margin-top:16px"><table><thead><tr><th>Palabra</th><th>Pieza</th><th>Comentarios con la palabra</th><th>DM enviados</th><th>Cuentas creadas</th></tr></thead><tbody>
-  ${orden.map((p) => `<tr><td><span class="palabra">${esc(p.palabra)}</span></td><td>${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} · ${esc(diaCorto(p.dia))}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>`).join('')}
+  ${orden.map((p) => `<tr><td><span class="palabra">${esc(p.palabra)}</span></td><td>${esc(tipoPieza(p))} · ${esc(diaCorto(p.dia))}</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>`).join('')}
   </tbody></table></div>
   <ul style="margin-top:14px">
     <li>Responde cada comentario con la palabra y manda el DM el mismo día.</li>
@@ -274,22 +280,23 @@ ${orden.map((p) => (p.tipo === 'video' ? video(p) : carrusel(p))).join('\n')}
     <tr><th>Margen</th><td>40 % por defecto (editable en Mis precios)</td></tr>
     <tr><th>Resultado</th><td>Costo $510 · margen $204 · precio sugerido $714 · $35.70 por porción (pesos mexicanos)</td></tr>
     <tr><th>Costo por gramo</th><td>Mantequilla de arranque: $186 / 1000 g = $0.186 por gramo</td></tr>
+    <tr><th>$1,800 (Opción A)</th><td>10 pedidos Medianos × $180 de mano de obra. El 10 es una suposición para hacer la cuenta, no un dato de clientas</td></tr>
     <tr><th>Anticipo del ejemplo</th><td>$357 (50 % de $714), solo como ejemplo · saldo por cobrar $357</td></tr>
   </tbody></table></div>
-  <p class="ayuda" style="margin-top:12px">Verificado en index.html (función calc(), tamaños, insumos y margen por defecto). Las capturas se tomaron con la app real corriendo en modo local, con datos de ejemplo.</p>
+  <p class="ayuda" style="margin-top:12px">Verificado en index.html (función calc(), tamaños, insumos y margen por defecto). Las capturas se tomaron con la app real corriendo en modo local y en modo oscuro, con datos de ejemplo.</p>
 </section>
 
 <section id="material">
   <h2>Material que necesito de ti</h2>
   <div class="tabla-envoltura"><table><thead><tr><th>Para</th><th>Qué grabar o capturar en tu celular</th></tr></thead><tbody>
-    <tr><td class="num">Video AGENDA</td><td>Tu libreta con tachones (cenital) · scroll de tus chats con nombres difuminados · calculadora del celular de noche · grabación de pantalla: Inicio → Agenda → "+" → paso 2 (Mediano · 20p) → paso "$ Total" con anticipo.</td></tr>
-    <tr><td class="num">Video COTIZA</td><td>Una sola toma sin cortes de la cotización completa (Cotizar → 4 pasos → PDF → ticket en WhatsApp) con un cronómetro real en cuadro. Antes: logo en Mi negocio, 1 receta guardada e insumos en Mis precios.</td></tr>
-    <tr><td class="num">Opcional</td><td>Si quieres que el PDF del carrusel ANTICIPO lleve un logo real en lugar de "TU LOGO", mándame una captura del PDF desde tu cuenta con los mismos datos.</td></tr>
+    <tr><td class="num">Video AGENDA</td><td>Tu libreta con tachones (cenital) · scroll de tus chats con nombres difuminados · calculadora del celular de noche · tú cerrando la libreta bajo una lámpara cálida · la libreta abierta en una receta con el celular al lado · grabación de pantalla en modo oscuro: Inicio y una cotización (Mediano · 20p → Resumen en vivo → "$ Total" con anticipo).</td></tr>
+    <tr><td class="num">Video COTIZA</td><td>Una sola toma sin cortes de la cotización completa (Cotizar → 4 pasos → PDF → ticket en WhatsApp) con un cronómetro real en cuadro. Antes: logo en Mi negocio, modo oscuro, 1 receta guardada e insumos en Mis precios.</td></tr>
+    <tr><td class="num">Opcional</td><td>Si quieres que el PDF del manifiesto (slide 8) lleve tu logo real en lugar de "TU LOGO", mándame una captura del PDF desde tu cuenta con los mismos datos.</td></tr>
   </tbody></table></div>
   <p class="ayuda" style="margin-top:12px">Mándame los clips por el chat (o súbelos a marketing/material/) y edito los Reels en 9:16 con subtítulos, textos de marca y tarjeta final, en MP4.</p>
 </section>
 
-<footer>Fuentes del kit en el repo: marketing/2026-10-organizacion-costeo/ (contenido.cjs, HTML de slides y storyboards, guiones, captions). Generado el 3 de octubre de 2026.</footer>
+<footer>Fuentes del kit en el repo: marketing/2026-10-organizacion-costeo/ (contenido.cjs, HTML de slides y storyboards, guiones, captions). Versión cacao, generada el 3 de octubre de 2026.</footer>
 </div>
 
 <script>
@@ -302,17 +309,6 @@ ${orden.map((p) => (p.tipo === 'video' ? video(p) : carrusel(p))).join('\n')}
     var p; try{ p=navigator.clipboard.writeText(el.textContent); }catch(e){ p=Promise.reject(e); }
     p.then(function(){ marcar(b,'Copiado'); }, function(){ seleccionar(el); marcar(b,'Seleccionado: copia con Ctrl+C'); });
   });
-  function elegir(id, desplazar){
-    document.querySelectorAll('.panel-paleta').forEach(function(p){ p.hidden = p.getAttribute('data-paleta')!==id; });
-    document.querySelectorAll('.opcion').forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-elegir-paleta')===id)); });
-    try{ localStorage.setItem('pastelia-kit-paleta', id); }catch(e){}
-    if(desplazar){ var c=document.getElementById('c1'); if(c) c.scrollIntoView({behavior:'smooth', block:'start'}); }
-  }
-  document.addEventListener('click', function(ev){
-    var b=ev.target.closest('[data-elegir-paleta]'); if(!b) return;
-    elegir(b.getAttribute('data-elegir-paleta'), !b.classList.contains('opcion'));
-  });
-  try{ var guardada=localStorage.getItem('pastelia-kit-paleta'); if(guardada && document.querySelector('.panel-paleta[data-paleta="'+guardada+'"]')) elegir(guardada, false); }catch(e){}
   var descargas=null;
   try{ if(window.claude && window.claude.use){ window.claude.use('downloads').then(function(d){ descargas=d; }, function(){}); } }catch(e){}
   document.addEventListener('click', function(ev){
@@ -334,11 +330,12 @@ function medicion() {
 }
 
 function leeme() {
-  return `Pastelia · Bloque 01 · Organización y costeo
+  return `Pastelia · Bloque 01 · Lanzamiento, organización y costeo
 Semana del 5 al 11 de octubre de 2026
 
-carruseles/   PNG 1080x1350 listos para Instagram y Facebook, una carpeta por paleta (fresa, azul, mandarina, menta).
-              c1 = COSTEO, c2 = ANTICIPO. La "tira" muestra el carrusel completo.
+carruseles/   PNG 1080x1350 listos para Instagram y Facebook, en la paleta cacao.
+              m1 = Manifiesto (PASTELIA) · cA = Opción A (TIEMPO) · cB = Opción B (COSTEO) · cC = Opción C (ORDEN).
+              La "tira" muestra cada carrusel completo.
 storyboards/  Escenas 1080x1920 de los videos, storyboard completo y tarjetas finales (v1 = AGENDA, v2 = COTIZA)
 captions/     Captions por red (.txt) y respuesta por DM para cada palabra clave (pega tu URL de prueba)
 guiones/      Guiones con tiempos, notas de producción y subtítulos .srt
@@ -352,35 +349,39 @@ ${C.porConfirmar.map((d) => '- ' + d.campo + ': ' + d.estado).join('\n')}
 `;
 }
 
-// Un ZIP por paleta (el chat acepta hasta 30 MB): todo lo de la semana + los carruseles de esa paleta.
+// Un ZIP por semana. Si pasa de 29 MB (el chat acepta 30), se parte en dos: carruseles y videos.
+const LIMITE = 29 * 1048576;
+function empacar(out, filtro) {
+  if (fs.existsSync(out)) fs.unlinkSync(out);
+  execFileSync('python3', ['-c', `
+import os, re, zipfile, sys
+src, out, filtro = sys.argv[1], sys.argv[2], sys.argv[3]
+raiz = os.path.basename(out)[:-4]
+with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
+    for d, _, fs_ in os.walk(src):
+        for f in sorted(fs_):
+            if f.endswith('.html'): continue
+            p = os.path.join(d, f); r = os.path.relpath(p, src)
+            if filtro == 'carruseles' and re.match(r'(storyboards/|guiones/v|captions/v)', r): continue
+            if filtro == 'videos' and re.match(r'(carruseles/|guiones/[mc]|captions/[mc])', r): continue
+            z.write(p, os.path.join(raiz, r))
+`, SALIDA, out, filtro]);
+  return out;
+}
 function zips() {
   fs.writeFileSync(path.join(SALIDA, 'LEEME.txt'), leeme());
   fs.writeFileSync(path.join(SALIDA, 'medicion.csv'), medicion());
-  const salidas = [];
-  for (const pal of PALETAS) {
-    const out = path.join(BASE, 'salida', ZIP.replace('.zip', `-${pal.id}.zip`));
-    if (fs.existsSync(out)) fs.unlinkSync(out);
-    execFileSync('python3', ['-c', `
-import os, zipfile, sys
-src, out, pal = sys.argv[1], sys.argv[2], sys.argv[3]
-raiz = os.path.basename(src) + '-' + pal
-with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
-    for d, _, fs_ in os.walk(src):
-        r = os.path.relpath(d, src).split(os.sep)
-        if r[0] == 'carruseles' and len(r) > 1 and r[1] != pal: continue
-        for f in sorted(fs_):
-            if f.endswith('.html'): continue
-            p = os.path.join(d, f); z.write(p, os.path.join(raiz, os.path.relpath(p, src)))
-`, SALIDA, out, pal.id]);
-    salidas.push(out);
-  }
-  const vieja = path.join(BASE, 'salida', ZIP); if (fs.existsSync(vieja)) fs.unlinkSync(vieja);
-  return salidas;
+  fs.readdirSync(path.join(BASE, 'salida')).filter((f) => f.endsWith('.zip')).forEach((f) => fs.unlinkSync(path.join(BASE, 'salida', f)));
+  const uno = empacar(path.join(BASE, 'salida', ZIP), 'todo');
+  if (fs.statSync(uno).size <= LIMITE) return [uno];
+  fs.unlinkSync(uno);
+  return ['carruseles', 'videos'].map((g) => empacar(path.join(BASE, 'salida', ZIP.replace('.zip', `-${g}.zip`)), g));
 }
 
-const html = pagina();
 fs.mkdirSync(path.join(BASE, 'kit'), { recursive: true });
-fs.writeFileSync(path.join(BASE, 'kit', 'index.html'), html);
 const zs = zips();
+const ZIP_PARTES = zs.length;
+const html = pagina();
+fs.writeFileSync(path.join(BASE, 'kit', 'index.html'), html);
 fs.writeFileSync(path.join(BASE, 'kit', 'archivos.json'), JSON.stringify(archivos, null, 2) + '\n');
 console.log('kit/index.html', (html.length / 1024).toFixed(0) + ' KB ·', Object.keys(archivos).length, 'archivos ·', zs.map((z) => path.basename(z) + ' ' + (fs.statSync(z).size / 1048576).toFixed(1) + ' MB').join(' · '));

@@ -18,30 +18,42 @@ qué entregas hoy, y cotizas
 con la calculadora a medianoche.
 
 5
-00:00:09,000 --> 00:00:12,160
-En Pastelia abres la app,
-ves qué entregas
+00:00:09,000 --> 00:00:10,960
+Ahora imagina tu día así.
 
 6
-00:00:12,200 --> 00:00:14,960
-hoy y qué pedidos
-tienes por cobrar.
+00:00:11,000 --> 00:00:14,560
+Abres Pastelia y ahí está:
+lo que entregas hoy
 
 7
-00:00:15,000 --> 00:00:17,486
-Y cotizas
-en la misma app:
+00:00:14,600 --> 00:00:16,960
+y lo que tienes
+por cobrar.
 
 8
-00:00:17,526 --> 00:00:21,697
-el precio se calcula solo
-y el anticipo queda anotado,
+00:00:17,000 --> 00:00:18,607
+¿Te piden un pastel?
 
 9
-00:00:21,737 --> 00:00:22,960
-con su saldo.
+00:00:18,647 --> 00:00:21,901
+Lo cotizas ahí mismo:
+el precio sale solo
 
 10
-00:00:23,000 --> 00:00:26,960
+00:00:21,941 --> 00:00:23,960
+y el anticipo queda anotado.
+
+11
+00:00:24,000 --> 00:00:24,860
+Y tu libreta…
+
+12
+00:00:24,900 --> 00:00:26,960
+vuelve a ser
+solo para tus recetas.
+
+13
+00:00:27,000 --> 00:00:29,960
 Comenta AGENDA
 y te mando el link.

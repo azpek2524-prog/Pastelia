@@ -20,7 +20,7 @@
 | 31–37 s | Paso 4 · $ Total | Escribes el anticipo y aparece el "Saldo por cobrar". | Cuatro: pones el anticipo y ves el saldo. | Paso 4: anticipo → saldo |
 | 37–45 s | PDF y ticket | Tocas PDF → comprobante con tu logo. Tocas el botón de ticket → se abre WhatsApp con el ticket listo. Ahí detienes el cronómetro. | PDF con tu logo… y el ticket directo al WhatsApp de tu cliente. | PDF con tu logo · Ticket a WhatsApp |
 | 45–50 s | Resultado | Primer plano del cronómetro detenido. | Todo en [di tu tiempo real]. | ⏱ [TU TIEMPO REAL] · con receta y precios ya guardados |
-| 50–54 s | CTA | Tarjeta final de marca con la palabra COTIZA. | Comenta COTIZA y te mando el link para probarla. | Comenta COTIZA y te mando el link |
+| 50–54 s | CTA | Tarjeta final: fondo cacao con goteo de chocolate, logo de Pastelia y "Comenta COTIZA" con la palabra en dorado. | Comenta COTIZA y te mando el link para probarla. | Comenta COTIZA y te mando el link |
 
 ## Subtítulos
 Archivo: `v2-subtitulos.srt` (tiempos aproximados; ajústalos al audio real).
@@ -45,7 +45,8 @@ Archivo: `v2-subtitulos.srt` (tiempos aproximados; ajústalos al audio real).
 - Opción A (recomendada): graba con otra cámara el celular con Pastelia y, al lado, un cronómetro físico o en otra pantalla, en una sola toma sin cortes.
 - Opción B: grabación de pantalla continua (sin cortes) y en CapCut pones un cronómetro que arranca en el toque a "Cotizar" y se detiene cuando aparece el ticket en WhatsApp.
 - Si tu tiempo real no cabe en ~40 s, acelera el video (x1.5 o x2) con el cronómetro dentro del cuadro y escribe "acelerado x2 · cronómetro real". Así el número sigue siendo real.
-- Antes de grabar: "Mi negocio" con tu logo, al menos 1 receta guardada (sin receta no se puede cotizar) y tus insumos en "Mis precios". Eso no cuenta en el cronómetro; por eso se aclara en pantalla.
+- Antes de grabar: "Mi negocio" con tu logo y el modo oscuro activado, al menos 1 receta guardada (sin receta no se puede cotizar) y tus insumos en "Mis precios". Eso no cuenta en el cronómetro; por eso se aclara en pantalla.
+- Look cacao: celular sobre mesa oscura con una lámpara cálida; texto en pantalla en crema sobre barra cacao al 70 % y el tiempo en dorado.
 - El campo "invitados" no elige el tamaño solo: toca "Mediano · 20p" a mano.
 - PDF: en el celular se abre la ventana de imprimir/compartir; elige "Guardar como PDF". Muéstralo 1–2 s.
 - Ticket: abre WhatsApp con el número del cliente. Para la demo usa tu propio número de prueba; no muestres chats de clientas reales.

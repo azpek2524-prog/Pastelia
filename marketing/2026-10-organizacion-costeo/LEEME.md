@@ -1,6 +1,15 @@
-# Bloque 01 · Organización y costeo (octubre 2026)
+# Bloque 01 · Lanzamiento, organización y costeo (octubre 2026)
 
-Fuentes del "Kit de contenido Pastelia" de la semana del 5 al 11 de octubre de 2026: 2 videos (AGENDA, COTIZA) y 2 carruseles (COSTEO, ANTICIPO).
+Fuentes del "Kit de contenido Pastelia" de la semana del 5 al 11 de octubre de 2026, en la paleta cacao:
+
+| Pieza | Qué es | Palabra clave |
+|---|---|---|
+| `m1` | Manifiesto: post fundacional que presenta el perfil (se publica primero y se fija) | PASTELIA |
+| `cA` | Carrusel opción A: "El error de $180 en cada pastel" (tu tiempo) | TIEMPO |
+| `v1` | Video Problem-Solution, 30 s (libreta + WhatsApp vs. tu agenda) | AGENDA |
+| `cB` | Carrusel opción B: "¿Y si tu competencia también cobra mal?" (costeo por gramo) | COSTEO |
+| `v2` | Video Tutorial/Demo con cronómetro real | COTIZA |
+| `cC` | Carrusel opción C: "El mensaje que te arruina el sábado" (orden y anticipos) | ORDEN |
 
 **Página publicada:** https://claude.ai/artifact/UTvekWzAYnhiX2XshDNFtt (privada; cada actualización del kit se publica en este mismo link).
 
@@ -8,33 +17,30 @@ Fuentes del "Kit de contenido Pastelia" de la semana del 5 al 11 de octubre de 2
 
 | Carpeta / archivo | Qué es |
 |---|---|
-| `contenido.cjs` | Todo el texto: guiones, slides, captions, avisos y calendario. **Si cambias un texto, cámbialo aquí.** |
-| `capturas/` | Capturas reales de la app (corrida en modo local con datos de ejemplo) |
-| `carruseles/` | HTML de cada carrusel por paleta (estilo App Store, lienzo continuo) y guion con conteo de palabras |
+| `contenido.cjs` | Todo el texto: slides (con su ciclo abierto y su diseño), guiones, captions, avisos y calendario. **Si cambias un texto, cámbialo aquí.** |
+| `capturas/` | Capturas reales de la app en modo oscuro (corrida en modo local con datos de ejemplo) |
+| `carruseles/` | HTML de cada carrusel (lienzo continuo que se corta en slides) y guion con conteo de palabras |
 | `storyboards/` | HTML de las escenas de cada video |
 | `guiones/` | Guiones de los videos (`.md`) y subtítulos (`.srt`) |
 | `captions/` | Captions por red y respuesta por DM (`.txt`) |
 | `calendario.md` | Día, pieza, red, hora sugerida y palabra clave |
 | `kit/` | Página del kit que se publica (`index.html`) y la lista de imágenes que lleva (`archivos.json`) |
-| `herramientas/` | Scripts para capturar, contar palabras y generar todo. `paletas.cjs` define las 4 paletas y `carrusel-pro.cjs` el diseño de los carruseles |
+| `herramientas/` | Scripts para capturar, contar palabras y generar todo. `diseno-cacao.cjs` define el diseño (colores, goteo, pastel, libreta, teléfonos, tarjetas y la composición de cada slide) |
 
-Los PNG, los ZIP (uno por paleta) y los MP4 se generan en `salida/` y **no se suben al repo** (están en `.gitignore`).
+Los PNG, los ZIP y los MP4 se generan en `salida/` y **no se suben al repo** (están en `.gitignore`). Si el ZIP de la semana pasa de 29 MB, se parte en dos (carruseles y videos) para que quepa en el chat.
 
-Paletas en prueba: Fresa, Azul eléctrico, Mandarina y Menta. En cada una, las pantallas del teléfono son la app real capturada con ese color de marca (Mi negocio → color).
+## Diseño cacao
+
+Fondo cacao casi negro (`#140D09` → `#241811`) con grano fino, titulares crema `#FFF4E6` en Nunito Black, acentos dorados `#E7B676` y la app real en modo oscuro. Cada slide intermedio termina con un ciclo abierto en dorado al pie (frase a medias o pregunta + flecha) y lleva un elemento visual: gráfico, captura real o ilustración.
 
 ## Cómo regenerar (desde la raíz del repo)
 
 ```bash
 export NODE_PATH=$(npm root -g)
-node marketing/2026-10-organizacion-costeo/herramientas/capturar-app.cjs    # capturas base de la app (opcional)
-# capturas de la app en el color de cada paleta (las usan los carruseles)
-for p in fresa:#E23E68 azul:#2360EB mandarina:#EF5418 menta:#0B9873; do
-  PASTELIA_COLOR="${p#*:}" PASTELIA_OUT="marketing/2026-10-organizacion-costeo/salida/capturas/${p%%:*}" \
-    node marketing/2026-10-organizacion-costeo/herramientas/capturar-app.cjs
-done
+node marketing/2026-10-organizacion-costeo/herramientas/capturar-app.cjs    # capturas de la app en modo oscuro (opcional)
 node marketing/2026-10-organizacion-costeo/herramientas/contar-palabras.cjs # valida portada < 8 y cuerpo ≤ 25 palabras
 node marketing/2026-10-organizacion-costeo/herramientas/generar.cjs         # PNG, storyboards, guiones, captions, .srt
-node marketing/2026-10-organizacion-costeo/herramientas/generar-kit.cjs     # página del kit y un ZIP por paleta
+node marketing/2026-10-organizacion-costeo/herramientas/generar-kit.cjs     # página del kit y ZIP de la semana
 ```
 
-Necesita Node con Playwright y Chromium (vienen instalados en el entorno de Claude Code en la nube).
+Necesita Node con Playwright y Chromium (vienen instalados en el entorno de Claude Code en la nube). Para comprimir los PNG usa `pngquant` si está instalado (`apt-get install pngquant`); sin él, los PNG salen más pesados.

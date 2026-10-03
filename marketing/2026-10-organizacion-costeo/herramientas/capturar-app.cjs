@@ -12,7 +12,9 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../../..');
 // PASTELIA_COLOR: color de marca de "Mi negocio" (la app deja elegir cualquiera). PASTELIA_OUT: carpeta de salida.
+// PASTELIA_TEMA: "dark" (por defecto, el modo oscuro de la app: va con el look cacao del marketing) o "light".
 const COLOR = process.env.PASTELIA_COLOR || '#7B5B4B';
+const TEMA = process.env.PASTELIA_TEMA === 'light' ? 'light' : 'dark';
 const OUT = process.env.PASTELIA_OUT ? path.resolve(process.env.PASTELIA_OUT) : path.resolve(__dirname, '../capturas');
 const HOST = 'http://pastelia.test';
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
@@ -44,7 +46,7 @@ function seed() {
     { ...base, id: 1004, cliente: 'Cliente ejemplo D', fechaEvento: iso(ayer), tamano: 'Petit', porciones: 9, precio: total(0.45), prepago: 0, total: total(0.45), estado: 'Entregado', pagado: true }
   ];
   return {
-    pastelia_theme: 'light',
+    pastelia_theme: TEMA,
     pastelia_marca: JSON.stringify({ bakeryName: 'Tu pastelería', logoUrl: LOGO_EJEMPLO, primaryColor: COLOR, telefono: '55 1234 5678', direccion: '', instagram: '', facebook: '' }),
     pastelia_recetas_seed_cleared: '1',
     // Receta sin lista de ingredientes: la app usa su costo base de insumos ($210 en Mediano).
@@ -56,7 +58,7 @@ function seed() {
 (async () => {
   fs.mkdirSync(OUT, { recursive: true });
   const browser = await launch();
-  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, locale: 'es-MX', timezoneId: 'America/Mexico_City', isMobile: true, hasTouch: true });
+  const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, locale: 'es-MX', timezoneId: 'America/Mexico_City', isMobile: true, hasTouch: true, colorScheme: TEMA });
   await ctx.clock.setFixedTime(new Date(FECHA_CAPTURA));
   const data = seed();
   await ctx.addInitScript((d) => {
@@ -113,6 +115,14 @@ function seed() {
   await click(M + '.pane[data-scr="mi-negocio"] [data-go="precios"], ' + M + '[data-go="precios"]');
   await page.evaluate(() => window.scrollTo(0, 0));
   await shot('02b-mis-precios.png');
+
+  // 2c) Editor de un insumo (la app pide precio, cantidad y unidad, y calcula el costo por gramo)
+  await click(M + '[data-insumo="ins_mant"]');
+  await page.waitForTimeout(300);
+  await shot('11-editar-insumo.png');
+  await page.evaluate(() => { const ov = [...document.querySelectorAll('body > div')].find((d) => d.style.zIndex === '9998'); ov.firstElementChild.setAttribute('data-cap', 'modal'); });
+  await shot('11b-editar-insumo-tarjeta.png', '[data-cap="modal"]');
+  await page.keyboard.press('Escape');
 
   // 3) Cotizador — paso 1: cliente
   await click(M + '[data-go="cotizar"]');

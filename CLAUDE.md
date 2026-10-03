@@ -18,6 +18,7 @@
   - Los números de ejemplo (costos, precios) se sacan de la app o de su código y se presentan como ejemplo.
   - Nunca se inventan métricas, testimonios, clientes ni tiempos.
 - **Marca:** marrón `#7B5B4B`, crema `#FFF4E6`, dorado `#E7B676`, tinta `#5A4236`; Fredoka (títulos) y Nunito (texto). Los logos están en la raíz (`pastelia-lockup.svg`, `pastelia-icon*.svg`). Las capturas de la app deben ser de esta app, no de otros repos.
+- **Look de marketing (cacao):** fondos oscuros cacao/café (`#140D09` → `#241811`), texto crema, acentos dorados y la app capturada en modo oscuro; titulares en Nunito Black. Nada de paletas claras ni de otros colores. Plantilla en `marketing/2026-10-organizacion-costeo/herramientas/diseno-cacao.cjs`.
 
 ## Formato de entrega: "Kit de contenido Pastelia"
 Cuando pida contenido para redes (posts, reels, carruseles, calendarios, campañas o anuncios), la entrega siempre incluye:

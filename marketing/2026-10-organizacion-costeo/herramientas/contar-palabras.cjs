@@ -1,4 +1,4 @@
-// Cuenta las palabras visibles de cada slide (kicker, título, etiquetas de la ilustración, texto, nota y CTA) y valida:
+// Cuenta las palabras visibles de cada slide (kicker, título, textos de gráficos y burbujas, texto, ciclo abierto, nota y CTA) y valida:
 //   portada: menos de 8 palabras · cuerpo: máximo 25 · último slide: un solo CTA.
 // Los símbolos sueltos (+ = · →) no cuentan como palabra; "$186" o "40%" sí.
 // Uso: node marketing/2026-10-organizacion-costeo/herramientas/contar-palabras.cjs [--json]
@@ -6,8 +6,7 @@ const { piezas } = require('../contenido.cjs');
 
 function palabras(txt) { return (txt || '').split(/\s+/).filter((w) => /[\p{L}\p{N}]/u.test(w)); }
 function visibles(s) {
-  const extra = [].concat(s.etiquetas || [], (s.bloques || []).map((b) => b.join(' ')), s.etiqueta ? [s.etiqueta.arriba, s.etiqueta.precio, s.etiqueta.abajo] : []);
-  return [s.kicker, s.titulo, ...extra, s.texto, s.nota, s.cta].filter(Boolean).join(' ');
+  return [s.kicker, s.titulo, ...(s.extra || []), s.texto, s.loop, s.nota, s.cta].filter(Boolean).join(' ');
 }
 
 function contar() {
