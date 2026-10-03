@@ -20,8 +20,10 @@
 - Los números son un ejemplo con los valores de arranque de la app (calc(), tamaño Mediano, margen 40 %). Con tus precios y tu receta cambian.
 - El slide de prueba es una captura real de la app (corrida en modo local con datos de ejemplo). Si prefieres tomarla en tu celular, ve a Cotizar con una receta, Mediano · 20p y Flores, margen 40 %, y captura el "Resumen en vivo": debe dar los mismos números solo si tu receta cuesta $210 de insumos.
 - No se compara con el precio de ninguna pastelería real. El slide 3 es una condición ("si ese precio no cubre tu costo"), no un dato.
+- Cuatro paletas para elegir (Fresa, Azul eléctrico, Mandarina, Menta). En cada una, el teléfono muestra la app real con ese color de marca (Mi negocio → color). El carrusel es continuo: algunos elementos cruzan de un slide al siguiente, así que se publican en orden.
 
 ## Antes de publicar
 - [ ] El $210 de insumos es el costo base que la app usa para un Mediano cuando la receta no tiene ingredientes capturados. Es un ejemplo, no el costo de una receta real.
 - [ ] La mano de obra ($180 en Mediano) es fija en la app hoy: el carrusel no promete que la puedas cambiar.
+- [ ] Elige la paleta: en cuanto me digas cuál, dejo solo esa en el ZIP final y la aplico también a las tarjetas finales de los videos.
 - [ ] Pega tu URL de prueba en la respuesta por DM (o usa la de lista de espera).

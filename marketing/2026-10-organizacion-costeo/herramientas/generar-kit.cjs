@@ -1,5 +1,5 @@
 // Arma la página "Kit de contenido Pastelia" (kit/index.html), el mapa de archivos para publicarla
-// (kit/archivos.json) y el ZIP de la semana (salida/…zip). Correr después de generar.cjs.
+// (kit/archivos.json) y los ZIP de la semana, uno por paleta (salida/…-<paleta>.zip). Correr después de generar.cjs.
 // Uso: node marketing/2026-10-organizacion-costeo/herramientas/generar-kit.cjs
 const fs = require('fs');
 const path = require('path');
@@ -7,6 +7,7 @@ const { execFileSync } = require('child_process');
 const C = require('../contenido.cjs');
 const { contar } = require('./contar-palabras.cjs');
 const { subtitulos } = require('./generar.cjs');
+const PALETAS = require('./paletas.cjs');
 
 const BASE = path.resolve(__dirname, '..');
 const ROOT = path.resolve(BASE, '../..');
@@ -19,6 +20,11 @@ const LOCKUP = fs.readFileSync(path.join(ROOT, 'pastelia-lockup.svg'), 'utf8').r
 
 const archivos = {};
 function img(sub, nombre) { const k = `img/${nombre}`; archivos[k] = rel(path.join(SALIDA, sub, nombre)); return k; }
+function imgPaleta(pal, nombre) { const k = `img/${pal}/${nombre}`; archivos[k] = rel(path.join(SALIDA, 'carruseles', pal, nombre)); return k; }
+const muestra = (pal) => `<i class="muestra" style="background:linear-gradient(135deg,${pal.c1},${pal.c2})"></i>`;
+function selector() {
+  return `<div class="selector" role="group" aria-label="Paleta de los carruseles">${PALETAS.map((pal, k) => `<button type="button" class="opcion" data-elegir-paleta="${pal.id}" aria-pressed="${k === 0}">${muestra(pal)}${esc(pal.nombre)}</button>`).join('')}</div>`;
+}
 
 let nCopia = 0;
 function copiable(titulo, texto, extraClase) {
@@ -74,15 +80,23 @@ function video(p) {
 
 function carrusel(p) {
   const { filas } = contar();
-  const slides = p.slides.map((s, i) => {
-    const nombre = `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`; const key = img('carruseles', nombre);
-    return `<figure class="slide"><img src="${key}" alt="Slide ${i + 1}" loading="lazy" width="1080" height="1350"><figcaption><b>${i + 1} / ${p.slides.length}</b>${descargar(key, nombre)}</figcaption></figure>`;
+  const paneles = PALETAS.map((pal, k) => {
+    const slides = p.slides.map((s, i) => {
+      const nombre = `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`; const key = imgPaleta(pal.id, nombre);
+      return `<figure class="slide"><img src="${key}" alt="Slide ${i + 1}, paleta ${esc(pal.nombre)}" loading="lazy" width="1080" height="1350"><figcaption><b>${i + 1} / ${p.slides.length}</b>${descargar(key, `${p.id}-${pal.id}-slide-${String(i + 1).padStart(2, '0')}.png`)}</figcaption></figure>`;
+    }).join('');
+    const tira = imgPaleta(pal.id, `${p.id}-tira.png`);
+    return `<div class="panel-paleta" data-paleta="${pal.id}"${k ? ' hidden' : ''}>
+      <p class="ayuda">Tira completa: así se ve el carrusel continuo al deslizar.</p>
+      <div class="tira"><img src="${tira}" alt="Carrusel completo, paleta ${esc(pal.nombre)}" loading="lazy"></div>
+      <div class="carril carril-slides">${slides}</div></div>`;
   }).join('');
   return `<article class="pieza" id="${p.id}">
   <p class="eyebrow">Carrusel · ${esc(p.estructura)}</p>
   <h3>${esc(p.titulo)}</h3>
   ${chips(p)}
-  <div class="carril carril-slides">${slides}</div>
+  ${selector()}
+  ${paneles}
   <h4>Slides, palabras y visual</h4>
   <div class="tabla-envoltura"><table class="guion"><thead><tr><th>#</th><th>Texto</th><th>Palabras</th><th>Visual</th></tr></thead><tbody>
   ${p.slides.map((s, i) => { const f = filas.find((x) => x.pieza === p.id && x.slide === i + 1); return `<tr><td class="num">${i + 1}</td><td>${esc(f.texto)}</td><td class="num">${f.palabras} <small>(${esc(f.limite)}) ${f.cumple ? '✓' : '✗'}</small></td><td>${esc(s.visual)}</td></tr>`; }).join('')}
@@ -158,6 +172,19 @@ table.cal td:nth-child(2){min-width:220px}table.cal td:nth-child(3){min-width:17
 .carril{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
 .carril figure{margin:0;flex:none;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
 .frame{width:min(200px,46vw)}.slide{width:min(280px,72vw)}
+.selector{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 14px}
+.opcion{appearance:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font:800 14px/1 var(--texto);padding:9px 14px 9px 9px;border-radius:999px;border:2px solid var(--linea);background:var(--papel);color:var(--tinta)}
+.opcion[aria-pressed="true"]{border-color:var(--tinta)}
+.opcion:focus-visible{outline:3px solid var(--dorado);outline-offset:2px}
+.muestra{display:inline-block;width:22px;height:22px;border-radius:50%;flex:none}
+.tira{overflow-x:auto;border-radius:12px;border:1px solid var(--linea);margin-bottom:14px;background:var(--campo)}
+.tira img{display:block;height:300px;width:auto;max-width:none}
+.paletas{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.paleta{background:var(--papel);border:1px solid var(--linea);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.paleta .portadas{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.paleta .portadas img{width:100%;height:auto;display:block;border-radius:8px}
+.paleta h3{font-size:22px;margin:0;display:flex;align-items:center;gap:8px}
+.paleta .hex{font:500 12px/1.4 var(--mono);color:var(--suave)}
 .carril img,.mini img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--linea);background:var(--campo)}
 figcaption{display:flex;flex-direction:column;gap:6px;font-size:13px}
 figcaption b{font-weight:800}
@@ -193,7 +220,7 @@ footer{padding-top:28px;color:var(--suave);font-size:14px}
   <p class="eyebrow">Bloque 01 · Organización y costeo · semana del 5 al 11 de octubre de 2026</p>
   <h1>Kit de contenido Pastelia</h1>
   <p class="bajada">Objetivo: conseguir usuarias atacando dos dolores, organizarse con libreta y WhatsApp, y no saber cuánto cobrar. Dos videos y dos carruseles, cada uno con su palabra clave para medir cuál trae registros.</p>
-  <ul class="indice">${orden.map((p) => `<li><a href="#${p.id}">${esc(p.dia.split(' ')[0])} · ${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#calendario">Calendario</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
+  <ul class="indice">${orden.map((p) => `<li><a href="#${p.id}">${esc(p.dia.split(' ')[0])} · ${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#calendario">Calendario</a></li><li><a href="#paletas">Paletas</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
 </header>
 
 <section id="confirmar">
@@ -207,7 +234,16 @@ footer{padding-top:28px;color:var(--suave);font-size:14px}
   ${orden.map((p) => `<tr><td class="num">${esc(diaCorto(p.dia))}</td><td><a href="#${p.id}" style="color:inherit">${esc(p.titulo)}</a><br><small>${esc(p.tipo === 'video' ? 'Video' : 'Carrusel')} · ${esc(p.estructura)}</small></td><td>${esc(p.redes.join(', '))}</td><td class="num">${esc(p.hora)}</td><td><span class="palabra">${esc(p.palabra)}</span></td></tr>`).join('')}
   </tbody></table></div>
   <p class="ayuda" style="margin-top:12px">Horas sugeridas; ajústalas con las estadísticas de tus cuentas.</p>
-  <p class="ayuda">El ZIP de la semana (${esc(ZIP)}: PNG, captions .txt, guiones, subtítulos .srt, calendario y plantilla de medición) va como archivo en el chat. Sin MP4 todavía: faltan tus clips.</p>
+  <p class="ayuda">El ZIP de la semana va como archivo en el chat, uno por paleta (${esc(ZIP.replace('.zip', '-<paleta>.zip'))}): PNG, captions .txt, guiones, subtítulos .srt, calendario y plantilla de medición. Sin MP4 todavía: faltan tus clips.</p>
+</section>
+
+<section id="paletas">
+  <h2>Elige la paleta de los carruseles</h2>
+  <p class="bajada">Mismo texto y mismas capturas reales en cuatro paletas. En cada una, el teléfono muestra la app con ese color de marca, que tú cambias en Mi negocio. Dime cuál te gusta y la dejo como la paleta de marketing.</p>
+  <div class="paletas" style="margin-top:18px">${PALETAS.map((pal) => `<div class="paleta"><h3>${muestra(pal)}${esc(pal.nombre)}</h3>
+    <div class="portadas"><img src="${imgPaleta(pal.id, 'c1-slide-01.png')}" alt="Portada COSTEO en ${esc(pal.nombre)}" loading="lazy" width="1080" height="1350"><img src="${imgPaleta(pal.id, 'c2-slide-01.png')}" alt="Portada ANTICIPO en ${esc(pal.nombre)}" loading="lazy" width="1080" height="1350"></div>
+    <span class="hex">${esc(pal.c1)} → ${esc(pal.c2)} · app ${esc(pal.app)}</span>
+    <button type="button" class="btn btn-sec" data-elegir-paleta="${pal.id}">Ver los carruseles en ${esc(pal.nombre)}</button></div>`).join('')}</div>
 </section>
 
 <section id="medir">
@@ -266,6 +302,17 @@ ${orden.map((p) => (p.tipo === 'video' ? video(p) : carrusel(p))).join('\n')}
     var p; try{ p=navigator.clipboard.writeText(el.textContent); }catch(e){ p=Promise.reject(e); }
     p.then(function(){ marcar(b,'Copiado'); }, function(){ seleccionar(el); marcar(b,'Seleccionado: copia con Ctrl+C'); });
   });
+  function elegir(id, desplazar){
+    document.querySelectorAll('.panel-paleta').forEach(function(p){ p.hidden = p.getAttribute('data-paleta')!==id; });
+    document.querySelectorAll('.opcion').forEach(function(b){ b.setAttribute('aria-pressed', String(b.getAttribute('data-elegir-paleta')===id)); });
+    try{ localStorage.setItem('pastelia-kit-paleta', id); }catch(e){}
+    if(desplazar){ var c=document.getElementById('c1'); if(c) c.scrollIntoView({behavior:'smooth', block:'start'}); }
+  }
+  document.addEventListener('click', function(ev){
+    var b=ev.target.closest('[data-elegir-paleta]'); if(!b) return;
+    elegir(b.getAttribute('data-elegir-paleta'), !b.classList.contains('opcion'));
+  });
+  try{ var guardada=localStorage.getItem('pastelia-kit-paleta'); if(guardada && document.querySelector('.panel-paleta[data-paleta="'+guardada+'"]')) elegir(guardada, false); }catch(e){}
   var descargas=null;
   try{ if(window.claude && window.claude.use){ window.claude.use('downloads').then(function(d){ descargas=d; }, function(){}); } }catch(e){}
   document.addEventListener('click', function(ev){
@@ -290,7 +337,8 @@ function leeme() {
   return `Pastelia · Bloque 01 · Organización y costeo
 Semana del 5 al 11 de octubre de 2026
 
-carruseles/   PNG 1080x1350 listos para Instagram y Facebook (c1 = COSTEO, c2 = ANTICIPO)
+carruseles/   PNG 1080x1350 listos para Instagram y Facebook, una carpeta por paleta (fresa, azul, mandarina, menta).
+              c1 = COSTEO, c2 = ANTICIPO. La "tira" muestra el carrusel completo.
 storyboards/  Escenas 1080x1920 de los videos, storyboard completo y tarjetas finales (v1 = AGENDA, v2 = COTIZA)
 captions/     Captions por red (.txt) y respuesta por DM para cada palabra clave (pega tu URL de prueba)
 guiones/      Guiones con tiempos, notas de producción y subtítulos .srt
@@ -304,26 +352,35 @@ ${C.porConfirmar.map((d) => '- ' + d.campo + ': ' + d.estado).join('\n')}
 `;
 }
 
-function zip() {
+// Un ZIP por paleta (el chat acepta hasta 30 MB): todo lo de la semana + los carruseles de esa paleta.
+function zips() {
   fs.writeFileSync(path.join(SALIDA, 'LEEME.txt'), leeme());
   fs.writeFileSync(path.join(SALIDA, 'medicion.csv'), medicion());
-  const out = path.join(BASE, 'salida', ZIP);
-  if (fs.existsSync(out)) fs.unlinkSync(out);
-  execFileSync('python3', ['-c', `
+  const salidas = [];
+  for (const pal of PALETAS) {
+    const out = path.join(BASE, 'salida', ZIP.replace('.zip', `-${pal.id}.zip`));
+    if (fs.existsSync(out)) fs.unlinkSync(out);
+    execFileSync('python3', ['-c', `
 import os, zipfile, sys
-src, out = sys.argv[1], sys.argv[2]
+src, out, pal = sys.argv[1], sys.argv[2], sys.argv[3]
+raiz = os.path.basename(src) + '-' + pal
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
     for d, _, fs_ in os.walk(src):
+        r = os.path.relpath(d, src).split(os.sep)
+        if r[0] == 'carruseles' and len(r) > 1 and r[1] != pal: continue
         for f in sorted(fs_):
             if f.endswith('.html'): continue
-            p = os.path.join(d, f); z.write(p, os.path.join(os.path.basename(src), os.path.relpath(p, src)))
-`, SALIDA, out]);
-  return out;
+            p = os.path.join(d, f); z.write(p, os.path.join(raiz, os.path.relpath(p, src)))
+`, SALIDA, out, pal.id]);
+    salidas.push(out);
+  }
+  const vieja = path.join(BASE, 'salida', ZIP); if (fs.existsSync(vieja)) fs.unlinkSync(vieja);
+  return salidas;
 }
 
 const html = pagina();
 fs.mkdirSync(path.join(BASE, 'kit'), { recursive: true });
 fs.writeFileSync(path.join(BASE, 'kit', 'index.html'), html);
-const z = zip();
+const zs = zips();
 fs.writeFileSync(path.join(BASE, 'kit', 'archivos.json'), JSON.stringify(archivos, null, 2) + '\n');
-console.log('kit/index.html', (html.length / 1024).toFixed(0) + ' KB ·', Object.keys(archivos).length, 'archivos ·', 'ZIP', (fs.statSync(z).size / 1048576).toFixed(1) + ' MB');
+console.log('kit/index.html', (html.length / 1024).toFixed(0) + ' KB ·', Object.keys(archivos).length, 'archivos ·', zs.map((z) => path.basename(z) + ' ' + (fs.statSync(z).size / 1048576).toFixed(1) + ' MB').join(' · '));

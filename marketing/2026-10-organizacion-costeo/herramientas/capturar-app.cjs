@@ -11,7 +11,9 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../../..');
-const OUT = path.resolve(__dirname, '../capturas');
+// PASTELIA_COLOR: color de marca de "Mi negocio" (la app deja elegir cualquiera). PASTELIA_OUT: carpeta de salida.
+const COLOR = process.env.PASTELIA_COLOR || '#7B5B4B';
+const OUT = process.env.PASTELIA_OUT ? path.resolve(process.env.PASTELIA_OUT) : path.resolve(__dirname, '../capturas');
 const HOST = 'http://pastelia.test';
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'application/json', '.webmanifest': 'application/manifest+json', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
 
@@ -43,7 +45,7 @@ function seed() {
   ];
   return {
     pastelia_theme: 'light',
-    pastelia_marca: JSON.stringify({ bakeryName: 'Tu pastelería', logoUrl: LOGO_EJEMPLO, primaryColor: '#7B5B4B', telefono: '55 1234 5678', direccion: '', instagram: '', facebook: '' }),
+    pastelia_marca: JSON.stringify({ bakeryName: 'Tu pastelería', logoUrl: LOGO_EJEMPLO, primaryColor: COLOR, telefono: '55 1234 5678', direccion: '', instagram: '', facebook: '' }),
     pastelia_recetas_seed_cleared: '1',
     // Receta sin lista de ingredientes: la app usa su costo base de insumos ($210 en Mediano).
     pastelia_recetas: JSON.stringify([{ id: 'rec_demo', nombre: 'Chocolate', grad: 'linear-gradient(135deg,#F3D9B0,#7B5B4B)', forma: 'Redondo', saborPan: 'Chocolate', rellenos: ['Ganache'], cobertura: 'Buttercream', detallesDiseno: '', ingredientesLista: [], insumos: 0, ingredientes: 0, precioPorcion: 0, photoBase64: '' }]),

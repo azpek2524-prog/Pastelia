@@ -4,6 +4,7 @@
 //   - guiones/*.md y guiones/*.srt, captions/*.txt, calendario.md
 // Uso (desde la raíz del repo): node marketing/2026-10-organizacion-costeo/herramientas/generar.cjs
 const fs = require('fs');
+const { execFileSync } = require('child_process');
 const path = require('path');
 const { launch, routeFonts } = require('./navegador.cjs');
 const C = require('../contenido.cjs');
@@ -19,17 +20,7 @@ const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': 
 const mk = (d) => fs.mkdirSync(d, { recursive: true });
 function pngSize(f) { const b = fs.readFileSync(f); return { w: b.readUInt32BE(16), h: b.readUInt32BE(20) }; }
 const svgFile = (f) => fs.readFileSync(path.join(ROOT, f), 'utf8').replace(/width="\d+" height="\d+"/, 'width="100%" height="100%"');
-const LOCKUP = svgFile('pastelia-lockup.svg');
 const LOCKUP_OSCURO = svgFile('pastelia-lockup-oscuro.svg');
-const ICONO = svgFile('pastelia-icon.svg');
-
-// Recorte de una captura: muestra el rectángulo [x0,y0,x1,y1] de la imagen a un ancho dado.
-function recorte(archivo, rect, ancho, rel) {
-  const { w, h } = pngSize(path.join(CAP, archivo));
-  const [x0, y0, x1, y1] = rect || [0, 0, w, h];
-  const s = ancho / (x1 - x0);
-  return `<div class="recorte" style="width:${ancho}px;height:${Math.round((y1 - y0) * s)}px"><img src="${rel}${archivo}" style="width:${Math.round(w * s)}px;left:${Math.round(-x0 * s)}px;top:${Math.round(-y0 * s)}px" alt=""></div>`;
-}
 
 const FUENTES = '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet">';
 const TOKENS = `:root{--marron:#7B5B4B;--crema:#FFF4E6;--dorado:#E7B676;--tinta:#5A4236;--campo:#F5E7D0;--tinte:#F1E6CE;--blanco:#FFFFFF;--suave:rgba(90,66,54,.66);--display:'Fredoka','Nunito',system-ui,sans-serif;--texto:'Nunito',system-ui,sans-serif}
@@ -38,120 +29,12 @@ body{background:#CDBBA6;padding:40px;display:flex;flex-direction:column;align-it
 .recorte{position:relative;overflow:hidden;flex:none}.recorte img{position:absolute;max-width:none;display:block}`;
 
 // ─────────────────────────── Carruseles ───────────────────────────
-const CSS_SLIDE = `${TOKENS}
-.slide{width:1080px;height:1350px;position:relative;overflow:hidden;background:var(--crema);color:var(--tinta);display:flex;flex-direction:column;padding:92px 96px 64px}
-.kicker{align-self:flex-start;background:var(--dorado);color:var(--tinta);font:800 30px/1 var(--texto);letter-spacing:.07em;text-transform:uppercase;padding:16px 26px 15px;border-radius:999px}
-.titulo{font:600 90px/1.02 var(--display);letter-spacing:-.012em;margin-top:34px;text-wrap:balance}
-.texto{font:700 46px/1.3 var(--texto);color:var(--marron);margin-top:30px;text-wrap:pretty}
-.visual{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;margin-top:36px}
-.nota{font:700 29px/1.3 var(--texto);color:var(--suave);margin-top:22px}
-.pie{display:flex;align-items:center;justify-content:space-between;margin-top:34px;font:800 28px/1 var(--texto);color:var(--suave)}
-.marca{display:flex;align-items:center;gap:14px;font:600 32px/1 var(--display);color:var(--tinta)}.marca i{width:46px;height:46px;display:block}
-.papel{background:var(--blanco);border-radius:20px;box-shadow:0 34px 60px -34px rgba(90,66,54,.55),0 0 0 2px rgba(123,91,75,.08);overflow:hidden}
-.oscura{background:linear-gradient(160deg,var(--tinta),var(--marron));color:var(--crema)}
-.oscura .pie{color:rgba(255,244,230,.7)}
-.desliza{width:84px;height:84px;border-radius:50%;background:var(--dorado);display:flex;align-items:center;justify-content:center}
-.portada .titulo{font-size:118px;line-height:1;margin-top:10px}
-.tags{flex:1;display:flex;align-items:center;justify-content:center;gap:56px}
-.tag{width:360px;height:210px;border-radius:30px;background:var(--crema);position:relative;display:flex;align-items:center;justify-content:center;font:700 96px/1 var(--display);color:var(--tinta);box-shadow:0 30px 50px -30px rgba(0,0,0,.6)}
-.tag:before{content:"";position:absolute;left:28px;top:50%;width:30px;height:30px;margin-top:-15px;border-radius:50%;background:var(--marron)}
-.tag.b{transform:rotate(7deg)}.tag .tache{position:absolute;left:-30px;right:-30px;top:50%;height:18px;margin-top:-9px;background:var(--dorado);border-radius:9px;transform:rotate(-14deg)}
-.pasteles{display:flex;gap:90px;align-items:flex-end}
-.pastel{display:flex;flex-direction:column;align-items:center}
-.vela{width:18px;height:64px;background:var(--tinta);border-radius:9px;position:relative}.vela:before{content:"";position:absolute;left:-7px;top:-34px;width:32px;height:40px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:var(--dorado)}
-.piso1{width:230px;height:110px;background:var(--dorado);border-radius:26px 26px 8px 8px}.piso2{width:330px;height:150px;background:var(--marron);border-radius:22px 22px 10px 10px;margin-top:-2px}
-.plato{width:400px;height:20px;background:var(--tinte);border-radius:10px}
-.etq{margin-top:30px;font:700 64px/1 var(--display);background:var(--blanco);padding:22px 40px;border-radius:24px;box-shadow:0 20px 40px -26px rgba(90,66,54,.5)}.etq.dorada{outline:6px solid var(--dorado)}
-.barras{width:100%;display:flex;flex-direction:column;gap:40px}
-.barra .lab{font:800 36px/1 var(--texto);color:var(--tinta);margin-bottom:16px}
-.barra .pista{height:110px;border-radius:24px;background:var(--tinte);position:relative;overflow:hidden}
-.barra .lleno{position:absolute;left:0;top:0;bottom:0;border-radius:24px}
-.hueco{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(-45deg,var(--dorado) 0 18px,rgba(231,182,118,.45) 18px 36px)}
-.formula{width:100%;display:flex;flex-direction:column;align-items:center;gap:14px}
-.bloque{width:100%;padding:30px 44px;border-radius:26px;font:600 58px/1 var(--display);background:var(--blanco);box-shadow:0 18px 40px -30px rgba(90,66,54,.5)}
-.bloque.c2{background:var(--campo)}.bloque.c3{background:var(--tinte)}.bloque.c4{background:var(--dorado)}
-.mas{font:600 54px/1 var(--display);color:var(--marron)}
-.suma{width:100%;display:flex;flex-direction:column;gap:18px}
-.fila{display:flex;justify-content:space-between;align-items:center;background:var(--blanco);border-radius:26px;padding:30px 44px;font:800 44px/1 var(--texto);box-shadow:0 18px 40px -30px rgba(90,66,54,.5)}
-.fila b{font:600 64px/1 var(--display)}
-.precio{width:100%;border-radius:40px;padding:56px 64px;background:linear-gradient(150deg,var(--tinta),var(--marron));color:var(--crema)}
-.precio .a{font:800 38px/1 var(--texto);opacity:.75}.precio .p{font:700 220px/1 var(--display);margin:18px 0 10px}.precio .z{font:800 46px/1 var(--texto);opacity:.85}
-.prueba .visual img,.prueba .visual .recorte{border-radius:26px;box-shadow:0 40px 70px -36px rgba(90,66,54,.65)}
-.cta{align-items:center;justify-content:center;text-align:center}
-.cta .logo{width:520px;height:137px}
-.cta .titulo{font-size:96px;margin-top:70px}
-.boton{margin-top:70px;background:var(--dorado);color:var(--tinta);border-radius:36px;padding:44px 56px;font:600 64px/1.15 var(--display);text-wrap:balance}
-.boton em{font-style:normal;display:block;font-size:104px;font-weight:700;letter-spacing:.02em}
-.tres .grande{position:absolute;left:58px;top:-10px;font:700 640px/1 var(--display);color:var(--dorado)}
-.tres .titulo{margin-top:440px;font-size:112px;position:relative}
-.tres .pdf{position:absolute;right:-170px;bottom:-250px;width:820px;transform:rotate(-8deg);border-radius:18px;box-shadow:0 40px 80px -30px rgba(90,66,54,.6)}
-.tres .pie{position:relative;margin-top:auto}`;
-
-function pie(i, n, oscuro) {
-  return `<div class="pie"><div class="marca"><i>${ICONO}</i><span${oscuro ? ' style="color:var(--crema)"' : ''}>Pastelia</span></div><div>${i} / ${n}</div></div>`;
-}
-
-function visualSlide(s, rel) {
-  switch (s.ilustracion) {
-    case 'dos-pasteles': {
-      const pastel = (cls) => `<div class="pastel"><div class="vela"></div><div class="piso1"></div><div class="piso2"></div><div class="plato"></div><div class="etq ${cls}">$ ?</div></div>`;
-      return `<div class="pasteles">${pastel('')}${pastel('dorada')}</div>`;
-    }
-    case 'barras':
-      return `<div class="barras">
-        <div class="barra"><div class="lab">${esc(s.etiquetas[0])}</div><div class="pista"><div class="lleno" style="width:58%;background:var(--campo);outline:4px solid var(--marron);outline-offset:-4px"></div><div class="hueco" style="left:58%;width:26%"></div></div></div>
-        <div class="barra"><div class="lab">${esc(s.etiquetas[1])}</div><div class="pista"><div class="lleno" style="width:84%;background:var(--marron)"></div></div></div></div>`;
-    case 'formula': {
-      const partes = s.texto.split(' + ');
-      return `<div class="formula">${partes.map((p, k) => `${k ? '<div class="mas">+</div>' : ''}<div class="bloque c${k + 1}">${esc(p.charAt(0).toUpperCase() + p.slice(1))}</div>`).join('')}</div>`;
-    }
-    case 'suma':
-      return `<div class="suma">${s.bloques.map(([a, b]) => `<div class="fila"><span>${esc(a)}</span><b>${esc(b)}</b></div>`).join('<div class="mas" style="text-align:center">+</div>')}</div>`;
-    case 'etiqueta':
-      return `<div class="precio"><div class="a">${esc(s.etiqueta.arriba)}</div><div class="p">${esc(s.etiqueta.precio)}</div><div class="z">${esc(s.etiqueta.abajo)}</div></div>`;
-  }
-  if (s.captura) {
-    if (s.tipo === 'prueba') return `<img src="${rel}${s.captura.archivo}" style="max-width:100%;max-height:100%;display:block" alt="">`;
-    const caja = (c) => `<div class="papel">${recorte(c.archivo, c.recorte, c.ancho || 888, rel)}</div>`;
-    return caja(s.captura) + (s.captura2 ? caja(s.captura2) : '');
-  }
-  return '';
-}
-
-function slideHTML(p, s, i, n, rel) {
-  const num = i + 1;
-  if (s.tipo === 'portada' && p.id === 'c2') {
-    const [tres, ...resto] = s.titulo.split(' ');
-    return `<section class="slide tres" data-n="${num}"><div class="grande">${esc(tres)}</div><img class="pdf" src="${rel}${s.captura.archivo}" alt=""><div class="titulo">${esc(resto.join(' '))}</div><div class="pie"><div style="width:380px;height:100px">${LOCKUP}</div></div></section>`;
-  }
-  if (s.tipo === 'portada') {
-    return `<section class="slide oscura portada" data-n="${num}"><div class="titulo">${esc(s.titulo)}</div>
-      <div class="tags"><div class="tag">$ ???</div><div class="tag b">$ ???<div class="tache"></div></div></div>
-      <div class="pie"><div style="width:380px;height:100px">${LOCKUP_OSCURO}</div><div class="desliza"><svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#5A4236" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div></div></section>`;
-  }
-  if (s.tipo === 'cta') {
-    const [antes, despues] = s.cta.split(p.palabra);
-    return `<section class="slide oscura cta" data-n="${num}"><div class="logo">${LOCKUP_OSCURO}</div><div class="titulo">${esc(s.titulo)}</div>
-      <div class="boton">${esc(antes.trim())}<em>${esc(p.palabra)}</em>${esc(despues.trim())}</div></section>`;
-  }
-  const textoAbajo = s.ilustracion === 'suma';
-  const textoVisible = s.ilustracion === 'formula' ? '' : s.texto;
-  return `<section class="slide${s.tipo === 'prueba' ? ' prueba' : ''}" data-n="${num}">
-    ${s.kicker ? `<div class="kicker">${esc(s.kicker)}</div>` : ''}
-    <div class="titulo">${esc(s.titulo)}</div>
-    ${textoVisible && !textoAbajo ? `<div class="texto">${esc(textoVisible)}</div>` : ''}
-    <div class="visual">${visualSlide(s, rel)}</div>
-    ${textoAbajo ? `<div class="texto" style="margin-top:34px">${esc(s.texto)}</div>` : ''}
-    ${s.nota ? `<div class="nota">${esc(s.nota)}</div>` : ''}
-    ${pie(num, n)}</section>`;
-}
-
-function carruselHTML(p) {
-  const rel = '../capturas/';
-  return `<!doctype html><html lang="es-MX"><head><meta charset="utf-8"><title>${esc(p.id)} · ${esc(p.titulo)}</title>${FUENTES}<style>${CSS_SLIDE}</style></head><body>
-${p.slides.map((s, i) => slideHTML(p, s, i, p.slides.length, rel)).join('\n')}
-</body></html>`;
-}
+// Estilo App Store (herramientas/carrusel-pro.cjs), una versión por paleta (herramientas/paletas.cjs).
+// Las pantallas de cada paleta se capturan con la app en ese color de marca:
+//   PASTELIA_COLOR=<app> PASTELIA_OUT=salida/capturas/<paleta> node herramientas/capturar-app.cjs
+const { carruselProHTML, W: SW, H: SH } = require('./carrusel-pro.cjs');
+const PALETAS = require('./paletas.cjs');
+const CAP_PALETAS = path.join(BASE, 'salida', 'capturas');
 
 // ─────────────────────────── Storyboards ───────────────────────────
 const CSS_SB = `${TOKENS}
@@ -364,26 +247,33 @@ async function render() {
   const ctx = await browser.newContext({ viewport: { width: 1200, height: 1400 }, deviceScaleFactor: 1 });
   await routeFonts(ctx);
   const page = await ctx.newPage();
-  const abrir = async (file) => {
+  const abrir = async (file, fuente = 'Fredoka') => {
     await page.goto('file://' + file, { waitUntil: 'networkidle' });
-    await page.evaluate(() => Promise.all([document.fonts.load('600 40px Fredoka'), document.fonts.load('800 40px Nunito')]).then(() => document.fonts.ready));
-    const f = await page.evaluate(() => [document.fonts.check('600 40px Fredoka'), [...document.fonts].some((x) => x.family === 'Fredoka' && x.status === 'loaded')]);
-    if (!f[1]) throw new Error('No cargó Fredoka en ' + file);
+    await page.evaluate(() => Promise.all(['600 40px Fredoka', '800 40px Nunito', '900 40px Nunito'].map((f) => document.fonts.load(f).catch(() => 0))).then(() => document.fonts.ready));
+    const ok = await page.evaluate((fu) => [...document.fonts].some((x) => x.family === fu && x.status === 'loaded'), fuente);
+    if (!ok) throw new Error('No cargó ' + fuente + ' en ' + file);
     await page.evaluate(() => Promise.all([...document.images].map((i) => i.complete ? 0 : new Promise((r) => { i.onload = i.onerror = r; }))));
   };
 
   for (const p of C.piezas) {
     if (p.tipo === 'carrusel') {
-      const f = path.join(BASE, 'carruseles', `${p.id}-${p.estructura.toLowerCase()}.html`);
-      fs.writeFileSync(f, carruselHTML(p));
-      await abrir(f);
-      const n = await page.locator('section.slide').count();
-      for (let i = 0; i < n; i++) {
-        const out = path.join(SALIDA, 'carruseles', `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`);
-        await page.locator('section.slide').nth(i).screenshot({ path: out });
+      const n = p.slides.length;
+      for (const pal of PALETAS) {
+        const capDir = path.join(CAP_PALETAS, pal.id);
+        if (!fs.existsSync(path.join(capDir, '10-pdf-comprobante.png'))) throw new Error(`Faltan las capturas de la paleta ${pal.id}: corre capturar-app.cjs con PASTELIA_COLOR=${pal.app} PASTELIA_OUT=${path.relative(ROOT, capDir)}`);
+        const f = path.join(BASE, 'carruseles', `${p.id}-${pal.id}.html`);
+        fs.writeFileSync(f, carruselProHTML({ p, paleta: pal, ROOT, capDir, rel: `../salida/capturas/${pal.id}/` }));
+        const dir = path.join(SALIDA, 'carruseles', pal.id); mk(dir);
+        await page.setViewportSize({ width: n * SW, height: SH });
+        await abrir(f, 'Nunito');
+        for (let i = 0; i < n; i++) await page.screenshot({ path: path.join(dir, `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`), clip: { x: i * SW, y: 0, width: SW, height: SH } });
+        const tira = path.join(dir, `${p.id}-tira-completa.png`);
+        await page.screenshot({ path: tira });
+        execFileSync('ffmpeg', ['-loglevel', 'error', '-y', '-i', tira, '-vf', `scale=${Math.min(n * 300, 2700)}:-1`, path.join(dir, `${p.id}-tira.png`)]);
+        fs.unlinkSync(tira);
       }
       fs.writeFileSync(path.join(BASE, 'carruseles', `${p.id}-guion.md`), carruselMD(p));
-      console.log('carrusel', p.id, n, 'slides');
+      console.log('carrusel', p.id, n, 'slides ×', PALETAS.length, 'paletas');
     } else {
       const f = path.join(BASE, 'storyboards', `${p.id}-storyboard.html`);
       fs.writeFileSync(f, storyboardHTML(p));
