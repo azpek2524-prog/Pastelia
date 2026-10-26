@@ -20,6 +20,12 @@ const LOCKUP = fs.readFileSync(path.join(ROOT, 'pastelia-lockup.svg'), 'utf8').r
 const archivos = {};
 function img(carpeta, nombre) { const k = `img/${carpeta}/${nombre}`; archivos[k] = rel(path.join(SALIDA, carpeta, nombre)); return k; }
 function archivo(carpeta, nombre) { const k = `descargas/${nombre}`; archivos[k] = rel(path.join(SALIDA, carpeta, nombre)); return k; }
+function mp4(carpeta, nombre) { const k = `video/${carpeta}/${nombre}`; archivos[k] = rel(path.join(SALIDA, carpeta, nombre)); return k; }
+const nombreReel = (p, v) => `${p.id}-${v === 'A' ? 'reel-A' : 'reel-B-prueba'}.mp4`;
+const NOTA_MP4 = {
+  r1: 'Grabados con la app real y datos de ejemplo ($714). Van sin audio: pon una canción desde Instagram al publicar o graba tu voz leyendo los subtítulos.',
+  r2: 'Grabados con la app real y datos de ejemplo. La respuesta del Agente IA (beta) se reprodujo con el código de la propia app, porque su servidor no responde desde mi entorno: prueba tu agente antes de publicar. Van sin audio.',
+};
 
 let nCopia = 0;
 function copiable(titulo, texto, extraClase) {
@@ -57,6 +63,9 @@ function video(p) {
   <h3>${esc(p.titulo)}</h3>
   <p class="bajada-pieza">${esc(p.subtitulo)}</p>
   ${chips(p)}
+  <h4>Reels listos para publicar (MP4 · 9:16 · ${esc(p.duracion)})</h4>
+  <p class="ayuda">${esc(NOTA_MP4[p.id])}</p>
+  <div class="videos">${['A', 'B'].map((v) => { const n = nombreReel(p, v), k = mp4(p.carpeta, n); return `<figure class="video"><video controls playsinline preload="metadata" poster="${img(p.carpeta, portada)}" src="${k}"></video><figcaption><b>${v === 'A' ? 'Versión A · para tu perfil (fíjala)' : 'Versión B · para "Reel de prueba"'}</b>${descargar(k, n, 'Descargar MP4')}</figcaption></figure>`; }).join('')}</div>
   <h4>${esc(p.variantes.A.etiqueta)} — ${esc(p.variantes.A.angulo)}</h4>${tablaGancho(p.variantes.A)}
   <h4>${esc(p.variantes.B.etiqueta)} — ${esc(p.variantes.B.angulo)}</h4>${tablaGancho(p.variantes.B)}
   <h4>Puente (on-ramp, 3–15 s)</h4>
@@ -66,7 +75,7 @@ function video(p) {
   ${A.map((e) => `<tr><td class="num">${e.t[0]}–${e.t[1]} s<br><small>${esc(e.nombre)}</small></td><td>${esc(e.visual)}</td><td>${esc(e.voz)}</td><td>${esc(e.texto)}</td></tr>`).join('')}
   </tbody></table></div>
   <h4>Storyboard por escena</h4>
-  <p class="ayuda">Sin clips todavía: estas escenas muestran qué grabar y dónde va cada texto. La línea punteada es la zona segura de 720×1200 (fuera de ella, Instagram tapa el texto). Las pantallas son capturas reales de la app con datos de ejemplo; donde dice "Graba aquí tu pantalla real" va tu grabación.</p>
+  <p class="ayuda">El plan de cada escena y dónde va cada texto; los MP4 de arriba ya lo siguen con la app real. La línea punteada es la zona segura de 720×1200 (fuera de ella, Instagram tapa el texto).</p>
   <div class="carril">${frames(A, 'A')}${frames(B, 'B')}</div>
   <div class="extras">
     ${figura(img(p.carpeta, tarjeta), tarjeta, `Tarjeta final ${p.palabra}`, 1080, 1920, 'Tarjeta final, lista para el Reel', 'mini')}
@@ -77,7 +86,7 @@ function video(p) {
     </div>
   </div>
   <h4>Subtítulos (.srt)</h4>
-  <p class="ayuda">Los archivos .srt vienen en el ZIP y en tu Drive. Tiempos aproximados: ajústalos al audio real en CapCut.</p>
+  <p class="ayuda">Los mismos subtítulos ya van dentro de los MP4. Los .srt vienen en el ZIP por si grabas tu voz y editas en CapCut.</p>
   <div class="captions">${copiable(`${p.id}-subtitulos-A.srt`, srt(A), 'srt')}${copiable(`${p.id}-subtitulos-B.srt`, srt([...B, ...p.cuerpo]), 'srt')}</div>
   ${captionYdm(p)}
   ${antes(p)}
@@ -179,6 +188,32 @@ function playbook() {
   <p class="bajada">${esc(pb.ads.intro)}</p>
   <ul class="checklist">${pb.ads.condiciones.map((c) => `<li>${esc(c)}</li>`).join('')}</ul>
   <p class="formula">${esc(pb.ads.presupuesto)}</p>
+</section>`;
+}
+
+// Lo que el botón "Subir a tu Drive" manda a cada carpeta: carruseles, meme, reels (MP4) y portadas. Sin documentos.
+function subidas() {
+  const l = [];
+  const sumar = (carpeta, ruta, nombre, tipo) => l.push({ ruta, nombre, tipo, carpeta: DRIVE.carpetas[carpeta], carpetaNombre: carpeta });
+  C.piezas.forEach((p) => {
+    if (p.tipo === 'video') {
+      ['A', 'B'].forEach((v) => { const n = nombreReel(p, v); sumar(p.carpeta, mp4(p.carpeta, n), n, 'video/mp4'); });
+      const portada = `${p.id}-portada-reel-1080x1920.png`; sumar(p.carpeta, img(p.carpeta, portada), portada, 'image/png');
+    } else if (p.tipo === 'meme') { const n = `${p.id}-meme.png`; sumar(p.carpeta, img(p.carpeta, n), n, 'image/png'); }
+    else p.slides.forEach((x, i) => { const n = `${p.id}-slide-${String(i + 1).padStart(2, '0')}.png`; sumar(p.carpeta, img(p.carpeta, n), n, 'image/png'); });
+  });
+  C.perfil.destacadas.forEach((d) => { const n = `destacada-${d.id}.png`; sumar(PERFIL, img(PERFIL, n), n, 'image/png'); });
+  return l;
+}
+function subirDrive() {
+  const l = subidas(), cuantos = (t) => l.filter((x) => x.tipo.startsWith(t)).length;
+  return `<section id="drive">
+  <h2>Subir a tu Drive</h2>
+  <p class="bajada">Con un toque se suben a <a href="${esc(DRIVE.raiz.url)}" target="_blank" rel="noopener">Pastelia / ${esc(DRIVE.raiz.titulo)}</a>, cada uno en su carpeta: ${cuantos('video')} reels en MP4 y ${cuantos('image')} imágenes (slides de los carruseles, el meme y las portadas de los reels y de las destacadas). Se suben con tu propia conexión de Google Drive en Claude: la primera vez te pide permiso. Si un archivo ya está en su carpeta, no lo duplica.</p>
+  <div class="zip"><button type="button" class="btn btn-grande" id="subir-drive" disabled>Subir carruseles y reels a mi Drive</button></div>
+  <p class="ayuda" id="estado-drive" role="status" aria-live="polite" style="margin-top:12px">Preparando la conexión…</p>
+  <details class="detalle"><summary>Archivo por archivo (${l.length})</summary><ol class="subidas" id="lista-drive">${l.map((x) => `<li><b>${esc(x.carpetaNombre)} / ${esc(x.nombre)}</b> · <span>Pendiente</span></li>`).join('')}</ol></details>
+  <script type="application/json" id="datos-drive">${JSON.stringify(l.map(({ ruta, nombre, tipo, carpeta }) => ({ ruta, nombre, tipo, carpeta }))).replace(/</g, '\\u003c')}</script>
 </section>`;
 }
 
@@ -297,6 +332,17 @@ ul{padding-left:20px;margin:0}li{margin:0}
 .aviso ul{display:flex;flex-direction:column;gap:6px}
 .formula{font:600 19px/1.4 var(--display);background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:16px 18px;margin:14px 0}
 .zip{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
+.videos{display:flex;gap:16px;overflow-x:auto;padding-bottom:6px}
+figure.video{margin:0;flex:none;width:min(260px,70vw);display:flex;flex-direction:column;gap:8px}
+figure.video video{width:100%;aspect-ratio:9/16;display:block;border-radius:12px;background:#000;border:1px solid var(--linea)}
+.btn-grande{font:800 16px/1.2 var(--texto);padding:14px 20px;border-radius:12px;background:var(--dorado);color:var(--dorado-tinta)}
+.btn[disabled]{opacity:.55;cursor:default}
+.detalle{margin-top:6px}
+.detalle summary{cursor:pointer;font-weight:800}
+ol.subidas{margin:10px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+ol.subidas li span{color:var(--suave);font-weight:700}
+ol.subidas li.ok span{color:var(--si)}ol.subidas li.no span{color:var(--no)}ol.subidas li.va span{color:var(--marron)}
+ol.subidas a{color:var(--marron)}
 footer{padding-top:28px;color:var(--suave);font-size:14px}
 footer a,.bajada a{color:var(--marron)}
 @media (max-width:700px){.extras{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.extras .col{grid-column:1/-1}.meme{grid-template-columns:1fr}.meme figure{max-width:320px}}
@@ -309,9 +355,11 @@ footer a,.bajada a{color:var(--marron)}
   <p class="eyebrow">Plan de arranque en Instagram · ${esc(C.SEMANA.titulo)} · $0 orgánico</p>
   <h1>Kit de contenido Pastelia</h1>
   <p class="bajada">Seis piezas para que tu perfil no esté vacío antes de invitar a nadie: 2 reels, 3 carruseles y 1 meme, cada una con su palabra clave para medir cuál trae registros. Le hablamos a reposteras que no saben cuánto cobrar, no a quien compra pasteles. Capturas reales de la app, sin pasteles hechos con IA.</p>
-  <p class="bajada">Todo está también en tu Drive: <a href="${esc(DRIVE.raiz.url)}" target="_blank" rel="noopener">Pastelia / ${esc(DRIVE.raiz.titulo)}</a>.</p>
-  <ul class="indice"><li><a href="#confirmar">Por confirmar</a></li><li><a href="#calendario">Calendario</a></li><li><a href="#perfil">Perfil</a></li>${C.piezas.map((p) => `<li><a href="#${p.id}">${p.n} · ${tipoPieza(p)} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#playbook">Playbook</a></li><li><a href="#dm">Respuestas por DM</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
+  <p class="bajada">Los carruseles y los reels se suben a tu Drive con un botón: <a href="#drive">Subir a tu Drive</a> (carpeta <a href="${esc(DRIVE.raiz.url)}" target="_blank" rel="noopener">Pastelia / ${esc(DRIVE.raiz.titulo)}</a>).</p>
+  <ul class="indice"><li><a href="#drive">Subir a Drive</a></li><li><a href="#confirmar">Por confirmar</a></li><li><a href="#calendario">Calendario</a></li><li><a href="#perfil">Perfil</a></li>${C.piezas.map((p) => `<li><a href="#${p.id}">${p.n} · ${tipoPieza(p)} ${esc(p.palabra)}</a></li>`).join('')}<li><a href="#playbook">Playbook</a></li><li><a href="#dm">Respuestas por DM</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
 </header>
+
+${subirDrive()}
 
 <section id="confirmar">
   <h2>Datos por confirmar</h2>
@@ -324,7 +372,7 @@ footer a,.bajada a{color:var(--marron)}
   ${cal.map((f) => { const p = C.piezas.find((x) => f.pieza.startsWith(x.id + ' ')); return `<tr><td class="num">${esc(diaCorto(f.dia))}</td><td class="num">${esc(f.hora)}</td><td>${p ? `<a href="#${p.id}" style="color:inherit">${esc(f.pieza)}</a><br><small>${esc(tipoPieza(p))} · ${esc(p.estructura)}</small>` : esc(f.pieza)}</td><td>${esc(f.red)}</td><td>${f.palabra !== '—' ? `<span class="palabra">${esc(f.palabra)}</span>` : '—'}</td></tr>`; }).join('')}
   </tbody></table></div>
   <p class="ayuda" style="margin-top:12px">Horas sugeridas del centro de México; ajústalas con las estadísticas de tu cuenta. Si el Reel del martes no está listo, publica primero el carrusel c1 y mueve el Reel un día.</p>
-  <p class="ayuda">El paquete de la semana va como archivo en el chat (${esc(ZIP)}${ZIP_PARTES > 1 ? ', en dos partes por tamaño' : ''}): PNG, captions y DM en .txt, guiones .md, subtítulos .srt, calendario y plantillas CSV. Sin MP4 todavía: faltan tus grabaciones.</p>
+  <p class="ayuda">El paquete de la semana va como archivo en el chat (${esc(ZIP)}${ZIP_PARTES > 1 ? `, en ${ZIP_PARTES} partes por tamaño` : ''}): PNG, MP4 de los reels, captions y DM en .txt, guiones .md, subtítulos .srt, calendario y plantillas CSV.</p>
 </section>
 
 ${perfil()}
@@ -369,13 +417,14 @@ ${playbook()}
 </section>
 
 <section id="material">
-  <h2>Material que necesito de ti</h2>
+  <h2>Material opcional</h2>
+  <p class="bajada">Los reels ya están hechos con la app real. Con tu material se ven más tuyos:</p>
   <div class="tabla-envoltura"><table><thead><tr><th>Para</th><th>Qué grabar o mandarme</th></tr></thead><tbody>
-    <tr><td class="num">Reel COTIZA (r1)</td><td>Grabación de pantalla en modo oscuro de la cotización completa (Cotizar → 20 invitados → receta, Mediano · 20p, Flores → Costeo → Resumen en vivo). Para la versión A, 2 s de tu mano tachando un "$ ?" en tu libreta (cenital).</td></tr>
-    <tr><td class="num">Reel AGENTE (r2)</td><td>Grabación de pantalla de la conversación real con el Agente IA (beta): el pedido escrito, la respuesta, "Confirma el pedido", "Confirmar y guardar" y la agenda. Para la versión B, 2 s de tu celular encendiéndose en una cocina oscura.</td></tr>
+    <tr><td class="num">Reel COTIZA (r1)</td><td>2 s de tu mano tachando un "$ ?" en tu libreta (cenital), para cambiar la ilustración del gancho A. Tu voz leyendo los subtítulos, si quieres narrarlo.</td></tr>
+    <tr><td class="num">Reel AGENTE (r2)</td><td>Recomendado: tu conversación real con el Agente IA (beta), para reemplazar la respuesta que reproduje con la app. Para la versión B, 2 s de tu celular encendiéndose en una cocina oscura.</td></tr>
     <tr><td class="num">Historia (p1)</td><td>Opcional: una foto tuya vertical con luz natural para la portada alterna, y tu voz en off si quieres la versión Reel.</td></tr>
   </tbody></table></div>
-  <p class="ayuda" style="margin-top:12px">Mándame los clips por el chat (o súbelos a "3. Mi material (fotos y videos)" en Drive o a marketing/material/ en el repo) y edito los Reels en 9:16 con subtítulos, textos de marca y tarjeta final, en MP4.</p>
+  <p class="ayuda" style="margin-top:12px">Mándame los clips por el chat (o súbelos a "3. Mi material (fotos y videos)" en Drive o a marketing/material/ en el repo) y cambio esas escenas en los MP4.</p>
 </section>
 
 <footer>Fuentes del kit en el repo: marketing/2026-10-arranque-instagram/ (contenido.cjs, HTML de slides y storyboards, guiones, captions, perfil y playbook). Paleta cacao con Fredoka y Nunito. Generado el 26 de octubre de 2026.</footer>
@@ -401,6 +450,76 @@ ${playbook()}
       .then(function(blob){ return descargas.save({ filename:nombre, data:blob }); })
       .then(function(){ marcar(b,'Listo'); }, function(err){ var c=err&&err.code; if(c==='declined') return; if(c==='rate_limited'){ marcar(b,'Espera un momento'); return; } if(c==='unavailable'||c==='not_granted'||c==='capability_disabled'||c==='capability_removed'){ descargas=null; marcar(b,'Toca otra vez para abrirlo'); return; } marcar(b,'No se pudo, intenta de nuevo'); });
   });
+  // Subir a Drive: la página lee sus propios PNG y MP4 y los manda a tu Google Drive con tu conector
+  // (capacidad mcp: create_file y search_files). Cada archivo viaja como argumento de archivo ($file).
+  var DRIVE='Google Drive', btnDrive=document.getElementById('subir-drive'), estadoDrive=document.getElementById('estado-drive'), listaDrive=document.getElementById('lista-drive');
+  var SUBIDAS=[]; try{ SUBIDAS=JSON.parse(document.getElementById('datos-drive').textContent); }catch(e){}
+  var mcp=null;
+  var AVISOS={
+    needs_reauth:'Tu conexión con Google Drive venció. Vuelve a conectarla en claude.ai → Configuración → Conectores y toca el botón otra vez.',
+    server_not_connected:'No encuentro tu Google Drive en Claude. Agrégalo en claude.ai → Configuración → Conectores y toca el botón otra vez.',
+    selection_required:'Tienes más de una conexión de Google Drive: elige cuál usar en el aviso de claude.ai y toca el botón otra vez.',
+    not_in_manifest:'Falta tu permiso para usar Google Drive desde esta página. Toca el botón otra vez y elige «Permitir» (o actívalo en el menú Permisos de la página).',
+    approval_required:'Falta tu permiso para usar Google Drive desde esta página. Toca el botón otra vez y elige «Permitir».',
+    consent_required:'Falta tu permiso para usar Google Drive desde esta página. Toca el botón otra vez y elige «Permitir».',
+    blocked_by_policy:'Tu organización no permite usar Google Drive desde páginas como esta.',
+    not_granted:'Esta vista no puede usar tus conectores. Abre el kit en claude.ai con tu cuenta.',
+    capability_disabled:'Esta vista no puede usar tus conectores. Abre el kit en claude.ai con tu cuenta.',
+    capability_removed:'Esta vista no puede usar tus conectores. Abre el kit en claude.ai con tu cuenta.'
+  };
+  function decir(t){ estadoDrive.textContent=t; }
+  function fila(i, t, clase, url){
+    var li=listaDrive.children[i]; if(!li) return; li.className=clase||'';
+    var sp=li.querySelector('span'); sp.textContent=t;
+    if(url){ var a=document.createElement('a'); a.href=url; a.target='_blank'; a.rel='noopener'; a.textContent=' · ver en Drive'; sp.appendChild(a); }
+  }
+  function base64(blob){ return new Promise(function(ok, mal){ var r=new FileReader(); r.onload=function(){ ok(String(r.result).split(',')[1]); }; r.onerror=mal; r.readAsDataURL(blob); }); }
+  async function subirTodo(){
+    btnDrive.disabled=true;
+    try{
+      decir('Conectando con tu Google Drive…');
+      var info=await mcp.listTools();
+      var srv=(info.servers||[]).filter(function(x){ return x.server===DRIVE; })[0];
+      if(!srv){ decir(AVISOS.server_not_connected); return; }
+      if(srv.authStatus==='needs_reauth'){ decir(AVISOS.needs_reauth); return; }
+      var conArchivo=info.fileArgs===true;
+      // Lo que ya hay en cada carpeta, para no duplicar si tocas el botón dos veces.
+      var ya={}, carpetas=[];
+      SUBIDAS.forEach(function(x){ if(carpetas.indexOf(x.carpeta)<0) carpetas.push(x.carpeta); });
+      for(var c=0;c<carpetas.length;c++){
+        decir('Revisando tus carpetas ('+(c+1)+' de '+carpetas.length+')…');
+        var r=await mcp.callTool(DRIVE,'search_files',{ query:"parentId = '"+carpetas[c]+"'", excludeContentSnippets:true, pageSize:100 },{ cache:false });
+        ya[carpetas[c]]=((r.payload && r.payload.files) || []).map(function(f){ return f.title; });
+      }
+      var subidos=0, estaban=0, problemas=0;
+      for(var i=0;i<SUBIDAS.length;i++){
+        var s=SUBIDAS[i];
+        if(ya[s.carpeta].indexOf(s.nombre)>=0){ fila(i,'Ya estaba en tu Drive','ok'); estaban++; continue; }
+        decir('Subiendo '+(i+1)+' de '+SUBIDAS.length+': '+s.nombre);
+        fila(i,'Subiendo…','va');
+        try{
+          var blob=await (await fetch(s.ruta)).blob();
+          var contenido;
+          if(conArchivo) contenido={ $file:{ data:blob, name:s.nombre, type:s.tipo } };
+          else if(blob.size<700*1024) contenido=await base64(blob);
+          else { fila(i,'Muy pesado para subirlo desde aquí: descárgalo y súbelo a mano','no'); problemas++; continue; }
+          var res=await mcp.callTool(DRIVE,'create_file',{ title:s.nombre, parentId:s.carpeta, contentMimeType:s.tipo, disableConversionToGoogleType:true, base64Content:contenido });
+          fila(i,'Subido','ok',res.payload && res.payload.viewUrl); subidos++;
+        }catch(e){
+          var code=e && e.code;
+          if(AVISOS[code]){ fila(i,'Sin subir','no'); decir(AVISOS[code]); return; }
+          fila(i,(code==='server_unavailable'||code==='upstream_error'||code==='cancelled') ? 'Sin confirmar: revisa tu Drive (si tocas otra vez, no se duplica)' : 'No se pudo ('+(code||'error')+')','no'); problemas++;
+        }
+      }
+      decir('Listo: '+subidos+' subidos'+(estaban?', '+estaban+' ya estaban':'')+(problemas?', '+problemas+' con problema: toca el botón otra vez para reintentar solo esos':'')+'.');
+    }catch(e){ decir(AVISOS[e && e.code] || 'Algo falló al hablar con Google Drive. Toca el botón otra vez en un momento.'); }
+    finally{ btnDrive.disabled=false; }
+  }
+  if(btnDrive){
+    var usar=(window.claude && window.claude.use) ? window.claude.use('mcp') : Promise.resolve(null);
+    usar.then(function(m){ mcp=m; if(m){ btnDrive.disabled=false; decir('Listo para subir.'); } else decir('Para subir a Drive, abre esta página en claude.ai con tu cuenta. Mientras, puedes descargar cada archivo o usar el ZIP del chat.'); }, function(){ decir('Para subir a Drive, abre esta página en claude.ai con tu cuenta.'); });
+    btnDrive.addEventListener('click', function(){ if(mcp) subirTodo(); });
+  }
 })();
 </script>`;
 }
@@ -415,23 +534,29 @@ ${PERFIL.padEnd(30)} Perfil (nombre, bio, enlace), portadas de destacadas, playb
 
 En cada carpeta:
 - Carruseles y meme: PNG 1080x1350 listos para Instagram, la "tira" con el carrusel completo, guion .md, caption, texto alternativo y DM (.txt).
-- Reels: storyboard por escena (A = versión principal, B = gancho para "Reel de prueba"), tarjeta final y portada 1080x1920, storyboard completo, guion .md con la tabla de 3 componentes y subtítulos .srt (A y B).
+- Reels: MP4 9:16 listos (A = para tu perfil, B = para "Reel de prueba"; van en los ZIP de videos), storyboard por escena, tarjeta final y portada 1080x1920, guion .md con la tabla de 3 componentes y subtítulos .srt (A y B).
 
-Sin MP4 todavía: faltan tus grabaciones de pantalla. Mándamelas por el chat y edito los Reels.
+Los reels van sin audio: ponles una canción desde Instagram al publicar o graba tu voz leyendo los subtítulos.
 
 Antes de publicar (datos por confirmar):
 ${C.porConfirmar.map((d) => '- ' + d.campo + ': ' + d.estado).join('\n')}
 `;
 }
 
-// Un ZIP por semana. Si pasa de 29 MB (el chat acepta 30), se parte en dos: reels y perfil / carruseles y meme.
+// Un ZIP por semana. Si pasa de 29 MB (el chat acepta 30), se parte: reels y perfil / carruseles y meme / MP4 de cada reel.
 const LIMITE = 29 * 1048576;
-const GRUPOS = { reels: ['01-', '04-', PERFIL, 'LEEME'], carruseles: ['02-', '03-', '05-', '06-', 'LEEME'] };
+const GRUPOS = {
+  reels: { prefijos: ['01-', '04-', PERFIL, 'LEEME'], mp4: 'sin' },
+  carruseles: { prefijos: ['02-', '03-', '05-', '06-', 'LEEME'] },
+  'videos-r1': { prefijos: ['01-', 'LEEME'], mp4: 'solo' },
+  'videos-r2': { prefijos: ['04-', 'LEEME'], mp4: 'solo' },
+};
 function empacar(out, grupo) {
   if (fs.existsSync(out)) fs.unlinkSync(out);
   execFileSync('python3', ['-c', `
 import os, zipfile, sys, json
-src, out, pref = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
+src, out, g = sys.argv[1], sys.argv[2], json.loads(sys.argv[3])
+pref, modo = g.get('prefijos'), g.get('mp4')
 raiz = os.path.basename(out)[:-4]
 with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
     for d, _, fs_ in os.walk(src):
@@ -439,8 +564,10 @@ with zipfile.ZipFile(out, 'w', zipfile.ZIP_DEFLATED) as z:
             if f.endswith('.html'): continue
             p = os.path.join(d, f); r = os.path.relpath(p, src)
             if pref and not any(r.startswith(x) for x in pref): continue
+            if modo == 'sin' and f.endswith('.mp4'): continue
+            if modo == 'solo' and not (f.endswith('.mp4') or r == 'LEEME.txt'): continue
             z.write(p, os.path.join(raiz, r))
-`, SALIDA, out, JSON.stringify(grupo || [])]);
+`, SALIDA, out, JSON.stringify(grupo || {})]);
   return out;
 }
 function zips() {
@@ -450,7 +577,7 @@ function zips() {
   const uno = empacar(path.join(dir, ZIP), null);
   if (fs.statSync(uno).size <= LIMITE) return [uno];
   fs.unlinkSync(uno);
-  return Object.entries(GRUPOS).map(([g, pref], i) => empacar(path.join(dir, ZIP.replace('.zip', `-parte${i + 1}-${g}.zip`)), pref));
+  return Object.entries(GRUPOS).map(([g, grupo], i) => empacar(path.join(dir, ZIP.replace('.zip', `-parte${i + 1}-${g}.zip`)), grupo));
 }
 
 fs.mkdirSync(path.join(BASE, 'kit'), { recursive: true });

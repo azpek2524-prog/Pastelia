@@ -105,7 +105,7 @@ const piezas = [
     notas: [
       'Para que salga $714 igual que en el guion: receta sin ingredientes capturados (la app usa $210 de insumos), tamaño Mediano, extra Flores activo y margen 40 %. Con tu receta real el número cambia y está bien: el texto en pantalla dice "Datos de ejemplo".',
       'Graba la pantalla en modo oscuro (Mi negocio), con "No molestar" y el brillo al máximo. Usa datos de ejemplo, nunca clientas reales.',
-      'Gancho A: la toma de la libreta dura 1–2 s y corta seco a la pantalla; el texto del gancho entra desde el primer cuadro.',
+      'Gancho A: la toma de la libreta dura 1–2 s y corta seco a la pantalla; el texto del gancho entra desde el primer cuadro. En el MP4 la libreta es una ilustración, no una foto.',
       'Ritmo: cortes cada 1–2 s al ritmo de la música. Zoom (110–120 %) a la fila que nombra la voz.',
       'Texto en pantalla dentro de la zona segura de 720×1200 (centro del cuadro): crema #FFF4E6 sobre barra cacao al 70 %, palabras clave en dorado #E7B676.',
       'Subtítulos: máximo 2 líneas de 3–5 palabras, dentro de la zona segura (abajo del centro, nunca en los 500 px de abajo).',
@@ -113,7 +113,7 @@ const piezas = [
       'Tarjeta final: usa la imagen del kit (1080×1920), 3–4 s.'
     ],
     antes: [
-      'Graba la pantalla de la cotización completa y la toma de la libreta: mándamelas y edito el Reel en MP4 con subtítulos y tarjeta final.',
+      'El Reel ya está hecho (MP4, versiones A y B) con una grabación real de la app y datos de ejemplo. Va sin audio: ponle una canción desde Instagram al publicar o graba tu voz leyendo los subtítulos. Si prefieres tu propia pantalla o tu mano en la libreta, mándame tus clips y lo cambio.',
       'Publica la versión A en tu perfil y fíjala. La B súbela como "Reel de prueba" (te explico en el playbook).',
       `Pega tu link en la respuesta por DM (${URL_APP}) o usa la respuesta de lista de espera.`
     ],
@@ -336,8 +336,8 @@ ${hashtags}`
         texto: 'Comenta AGENTE y te mando el link' }
     ],
     notas: [
-      'La conversación se graba REAL, en tu celular: no la actuamos ni la armamos en edición. Si el agente contesta algo raro, vuelve a intentarlo o no publiques esa toma.',
-      'Las escenas marcadas "Graba aquí tu pantalla" no tienen captura porque en mi entorno de trabajo el servidor del agente no está disponible. Las demás son capturas reales de la app.',
+      'El MP4 muestra la app real: el pedido escrito, la tarjeta "Confirma el pedido" con el precio estimado, "Confirmar y guardar" y la agenda. La respuesta del agente se reprodujo con el código de la propia app (la misma tarjeta y los mismos mensajes que muestra cuando el agente responde), porque desde mi entorno su servidor no está disponible. No hay textos inventados de la IA.',
+      'Si tu agente contesta distinto (por ejemplo, pide el nombre con otras palabras), graba tu conversación real y mándamela: cambio esas escenas.',
       'Escribe el pedido como te llega por WhatsApp. Si en el primer mensaje pones nombre y fecha ("Pastel de chocolate para 20 personas, a nombre de Cliente de ejemplo, para el 7 de noviembre"), el agente puede ir directo a "Confirma el pedido".',
       'Usa un nombre de prueba ("Cliente de ejemplo"), nunca el de una clienta real, y borra ese pedido de tu agenda después de grabar.',
       'La leyenda "beta" debe verse al menos una vez (escena "Es beta").',
@@ -345,9 +345,9 @@ ${hashtags}`
       'Texto en pantalla y subtítulos dentro de la zona segura de 720×1200; crema sobre barra cacao al 70 % y palabras clave en dorado.'
     ],
     antes: [
-      'Prueba el Agente IA en tu cuenta antes de grabar y confirma que responde (desde mi entorno no pude conectarme a su servidor).',
+      'Prueba el Agente IA en tu cuenta antes de publicar y confirma que hace lo que muestra el Reel (desde mi entorno no pude conectarme a su servidor).',
       'Costo: el agente usa Gemini Pro con "pensamiento alto" y hoy no tiene límite por usuaria (agent-proxy/README.md). Antes de invitar a muchas personas a probarlo, revisa ese costo o cámbialo a Flash.',
-      'Mándame la grabación de la conversación completa y edito el Reel en MP4 con subtítulos y tarjeta final.',
+      'El Reel ya está hecho (MP4, versiones A y B), sin audio. Si quieres usar tu propia grabación de la conversación, mándamela y la cambio.',
       `Pega tu link en la respuesta por DM (${URL_APP}) o usa la respuesta de lista de espera.`
     ],
     captions: {
@@ -590,7 +590,7 @@ const calendarioExtra = [
 const porConfirmar = [
   { campo: 'Link de la app', estado: 'Por confirmar: ¿cualquiera ya puede crear cuenta (link directo) o usas lista de espera (Google Form)? Los DM llevan [TU LINK]; pégalo antes de responder.' },
   { campo: 'Tu historia (p1)', estado: 'Por confirmar: lee los slides y confirma que cada frase es cierta para ti. No agregué fechas, cifras ni anécdotas.' },
-  { campo: 'Agente IA (r2)', estado: 'Por confirmar: que responde en tu cuenta antes de grabar, y el costo de Gemini Pro sin límite por usuaria antes de invitar a mucha gente a usarlo.' },
+  { campo: 'Agente IA (r2)', estado: 'Por confirmar: que tu agente responde como en el Reel (pide el nombre del cliente y luego arma "Confirma el pedido"), y el costo de Gemini Pro sin límite por usuaria antes de invitar a mucha gente a usarlo.' },
   { campo: 'Dónde se guardan los datos', estado: 'Por confirmar: tu contexto de marketing dice "en tu dispositivo, no en la nube", pero index.html ya guarda pedidos, recetas y catálogo en Firebase cuando la persona inicia sesión (modo nube). Mientras lo confirmas, la respuesta "¿Y si pierdo mis datos?" solo habla de la copia de seguridad y no promete nube.' },
   { campo: 'Caja, base, gas y luz (c2)', estado: 'Opcional: la app no trae esos montos, así que van como "$ ?". Si me das tus costos, regenero con tus números.' },
   { campo: 'Fotos reales', estado: 'La carpeta "3. Mi material" está vacía. No hay ni habrá pasteles hechos con IA: p1 trae una portada alterna con marco para tu foto.' },

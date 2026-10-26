@@ -62,8 +62,8 @@ Archivos `r2-subtitulos-A.srt` y `r2-subtitulos-B.srt` (tiempos aproximados; aj�
 > Comenta AGENTE / y te mando el link.
 
 ## Notas de producción
-- La conversación se graba REAL, en tu celular: no la actuamos ni la armamos en edición. Si el agente contesta algo raro, vuelve a intentarlo o no publiques esa toma.
-- Las escenas marcadas "Graba aquí tu pantalla" no tienen captura porque en mi entorno de trabajo el servidor del agente no está disponible. Las demás son capturas reales de la app.
+- El MP4 muestra la app real: el pedido escrito, la tarjeta "Confirma el pedido" con el precio estimado, "Confirmar y guardar" y la agenda. La respuesta del agente se reprodujo con el código de la propia app (la misma tarjeta y los mismos mensajes que muestra cuando el agente responde), porque desde mi entorno su servidor no está disponible. No hay textos inventados de la IA.
+- Si tu agente contesta distinto (por ejemplo, pide el nombre con otras palabras), graba tu conversación real y mándamela: cambio esas escenas.
 - Escribe el pedido como te llega por WhatsApp. Si en el primer mensaje pones nombre y fecha ("Pastel de chocolate para 20 personas, a nombre de Cliente de ejemplo, para el 7 de noviembre"), el agente puede ir directo a "Confirma el pedido".
 - Usa un nombre de prueba ("Cliente de ejemplo"), nunca el de una clienta real, y borra ese pedido de tu agenda después de grabar.
 - La leyenda "beta" debe verse al menos una vez (escena "Es beta").
@@ -71,9 +71,9 @@ Archivos `r2-subtitulos-A.srt` y `r2-subtitulos-B.srt` (tiempos aproximados; aj�
 - Texto en pantalla y subtítulos dentro de la zona segura de 720×1200; crema sobre barra cacao al 70 % y palabras clave en dorado.
 
 ## Antes de publicar
-- [ ] Prueba el Agente IA en tu cuenta antes de grabar y confirma que responde (desde mi entorno no pude conectarme a su servidor).
+- [ ] Prueba el Agente IA en tu cuenta antes de publicar y confirma que hace lo que muestra el Reel (desde mi entorno no pude conectarme a su servidor).
 - [ ] Costo: el agente usa Gemini Pro con "pensamiento alto" y hoy no tiene límite por usuaria (agent-proxy/README.md). Antes de invitar a muchas personas a probarlo, revisa ese costo o cámbialo a Flash.
-- [ ] Mándame la grabación de la conversación completa y edito el Reel en MP4 con subtítulos y tarjeta final.
+- [ ] El Reel ya está hecho (MP4, versiones A y B), sin audio. Si quieres usar tu propia grabación de la conversación, mándamela y la cambio.
 - [ ] Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.
 
 ## Caption (Instagram)

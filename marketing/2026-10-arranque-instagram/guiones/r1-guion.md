@@ -63,7 +63,7 @@ Archivos `r1-subtitulos-A.srt` y `r1-subtitulos-B.srt` (tiempos aproximados; aj�
 ## Notas de producción
 - Para que salga $714 igual que en el guion: receta sin ingredientes capturados (la app usa $210 de insumos), tamaño Mediano, extra Flores activo y margen 40 %. Con tu receta real el número cambia y está bien: el texto en pantalla dice "Datos de ejemplo".
 - Graba la pantalla en modo oscuro (Mi negocio), con "No molestar" y el brillo al máximo. Usa datos de ejemplo, nunca clientas reales.
-- Gancho A: la toma de la libreta dura 1–2 s y corta seco a la pantalla; el texto del gancho entra desde el primer cuadro.
+- Gancho A: la toma de la libreta dura 1–2 s y corta seco a la pantalla; el texto del gancho entra desde el primer cuadro. En el MP4 la libreta es una ilustración, no una foto.
 - Ritmo: cortes cada 1–2 s al ritmo de la música. Zoom (110–120 %) a la fila que nombra la voz.
 - Texto en pantalla dentro de la zona segura de 720×1200 (centro del cuadro): crema #FFF4E6 sobre barra cacao al 70 %, palabras clave en dorado #E7B676.
 - Subtítulos: máximo 2 líneas de 3–5 palabras, dentro de la zona segura (abajo del centro, nunca en los 500 px de abajo).
@@ -71,7 +71,7 @@ Archivos `r1-subtitulos-A.srt` y `r1-subtitulos-B.srt` (tiempos aproximados; aj�
 - Tarjeta final: usa la imagen del kit (1080×1920), 3–4 s.
 
 ## Antes de publicar
-- [ ] Graba la pantalla de la cotización completa y la toma de la libreta: mándamelas y edito el Reel en MP4 con subtítulos y tarjeta final.
+- [ ] El Reel ya está hecho (MP4, versiones A y B) con una grabación real de la app y datos de ejemplo. Va sin audio: ponle una canción desde Instagram al publicar o graba tu voz leyendo los subtítulos. Si prefieres tu propia pantalla o tu mano en la libreta, mándame tus clips y lo cambio.
 - [ ] Publica la versión A en tu perfil y fíjala. La B súbela como "Reel de prueba" (te explico en el playbook).
 - [ ] Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.
 

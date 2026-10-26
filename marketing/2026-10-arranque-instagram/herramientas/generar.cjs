@@ -576,4 +576,4 @@ function comprimir() {
 }
 
 if (require.main === module) render().catch((e) => { console.error(e); process.exit(1); });
-module.exports = { subtitulos, srt, escenasDe, altText, calendario, bioTexto, SALIDA, PERFIL };
+module.exports = { subtitulos, srt, escenasDe, altText, calendario, bioTexto, SALIDA, PERFIL, CAP, D, CSS_SB, overlayHTML, ilustracion };
