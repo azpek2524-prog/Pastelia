@@ -1,0 +1,836 @@
+<title>Kit de contenido Pastelia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@600;700;800;900&display=swap">
+<style>
+/* Layout: una columna de lectura con carriles horizontales para slides y escenas; marca de Pastelia (CLAUDE.md). */
+:root{
+  --fondo:#FFF4E6; --papel:#FFFFFF; --campo:#F5E7D0; --tinte:#F1E6CE;
+  --tinta:#5A4236; --marron:#7B5B4B; --suave:#8A7062; --dorado:#E7B676; --dorado-tinta:#4A342E;
+  --linea:rgba(123,91,75,.16); --aviso:#FBEBD2; --aviso-borde:#E7B676; --no:#B5523B; --si:#7B5B4B;
+  --display:'Fredoka','Nunito',system-ui,sans-serif; --texto:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif; --mono:ui-monospace,'SFMono-Regular',Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --fondo:#150E0A; --papel:#21170F; --campo:#2E2118; --tinte:#36281D;
+  --tinta:#F6EADB; --marron:#E9D6C2; --suave:#BFA894; --dorado:#E7B676; --dorado-tinta:#2A1F17;
+  --linea:rgba(246,234,219,.14); --aviso:#3A2C1C; --aviso-borde:#B98A4C; --no:#E39A7B; --si:#E7B676; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --fondo:#150E0A; --papel:#21170F; --campo:#2E2118; --tinte:#36281D;
+  --tinta:#F6EADB; --marron:#E9D6C2; --suave:#BFA894; --dorado:#E7B676; --dorado-tinta:#2A1F17;
+  --linea:rgba(246,234,219,.14); --aviso:#3A2C1C; --aviso-borde:#B98A4C; --no:#E39A7B; --si:#E7B676; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--fondo);color:var(--tinta);font:600 16px/1.55 var(--texto);margin:0}
+.envoltura{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 64px}
+header.cab{display:flex;flex-direction:column;gap:14px;padding-block:8px 28px;border-bottom:1px solid var(--linea)}
+header.cab svg{color:var(--tinta)}
+h1{font:600 clamp(34px,6vw,56px)/1.02 var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h2{font:600 30px/1.1 var(--display);margin:0 0 16px;text-wrap:balance}
+h3{font:600 clamp(26px,4vw,36px)/1.1 var(--display);margin:4px 0 14px;text-wrap:balance}
+h3.h3-sec{font-size:24px;margin-top:30px}
+h4{font:800 13px/1.2 var(--texto);text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:30px 0 12px}
+.bajada{font-size:18px;color:var(--marron);max-width:65ch;margin:0}
+.bajada-pieza{font-size:17px;color:var(--marron);margin:-6px 0 14px}
+.eyebrow{font:800 13px/1.3 var(--texto);text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin:0}
+section{padding-block:36px;border-bottom:1px solid var(--linea)}
+.indice{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
+.indice a{display:inline-block;padding:8px 14px;border-radius:999px;background:var(--campo);color:var(--tinta);text-decoration:none;font-weight:800;font-size:14px}
+.indice a:focus-visible,.btn:focus-visible,a:focus-visible{outline:3px solid var(--dorado);outline-offset:2px}
+.tabla-envoltura{overflow-x:auto;border:1px solid var(--linea);border-radius:14px;background:var(--papel)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;vertical-align:top;padding:12px 14px;border-bottom:1px solid var(--linea)}
+thead th{font:800 12px/1.2 var(--texto);text-transform:uppercase;letter-spacing:.07em;color:var(--suave);background:var(--tinte)}
+tbody tr:last-child td,tbody tr:last-child th{border-bottom:0}
+td.num,.num{white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:800}
+td small,li small{color:var(--suave);font-weight:700;display:block}
+table.guion td{min-width:170px}table.guion td.num{min-width:0}
+table.cal td:nth-child(3){min-width:230px}
+.palabra{display:inline-block;font:700 15px/1 var(--display);letter-spacing:.04em;background:var(--dorado);color:var(--dorado-tinta);padding:6px 10px;border-radius:8px}
+.confirmar{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.confirmar div{background:var(--aviso);border:1px solid var(--aviso-borde);border-radius:14px;padding:14px 16px;min-width:0}
+.confirmar b{display:block;font:600 18px/1.2 var(--display);margin-bottom:4px}
+.pieza{padding-block:40px;border-bottom:1px solid var(--linea)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:800 13px/1 var(--texto);padding:8px 12px;border-radius:999px;background:var(--campo);color:var(--tinta)}
+.chip-fecha{background:var(--tinta);color:var(--fondo)}
+.chip-cta{background:var(--dorado);color:var(--dorado-tinta)}
+.hook{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.hook div{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;min-width:0}
+.hook span{display:block;font:800 12px/1.2 var(--texto);text-transform:uppercase;letter-spacing:.08em;color:var(--suave);margin-bottom:8px}
+.puentes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.puentes>div{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px;min-width:0}
+.puentes ul{list-style:none;padding:0;margin:8px 0 0;display:flex;flex-direction:column;gap:10px}
+.puentes .num{display:inline-block;background:var(--campo);border-radius:6px;padding:2px 8px;margin-right:6px;font-size:13px}
+.ayuda{color:var(--suave);margin:-4px 0 12px;font-size:15px;max-width:75ch}
+.carril{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:10px}
+.carril figure{margin:0;flex:none;scroll-snap-align:start;display:flex;flex-direction:column;gap:8px}
+figure.frame{width:min(200px,46vw)}figure.slide{width:min(280px,72vw)}
+.tira{overflow-x:auto;border-radius:12px;border:1px solid var(--linea);margin-bottom:14px;background:var(--campo)}
+.tira img{display:block;height:300px;width:auto;max-width:none}
+figure img{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--linea);background:var(--campo)}
+figcaption{display:flex;flex-direction:column;gap:6px;font-size:13px}
+figcaption b{font-weight:800}
+figcaption span{color:var(--suave)}
+small.loop{color:var(--marron);font-style:italic}
+.extras{display:grid;grid-template-columns:minmax(0,180px) minmax(0,180px) minmax(0,1fr);gap:20px;margin-top:20px;align-items:start}
+figure.mini{margin:0;display:flex;flex-direction:column;gap:8px}
+.col{min-width:0}.col h4{margin-top:0}
+.meme{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:24px;align-items:start;margin-top:20px}
+.meme figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.dos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+.dos>div{min-width:0}
+.destacadas{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.destacadas figure{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.destacadas img{aspect-ratio:9/16;object-fit:cover}
+ol.pasos,ol.rutina{padding-left:22px;margin:0 0 8px;display:flex;flex-direction:column;gap:6px;max-width:80ch}
+ol.rutina .num{display:inline-block;background:var(--campo);border-radius:6px;padding:2px 8px;margin-right:8px;font-size:13px}
+.vs{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:14px 16px}
+.vs h4{margin-top:0}
+.vs-no h4{color:var(--no)}.vs-si h4{color:var(--si)}
+.vs-no li{text-decoration:line-through;text-decoration-color:var(--no)}
+.estructuras{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.estructura{background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.estructura>b{font:600 20px/1.2 var(--display)}
+.estructura ol{padding-left:20px;margin:0}
+ul.reglas,ul.checklist{padding-left:20px;margin:12px 0 0;display:flex;flex-direction:column;gap:6px;max-width:80ch}
+ul.checklist{list-style:none;padding-left:0}
+ul.checklist li{padding-left:34px;position:relative}
+ul.checklist li:before{content:"";position:absolute;left:0;top:2px;width:20px;height:20px;border:2px solid var(--dorado);border-radius:6px}
+ul{padding-left:20px;margin:0}li{margin:0}
+.btn{appearance:none;border:0;cursor:pointer;font:800 13px/1 var(--texto);padding:10px 14px;border-radius:10px;background:var(--tinta);color:var(--fondo);align-self:flex-start;text-decoration:none;display:inline-block}
+.btn-sec{background:var(--campo);color:var(--tinta)}
+.btn[data-estado="ok"]{background:var(--dorado);color:var(--dorado-tinta)}
+.captions{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.copiable{background:var(--papel);border:1px solid var(--linea);border-radius:14px;overflow:hidden;min-width:0;margin-top:12px}
+.captions .copiable{margin-top:0}
+.copiable-cab{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 12px 10px 16px;background:var(--tinte);font-weight:800}
+.copiable pre{margin:0;padding:14px 16px;white-space:pre-wrap;word-break:break-word;font:600 14.5px/1.55 var(--texto);max-height:360px;overflow:auto}
+.srt pre{font:500 13px/1.45 var(--mono)}
+.aviso{margin-top:24px;background:var(--aviso);border:1px solid var(--aviso-borde);border-radius:14px;padding:16px 18px}
+.aviso h4{margin:0 0 8px;color:var(--tinta)}
+.aviso ul{display:flex;flex-direction:column;gap:6px}
+.formula{font:600 19px/1.4 var(--display);background:var(--papel);border:1px solid var(--linea);border-radius:14px;padding:16px 18px;margin:14px 0}
+.zip{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:16px}
+footer{padding-top:28px;color:var(--suave);font-size:14px}
+footer a,.bajada a{color:var(--marron)}
+@media (max-width:700px){.extras{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.extras .col{grid-column:1/-1}.meme{grid-template-columns:1fr}.meme figure{max-width:320px}}
+@media (prefers-reduced-motion:no-preference){.carril{scroll-behavior:smooth}}
+</style>
+
+<div class="envoltura">
+<header class="cab">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 100" width="190" height="50" role="img" aria-label="Pastelia">
+  <rect width="100" height="100" rx="24" fill="#3A2A24"></rect>
+  <rect x="28" y="24" width="14" height="54" rx="7" fill="#FDF5EC"></rect>
+  <circle cx="53" cy="38" r="16" fill="none" stroke="#FDF5EC" stroke-width="14"></circle>
+  <circle cx="73" cy="72" r="7" fill="#EF7C8E"></circle>
+  <text x="120" y="68" font-family="Fredoka, Nunito, sans-serif" font-size="46" font-weight="600" letter-spacing="-0.7" fill="currentColor">Pastelia</text>
+</svg>
+  <p class="eyebrow">Plan de arranque en Instagram · Semana 1 · del 26 de octubre al 1 de noviembre de 2026 · $0 orgánico</p>
+  <h1>Kit de contenido Pastelia</h1>
+  <p class="bajada">Seis piezas para que tu perfil no esté vacío antes de invitar a nadie: 2 reels, 3 carruseles y 1 meme, cada una con su palabra clave para medir cuál trae registros. Le hablamos a reposteras que no saben cuánto cobrar, no a quien compra pasteles. Capturas reales de la app, sin pasteles hechos con IA.</p>
+  <p class="bajada">Todo está también en tu Drive: <a href="https://drive.google.com/drive/folders/1hHgwA86UZlz0dols1G1Ee42POWLtIjiE" target="_blank" rel="noopener">Pastelia / 4. Posts - Semana 1 Arranque</a>.</p>
+  <ul class="indice"><li><a href="#confirmar">Por confirmar</a></li><li><a href="#calendario">Calendario</a></li><li><a href="#perfil">Perfil</a></li><li><a href="#r1">1 · Reel COTIZA</a></li><li><a href="#c1">2 · Carrusel COSTEO</a></li><li><a href="#p1">3 · Carrusel PASTELIA</a></li><li><a href="#r2">4 · Reel AGENTE</a></li><li><a href="#c2">5 · Carrusel TIEMPO</a></li><li><a href="#m1">6 · Meme RESPETO</a></li><li><a href="#playbook">Playbook</a></li><li><a href="#dm">Respuestas por DM</a></li><li><a href="#medir">Cómo medir</a></li><li><a href="#numeros">Números</a></li><li><a href="#material">Material</a></li></ul>
+</header>
+
+<section id="confirmar">
+  <h2>Datos por confirmar</h2>
+  <div class="confirmar"><div><b>Link de la app</b>Por confirmar: ¿cualquiera ya puede crear cuenta (link directo) o usas lista de espera (Google Form)? Los DM llevan [TU LINK]; pégalo antes de responder.</div><div><b>Tu historia (p1)</b>Por confirmar: lee los slides y confirma que cada frase es cierta para ti. No agregué fechas, cifras ni anécdotas.</div><div><b>Agente IA (r2)</b>Por confirmar: que responde en tu cuenta antes de grabar, y el costo de Gemini Pro sin límite por usuaria antes de invitar a mucha gente a usarlo.</div><div><b>Dónde se guardan los datos</b>Por confirmar: tu contexto de marketing dice &quot;en tu dispositivo, no en la nube&quot;, pero index.html ya guarda pedidos, recetas y catálogo en Firebase cuando la persona inicia sesión (modo nube). Mientras lo confirmas, la respuesta &quot;¿Y si pierdo mis datos?&quot; solo habla de la copia de seguridad y no promete nube.</div><div><b>Caja, base, gas y luz (c2)</b>Opcional: la app no trae esos montos, así que van como &quot;$ ?&quot;. Si me das tus costos, regenero con tus números.</div><div><b>Fotos reales</b>La carpeta &quot;3. Mi material&quot; está vacía. No hay ni habrá pasteles hechos con IA: p1 trae una portada alterna con marco para tu foto.</div><div><b>Precio de Pastelia</b>Confirmado (3 oct): no se menciona y nada dice &quot;gratis&quot;. Si te preguntan, usa la respuesta rápida &quot;¿Cuánto cuesta?&quot;.</div><div><b>Mercado</b>Confirmado (3 oct): México y Latinoamérica. Ejemplos en pesos mexicanos y horas del centro de México.</div><div><b>Palabras clave</b>Si ya publicaste piezas del Bloque 01 con COSTEO, COTIZA, PASTELIA o TIEMPO, separa la medición por fecha.</div></div>
+</section>
+
+<section id="calendario">
+  <h2>Calendario de publicación</h2>
+  <div class="tabla-envoltura"><table class="cal"><thead><tr><th>Día</th><th>Hora</th><th>Pieza</th><th>Red</th><th>Palabra clave</th></tr></thead><tbody>
+  <tr><td class="num">Lun 26 oct</td><td class="num">—</td><td>Perfil listo (nombre, bio, foto, enlace) y grabar las pantallas de los 2 reels</td><td>Instagram</td><td>—</td></tr><tr><td class="num">Mar 27 oct</td><td class="num">19:30</td><td><a href="#r1" style="color:inherit">r1 · ¿Todavía cobras tus pasteles a ojo?</a><br><small>Reel · Problem-Solution / Demo con grabación de pantalla</small></td><td>Instagram (Reel, fijado 1)</td><td><span class="palabra">COTIZA</span></td></tr><tr><td class="num">Mié 28 oct</td><td class="num">12:30</td><td><a href="#c1" style="color:inherit">c1 · Así se calcula un pastel de 20 porciones</a><br><small>Carrusel · Demo Walkthrough / Problem-Proof</small></td><td>Instagram (carrusel, fijado 2)</td><td><span class="palabra">COSTEO</span></td></tr><tr><td class="num">Jue 29 oct</td><td class="num">19:30</td><td><a href="#p1" style="color:inherit">p1 · No sabía cuánto cobrar, así que hice mi propia app</a><br><small>Carrusel · Founder Hero's Journey</small></td><td>Instagram (carrusel, fijado 3), Opcional: Reel con voz en off</td><td><span class="palabra">PASTELIA</span></td></tr><tr><td class="num">Vie 30 oct</td><td class="num">19:30</td><td><a href="#r2" style="color:inherit">r2 · Le pedí a una IA que cotizara mi pedido</a><br><small>Reel · Demo con grabación de pantalla (función beta)</small></td><td>Instagram (Reel)</td><td><span class="palabra">AGENTE</span></td></tr><tr><td class="num">Sáb 31 oct</td><td class="num">09:30</td><td><a href="#c2" style="color:inherit">c2 · Por esto no te queda nada</a><br><small>Carrusel · Hack List / Problem-Proof</small></td><td>Instagram (carrusel)</td><td><span class="palabra">TIEMPO</span></td></tr><tr><td class="num">Dom 1 nov</td><td class="num">19:30</td><td><a href="#m1" style="color:inherit">m1 · ¿Me lo dejas más barato? Es para mi mamá</a><br><small>Meme · Meme de oficio (contraste: regateo vs. desglose real)</small></td><td>Instagram (post de una imagen)</td><td><span class="palabra">RESPETO</span></td></tr><tr><td class="num">Lun 2 nov</td><td class="num">—</td><td>Empiezan los DM 1 a 1 (3 o 4 al día) y sigue la rutina de 15 minutos</td><td>Instagram (DM)</td><td>—</td></tr>
+  </tbody></table></div>
+  <p class="ayuda" style="margin-top:12px">Horas sugeridas del centro de México; ajústalas con las estadísticas de tu cuenta. Si el Reel del martes no está listo, publica primero el carrusel c1 y mueve el Reel un día.</p>
+  <p class="ayuda">El paquete de la semana va como archivo en el chat (pastelia-arranque-semana-2026-10-26.zip, en dos partes por tamaño): PNG, captions y DM en .txt, guiones .md, subtítulos .srt, calendario y plantillas CSV. Sin MP4 todavía: faltan tus grabaciones.</p>
+</section>
+
+<section id="perfil">
+  <h2>Perfil de Instagram</h2>
+  <p class="bajada">Ármalo antes de publicar la primera pieza. Copia cada texto en Instagram → Editar perfil.</p>
+  <ol class="pasos"><li>Cambia la cuenta a profesional: Configuración → Tipo de cuenta y herramientas → Cambiar a cuenta profesional → Empresa.</li><li>Foto de perfil: &quot;Foto de perfil Pastelia.png&quot; (carpeta &quot;1. Perfil de Instagram&quot; de tu Drive).</li><li>Nombre, presentación y enlace: cópialos de aquí abajo (Editar perfil).</li><li>Historias destacadas: cuando publiques cada pieza, compártela en tu historia y agrégala a su destacada con la portada del kit.</li><li>Fija r1, c1 y p1 (menú de los tres puntos → Fijar en tu perfil). La última que fijes suele quedar primero: fija p1, luego c1 y al final r1. Si el orden no queda, desfija y vuelve a fijar.</li></ol>
+  <div class="dos">
+    <div><h4>Nombre (sale en las búsquedas)</h4>
+      <div class="copiable "><div class="copiable-cab"><span>Recomendado · 29 caracteres</span><button type="button" class="btn" data-copiar="copia-1">Copiar texto</button></div><pre id="copia-1">Pastelia | Costeo de pasteles</pre></div>
+      <p class="ayuda" style="margin-top:8px">El nombre es lo que Instagram usa para buscar. &quot;Costeo de pasteles&quot; es justo el tema de tus primeros posts y lo que una repostera escribe cuando no sabe cuánto cobrar.</p>
+      <div class="copiable "><div class="copiable-cab"><span>Alternativa · 30 caracteres</span><button type="button" class="btn" data-copiar="copia-2">Copiar texto</button></div><pre id="copia-2">Pastelia | Cotiza tus pasteles</pre></div><p class="ayuda" style="margin-top:6px">El que ya tienes en el documento del perfil: habla de la acción.</p><div class="copiable "><div class="copiable-cab"><span>Alternativa · 30 caracteres</span><button type="button" class="btn" data-copiar="copia-3">Copiar texto</button></div><pre id="copia-3">Pastelia | App para reposteras</pre></div><p class="ayuda" style="margin-top:6px">Dice para quién es; sirve si te buscan como &quot;app&quot;.</p>
+    </div>
+    <div><h4>Presentación (bio)</h4>
+      <div class="copiable "><div class="copiable-cab"><span>Bio en 3 líneas · 144 de 150 caracteres</span><button type="button" class="btn" data-copiar="copia-4">Copiar texto</button></div><pre id="copia-4">Para reposteras: cuánto cobrar por cada pastel con tus costos reales.
+Cotiza y lleva tus pedidos y anticipos en un solo lugar.
+Únete a la beta ↓</pre></div>
+      <p class="ayuda" style="margin-top:8px">Línea 1: para quién es y la frase que buscan (&quot;cuánto cobrar por cada pastel&quot;). Línea 2: lo que hace la app hoy. Línea 3: la acción, que apunta al enlace.</p>
+      <h4>Enlace</h4>
+      <div class="copiable "><div class="copiable-cab"><span>Título del enlace (app abierta)</span><button type="button" class="btn" data-copiar="copia-5">Copiar texto</button></div><pre id="copia-5">Prueba Pastelia (beta)</pre></div>
+      <div class="copiable "><div class="copiable-cab"><span>Título del enlace (lista de espera)</span><button type="button" class="btn" data-copiar="copia-6">Copiar texto</button></div><pre id="copia-6">Lista de espera de Pastelia</pre></div>
+      <p class="ayuda" style="margin-top:8px">Si cualquiera ya puede crear cuenta: link directo a la app con el título &quot;Prueba Pastelia (beta)&quot;. Si todavía no: un Google Form de lista de espera (nombre, WhatsApp o correo, ciudad y cuántos pasteles vende al mes) con el título &quot;Lista de espera de Pastelia&quot;.</p>
+    </div>
+  </div>
+  <h4>Historias destacadas: nombres y portadas</h4>
+  <p class="ayuda">Portadas de 1080×1920 con los mismos íconos de la app; Instagram muestra el círculo del centro. Cada vez que publiques una pieza, compártela en tu historia y agrégala a su destacada.</p>
+  <div class="destacadas"><figure><img src="img/Perfil-y-Playbook/destacada-cotiza.png" alt="Portada de la destacada Cotiza" loading="lazy" width="1080" height="1920"><figcaption><b>Cotiza</b><span>El Reel de la cotización (r1) y el carrusel de las 4 partes del precio (c1).</span><a class="btn btn-sec" href="img/Perfil-y-Playbook/destacada-cotiza.png" target="_blank" rel="noopener" data-descargar="img/Perfil-y-Playbook/destacada-cotiza.png" data-nombre="destacada-cotiza.png">Descargar PNG</a></figcaption></figure><figure><img src="img/Perfil-y-Playbook/destacada-costeo.png" alt="Portada de la destacada Costeo" loading="lazy" width="1080" height="1920"><figcaption><b>Costeo</b><span>Costos olvidados (c2) y tips de costeo por gramo.</span><a class="btn btn-sec" href="img/Perfil-y-Playbook/destacada-costeo.png" target="_blank" rel="noopener" data-descargar="img/Perfil-y-Playbook/destacada-costeo.png" data-nombre="destacada-costeo.png">Descargar PNG</a></figcaption></figure><figure><img src="img/Perfil-y-Playbook/destacada-agente.png" alt="Portada de la destacada Agente IA" loading="lazy" width="1080" height="1920"><figcaption><b>Agente IA</b><span>El Reel del agente (r2) y avances de la beta.</span><a class="btn btn-sec" href="img/Perfil-y-Playbook/destacada-agente.png" target="_blank" rel="noopener" data-descargar="img/Perfil-y-Playbook/destacada-agente.png" data-nombre="destacada-agente.png">Descargar PNG</a></figcaption></figure><figure><img src="img/Perfil-y-Playbook/destacada-agenda.png" alt="Portada de la destacada Agenda" loading="lazy" width="1080" height="1920"><figcaption><b>Agenda</b><span>Entregas de hoy, por cobrar y anticipos (más adelante).</span><a class="btn btn-sec" href="img/Perfil-y-Playbook/destacada-agenda.png" target="_blank" rel="noopener" data-descargar="img/Perfil-y-Playbook/destacada-agenda.png" data-nombre="destacada-agenda.png">Descargar PNG</a></figcaption></figure><figure><img src="img/Perfil-y-Playbook/destacada-beta.png" alt="Portada de la destacada Beta" loading="lazy" width="1080" height="1920"><figcaption><b>Beta</b><span>La historia (p1), cómo unirte y lo que vas mejorando con las beta testers.</span><a class="btn btn-sec" href="img/Perfil-y-Playbook/destacada-beta.png" target="_blank" rel="noopener" data-descargar="img/Perfil-y-Playbook/destacada-beta.png" data-nombre="destacada-beta.png">Descargar PNG</a></figcaption></figure></div>
+</section>
+
+<article class="pieza" id="r1">
+  <p class="eyebrow">Pieza 1 · Reel · fijado 1 · Problem-Solution / Demo con grabación de pantalla · ≈ 31 s</p>
+  <h3>¿Todavía cobras tus pasteles a ojo?</h3>
+  <p class="bajada-pieza">Una cotización completa en Pastelia, hasta el precio sugerido</p>
+  <div class="chips"><span class="chip chip-fecha">Martes 27 de octubre · 19:30</span><span class="chip">Instagram (Reel, fijado 1)</span><span class="chip">Video 9:16 · 1080×1920 · ≈ 31 s</span><span class="chip chip-cta">CTA: COTIZA</span></div>
+  <h4>Gancho A · principal — Hábito: cobrar a ojo (te nombra el problema)</h4><div class="hook"><div><span>Acción visual · 0–3 s</span>Plano cenital: tu mano tacha un &quot;$ ?&quot; escrito en la libreta y, en el mismo segundo, deja encima el celular con Pastelia abierta en &quot;Nueva cotización&quot;.</div><div><span>Voz en off</span>Te enseño de dónde sale el precio de un pastel para 20.</div><div><span>Texto en pantalla · zona segura</span>¿Todavía cobras tus pasteles a ojo?</div></div>
+  <h4>Gancho B · Reel de prueba — La pregunta que buscan en Instagram (el resultado primero)</h4><div class="hook"><div><span>Acción visual · 0–3 s</span>El resultado primero: el &quot;Resumen en vivo&quot; con $714 ya calculado y un zoom rápido a &quot;$35.70 por porción&quot;.</div><div><span>Voz en off</span>Este precio sale de cuatro números. Te los enseño.</div><div><span>Texto en pantalla · zona segura</span>¿Cuánto cobrar por un pastel de 20 porciones?</div></div>
+  <h4>Puente (on-ramp, 3–15 s)</h4>
+  <div class="puentes"><div><b>Versión A</b><ul><li><span class="num">3–9 s</span> A ojo, casi siempre se queda algo fuera. Aquí empiezo por el pedido: veinte invitados. <small>Texto: Sin adivinar · paso 1: el pedido</small></li><li><span class="num">9–15 s</span> Mi receta de chocolate, tamaño mediano de veinte porciones y flores. <small>Igual en A y B</small></li></ul></div><div><b>Versión B</b><ul><li><span class="num">3–9 s</span> Insumos, tu tiempo, la decoración y tu ganancia. Empiezo desde cero: veinte invitados. <small>Texto: 4 números · ninguno a ojo</small></li><li><span class="num">9–15 s</span> Mi receta de chocolate, tamaño mediano de veinte porciones y flores. <small>Igual en A y B</small></li></ul></div></div>
+  <h4>Guion completo (versión A)</h4>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>Tiempo</th><th>Acción visual</th><th>Voz en off</th><th>Texto en pantalla</th></tr></thead><tbody>
+  <tr><td class="num">0–3 s<br><small>Gancho A</small></td><td>Plano cenital: tu mano tacha un &quot;$ ?&quot; escrito en la libreta y, en el mismo segundo, deja encima el celular con Pastelia abierta en &quot;Nueva cotización&quot;.</td><td>Te enseño de dónde sale el precio de un pastel para 20.</td><td>¿Todavía cobras tus pasteles a ojo?</td></tr><tr><td class="num">3–9 s<br><small>Puente A (on-ramp)</small></td><td>Grabación de pantalla en modo oscuro: tocas &quot;Cotizar&quot; y llenas el paso 1 con 20 invitados y la fecha del evento.</td><td>A ojo, casi siempre se queda algo fuera. Aquí empiezo por el pedido: veinte invitados.</td><td>Sin adivinar · paso 1: el pedido</td></tr><tr><td class="num">9–15 s<br><small>Paso 2 · el pastel</small></td><td>Paso 2: eliges tu receta, tocas &quot;Mediano · 20p&quot; y activas &quot;Flores&quot; en Extras de diseño.</td><td>Mi receta de chocolate, tamaño mediano de veinte porciones y flores.</td><td>Receta · Mediano 20p · Flores</td></tr><tr><td class="num">15–22 s<br><small>Paso 3 · el costeo</small></td><td>Paso 3 &quot;Costeo&quot;: aparecen las filas. Zoom lento a &quot;Mano de obra $180&quot;.</td><td>Pastelia suma mis insumos, mi mano de obra, las flores y mi ganancia del cuarenta por ciento.</td><td>Insumos $210 · Mano de obra $180 · Flores $120 · Margen 40% $204</td></tr><tr><td class="num">22–27 s<br><small>Resultado</small></td><td>&quot;Resumen en vivo&quot;: zoom al precio sugerido y al precio por porción.</td><td>Precio sugerido: setecientos catorce pesos. Treinta y cinco setenta por porción.</td><td>$714 · $35.70 por porción · Datos de ejemplo</td></tr><tr><td class="num">27–31 s<br><small>CTA</small></td><td>Tarjeta final: fondo cacao con goteo de chocolate, logo de Pastelia y &quot;Comenta COTIZA&quot; con la palabra en dorado.</td><td>Comenta COTIZA y te mando el link para probarla.</td><td>Comenta COTIZA y te mando el link</td></tr>
+  </tbody></table></div>
+  <h4>Storyboard por escena</h4>
+  <p class="ayuda">Sin clips todavía: estas escenas muestran qué grabar y dónde va cada texto. La línea punteada es la zona segura de 720×1200 (fuera de ella, Instagram tapa el texto). Las pantallas son capturas reales de la app con datos de ejemplo; donde dice "Graba aquí tu pantalla real" va tu grabación.</p>
+  <div class="carril"><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-A-escena-1.png" alt="A · escena 1: Gancho A" loading="lazy" width="1080" height="1920"><figcaption><b>A · 0–3 s · Gancho A</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-A-escena-1.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-A-escena-1.png" data-nombre="r1-A-escena-1.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-A-escena-2.png" alt="A · escena 2: Puente A (on-ramp)" loading="lazy" width="1080" height="1920"><figcaption><b>A · 3–9 s · Puente A (on-ramp)</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-A-escena-2.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-A-escena-2.png" data-nombre="r1-A-escena-2.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-A-escena-3.png" alt="A · escena 3: Paso 2 · el pastel" loading="lazy" width="1080" height="1920"><figcaption><b>A · 9–15 s · Paso 2 · el pastel</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-A-escena-3.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-A-escena-3.png" data-nombre="r1-A-escena-3.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-A-escena-4.png" alt="A · escena 4: Paso 3 · el costeo" loading="lazy" width="1080" height="1920"><figcaption><b>A · 15–22 s · Paso 3 · el costeo</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-A-escena-4.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-A-escena-4.png" data-nombre="r1-A-escena-4.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-A-escena-5.png" alt="A · escena 5: Resultado" loading="lazy" width="1080" height="1920"><figcaption><b>A · 22–27 s · Resultado</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-A-escena-5.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-A-escena-5.png" data-nombre="r1-A-escena-5.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-A-escena-6.png" alt="A · escena 6: CTA" loading="lazy" width="1080" height="1920"><figcaption><b>A · 27–31 s · CTA</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-A-escena-6.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-A-escena-6.png" data-nombre="r1-A-escena-6.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-B-escena-1.png" alt="B · escena 1: Gancho B" loading="lazy" width="1080" height="1920"><figcaption><b>B · 0–3 s · Gancho B</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-B-escena-1.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-B-escena-1.png" data-nombre="r1-B-escena-1.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/01-Reel-Cotizacion/r1-B-escena-2.png" alt="B · escena 2: Puente B (on-ramp)" loading="lazy" width="1080" height="1920"><figcaption><b>B · 3–9 s · Puente B (on-ramp)</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-B-escena-2.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-B-escena-2.png" data-nombre="r1-B-escena-2.png">Descargar PNG</a></figcaption></figure></div>
+  <div class="extras">
+    <figure class="mini"><img src="img/01-Reel-Cotizacion/r1-tarjeta-final-cotiza-1080x1920.png" alt="Tarjeta final COTIZA" loading="lazy" width="1080" height="1920"><figcaption><b>Tarjeta final, lista para el Reel</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-tarjeta-final-cotiza-1080x1920.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-tarjeta-final-cotiza-1080x1920.png" data-nombre="r1-tarjeta-final-cotiza-1080x1920.png">Descargar PNG</a></figcaption></figure>
+    <figure class="mini"><img src="img/01-Reel-Cotizacion/r1-portada-reel-1080x1920.png" alt="Portada del Reel r1" loading="lazy" width="1080" height="1920"><figcaption><b>Portada del Reel</b><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-portada-reel-1080x1920.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-portada-reel-1080x1920.png" data-nombre="r1-portada-reel-1080x1920.png">Descargar PNG</a></figcaption></figure>
+    <div class="col">
+      <h4>Notas de producción</h4><ul><li>Para que salga $714 igual que en el guion: receta sin ingredientes capturados (la app usa $210 de insumos), tamaño Mediano, extra Flores activo y margen 40 %. Con tu receta real el número cambia y está bien: el texto en pantalla dice &quot;Datos de ejemplo&quot;.</li><li>Graba la pantalla en modo oscuro (Mi negocio), con &quot;No molestar&quot; y el brillo al máximo. Usa datos de ejemplo, nunca clientas reales.</li><li>Gancho A: la toma de la libreta dura 1–2 s y corta seco a la pantalla; el texto del gancho entra desde el primer cuadro.</li><li>Ritmo: cortes cada 1–2 s al ritmo de la música. Zoom (110–120 %) a la fila que nombra la voz.</li><li>Texto en pantalla dentro de la zona segura de 720×1200 (centro del cuadro): crema #FFF4E6 sobre barra cacao al 70 %, palabras clave en dorado #E7B676.</li><li>Subtítulos: máximo 2 líneas de 3–5 palabras, dentro de la zona segura (abajo del centro, nunca en los 500 px de abajo).</li><li>Audio: si usas una canción en tendencia, ponla desde Instagram al publicar (no la pegues en CapCut).</li><li>Tarjeta final: usa la imagen del kit (1080×1920), 3–4 s.</li></ul>
+      <p><a class="btn btn-sec" href="img/01-Reel-Cotizacion/r1-storyboard-completo.png" target="_blank" rel="noopener" data-descargar="img/01-Reel-Cotizacion/r1-storyboard-completo.png" data-nombre="r1-storyboard-completo.png">Descargar storyboard completo</a></p>
+    </div>
+  </div>
+  <h4>Subtítulos (.srt)</h4>
+  <p class="ayuda">Los archivos .srt vienen en el ZIP y en tu Drive. Tiempos aproximados: ajústalos al audio real en CapCut.</p>
+  <div class="captions"><div class="copiable srt"><div class="copiable-cab"><span>r1-subtitulos-A.srt</span><button type="button" class="btn" data-copiar="copia-7">Copiar texto</button></div><pre id="copia-7">1
+00:00:00,000 --&gt; 00:00:01,710
+Te enseño de dónde
+sale el precio
+
+2
+00:00:01,750 --&gt; 00:00:02,960
+de un pastel para 20.
+
+3
+00:00:03,000 --&gt; 00:00:06,160
+A ojo, casi siempre
+se queda algo fuera.
+
+4
+00:00:06,200 --&gt; 00:00:08,960
+Aquí empiezo por el pedido:
+veinte invitados.
+
+5
+00:00:09,000 --&gt; 00:00:12,233
+Mi receta de chocolate,
+tamaño mediano
+
+6
+00:00:12,273 --&gt; 00:00:14,960
+de veinte porciones y flores.
+
+7
+00:00:15,000 --&gt; 00:00:18,254
+Pastelia suma mis insumos,
+mi mano de obra,
+
+8
+00:00:18,294 --&gt; 00:00:21,960
+las flores y mi ganancia
+del cuarenta por ciento.
+
+9
+00:00:22,000 --&gt; 00:00:24,233
+Precio sugerido: setecientos catorce pesos.
+
+10
+00:00:24,273 --&gt; 00:00:26,960
+Treinta y cinco setenta
+por porción.
+
+11
+00:00:27,000 --&gt; 00:00:30,960
+Comenta COTIZA y te mando
+el link para probarla.
+</pre></div><div class="copiable srt"><div class="copiable-cab"><span>r1-subtitulos-B.srt</span><button type="button" class="btn" data-copiar="copia-8">Copiar texto</button></div><pre id="copia-8">1
+00:00:00,000 --&gt; 00:00:01,960
+Este precio sale
+de cuatro números.
+
+2
+00:00:02,000 --&gt; 00:00:02,960
+Te los enseño.
+
+3
+00:00:03,000 --&gt; 00:00:06,652
+Insumos, tu tiempo,
+la decoración y tu ganancia.
+
+4
+00:00:06,692 --&gt; 00:00:08,960
+Empiezo desde cero: veinte invitados.
+
+5
+00:00:09,000 --&gt; 00:00:12,233
+Mi receta de chocolate,
+tamaño mediano
+
+6
+00:00:12,273 --&gt; 00:00:14,960
+de veinte porciones y flores.
+
+7
+00:00:15,000 --&gt; 00:00:18,254
+Pastelia suma mis insumos,
+mi mano de obra,
+
+8
+00:00:18,294 --&gt; 00:00:21,960
+las flores y mi ganancia
+del cuarenta por ciento.
+
+9
+00:00:22,000 --&gt; 00:00:24,233
+Precio sugerido: setecientos catorce pesos.
+
+10
+00:00:24,273 --&gt; 00:00:26,960
+Treinta y cinco setenta
+por porción.
+
+11
+00:00:27,000 --&gt; 00:00:30,960
+Comenta COTIZA y te mando
+el link para probarla.
+</pre></div></div>
+  <h4>Caption para Instagram</h4><div class="copiable "><div class="copiable-cab"><span>Caption (con frases que la gente busca)</span><button type="button" class="btn" data-copiar="copia-9">Copiar texto</button></div><pre id="copia-9">¿Cuánto cobrar por un pastel de 20 porciones? Así lo saco con números, no a ojo 👇
+
+Cómo costear un pastel en Pastelia, paso a paso:
+1. El pedido: 20 invitados y la fecha.
+2. El pastel: tu receta, tamaño Mediano (20 porciones) y la decoración.
+3. El costeo: insumos $210 + mano de obra $180 + flores $120 + margen 40 % ($204).
+= Precio sugerido $714, o $35.70 por porción.
+
+(Datos de ejemplo de la app, en pesos mexicanos. Con tu receta y tus precios, tu número cambia.)
+
+A ojo casi siempre se queda algo fuera: tu tiempo, la decoración o tu ganancia.
+
+Comenta COTIZA y te mando el link para probarla.
+
+#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento</pre></div>
+  <h4>Respuesta por DM a quien comente COTIZA</h4><div class="copiable "><div class="copiable-cab"><span>Mensaje directo (pega tu link)</span><button type="button" class="btn" data-copiar="copia-10">Copiar texto</button></div><pre id="copia-10">¡Hola! Gracias por comentar COTIZA. Aquí está el link para probar Pastelia (beta): [TU LINK]
+
+Crea tu cuenta con tu correo o con Google, llena &quot;Mi negocio&quot; y guarda tu receta más pedida. Con eso ya puedes cotizar tu primer pastel.
+
+¿Me cuentas qué te pareció? Tu opinión me ayuda a mejorarla.</pre></div>
+  <div class="aviso"><h4>Antes de publicar</h4><ul><li>Graba la pantalla de la cotización completa y la toma de la libreta: mándamelas y edito el Reel en MP4 con subtítulos y tarjeta final.</li><li>Publica la versión A en tu perfil y fíjala. La B súbela como &quot;Reel de prueba&quot; (te explico en el playbook).</li><li>Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.</li></ul></div>
+</article>
+<article class="pieza" id="c1">
+  <p class="eyebrow">Pieza 2 · Carrusel · fijado 2 · Demo Walkthrough / Problem-Proof</p>
+  <h3>Así se calcula un pastel de 20 porciones</h3>
+  <div class="chips"><span class="chip chip-fecha">Miércoles 28 de octubre · 12:30</span><span class="chip">Instagram (carrusel, fijado 2)</span><span class="chip">8 slides · 1080×1350 (4:5)</span><span class="chip chip-cta">CTA: COSTEO</span></div>
+  <h4>Carrusel completo</h4>
+  <p class="ayuda">Lienzo continuo: algunos elementos cruzan de un slide al siguiente para invitar a deslizar. Al pie de cada slide intermedio va el ciclo abierto en dorado.</p>
+  <div class="tira"><img src="img/02-Carrusel-Calculo-20p/c1-tira.png" alt="Carrusel COSTEO completo" loading="lazy"></div>
+  <div class="carril"><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-01.png" alt="Slide 1: Así se calcula un pastel de 20 porciones" loading="lazy" width="1080" height="1350"><figcaption><b>1 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-01.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-01.png" data-nombre="c1-slide-01.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-02.png" alt="Slide 2: A ojo, algo se queda fuera." loading="lazy" width="1080" height="1350"><figcaption><b>2 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-02.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-02.png" data-nombre="c1-slide-02.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-03.png" alt="Slide 3: El precio tiene 4 partes:" loading="lazy" width="1080" height="1350"><figcaption><b>3 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-03.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-03.png" data-nombre="c1-slide-03.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-04.png" alt="Slide 4: Insumos: $210" loading="lazy" width="1080" height="1350"><figcaption><b>4 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-04.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-04.png" data-nombre="c1-slide-04.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-05.png" alt="Slide 5: Mano de obra: $180" loading="lazy" width="1080" height="1350"><figcaption><b>5 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-05.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-05.png" data-nombre="c1-slide-05.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-06.png" alt="Slide 6: Extras: $120" loading="lazy" width="1080" height="1350"><figcaption><b>6 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-06.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-06.png" data-nombre="c1-slide-06.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-07.png" alt="Slide 7: Margen 40%: $204" loading="lazy" width="1080" height="1350"><figcaption><b>7 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-07.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-07.png" data-nombre="c1-slide-07.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/02-Carrusel-Calculo-20p/c1-slide-08.png" alt="Slide 8: $714, o $35.70 por porción." loading="lazy" width="1080" height="1350"><figcaption><b>8 / 8</b><a class="btn btn-sec" href="img/02-Carrusel-Calculo-20p/c1-slide-08.png" target="_blank" rel="noopener" data-descargar="img/02-Carrusel-Calculo-20p/c1-slide-08.png" data-nombre="c1-slide-08.png">Descargar PNG</a></figcaption></figure></div>
+  <h4>Slides, palabras y diseño</h4>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>#</th><th>Texto que se ve</th><th>Palabras</th><th>Diseño</th></tr></thead><tbody>
+  <tr><td class="num">1</td><td>Así se calcula un pastel de 20 porciones · $714 · Datos de ejemplo</td><td class="num">12 <small>(título máx. 10) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Goteo de chocolate arriba. Titular crema grande con &quot;20 porciones&quot; en dorado. Abajo, &quot;$714&quot; gigante en oro con la etiqueta &quot;Datos de ejemplo&quot; y el teléfono con el paso Costeo real entrando por la derecha (cruza al slide 2).</td></tr><tr><td class="num">2</td><td>A ojo, algo se queda fuera. · Copias el precio de enfrente o redondeas. Tu tiempo y tu ganancia no entran.<br><small class="loop">Ciclo abierto: Se calcula en partes…</small></td><td class="num">24 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Libreta crema con precios tachados en rojo cacao y un &quot;$ ?&quot; (ilustración vectorial, sin pasteles). Ciclo abierto en dorado al pie.</td></tr><tr><td class="num">3</td><td>El precio tiene 4 partes: · Insumos · Mano de obra · Extras · Margen<br><small class="loop">Ciclo abierto: Empecemos por la receta…</small></td><td class="num">15 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Cuatro tarjetas apiladas como ticket, numeradas 1–4 en círculos dorados, con los íconos de la app (frasco, batidor, moño y moneda) y el monto oculto (&quot;$ —&quot;), para que el lector deslice.</td></tr><tr><td class="num">4</td><td>1 · Insumos: $210 · Lo que usas de tu receta, con tus precios por gramo, escalado al tamaño. · Datos de ejemplo<br><small class="loop">Ciclo abierto: Lo que casi nadie cobra…</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;1&quot; dorado grande. Teléfono con &quot;Mis precios&quot; real (costo por gramo) y, encima, el recorte real de la fila &quot;Insumos $210&quot; del costeo con aro dorado.</td></tr><tr><td class="num">5</td><td>2 · Mano de obra: $180 · Tu tiempo de batir, hornear y decorar. Pastelia lo suma siempre. · Datos de ejemplo<br><small class="loop">Ciclo abierto: Luego, lo que lo hace bonito…</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;2&quot; dorado. Recorte real de las filas del costeo con aro dorado en &quot;Mano de obra $180&quot;; el teléfono con el paso Costeo detrás.</td></tr><tr><td class="num">6</td><td>3 · Extras: $120 · Las flores de este ejemplo. Topper, piso extra o lo que tú agregues. · Datos de ejemplo<br><small class="loop">Ciclo abierto: Y falta lo más importante…</small></td><td class="num">24 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;3&quot; dorado. Recorte real de &quot;Extras de diseño&quot; (Flores $120, Topper $80, Añadir extra) y la fila &quot;Extras (flores) $120&quot; con aro dorado.</td></tr><tr><td class="num">7</td><td>4 · Margen 40%: $204 · Tu ganancia sobre los $510 de costo. Tú eliges el porcentaje. · Datos de ejemplo<br><small class="loop">Ciclo abierto: Ahora, súmalo todo…</small></td><td class="num">21 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;4&quot; dorado. Recorte real de &quot;Margen de ganancia · 40 %&quot; y de la fila &quot;Margen 40% $204&quot; con aro dorado.</td></tr><tr><td class="num">8</td><td>$714, o $35.70 por porción. · Datos de ejemplo · Comenta COSTEO y te mando el link</td><td class="num">15 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Goteo arriba. El &quot;Resumen en vivo&quot; real ampliado ($714 · $35.70 por porción) con borde dorado; titular crema con &quot;$714,&quot; en dorado, etiqueta &quot;Datos de ejemplo&quot; y el botón cacao con borde dorado: COSTEO en dorado.</td></tr>
+  </tbody></table></div>
+  
+  <h4>Notas</h4><ul><li>Todos los números salen de la función calc() de index.html con los valores de arranque de la app. Están marcados como &quot;Datos de ejemplo&quot;.</li><li>Las pantallas son capturas reales de Pastelia en modo oscuro (modo local, datos de ejemplo). No hay fotos ni ilustraciones de pasteles.</li><li>El carrusel es continuo: el teléfono de la portada cruza al slide 2. Publica los slides en orden.</li><li>Texto alternativo: Instagram → Configuración avanzada → Escribir texto alternativo. Va listo abajo, uno por slide.</li></ul>
+  <h4>Caption para Instagram</h4><div class="copiable "><div class="copiable-cab"><span>Caption (con frases que la gente busca)</span><button type="button" class="btn" data-copiar="copia-11">Copiar texto</button></div><pre id="copia-11">Cómo costear un pastel de 20 porciones (y no cobrarlo a ojo) 👇
+
+El precio de un pastel tiene 4 partes:
+1. Insumos: $210. Sale de tu receta y de lo que pagas por cada insumo.
+2. Mano de obra: $180. Es tu tiempo.
+3. Extras: $120. Las flores de este ejemplo.
+4. Margen 40 %: $204. Tu ganancia sobre $510 de costo.
+Total: $714, o $35.70 por porción.
+
+Datos de ejemplo de Pastelia, en pesos mexicanos. Con tus precios, tu número cambia: por eso conviene sacarlo con tus costos y no copiar el de enfrente.
+
+Guárdalo para tu próxima cotización.
+
+Comenta COSTEO y te mando el link.
+
+#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento</pre></div>
+  <h4>Respuesta por DM a quien comente COSTEO</h4><div class="copiable "><div class="copiable-cab"><span>Mensaje directo (pega tu link)</span><button type="button" class="btn" data-copiar="copia-12">Copiar texto</button></div><pre id="copia-12">¡Hola! Gracias por comentar COSTEO. Aquí está el link para probar Pastelia (beta): [TU LINK]
+
+Crea tu cuenta con tu correo o con Google y empieza por &quot;Mis precios&quot;: pon lo que pagas por tu mantequilla, harina, huevo y chocolate. La app saca el costo por gramo.
+
+¿Me cuentas qué te pareció? Tu opinión me ayuda a mejorarla.</pre></div>
+  <h4>Texto alternativo</h4><div class="copiable "><div class="copiable-cab"><span>Instagram → Configuración avanzada → Escribir texto alternativo</span><button type="button" class="btn" data-copiar="copia-13">Copiar texto</button></div><pre id="copia-13">Slide 1: Así se calcula un pastel de 20 porciones. $714. Datos de ejemplo.
+
+Slide 2: A ojo, algo se queda fuera. Copias el precio de enfrente o redondeas. Tu tiempo y tu ganancia no entran.
+
+Slide 3: El precio tiene 4 partes: Insumos. Mano de obra. Extras. Margen.
+
+Slide 4: 1. Insumos: $210. Lo que usas de tu receta, con tus precios por gramo, escalado al tamaño. Datos de ejemplo.
+
+Slide 5: 2. Mano de obra: $180. Tu tiempo de batir, hornear y decorar. Pastelia lo suma siempre. Datos de ejemplo.
+
+Slide 6: 3. Extras: $120. Las flores de este ejemplo. Topper, piso extra o lo que tú agregues. Datos de ejemplo.
+
+Slide 7: 4. Margen 40%: $204. Tu ganancia sobre los $510 de costo. Tú eliges el porcentaje. Datos de ejemplo.
+
+Slide 8: $714, o $35.70 por porción. Datos de ejemplo. Comenta COSTEO y te mando el link.</pre></div>
+  <div class="aviso"><h4>Antes de publicar</h4><ul><li>Revisa que el titular de la portada no se corte en la vista de cuadrícula (4:5).</li><li>Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.</li><li>Después de publicarlo, fíjalo en tu perfil.</li></ul></div>
+</article>
+<article class="pieza" id="p1">
+  <p class="eyebrow">Pieza 3 · Carrusel · fijado 3 · Founder Hero's Journey</p>
+  <h3>No sabía cuánto cobrar, así que hice mi propia app</h3>
+  <div class="chips"><span class="chip chip-fecha">Jueves 29 de octubre · 19:30</span><span class="chip">Instagram (carrusel, fijado 3)</span><span class="chip">Opcional: Reel con voz en off</span><span class="chip">8 slides · 1080×1350 (4:5) + guion de voz en off</span><span class="chip chip-cta">CTA: PASTELIA</span></div>
+  <h4>Carrusel completo</h4>
+  <p class="ayuda">Lienzo continuo: algunos elementos cruzan de un slide al siguiente para invitar a deslizar. Al pie de cada slide intermedio va el ciclo abierto en dorado.</p>
+  <div class="tira"><img src="img/03-Post-Historia-Beta/p1-tira.png" alt="Carrusel PASTELIA completo" loading="lazy"></div>
+  <div class="carril"><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-01.png" alt="Slide 1: No sabía cuánto cobrar, así que hice mi propia app" loading="lazy" width="1080" height="1350"><figcaption><b>1 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-01.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-01.png" data-nombre="p1-slide-01.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-01-con-foto.png" alt="Portada alterna con marco para tu foto" loading="lazy" width="1080" height="1350"><figcaption><b>Portada alterna: con tu foto</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-01-con-foto.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-01-con-foto.png" data-nombre="p1-slide-01-con-foto.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-02.png" alt="Slide 2: Cobraba a ojo." loading="lazy" width="1080" height="1350"><figcaption><b>2 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-02.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-02.png" data-nombre="p1-slide-02.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-03.png" alt="Slide 3: …vivían en una libreta y en WhatsApp." loading="lazy" width="1080" height="1350"><figcaption><b>3 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-03.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-03.png" data-nombre="p1-slide-03.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-04.png" alt="Slide 4: Cobrar bien no era subir precios. Era saber mis costos." loading="lazy" width="1080" height="1350"><figcaption><b>4 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-04.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-04.png" data-nombre="p1-slide-04.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-05.png" alt="Slide 5: …el cotizador por gramo." loading="lazy" width="1080" height="1350"><figcaption><b>5 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-05.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-05.png" data-nombre="p1-slide-05.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-06.png" alt="Slide 6: …la agenda." loading="lazy" width="1080" height="1350"><figcaption><b>6 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-06.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-06.png" data-nombre="p1-slide-06.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-07.png" alt="Slide 7: Está en beta y la quiero hacer contigo." loading="lazy" width="1080" height="1350"><figcaption><b>7 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-07.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-07.png" data-nombre="p1-slide-07.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/03-Post-Historia-Beta/p1-slide-08.png" alt="Slide 8: Ayúdame a hacerla mejor." loading="lazy" width="1080" height="1350"><figcaption><b>8 / 8</b><a class="btn btn-sec" href="img/03-Post-Historia-Beta/p1-slide-08.png" target="_blank" rel="noopener" data-descargar="img/03-Post-Historia-Beta/p1-slide-08.png" data-nombre="p1-slide-08.png">Descargar PNG</a></figcaption></figure></div>
+  <h4>Slides, palabras y diseño</h4>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>#</th><th>Texto que se ve</th><th>Palabras</th><th>Diseño</th></tr></thead><tbody>
+  <tr><td class="num">1</td><td>La historia de Pastelia · No sabía cuánto cobrar, así que hice mi propia app</td><td class="num">14 <small>(título máx. 10) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Portada tipográfica editorial: comillas doradas grandes, titular crema en cuatro líneas con &quot;mi propia app&quot; en dorado y el logo al pie. Versión alterna con un marco punteado dorado para TU foto real.</td></tr><tr><td class="num">2</td><td>Cobraba a ojo. · Le ponía el precio que me parecía justo, sin saber si de verdad ganaba.<br><small class="loop">Ciclo abierto: Y los pedidos…</small></td><td class="num">20 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Titular crema grande. Libreta crema con precios tachados y un &quot;$ ?&quot; (ilustración vectorial). Ciclo abierto en dorado al pie.</td></tr><tr><td class="num">3</td><td>…vivían en una libreta y en WhatsApp. · Fechas, anticipos y cambios, regados entre chats.<br><small class="loop">Ciclo abierto: Hasta que me cayó el veinte:</small></td><td class="num">20 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. La libreta del slide 2 asoma por la izquierda; a la derecha, burbujas de chat genéricas sin texto (no imitan WhatsApp), una con borde dorado.</td></tr><tr><td class="num">4</td><td>Cobrar bien no era subir precios. Era saber mis costos. · Cuánto me cuesta cada gramo, cuánto vale mi tiempo y cuánto quiero ganar.<br><small class="loop">Ciclo abierto: Así nació…</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Slide tipográfico: tres íconos de línea dorados (frasco, reloj y moneda) en fila, uno por cada pregunta.</td></tr><tr><td class="num">5</td><td>…el cotizador por gramo. · Pones lo que pagas por cada insumo y sale el costo por gramo. · Datos de ejemplo<br><small class="loop">Ciclo abierto: Y para los pedidos regados…</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Teléfono con &quot;Mis precios&quot; real y, flotando, el recorte de &quot;Mantequilla $186 / 1000 g&quot; con aro dorado en &quot;$0.186/g&quot;.</td></tr><tr><td class="num">6</td><td>…la agenda. · Lo que entregas hoy y lo que tienes por cobrar, al abrir la app. · Datos de ejemplo<br><small class="loop">Ciclo abierto: Y ahora, la parte que falta:</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Teléfono con el Inicio real y tarjetas flotantes ampliadas: &quot;2 entregas para hoy&quot; y &quot;Por cobrar&quot;, con borde dorado.</td></tr><tr><td class="num">7</td><td>Está en beta y la quiero hacer contigo. · beta · Pruébala con tus pedidos reales y dime qué le falta.<br><small class="loop">Ciclo abierto: ¿Te animas?</small></td><td class="num">21 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Ícono de Pastelia al centro con halo dorado y una etiqueta &quot;beta&quot; en dorado.</td></tr><tr><td class="num">8</td><td>Ayúdame a hacerla mejor. · Comenta PASTELIA y te mando el link</td><td class="num">11 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Goteo de chocolate arriba, logo, titular crema con &quot;mejor.&quot; en dorado y el botón cacao con borde dorado: PASTELIA en dorado.</td></tr>
+  </tbody></table></div>
+  <h4>Guion de voz en off (versión Reel opcional · ≈ 41 s)</h4><p class="ayuda">Versión Reel opcional: los 8 slides en un video 9:16 (cada slide sobre fondo cacao, 4–6 s) con tu voz en off. Graba tu voz con el celular cerca, en un cuarto sin eco; o usa la voz de texto a voz de CapCut.</p>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>Tiempo</th><th>Slide</th><th>Voz en off</th></tr></thead><tbody><tr><td class="num">0–4 s</td><td class="num">1</td><td>No sabía cuánto cobrar por mis pasteles… así que hice mi propia app.</td></tr><tr><td class="num">4–9 s</td><td class="num">2</td><td>Cobraba a ojo: le ponía el precio que me parecía justo, sin saber si de verdad ganaba.</td></tr><tr><td class="num">9–14 s</td><td class="num">3</td><td>Y los pedidos vivían en una libreta y en WhatsApp: fechas, anticipos y cambios, regados entre chats.</td></tr><tr><td class="num">14–20 s</td><td class="num">4</td><td>Hasta que me cayó el veinte: cobrar bien no era subir precios. Era saber mis costos.</td></tr><tr><td class="num">20–26 s</td><td class="num">5</td><td>Así nació el cotizador por gramo: pones lo que pagas por cada insumo y sale el costo por gramo.</td></tr><tr><td class="num">26–31 s</td><td class="num">6</td><td>Y la agenda: lo que entregas hoy y lo que tienes por cobrar, en cuanto abres la app.</td></tr><tr><td class="num">31–37 s</td><td class="num">7</td><td>Pastelia está en beta, y la quiero hacer contigo. Pruébala con tus pedidos reales y dime qué le falta.</td></tr><tr><td class="num">37–41 s</td><td class="num">8</td><td>Comenta PASTELIA y te mando el link.</td></tr></tbody></table></div>
+  <div class="copiable srt"><div class="copiable-cab"><span>p1-subtitulos.srt</span><button type="button" class="btn" data-copiar="copia-14">Copiar texto</button></div><pre id="copia-14">1
+00:00:00,000 --&gt; 00:00:02,114
+No sabía cuánto
+cobrar por mis pasteles…
+
+2
+00:00:02,154 --&gt; 00:00:03,960
+así que hice
+mi propia app.
+
+3
+00:00:04,000 --&gt; 00:00:06,019
+Cobraba a ojo:
+le ponía el precio
+
+4
+00:00:06,059 --&gt; 00:00:07,784
+que me parecía justo,
+sin saber
+
+5
+00:00:07,824 --&gt; 00:00:08,960
+si de verdad ganaba.
+
+6
+00:00:09,000 --&gt; 00:00:11,019
+Y los pedidos
+vivían en una libreta
+
+7
+00:00:11,059 --&gt; 00:00:13,078
+y en WhatsApp: fechas,
+anticipos y cambios,
+
+8
+00:00:13,118 --&gt; 00:00:13,960
+regados entre chats.
+
+9
+00:00:14,000 --&gt; 00:00:16,960
+Hasta que me cayó
+el veinte: cobrar bien
+
+10
+00:00:17,000 --&gt; 00:00:18,460
+no era subir precios.
+
+11
+00:00:18,500 --&gt; 00:00:19,960
+Era saber mis costos.
+
+12
+00:00:20,000 --&gt; 00:00:21,855
+Así nació
+el cotizador por gramo:
+
+13
+00:00:21,895 --&gt; 00:00:24,697
+pones lo que pagas
+por cada insumo y sale
+
+14
+00:00:24,737 --&gt; 00:00:25,960
+el costo por gramo.
+
+15
+00:00:26,000 --&gt; 00:00:27,904
+Y la agenda:
+lo que entregas hoy
+
+16
+00:00:27,944 --&gt; 00:00:29,571
+y lo que tienes
+por cobrar,
+
+17
+00:00:29,611 --&gt; 00:00:30,960
+en cuanto abres la app.
+
+18
+00:00:31,000 --&gt; 00:00:33,802
+Pastelia está en beta,
+y la quiero hacer contigo.
+
+19
+00:00:33,842 --&gt; 00:00:36,960
+Pruébala con tus pedidos reales
+y dime qué le falta.
+
+20
+00:00:37,000 --&gt; 00:00:40,960
+Comenta PASTELIA
+y te mando el link.
+</pre></div>
+  <h4>Notas</h4><ul><li>Es tu historia: escribí solo lo que me diste (cobrar a ojo, pedidos en libreta y WhatsApp, por qué nacieron el cotizador por gramo y la agenda, invitación a la beta). No agregué fechas, cifras ni anécdotas.</li><li>La primera persona no lleva adjetivos con género (&quot;cansada/cansado&quot;), así que sirve tal cual.</li><li>Portada en dos versiones: solo texto (lista para publicar) y con marco para tu foto real. Si me mandas una foto tuya (o la subes a &quot;3. Mi material&quot;), la pongo en el marco.</li><li>Las pantallas son capturas reales de la app en modo oscuro, con datos de ejemplo.</li></ul>
+  <h4>Caption para Instagram</h4><div class="copiable "><div class="copiable-cab"><span>Caption (con frases que la gente busca)</span><button type="button" class="btn" data-copiar="copia-15">Copiar texto</button></div><pre id="copia-15">No sabía cuánto cobrar por un pastel, así que hice mi propia app.
+
+Cobraba a ojo. Y los pedidos vivían en una libreta y en WhatsApp: fechas, anticipos y cambios, regados entre chats.
+
+Hasta que me cayó el veinte: cobrar bien no era subir precios, era saber mis costos. Cuánto me cuesta cada gramo, cuánto vale mi tiempo y cuánto quiero ganar.
+
+Así nació Pastelia: un cotizador por gramo con tus propios precios y una agenda con lo que entregas hoy y lo que tienes por cobrar.
+
+Está en beta y la quiero hacer contigo. Pruébala con tus pedidos reales y dime qué le falta.
+
+Comenta PASTELIA y te mando el link.
+
+#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento</pre></div>
+  <h4>Respuesta por DM a quien comente PASTELIA</h4><div class="copiable "><div class="copiable-cab"><span>Mensaje directo (pega tu link)</span><button type="button" class="btn" data-copiar="copia-16">Copiar texto</button></div><pre id="copia-16">¡Hola! Gracias por comentar PASTELIA. Aquí está el link para probar Pastelia (beta): [TU LINK]
+
+Gracias por leer la historia. Crea tu cuenta con tu correo o con Google, llena &quot;Mi negocio&quot; y haz tu primera cotización con un pedido real.
+
+¿Me cuentas qué te pareció? Tu opinión me ayuda a mejorarla.</pre></div>
+  <h4>Texto alternativo</h4><div class="copiable "><div class="copiable-cab"><span>Instagram → Configuración avanzada → Escribir texto alternativo</span><button type="button" class="btn" data-copiar="copia-17">Copiar texto</button></div><pre id="copia-17">Slide 1: La historia de Pastelia. No sabía cuánto cobrar, así que hice mi propia app.
+
+Slide 2: Cobraba a ojo. Le ponía el precio que me parecía justo, sin saber si de verdad ganaba.
+
+Slide 3: …vivían en una libreta y en WhatsApp. Fechas, anticipos y cambios, regados entre chats.
+
+Slide 4: Cobrar bien no era subir precios. Era saber mis costos. Cuánto me cuesta cada gramo, cuánto vale mi tiempo y cuánto quiero ganar.
+
+Slide 5: …el cotizador por gramo. Pones lo que pagas por cada insumo y sale el costo por gramo. Datos de ejemplo.
+
+Slide 6: …la agenda. Lo que entregas hoy y lo que tienes por cobrar, al abrir la app. Datos de ejemplo.
+
+Slide 7: Está en beta y la quiero hacer contigo. Pruébala con tus pedidos reales y dime qué le falta.
+
+Slide 8: Ayúdame a hacerla mejor. Comenta PASTELIA y te mando el link.</pre></div>
+  <div class="aviso"><h4>Antes de publicar</h4><ul><li>Lee los slides 1 a 7 y confirma que cada frase es cierta para ti. Si algo no pasó así, dímelo y lo cambio: no publiques una historia que no pasó.</li><li>Si quieres la portada con tu foto, mándamela (vertical, con luz natural, sin filtros).</li><li>Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.</li><li>Después de publicarlo, fíjalo en tu perfil.</li></ul></div>
+</article>
+<article class="pieza" id="r2">
+  <p class="eyebrow">Pieza 4 · Reel · Demo con grabación de pantalla (función beta) · ≈ 32 s</p>
+  <h3>Le pedí a una IA que cotizara mi pedido</h3>
+  <p class="bajada-pieza">El Agente IA de Pastelia, en beta</p>
+  <div class="chips"><span class="chip chip-fecha">Viernes 30 de octubre · 19:30</span><span class="chip">Instagram (Reel)</span><span class="chip">Video 9:16 · 1080×1920 · ≈ 32 s</span><span class="chip chip-cta">CTA: AGENTE</span></div>
+  <h4>Gancho A · principal — Experimento: ¿la IA cotiza con mis costos?</h4><div class="hook"><div><span>Acción visual · 0–3 s</span>Grabación de pantalla: en el chat del Agente IA escribes &quot;Pastel para 20 personas&quot;; arriba se lee &quot;Tu asistente de cotización · beta&quot;.</div><div><span>Voz en off</span>Le escribí solo esto: pastel para veinte personas.</div><div><span>Texto en pantalla · zona segura</span>Le pedí a una IA que cotizara mi pedido</div></div>
+  <h4>Gancho B · Reel de prueba — POV: te piden precio de noche (situación del oficio)</h4><div class="hook"><div><span>Acción visual · 0–3 s</span>Toma real de noche: cocina en penumbra con una sola luz cálida; tu celular se enciende con un mensaje (texto borroso, sin nombres).</div><div><span>Voz en off</span>En vez de sacar la calculadora…</div><div><span>Texto en pantalla · zona segura</span>POV: te piden precio a las 11 p. m.</div></div>
+  <h4>Puente (on-ramp, 3–15 s)</h4>
+  <div class="puentes"><div><b>Versión A</b><ul><li><span class="num">3–9 s</span> No usa precios de internet: usa mis insumos, mis tamaños y mi margen. <small>Texto: Con TUS costos · no precios de internet</small></li><li><span class="num">9–15 s</span> Le doy el nombre del cliente y la fecha. <small>Igual en A y B</small></li></ul></div><div><b>Versión B</b><ul><li><span class="num">3–9 s</span> …se lo escribo al Agente IA de Pastelia, tal cual me llegó. <small>Texto: Agente IA · beta</small></li><li><span class="num">9–15 s</span> Le doy el nombre del cliente y la fecha. <small>Igual en A y B</small></li></ul></div></div>
+  <h4>Guion completo (versión A)</h4>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>Tiempo</th><th>Acción visual</th><th>Voz en off</th><th>Texto en pantalla</th></tr></thead><tbody>
+  <tr><td class="num">0–3 s<br><small>Gancho A</small></td><td>Grabación de pantalla: en el chat del Agente IA escribes &quot;Pastel para 20 personas&quot;; arriba se lee &quot;Tu asistente de cotización · beta&quot;.</td><td>Le escribí solo esto: pastel para veinte personas.</td><td>Le pedí a una IA que cotizara mi pedido</td></tr><tr><td class="num">3–9 s<br><small>Puente A (on-ramp)</small></td><td>Envías el mensaje y se ve la respuesta REAL del agente (lo que conteste en ese momento).</td><td>No usa precios de internet: usa mis insumos, mis tamaños y mi margen.</td><td>Con TUS costos · no precios de internet</td></tr><tr><td class="num">9–15 s<br><small>Los datos que falten</small></td><td>La conversación real sigue: le das el nombre del cliente y la fecha (si no los pusiste en el primer mensaje).</td><td>Le doy el nombre del cliente y la fecha.</td><td>Le das los datos que falten</td></tr><tr><td class="num">15–22 s<br><small>Confirma el pedido</small></td><td>Aparece la tarjeta &quot;Confirma el pedido&quot;: cliente, pastel, tamaño, extras, fecha y &quot;Precio estimado&quot;. Zoom al precio.</td><td>Y me arma la cotización con el precio estimado, con mis costos.</td><td>Precio estimado con tus costos</td></tr><tr><td class="num">22–26 s<br><small>Queda en la agenda</small></td><td>Tocas &quot;Confirmar y guardar&quot; → &quot;¡Listo! El pedido ya está en tu agenda&quot;. Corte a la Agenda con el pedido nuevo (graba la tuya).</td><td>Yo reviso, confirmo… y queda en mi agenda.</td><td>Tú confirmas · queda en tu agenda</td></tr><tr><td class="num">26–29 s<br><small>Es beta</small></td><td>Zoom al encabezado &quot;Agente IA · Tu asistente de cotización · beta&quot;.</td><td>Ojo: está en beta. Revisa siempre el precio antes de confirmar.</td><td>Es beta: revisa el precio antes de guardar</td></tr><tr><td class="num">29–32 s<br><small>CTA</small></td><td>Tarjeta final: fondo cacao con goteo de chocolate, logo de Pastelia y &quot;Comenta AGENTE&quot; con la palabra en dorado.</td><td>Comenta AGENTE y te mando el link.</td><td>Comenta AGENTE y te mando el link</td></tr>
+  </tbody></table></div>
+  <h4>Storyboard por escena</h4>
+  <p class="ayuda">Sin clips todavía: estas escenas muestran qué grabar y dónde va cada texto. La línea punteada es la zona segura de 720×1200 (fuera de ella, Instagram tapa el texto). Las pantallas son capturas reales de la app con datos de ejemplo; donde dice "Graba aquí tu pantalla real" va tu grabación.</p>
+  <div class="carril"><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-1.png" alt="A · escena 1: Gancho A" loading="lazy" width="1080" height="1920"><figcaption><b>A · 0–3 s · Gancho A</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-1.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-1.png" data-nombre="r2-A-escena-1.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-2.png" alt="A · escena 2: Puente A (on-ramp)" loading="lazy" width="1080" height="1920"><figcaption><b>A · 3–9 s · Puente A (on-ramp)</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-2.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-2.png" data-nombre="r2-A-escena-2.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-3.png" alt="A · escena 3: Los datos que falten" loading="lazy" width="1080" height="1920"><figcaption><b>A · 9–15 s · Los datos que falten</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-3.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-3.png" data-nombre="r2-A-escena-3.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-4.png" alt="A · escena 4: Confirma el pedido" loading="lazy" width="1080" height="1920"><figcaption><b>A · 15–22 s · Confirma el pedido</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-4.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-4.png" data-nombre="r2-A-escena-4.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-5.png" alt="A · escena 5: Queda en la agenda" loading="lazy" width="1080" height="1920"><figcaption><b>A · 22–26 s · Queda en la agenda</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-5.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-5.png" data-nombre="r2-A-escena-5.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-6.png" alt="A · escena 6: Es beta" loading="lazy" width="1080" height="1920"><figcaption><b>A · 26–29 s · Es beta</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-6.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-6.png" data-nombre="r2-A-escena-6.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-A-escena-7.png" alt="A · escena 7: CTA" loading="lazy" width="1080" height="1920"><figcaption><b>A · 29–32 s · CTA</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-A-escena-7.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-A-escena-7.png" data-nombre="r2-A-escena-7.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-B-escena-1.png" alt="B · escena 1: Gancho B" loading="lazy" width="1080" height="1920"><figcaption><b>B · 0–3 s · Gancho B</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-B-escena-1.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-B-escena-1.png" data-nombre="r2-B-escena-1.png">Descargar PNG</a></figcaption></figure><figure class="frame"><img src="img/04-Reel-Agente-IA/r2-B-escena-2.png" alt="B · escena 2: Puente B (on-ramp)" loading="lazy" width="1080" height="1920"><figcaption><b>B · 3–9 s · Puente B (on-ramp)</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-B-escena-2.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-B-escena-2.png" data-nombre="r2-B-escena-2.png">Descargar PNG</a></figcaption></figure></div>
+  <div class="extras">
+    <figure class="mini"><img src="img/04-Reel-Agente-IA/r2-tarjeta-final-agente-1080x1920.png" alt="Tarjeta final AGENTE" loading="lazy" width="1080" height="1920"><figcaption><b>Tarjeta final, lista para el Reel</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-tarjeta-final-agente-1080x1920.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-tarjeta-final-agente-1080x1920.png" data-nombre="r2-tarjeta-final-agente-1080x1920.png">Descargar PNG</a></figcaption></figure>
+    <figure class="mini"><img src="img/04-Reel-Agente-IA/r2-portada-reel-1080x1920.png" alt="Portada del Reel r2" loading="lazy" width="1080" height="1920"><figcaption><b>Portada del Reel</b><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-portada-reel-1080x1920.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-portada-reel-1080x1920.png" data-nombre="r2-portada-reel-1080x1920.png">Descargar PNG</a></figcaption></figure>
+    <div class="col">
+      <h4>Notas de producción</h4><ul><li>La conversación se graba REAL, en tu celular: no la actuamos ni la armamos en edición. Si el agente contesta algo raro, vuelve a intentarlo o no publiques esa toma.</li><li>Las escenas marcadas &quot;Graba aquí tu pantalla&quot; no tienen captura porque en mi entorno de trabajo el servidor del agente no está disponible. Las demás son capturas reales de la app.</li><li>Escribe el pedido como te llega por WhatsApp. Si en el primer mensaje pones nombre y fecha (&quot;Pastel de chocolate para 20 personas, a nombre de Cliente de ejemplo, para el 7 de noviembre&quot;), el agente puede ir directo a &quot;Confirma el pedido&quot;.</li><li>Usa un nombre de prueba (&quot;Cliente de ejemplo&quot;), nunca el de una clienta real, y borra ese pedido de tu agenda después de grabar.</li><li>La leyenda &quot;beta&quot; debe verse al menos una vez (escena &quot;Es beta&quot;).</li><li>Gancho B: la toma de noche es una dramatización (POV), no un mensaje real de una clienta. Nombres y texto del mensaje, borrosos.</li><li>Texto en pantalla y subtítulos dentro de la zona segura de 720×1200; crema sobre barra cacao al 70 % y palabras clave en dorado.</li></ul>
+      <p><a class="btn btn-sec" href="img/04-Reel-Agente-IA/r2-storyboard-completo.png" target="_blank" rel="noopener" data-descargar="img/04-Reel-Agente-IA/r2-storyboard-completo.png" data-nombre="r2-storyboard-completo.png">Descargar storyboard completo</a></p>
+    </div>
+  </div>
+  <h4>Subtítulos (.srt)</h4>
+  <p class="ayuda">Los archivos .srt vienen en el ZIP y en tu Drive. Tiempos aproximados: ajústalos al audio real en CapCut.</p>
+  <div class="captions"><div class="copiable srt"><div class="copiable-cab"><span>r2-subtitulos-A.srt</span><button type="button" class="btn" data-copiar="copia-18">Copiar texto</button></div><pre id="copia-18">1
+00:00:00,000 --&gt; 00:00:02,960
+Le escribí solo esto:
+pastel para veinte personas.
+
+2
+00:00:03,000 --&gt; 00:00:06,652
+No usa precios de internet:
+usa mis insumos,
+
+3
+00:00:06,692 --&gt; 00:00:08,960
+mis tamaños y mi margen.
+
+4
+00:00:09,000 --&gt; 00:00:14,960
+Le doy el nombre
+del cliente y la fecha.
+
+5
+00:00:15,000 --&gt; 00:00:20,210
+Y me arma la cotización
+con el precio estimado,
+
+6
+00:00:20,250 --&gt; 00:00:21,960
+con mis costos.
+
+7
+00:00:22,000 --&gt; 00:00:23,460
+Yo reviso, confirmo…
+
+8
+00:00:23,500 --&gt; 00:00:25,960
+y queda en mi agenda.
+
+9
+00:00:26,000 --&gt; 00:00:27,051
+Ojo: está en beta.
+
+10
+00:00:27,091 --&gt; 00:00:28,960
+Revisa siempre el precio
+antes de confirmar.
+
+11
+00:00:29,000 --&gt; 00:00:31,960
+Comenta AGENTE
+y te mando el link.
+</pre></div><div class="copiable srt"><div class="copiable-cab"><span>r2-subtitulos-B.srt</span><button type="button" class="btn" data-copiar="copia-19">Copiar texto</button></div><pre id="copia-19">1
+00:00:00,000 --&gt; 00:00:02,960
+En vez
+de sacar la calculadora…
+
+2
+00:00:03,000 --&gt; 00:00:06,960
+…se lo escribo
+al Agente IA de Pastelia,
+
+3
+00:00:07,000 --&gt; 00:00:08,960
+tal cual me llegó.
+
+4
+00:00:09,000 --&gt; 00:00:14,960
+Le doy el nombre
+del cliente y la fecha.
+
+5
+00:00:15,000 --&gt; 00:00:20,210
+Y me arma la cotización
+con el precio estimado,
+
+6
+00:00:20,250 --&gt; 00:00:21,960
+con mis costos.
+
+7
+00:00:22,000 --&gt; 00:00:23,460
+Yo reviso, confirmo…
+
+8
+00:00:23,500 --&gt; 00:00:25,960
+y queda en mi agenda.
+
+9
+00:00:26,000 --&gt; 00:00:27,051
+Ojo: está en beta.
+
+10
+00:00:27,091 --&gt; 00:00:28,960
+Revisa siempre el precio
+antes de confirmar.
+
+11
+00:00:29,000 --&gt; 00:00:31,960
+Comenta AGENTE
+y te mando el link.
+</pre></div></div>
+  <h4>Caption para Instagram</h4><div class="copiable "><div class="copiable-cab"><span>Caption (con frases que la gente busca)</span><button type="button" class="btn" data-copiar="copia-20">Copiar texto</button></div><pre id="copia-20">Le pedí a una IA que cotizara mi pedido: &quot;pastel para 20 personas&quot;.
+
+¿No sabes cuánto cobrar por un pastel para 20 personas a las 11 de la noche? El Agente IA de Pastelia (en beta) arma la cotización con tus insumos, tus tamaños y tu margen. Te muestra el precio estimado y tú decides si lo guardas en tu agenda.
+
+Es beta: revisa siempre el precio antes de confirmar. Y si prefieres hacerlo tú, el cotizador paso a paso te enseña cómo costear un pastel.
+
+Comenta AGENTE y te mando el link para probarlo.
+
+#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento</pre></div>
+  <h4>Respuesta por DM a quien comente AGENTE</h4><div class="copiable "><div class="copiable-cab"><span>Mensaje directo (pega tu link)</span><button type="button" class="btn" data-copiar="copia-21">Copiar texto</button></div><pre id="copia-21">¡Hola! Gracias por comentar AGENTE. Aquí está el link para probar Pastelia (beta): [TU LINK]
+
+Crea tu cuenta con tu correo o con Google, guarda una receta y abre &quot;Agente IA&quot; (abajo a la derecha). Escríbele un pedido como te llega por WhatsApp. Está en beta: revisa el precio antes de confirmar.
+
+¿Me cuentas qué te pareció? Tu opinión me ayuda a mejorarla.</pre></div>
+  <div class="aviso"><h4>Antes de publicar</h4><ul><li>Prueba el Agente IA en tu cuenta antes de grabar y confirma que responde (desde mi entorno no pude conectarme a su servidor).</li><li>Costo: el agente usa Gemini Pro con &quot;pensamiento alto&quot; y hoy no tiene límite por usuaria (agent-proxy/README.md). Antes de invitar a muchas personas a probarlo, revisa ese costo o cámbialo a Flash.</li><li>Mándame la grabación de la conversación completa y edito el Reel en MP4 con subtítulos y tarjeta final.</li><li>Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.</li></ul></div>
+</article>
+<article class="pieza" id="c2">
+  <p class="eyebrow">Pieza 5 · Carrusel · Hack List / Problem-Proof</p>
+  <h3>Por esto no te queda nada</h3>
+  <div class="chips"><span class="chip chip-fecha">Sábado 31 de octubre · 09:30</span><span class="chip">Instagram (carrusel)</span><span class="chip">9 slides · 1080×1350 (4:5)</span><span class="chip chip-cta">CTA: TIEMPO</span></div>
+  <h4>Carrusel completo</h4>
+  <p class="ayuda">Lienzo continuo: algunos elementos cruzan de un slide al siguiente para invitar a deslizar. Al pie de cada slide intermedio va el ciclo abierto en dorado.</p>
+  <div class="tira"><img src="img/05-Carrusel-Costos-Olvidados/c2-tira.png" alt="Carrusel TIEMPO completo" loading="lazy"></div>
+  <div class="carril"><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-01.png" alt="Slide 1: Por esto no te queda nada" loading="lazy" width="1080" height="1350"><figcaption><b>1 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-01.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-01.png" data-nombre="c2-slide-01.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-02.png" alt="Slide 2: &quot;Me quedan $300.&quot;" loading="lazy" width="1080" height="1350"><figcaption><b>2 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-02.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-02.png" data-nombre="c2-slide-02.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-03.png" alt="Slide 3: Tu tiempo: −$180" loading="lazy" width="1080" height="1350"><figcaption><b>3 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-03.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-03.png" data-nombre="c2-slide-03.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-04.png" alt="Slide 4: Decoración: −$120" loading="lazy" width="1080" height="1350"><figcaption><b>4 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-04.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-04.png" data-nombre="c2-slide-04.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-05.png" alt="Slide 5: Caja y base: −$ ?" loading="lazy" width="1080" height="1350"><figcaption><b>5 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-05.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-05.png" data-nombre="c2-slide-05.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-06.png" alt="Slide 6: Gas y luz: −$ ?" loading="lazy" width="1080" height="1350"><figcaption><b>6 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-06.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-06.png" data-nombre="c2-slide-06.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-07.png" alt="Slide 7: Ganancia real: menos de $0." loading="lazy" width="1080" height="1350"><figcaption><b>7 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-07.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-07.png" data-nombre="c2-slide-07.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-08.png" alt="Slide 8: En Pastelia, cada costo suma." loading="lazy" width="1080" height="1350"><figcaption><b>8 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-08.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-08.png" data-nombre="c2-slide-08.png">Descargar PNG</a></figcaption></figure><figure class="slide"><img src="img/05-Carrusel-Costos-Olvidados/c2-slide-09.png" alt="Slide 9: Tu tiempo también se cobra." loading="lazy" width="1080" height="1350"><figcaption><b>9 / 9</b><a class="btn btn-sec" href="img/05-Carrusel-Costos-Olvidados/c2-slide-09.png" target="_blank" rel="noopener" data-descargar="img/05-Carrusel-Costos-Olvidados/c2-slide-09.png" data-nombre="c2-slide-09.png">Descargar PNG</a></figcaption></figure></div>
+  <h4>Slides, palabras y diseño</h4>
+  <div class="tabla-envoltura"><table class="guion"><thead><tr><th>#</th><th>Texto que se ve</th><th>Palabras</th><th>Diseño</th></tr></thead><tbody>
+  <tr><td class="num">1</td><td>Por esto no te queda nada · Te queda · $0</td><td class="num">9 <small>(título máx. 10) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Goteo arriba. Titular crema enorme con &quot;nada&quot; en dorado. Abajo, un ticket crema con renglones borrosos y la última línea &quot;Te queda: $0&quot; en dorado.</td></tr><tr><td class="num">2</td><td>&quot;Me quedan $300.&quot; · $510 − $210 = $300 · Cobraste $510 y gastaste $210 en insumos. Pero faltan 4 costos. · Datos de ejemplo<br><small class="loop">Ciclo abierto: El primero eres tú…</small></td><td class="num">24 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Ecuación grande &quot;$510 − $210 = $300&quot; con el $300 en oro y, debajo, el medidor dorado &quot;Te queda&quot; lleno hasta $300.</td></tr><tr><td class="num">3</td><td>1 · Tu tiempo: −$180 · Quedan $120 · Batir, hornear, decorar y entregar también es trabajo.<br><small class="loop">Ciclo abierto: El segundo se ve bonito…</small></td><td class="num">19 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;1&quot; dorado. Medidor &quot;Te queda&quot; que baja de $300 a $120: el tramo de $180 se va en cacao rayado.</td></tr><tr><td class="num">4</td><td>2 · Decoración: −$120 · Quedan $0 · Flores, topper o letrero: si no lo cobras aparte, sale de tu ganancia.<br><small class="loop">Ciclo abierto: Y todavía falta…</small></td><td class="num">21 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;2&quot; dorado. El medidor llega a $0.</td></tr><tr><td class="num">5</td><td>3 · Caja y base: −$ ? · Quedan menos de $0 · ¿Cuánto te cuestan? Si no lo sabes, lo estás regalando.<br><small class="loop">Ciclo abierto: Y lo que nadie ve…</small></td><td class="num">23 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;3&quot; dorado. Ilustración de línea dorada de una caja abierta y una base redonda (sin pastel). El medidor cruza abajo de $0.</td></tr><tr><td class="num">6</td><td>4 · Gas y luz: −$ ? · Quedan menos de $0 · Horno, batidora y refri trabajan para cada pastel, aunque se paguen en otro recibo.<br><small class="loop">Ciclo abierto: ¿Cuánto ganaste, entonces?</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Número &quot;4&quot; dorado. Íconos de línea dorados de flama y foco. El medidor sigue bajando.</td></tr><tr><td class="num">7</td><td>Ganancia real: menos de $0. · Cobraste $510 · Insumos −$210 · Tiempo −$180 · Decoración −$120 · Caja y base −$ ? · Gas y luz −$ ? · Datos de ejemplo<br><small class="loop">Ciclo abierto: Así se arregla…</small></td><td class="num">25 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Gráfica de cascada nativa (SVG): barra de $510 en crema y escalones que bajan en tono cacao hasta $0; caja/base y gas/luz punteados, abajo de cero. Solo el resultado va en dorado.</td></tr><tr><td class="num">8</td><td>En Pastelia, cada costo suma. · Tu tiempo ya viene incluido. Caja, base, gas y luz los agregas como extras.<br><small class="loop">Ciclo abierto: ¿Y en tu próximo pedido?</small></td><td class="num">24 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Captura real de la ventana &quot;Nuevo extra&quot; (&quot;Se suma al total cuando lo activas en una cotización&quot;, con &quot;Caja y base&quot; escrito) sobre el recorte real de &quot;Extras de diseño&quot;.</td></tr><tr><td class="num">9</td><td>Tu tiempo también se cobra. · Comenta TIEMPO y te mando el link</td><td class="num">12 <small>(máx. 25) ✓</small></td><td>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Goteo arriba, logo, titular crema con &quot;se cobra.&quot; en dorado y el botón cacao con borde dorado: TIEMPO en dorado.</td></tr>
+  </tbody></table></div>
+  
+  <h4>Notas</h4><ul><li>$510, $210, $180 y $120 son los valores de arranque de la app (insumos, mano de obra y flores de un Mediano). &quot;Cobraste $510&quot; es un ejemplo: es justo el costo de ese pastel sin ganancia.</li><li>Caja, base, gas y luz quedan como &quot;$ ?&quot; porque la app no trae esos montos y no los invento. Si me das tus costos reales, regenero el carrusel con tus números.</li><li>Pastelia no tiene un campo propio para gas, luz, caja ni base: se dan de alta como extras (nombre y precio) y se activan en cada cotización. El slide 8 lo dice así y muestra la pantalla real.</li><li>Gráficas nativas: solo el resultado va en dorado; lo demás en tonos cacao, con etiquetas directas.</li><li>Sin fotos ni ilustraciones de pasteles: caja y base van en dibujo de línea.</li></ul>
+  <h4>Caption para Instagram</h4><div class="copiable "><div class="copiable-cab"><span>Caption (con frases que la gente busca)</span><button type="button" class="btn" data-copiar="copia-22">Copiar texto</button></div><pre id="copia-22">Por esto no te queda nada: 4 costos que casi nadie cobra en sus pasteles 👇
+
+Ejemplo: cobras $510 por un pastel de 20 porciones y gastaste $210 en insumos. &quot;Me quedan $300&quot;, piensas.
+– Tu tiempo (mano de obra): $180. Quedan $120.
+– Decoración (flores): $120. Quedan $0.
+– Caja y base: $ ?
+– Gas y luz: $ ?
+Resultado: menos de $0. Y tu tiempo, pagado a medias.
+
+Cómo costear un pastel sin que se te escape nada: en Pastelia tu mano de obra ya viene incluida, y la decoración, la caja, la base, el gas y la luz los das de alta como extras con tu costo. Así entran en el precio y tu ganancia va encima.
+
+(Valores de ejemplo de la app, en pesos mexicanos.)
+
+Comenta TIEMPO y te mando el link.
+
+#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento</pre></div>
+  <h4>Respuesta por DM a quien comente TIEMPO</h4><div class="copiable "><div class="copiable-cab"><span>Mensaje directo (pega tu link)</span><button type="button" class="btn" data-copiar="copia-23">Copiar texto</button></div><pre id="copia-23">¡Hola! Gracias por comentar TIEMPO. Aquí está el link para probar Pastelia (beta): [TU LINK]
+
+Crea tu cuenta con tu correo o con Google. En &quot;Mis precios&quot; → &quot;Añadir extra&quot; da de alta tu caja y base y tu gas y luz con lo que te cuestan por pastel; actívalos en cada cotización y se suman al precio.
+
+¿Me cuentas qué te pareció? Tu opinión me ayuda a mejorarla.</pre></div>
+  <h4>Texto alternativo</h4><div class="copiable "><div class="copiable-cab"><span>Instagram → Configuración avanzada → Escribir texto alternativo</span><button type="button" class="btn" data-copiar="copia-24">Copiar texto</button></div><pre id="copia-24">Slide 1: Por esto no te queda nada. Abajo, un ticket con renglones borrosos que termina en «Te queda: $0».
+
+Slide 2: &quot;Me quedan $300.&quot; $510 − $210 = $300. Cobraste $510 y gastaste $210 en insumos. Pero faltan 4 costos. Datos de ejemplo.
+
+Slide 3: 1. Tu tiempo: −$180. Quedan $120. Batir, hornear, decorar y entregar también es trabajo.
+
+Slide 4: 2. Decoración: −$120. Quedan $0. Flores, topper o letrero: si no lo cobras aparte, sale de tu ganancia.
+
+Slide 5: 3. Caja y base: −$ ? Quedan menos de $0. ¿Cuánto te cuestan? Si no lo sabes, lo estás regalando.
+
+Slide 6: 4. Gas y luz: −$ ? Quedan menos de $0. Horno, batidora y refri trabajan para cada pastel, aunque se paguen en otro recibo.
+
+Slide 7: Ganancia real: menos de $0. Cobraste $510. Insumos −$210. Tiempo −$180. Decoración −$120. Caja y base −$ ? Gas y luz −$ ? Datos de ejemplo.
+
+Slide 8: En Pastelia, cada costo suma. Tu tiempo ya viene incluido. Caja, base, gas y luz los agregas como extras.
+
+Slide 9: Tu tiempo también se cobra. Comenta TIEMPO y te mando el link.</pre></div>
+  <div class="aviso"><h4>Antes de publicar</h4><ul><li>Opcional: dime cuánto te cuestan la caja, la base y el gas/luz por pastel y cambio los &quot;$ ?&quot; por tus números.</li><li>Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.</li></ul></div>
+</article>
+<article class="pieza" id="m1">
+  <p class="eyebrow">Pieza 6 · Meme · Meme de oficio (contraste: regateo vs. desglose real)</p>
+  <h3>¿Me lo dejas más barato? Es para mi mamá</h3>
+  <div class="chips"><span class="chip chip-fecha">Domingo 1 de noviembre · 19:30</span><span class="chip">Instagram (post de una imagen)</span><span class="chip">1 imagen · 1080×1350 (4:5)</span><span class="chip chip-cta">CTA: RESPETO</span></div>
+  <div class="meme"><figure class="slide"><img src="img/06-Meme-Mama/m1-meme.png" alt="Meme: ¿Me lo dejas más barato? Es para mi mamá. Con todo respeto: la mantequilla no sabe que es para tu mamá." loading="lazy" width="1080" height="1350"><figcaption><b>Imagen lista para publicar</b><a class="btn btn-sec" href="img/06-Meme-Mama/m1-meme.png" target="_blank" rel="noopener" data-descargar="img/06-Meme-Mama/m1-meme.png" data-nombre="m1-meme.png">Descargar PNG</a></figcaption></figure>
+    <div class="col"><h4>Diseño</h4><p>Fondo cacao casi negro (#140D09 → #241811) con grano fino y un brillo cálido. Arriba, &quot;Cliente&quot; y una burbuja de chat crema genérica (no imita WhatsApp) con el regateo. En medio, &quot;Mi cotización&quot; y el &quot;Resumen en vivo&quot; real de Pastelia ($714) con aro dorado en &quot;Mano de obra $180&quot;. Abajo, el remate en crema con &quot;la mantequilla&quot; en dorado y @heypastelia con el logo.</p><h4>Notas</h4><ul><li>Es una situación común del oficio, no el chat de una clienta real.</li><li>El desglose es la captura real de la app con datos de ejemplo ($714).</li><li>Formato de una sola imagen: el CTA va en el caption, no en la imagen. El logo y @heypastelia van chiquitos para que, si lo comparten, se sepa de dónde salió.</li></ul></div></div>
+  <h4>Caption para Instagram</h4><div class="copiable "><div class="copiable-cab"><span>Caption (con frases que la gente busca)</span><button type="button" class="btn" data-copiar="copia-25">Copiar texto</button></div><pre id="copia-25">&quot;¿Me lo dejas más barato? Es para mi mamá.&quot;
+Con todo respeto: la mantequilla no sabe que es para tu mamá.
+
+Si alguna vez te lo pidieron, sabes cómo se siente. Cobrar bien no es ser cara: es saber cuánto cuesta lo que haces. Si no sabes cuánto cobrar por un pastel, empieza por tus costos: insumos, tu tiempo, la decoración y tu ganancia.
+
+Etiqueta a la repostera que necesita ver esto.
+
+¿Te ha pasado? Comenta RESPETO y te mando el link para cotizar con tus números.
+
+#reposteria #pasteleria #pastelesporencargo #reposteriacasera #emprendimiento</pre></div>
+  <h4>Respuesta por DM a quien comente RESPETO</h4><div class="copiable "><div class="copiable-cab"><span>Mensaje directo (pega tu link)</span><button type="button" class="btn" data-copiar="copia-26">Copiar texto</button></div><pre id="copia-26">¡Hola! Gracias por comentar RESPETO. Aquí está el link para probar Pastelia (beta): [TU LINK]
+
+Crea tu cuenta con tu correo o con Google y haz la cotización de tu pastel más pedido. Así, cuando te pidan descuento, sabes exactamente hasta dónde puedes bajar.
+
+¿Me cuentas qué te pareció? Tu opinión me ayuda a mejorarla.</pre></div>
+  <h4>Texto alternativo</h4><div class="copiable "><div class="copiable-cab"><span>Instagram → Configuración avanzada → Escribir texto alternativo</span><button type="button" class="btn" data-copiar="copia-27">Copiar texto</button></div><pre id="copia-27">Meme. Arriba, la burbuja de chat de «Cliente»: «¿Me lo dejas más barato? Es para mi mamá». En medio, «Mi cotización»: el resumen real de Pastelia con insumos $210, mano de obra $180 (resaltada), extras (flores) $120 y margen 40 % $204, que dan un precio sugerido de $714, o $35.70 por porción (datos de ejemplo). Abajo: «Con todo respeto: la mantequilla no sabe que es para tu mamá». Firma @heypastelia.</pre></div>
+  <div class="aviso"><h4>Antes de publicar</h4><ul><li>Pega tu link en la respuesta por DM ([TU LINK]) o usa la respuesta de lista de espera.</li><li>Responde los comentarios con humor y sin pelear con nadie: el chiste es sobre el regateo, no sobre las mamás.</li></ul></div>
+</article>
+
+<section id="playbook">
+  <h2>Playbook orgánico ($0)</h2>
+  <h3 class="h3-sec">Rutina diaria de 15 minutos</h3>
+  <ol class="rutina"><li><span class="num">Min 0–3</span>Busca 5 reels recientes de reposteras: en la lupa escribe &quot;pasteles por encargo&quot;, &quot;repostería casera&quot; o &quot;cuánto cobrar pastel&quot;, o entra a #pastelesporencargo y #reposteriacasera. Elige cuentas que sí contestan sus comentarios.</li><li><span class="num">Min 3–12</span>Deja 5 comentarios útiles, uno por reel: algo concreto que viste + una pregunta de oficio o un tip de costeo. Sin links y sin &quot;prueba mi app&quot;.</li><li><span class="num">Min 12–15</span>Contesta todos los comentarios y mensajes de tus posts, y manda el DM con el link a quien comentó la palabra clave.</li></ol>
+  <p class="formula">[Algo concreto que viste en su video] + [una pregunta de oficio o un tip útil]</p>
+  <div class="dos">
+    <div class="vs vs-no"><h4>Comentarios vacíos (evítalos)</h4><ul><li>&quot;Qué bonito 😍&quot;</li><li>&quot;Wow, me encanta&quot;</li><li>&quot;Hermoso trabajo 👏&quot;</li><li>&quot;Sígueme y te sigo&quot;</li><li>&quot;Pásate por mi perfil&quot;</li></ul></div>
+    <div class="vs vs-si"><h4>Comentarios útiles (adáptalos, no los copies)</h4><ul><li><b>Pregunta de técnica:</b> Ese filo del buttercream quedó muy parejo. ¿Lo enfrías entre capas o usas espátula caliente?</li><li><b>Pregunta de precio:</b> Para un pastel de este tamaño, ¿el topper lo cobras aparte o va incluido? Siempre es la duda.</li><li><b>Tip de costeo:</b> Un tip que ayuda: saca el costo por gramo de la mantequilla. Es de lo que más sube y casi nadie lo actualiza.</li><li><b>Pregunta de pedidos:</b> Qué buena idea mostrar la entrega. ¿Pides anticipo para apartar la fecha o cobras todo al final?</li><li><b>Reconocer el trabajo:</b> Se nota todo el tiempo de decoración. Ojalá tus clientas sepan que ese tiempo también se cobra.</li></ul></div>
+  </div>
+  <ul class="reglas"><li>Nunca el mismo comentario dos veces: Instagram lo nota y la persona también.</li><li>Habla como ella: si dice &quot;torta&quot;, tú dices &quot;torta&quot;.</li><li>No menciones Pastelia en comentarios a cuentas que no conoces. Si te preguntan qué haces, ahí sí.</li><li>Constancia sobre cantidad: 5 comentarios buenos todos los días valen más que 30 un solo día.</li></ul>
+
+  <h3 class="h3-sec">3 estructuras de mensaje directo para invitar a 20 reposteras</h3>
+  <p class="bajada">Son estructuras, no plantillas: cambia cada hueco [entre corchetes] con algo real de su perfil. Manda 3 o 4 al día, una por una. Empieza la semana 2, cuando ya estén publicados los 6 posts.</p>
+  <div class="estructuras"><div class="estructura"><b>1 · &quot;Vi tu trabajo&quot;</b><p class="ayuda">Primer contacto con alguien que no te conoce.</p><ol><li>Saludo con su nombre</li><li>Algo concreto de un post reciente suyo</li><li>Una pregunta sobre cómo cotiza</li><li>Qué es Pastelia en una línea (y que está en beta)</li><li>Pregunta de permiso, sin presión</li></ol><div class="copiable "><div class="copiable-cab"><span>Ejemplo (cambia lo que está entre corchetes)</span><button type="button" class="btn" data-copiar="copia-28">Copiar texto</button></div><pre id="copia-28">Hola, [nombre]. Vi tu [pastel de dos pisos con flores] y me encantó [cómo combinaste los tonos]. Una pregunta: ¿cómo calculas el precio de uno así? Estoy haciendo Pastelia, una app para cotizar con tus costos reales, y está en beta. ¿Te late probarla con uno de tus pedidos y decirme qué le falta?</pre></div></div><div class="estructura"><b>2 · &quot;Te ayudo primero&quot;</b><p class="ayuda">Cuentas que comentan que no saben cuánto cobrar o que cobran poco.</p><ol><li>Saludo y por qué le escribes</li><li>Ofreces algo útil y concreto</li><li>Cómo lo harían (su receta y sus precios)</li><li>Lo único que pides: su opinión</li><li>Salida fácil</li></ol><div class="copiable "><div class="copiable-cab"><span>Ejemplo (cambia lo que está entre corchetes)</span><button type="button" class="btn" data-copiar="copia-29">Copiar texto</button></div><pre id="copia-29">Hola, [nombre]. Vi que comentaste [que nunca sabes cuánto cobrar]. Si quieres, te ayudo a sacar el costo real de [tu pastel más pedido] con tu receta y tus precios, en Pastelia (está en beta). A cambio solo te pido tu opinión. Si no es buen momento, no pasa nada.</pre></div></div><div class="estructura"><b>3 · &quot;Hagamos un reel&quot;</b><p class="ayuda">Beta testers que ya probaron la app y les gustó.</p><ol><li>Agradece algo concreto de su prueba</li><li>Propón el reel: cómo cotiza un pedido suyo</li><li>Explica &quot;Invitar colaborador&quot;: sale en su perfil y en el tuyo</li><li>Qué le ofreces: acceso a la beta y ayuda con sus precios</li><li>Siguiente paso concreto (día y guion corto)</li></ol><div class="copiable "><div class="copiable-cab"><span>Ejemplo (cambia lo que está entre corchetes)</span><button type="button" class="btn" data-copiar="copia-30">Copiar texto</button></div><pre id="copia-30">Hola, [nombre]. Gracias por probar Pastelia y por [tu idea de agregar envíos]. ¿Te late hacer un reel en colaboración mostrando cómo cotizas [tu pastel de 20 porciones]? Con &quot;Invitar colaborador&quot; sale en tu perfil y en el mío. Yo te ayudo con tus precios y te mando un guion de 30 segundos. ¿Te queda [el jueves]?</pre></div></div></div>
+  <ul class="reglas"><li>El intercambio es acceso a la beta y ayuda con sus precios a cambio de un reel en colaboración. No ofrezcas meses gratis a futuro hasta decidir el precio de Pastelia.</li><li>Lleva el registro en la plantilla de invitaciones (CSV) para no escribirle dos veces a la misma persona.</li><li>Si no contesta en 5 días, un solo seguimiento corto. Si tampoco, la dejas en paz.</li></ul>
+  <div class="zip"><a class="btn " href="descargas/invitaciones-beta.csv" target="_blank" rel="noopener" data-descargar="descargas/invitaciones-beta.csv" data-nombre="pastelia-invitaciones-beta.csv">Descargar registro de invitaciones (CSV)</a></div>
+
+  <h3 class="h3-sec">Después de la semana 1: ritmo semanal</h3>
+  <ul class="reglas"><li>2 reels y 1 carrusel por semana. Ejemplo: reel el martes, carrusel el jueves y reel el sábado.</li><li>Ganchos A/B: cada reel nuevo, prueba un segundo gancho como &quot;Reel de prueba&quot; (en la pantalla de compartir, si te aparece la opción). Ese reel lo ve primero gente que no te sigue; a las 24–72 h compara reproducciones, tiempo de visualización y guardados, y comparte en tu perfil el que gane.</li><li>Stories 3 o 4 días por semana cuando ya tengas seguidores (antes nadie las ve): encuesta &quot;¿Cuánto cobrarías por este pastel?&quot; con foto de un pastel real tuyo o de una beta tester con su permiso, avances de la app e invitación a la beta.</li><li>Cada viernes revisa la tabla de palabras clave: qué pieza trajo más comentarios, DM y cuentas creadas. Repite el tema que gane.</li><li>Cuando una beta tester acepte, publica el reel en colaboración (opción &quot;Invitar colaborador&quot;).</li></ul>
+
+  <h3 class="h3-sec">Cuándo lanzar ads (semana 4 a 6)</h3>
+  <p class="bajada">Todavía no. Revísalo en 4 a 6 semanas y solo cuando se cumplan las tres condiciones:</p>
+  <ul class="checklist"><li>Hay un link que funciona para registrarse o anotarse.</li><li>Tienes 2 o 3 reels que rinden claramente más que el resto (guardados, compartidos, gente pidiendo el link). Ese reel es tu primer anuncio.</li><li>En la beta, al menos 10 a 20 reposteras usan la app cada semana.</li></ul>
+  <p class="formula">Primera prueba: $70 a $100 MXN al día durante 7 a 10 días (de $490 a $1,000 MXN en total), midiendo cuánto cuesta cada registro.</p>
+</section>
+
+<section id="dm">
+  <h2>Respuestas rápidas por DM</h2>
+  <div class="captions"><div class="copiable "><div class="copiable-cab"><span>¿Cuánto cuesta? (por confirmar)</span><button type="button" class="btn" data-copiar="copia-31">Copiar texto</button></div><pre id="copia-31">Ahorita está en beta y todavía no defino el precio. Cuando lo tenga, te aviso por aquí. Mientras, me ayudaría mucho tu opinión.</pre></div><div class="copiable "><div class="copiable-cab"><span>¿Funciona en mi celular?</span><button type="button" class="btn" data-copiar="copia-32">Copiar texto</button></div><pre id="copia-32">Sí. Se abre en el navegador del celular y la puedes instalar como app en tu pantalla de inicio. También funciona en computadora.</pre></div><div class="copiable "><div class="copiable-cab"><span>¿Y si pierdo mis datos? (por confirmar)</span><button type="button" class="btn" data-copiar="copia-33">Copiar texto</button></div><pre id="copia-33">En la app tienes &quot;Copia de seguridad&quot;: exportas tus datos a un archivo y los restauras cuando quieras. Te recomiendo hacer una copia cada semana.</pre></div><div class="copiable "><div class="copiable-cab"><span>¿Contesta sola mis mensajes de WhatsApp?</span><button type="button" class="btn" data-copiar="copia-34">Copiar texto</button></div><pre id="copia-34">No. El Agente IA (beta) te ayuda a cotizar dentro de la app; tus chats los sigues contestando tú. Lo que sí hace la app es abrir WhatsApp con el ticket listo para tu cliente.</pre></div><div class="copiable "><div class="copiable-cab"><span>¿Tengo que capturar todos mis ingredientes?</span><button type="button" class="btn" data-copiar="copia-35">Copiar texto</button></div><pre id="copia-35">Con tus insumos principales basta para empezar (mantequilla, harina, huevo, chocolate…). Pones lo que pagas y la app saca el costo por gramo o pieza.</pre></div><div class="copiable "><div class="copiable-cab"><span>Si todavía no quieres abrir la app (lista de espera)</span><button type="button" class="btn" data-copiar="copia-36">Copiar texto</button></div><pre id="copia-36">Gracias por comentar. Pastelia todavía está en prueba con pocas reposteras. ¿Te anoto en la lista y te aviso por aquí en cuanto abra?</pre></div></div>
+</section>
+
+<section id="medir">
+  <h2>Cómo medir qué pieza trae registros</h2>
+  <p class="bajada">La app no tiene analítica, así que cada pieza usa su propia palabra clave. Cuenta tres cosas por palabra:</p>
+  <div class="tabla-envoltura" style="margin-top:16px"><table><thead><tr><th>Palabra</th><th>Pieza</th><th>Comentarios con la palabra</th><th>DM enviados</th><th>Cuentas creadas</th></tr></thead><tbody>
+  <tr><td><span class="palabra">COTIZA</span></td><td>1 · Reel · Mar 27 oct</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td><span class="palabra">COSTEO</span></td><td>2 · Carrusel · Mié 28 oct</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td><span class="palabra">PASTELIA</span></td><td>3 · Carrusel · Jue 29 oct</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td><span class="palabra">AGENTE</span></td><td>4 · Reel · Vie 30 oct</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td><span class="palabra">TIEMPO</span></td><td>5 · Carrusel · Sáb 31 oct</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr><tr><td><span class="palabra">RESPETO</span></td><td>6 · Meme · Dom 1 nov</td><td class="num">—</td><td class="num">—</td><td class="num">—</td></tr>
+  </tbody></table></div>
+  <ul class="reglas">
+    <li>Contesta cada comentario con la palabra y manda el DM el mismo día.</li>
+    <li>"Cuentas creadas": pregúntalo en el DM, o compara las altas nuevas en Firebase (Authentication) con los días en que mandaste cada link.</li>
+    <li>Para los reels, anota también guardados y compartidos: son la señal de cuál podría ser tu primer anuncio.</li>
+  </ul>
+  <div class="zip"><a class="btn " href="descargas/medicion.csv" target="_blank" rel="noopener" data-descargar="descargas/medicion.csv" data-nombre="pastelia-medicion-semana1.csv">Descargar plantilla de medición (CSV)</a></div>
+</section>
+
+<section id="numeros">
+  <h2>De dónde salen los números</h2>
+  <p class="formula">Precio = (insumos × multiplicador + mano de obra × multiplicador + extras) × (1 + margen)</p>
+  <div class="tabla-envoltura"><table><tbody>
+    <tr><th>Tamaño Mediano</th><td>Multiplicador 1.00 · 20 porciones (tamaños de arranque de la app)</td></tr>
+    <tr><th>Insumos</th><td>$210: costo base de la app para un Mediano cuando la receta no tiene ingredientes capturados</td></tr>
+    <tr><th>Mano de obra</th><td>$180 en Mediano, fija en el código (escala con el tamaño; hoy no se edita)</td></tr>
+    <tr><th>Extras</th><td>Flores $120 (activo por defecto) · Topper $80 · los que tú agregues con nombre y precio</td></tr>
+    <tr><th>Margen</th><td>40 % por defecto (editable en Mis precios)</td></tr>
+    <tr><th>Resultado</th><td>Costo $510 · margen $204 · precio sugerido $714 · $35.70 por porción (pesos mexicanos)</td></tr>
+    <tr><th>Costo por gramo</th><td>Mantequilla de arranque: $186 / 1000 g = $0.186 por gramo</td></tr>
+    <tr><th>"Cobraste $510" (c2)</th><td>Es el costo del mismo pastel sin ganancia: $210 + $180 + $120. Caja, base, gas y luz van como "$ ?" porque la app no trae esos montos</td></tr>
+  </tbody></table></div>
+  <p class="ayuda" style="margin-top:12px">Verificado en index.html (función calc(), tamaños, extras, insumos y margen por defecto). Las capturas se tomaron con la app real corriendo en modo local y en modo oscuro, con datos de ejemplo, el 26 de octubre de 2026.</p>
+</section>
+
+<section id="material">
+  <h2>Material que necesito de ti</h2>
+  <div class="tabla-envoltura"><table><thead><tr><th>Para</th><th>Qué grabar o mandarme</th></tr></thead><tbody>
+    <tr><td class="num">Reel COTIZA (r1)</td><td>Grabación de pantalla en modo oscuro de la cotización completa (Cotizar → 20 invitados → receta, Mediano · 20p, Flores → Costeo → Resumen en vivo). Para la versión A, 2 s de tu mano tachando un "$ ?" en tu libreta (cenital).</td></tr>
+    <tr><td class="num">Reel AGENTE (r2)</td><td>Grabación de pantalla de la conversación real con el Agente IA (beta): el pedido escrito, la respuesta, "Confirma el pedido", "Confirmar y guardar" y la agenda. Para la versión B, 2 s de tu celular encendiéndose en una cocina oscura.</td></tr>
+    <tr><td class="num">Historia (p1)</td><td>Opcional: una foto tuya vertical con luz natural para la portada alterna, y tu voz en off si quieres la versión Reel.</td></tr>
+  </tbody></table></div>
+  <p class="ayuda" style="margin-top:12px">Mándame los clips por el chat (o súbelos a "3. Mi material (fotos y videos)" en Drive o a marketing/material/ en el repo) y edito los Reels en 9:16 con subtítulos, textos de marca y tarjeta final, en MP4.</p>
+</section>
+
+<footer>Fuentes del kit en el repo: marketing/2026-10-arranque-instagram/ (contenido.cjs, HTML de slides y storyboards, guiones, captions, perfil y playbook). Paleta cacao con Fredoka y Nunito. Generado el 26 de octubre de 2026.</footer>
+</div>
+
+<script>
+(function(){
+  function marcar(btn, txt){ var o=btn.textContent; btn.textContent=txt; btn.setAttribute('data-estado','ok'); setTimeout(function(){ btn.textContent=o; btn.removeAttribute('data-estado'); }, 1800); }
+  function seleccionar(el){ try{ var r=document.createRange(); r.selectNodeContents(el); var s=window.getSelection(); s.removeAllRanges(); s.addRange(r); }catch(e){} }
+  document.addEventListener('click', function(ev){
+    var b=ev.target.closest('[data-copiar]'); if(!b) return;
+    var el=document.getElementById(b.getAttribute('data-copiar')); if(!el) return;
+    var p; try{ p=navigator.clipboard.writeText(el.textContent); }catch(e){ p=Promise.reject(e); }
+    p.then(function(){ marcar(b,'Copiado'); }, function(){ seleccionar(el); marcar(b,'Seleccionado: cópialo'); });
+  });
+  var descargas=null;
+  try{ if(window.claude && window.claude.use){ window.claude.use('downloads').then(function(d){ descargas=d; }, function(){}); } }catch(e){}
+  document.addEventListener('click', function(ev){
+    var b=ev.target.closest('[data-descargar]'); if(!b || !descargas) return;   // sin descargas: el enlace abre el archivo
+    ev.preventDefault();
+    var url=b.getAttribute('data-descargar'), nombre=b.getAttribute('data-nombre');
+    fetch(url).then(function(r){ if(!r.ok) throw new Error('http'); return r.blob(); })
+      .then(function(blob){ return descargas.save({ filename:nombre, data:blob }); })
+      .then(function(){ marcar(b,'Listo'); }, function(err){ var c=err&&err.code; if(c==='declined') return; if(c==='rate_limited'){ marcar(b,'Espera un momento'); return; } if(c==='unavailable'||c==='not_granted'||c==='capability_disabled'||c==='capability_removed'){ descargas=null; marcar(b,'Toca otra vez para abrirlo'); return; } marcar(b,'No se pudo, intenta de nuevo'); });
+  });
+})();
+</script>

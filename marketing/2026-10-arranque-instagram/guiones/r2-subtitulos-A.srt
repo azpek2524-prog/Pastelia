@@ -1,0 +1,49 @@
+1
+00:00:00,000 --> 00:00:02,960
+Le escribí solo esto:
+pastel para veinte personas.
+
+2
+00:00:03,000 --> 00:00:06,652
+No usa precios de internet:
+usa mis insumos,
+
+3
+00:00:06,692 --> 00:00:08,960
+mis tamaños y mi margen.
+
+4
+00:00:09,000 --> 00:00:14,960
+Le doy el nombre
+del cliente y la fecha.
+
+5
+00:00:15,000 --> 00:00:20,210
+Y me arma la cotización
+con el precio estimado,
+
+6
+00:00:20,250 --> 00:00:21,960
+con mis costos.
+
+7
+00:00:22,000 --> 00:00:23,460
+Yo reviso, confirmo…
+
+8
+00:00:23,500 --> 00:00:25,960
+y queda en mi agenda.
+
+9
+00:00:26,000 --> 00:00:27,051
+Ojo: está en beta.
+
+10
+00:00:27,091 --> 00:00:28,960
+Revisa siempre el precio
+antes de confirmar.
+
+11
+00:00:29,000 --> 00:00:31,960
+Comenta AGENTE
+y te mando el link.

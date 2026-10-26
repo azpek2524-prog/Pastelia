@@ -1,0 +1,15 @@
+Slide 1: La historia de Pastelia. No sabía cuánto cobrar, así que hice mi propia app.
+
+Slide 2: Cobraba a ojo. Le ponía el precio que me parecía justo, sin saber si de verdad ganaba.
+
+Slide 3: …vivían en una libreta y en WhatsApp. Fechas, anticipos y cambios, regados entre chats.
+
+Slide 4: Cobrar bien no era subir precios. Era saber mis costos. Cuánto me cuesta cada gramo, cuánto vale mi tiempo y cuánto quiero ganar.
+
+Slide 5: …el cotizador por gramo. Pones lo que pagas por cada insumo y sale el costo por gramo. Datos de ejemplo.
+
+Slide 6: …la agenda. Lo que entregas hoy y lo que tienes por cobrar, al abrir la app. Datos de ejemplo.
+
+Slide 7: Está en beta y la quiero hacer contigo. Pruébala con tus pedidos reales y dime qué le falta.
+
+Slide 8: Ayúdame a hacerla mejor. Comenta PASTELIA y te mando el link.

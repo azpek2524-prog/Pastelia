@@ -1,0 +1,13 @@
+{
+  "nota": "Carpetas de Google Drive donde se guarda esta semana (Pastelia/4. Posts - Semana 1 Arranque). Las usa generar-kit.cjs para enlazarlas desde el kit.",
+  "raiz": { "titulo": "4. Posts - Semana 1 Arranque", "id": "1hHgwA86UZlz0dols1G1Ee42POWLtIjiE", "url": "https://drive.google.com/drive/folders/1hHgwA86UZlz0dols1G1Ee42POWLtIjiE" },
+  "carpetas": {
+    "01-Reel-Cotizacion": "11xq2o9z5R3b_eyG_LdowttwfwVw6QNwW",
+    "02-Carrusel-Calculo-20p": "1xv25LkrTaE-Gj8YBm7szSU8pMIfsx7gr",
+    "03-Post-Historia-Beta": "1pyhj1x-Y65JgjhVUrdhY0QNO3yQfe8dm",
+    "04-Reel-Agente-IA": "1Ktk3jNK1GAhnCVsuN3hECtM0Z0IJFD7I",
+    "05-Carrusel-Costos-Olvidados": "1Hsg4G9tvJj-5ry0e6iIR_AJ7Zes0WC29",
+    "06-Meme-Mama": "1p2-sB12tE6bfycVHTV_FpHPV4G6iUxyP",
+    "Perfil-y-Playbook": "1G74Q4lJeFjg6lJwAt_g77tAjZTbu2dR-"
+  }
+}

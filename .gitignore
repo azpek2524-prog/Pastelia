@@ -3,3 +3,8 @@
 .env.local
 node_modules/
 .wrangler/
+
+# Marketing: salidas generadas, videos y ZIP no se suben al repo (CLAUDE.md)
+marketing/*/salida/
+marketing/**/*.mp4
+marketing/**/*.zip

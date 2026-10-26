@@ -1,0 +1,93 @@
+1
+00:00:00,000 --> 00:00:02,114
+No sabía cuánto
+cobrar por mis pasteles…
+
+2
+00:00:02,154 --> 00:00:03,960
+así que hice
+mi propia app.
+
+3
+00:00:04,000 --> 00:00:06,019
+Cobraba a ojo:
+le ponía el precio
+
+4
+00:00:06,059 --> 00:00:07,784
+que me parecía justo,
+sin saber
+
+5
+00:00:07,824 --> 00:00:08,960
+si de verdad ganaba.
+
+6
+00:00:09,000 --> 00:00:11,019
+Y los pedidos
+vivían en una libreta
+
+7
+00:00:11,059 --> 00:00:13,078
+y en WhatsApp: fechas,
+anticipos y cambios,
+
+8
+00:00:13,118 --> 00:00:13,960
+regados entre chats.
+
+9
+00:00:14,000 --> 00:00:16,960
+Hasta que me cayó
+el veinte: cobrar bien
+
+10
+00:00:17,000 --> 00:00:18,460
+no era subir precios.
+
+11
+00:00:18,500 --> 00:00:19,960
+Era saber mis costos.
+
+12
+00:00:20,000 --> 00:00:21,855
+Así nació
+el cotizador por gramo:
+
+13
+00:00:21,895 --> 00:00:24,697
+pones lo que pagas
+por cada insumo y sale
+
+14
+00:00:24,737 --> 00:00:25,960
+el costo por gramo.
+
+15
+00:00:26,000 --> 00:00:27,904
+Y la agenda:
+lo que entregas hoy
+
+16
+00:00:27,944 --> 00:00:29,571
+y lo que tienes
+por cobrar,
+
+17
+00:00:29,611 --> 00:00:30,960
+en cuanto abres la app.
+
+18
+00:00:31,000 --> 00:00:33,802
+Pastelia está en beta,
+y la quiero hacer contigo.
+
+19
+00:00:33,842 --> 00:00:36,960
+Pruébala con tus pedidos reales
+y dime qué le falta.
+
+20
+00:00:37,000 --> 00:00:40,960
+Comenta PASTELIA
+y te mando el link.
